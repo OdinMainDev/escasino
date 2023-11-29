@@ -7,7 +7,10 @@
   position: fixed;
   bottom: 0;
   background-color: var(--primary);
-  gap: 16px;
+  gap: 10px;
+  @media (min-width: 375px) {
+    gap: 16px;
+  }
 }
 
 .button {
