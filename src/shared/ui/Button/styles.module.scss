@@ -1,0 +1,20 @@
+.container {
+  cursor: pointer;
+  padding: 16px 32px;
+  border-radius: 2px;
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+  line-height: 24px;
+}
+
+.outlined {
+  background-color: transparent;
+  border: 2px solid #181818;
+  color: var(--secondary);
+}
+
+.contained {
+  background-color: var(--secondary);
+  color: var(--primary);
+}

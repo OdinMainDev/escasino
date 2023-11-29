@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 16px;
+  z-index: 5;
+  position: fixed;
+  bottom: 0;
+  background-color: var(--primary);
+  gap: 16px;
+}
+
+.button {
+  flex: 1;
+}

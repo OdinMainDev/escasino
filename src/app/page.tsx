@@ -3,6 +3,7 @@ import { Header } from '@/widgets/Header';
 import { TopGames } from '@/widgets/TopGames';
 
 import styles from './styles.module.scss';
+import { AuthFooter } from '@/widgets/AuthFooter';
 
 export default function Home() {
   return (
@@ -13,9 +14,10 @@ export default function Home() {
       <div className={styles.top_games}>
         <TopGames />
       </div>
-      <div>
+      <div className={styles.games_table}>
         <GamesTable />
       </div>
+      <AuthFooter />
     </div>
   );
 }

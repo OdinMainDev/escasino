@@ -1,7 +1,15 @@
 .header {
-
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 5;
 }
 
 .top_games {
+  margin-top: 104px;
   margin-bottom: 30px;
+}
+
+.games_table {
+  margin-bottom: 100px;
 }
