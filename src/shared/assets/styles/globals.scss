@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import './variables';
+
+body {
+  background: var(--background);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #FFF;
+}
