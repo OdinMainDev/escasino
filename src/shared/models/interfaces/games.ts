@@ -14,7 +14,7 @@ export interface IGame {
   has_freerounds: boolean;
   desktop_enabled: boolean;
   mobile_enabled: boolean;
-  image: string;
+  image: string | null;
   data: IGameData;
   game_data: null;
   created_at: number;

@@ -8,7 +8,7 @@ const Header = () => {
 
   return (
     <div className={styles.container} style={containerStyles}>
-      <Input placeholder="Поиск игры" elType="search" className={styles.input} />
+      <Input placeholder="Поиск игры" elType="search" className={styles.input} elSize="s" />
       <div className={styles.icon}>
         <svg
           width="24"

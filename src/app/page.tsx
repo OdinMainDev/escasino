@@ -3,11 +3,11 @@ import { Header } from '@/widgets/Header';
 import { TopGames } from '@/widgets/TopGames';
 
 import styles from './styles.module.scss';
-import { AuthFooter } from '@/widgets/AuthFooter';
+import { AuthFooter } from '@/widgets/Auth';
 
 export default function Home() {
   return (
-    <div>
+    <div className={styles.container}>
       <div className={styles.header}>
         <Header />
       </div>

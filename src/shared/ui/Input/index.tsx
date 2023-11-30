@@ -4,11 +4,12 @@ import classNames from 'classnames';
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   elType?: 'input' | 'search';
+  elSize?: 'm' | 's';
 }
 
-const Input = forwardRef<HTMLInputElement, IProps>(({ elType = 'input', ...otherProps }, ref) => {
-  return (
-    <label className={classNames(styles.container, otherProps.className)}>
+const Input = forwardRef<HTMLInputElement, IProps>(
+  ({ elType = 'input', elSize = 'm', ...otherProps }, ref) => (
+    <label className={classNames(styles.container, styles[elSize], otherProps.className)}>
       <input {...otherProps} ref={ref} className={styles.input} />
       {elType === 'search' && (
         <div className={styles.icon}>
@@ -30,7 +31,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(({ elType = 'input', ...other
         </div>
       )}
     </label>
-  );
-});
+  ),
+);
 
 export default Input;

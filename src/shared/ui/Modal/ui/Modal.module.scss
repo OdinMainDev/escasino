@@ -1,0 +1,30 @@
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: rgba($color: #000000, $alpha: 0.5);
+}
+
+.isOpen {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.content {
+  background-color: var(--primary);
+  padding: 24px 16px;
+  position: relative;
+}
+
+.close {
+  width: 24px;
+  height: 24px;
+  top: 16px;
+  right: 16px;
+  position: absolute;
+}
