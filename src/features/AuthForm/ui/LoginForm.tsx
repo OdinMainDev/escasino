@@ -3,14 +3,23 @@ import styles from './LoginForm.module.scss';
 import Input from '@/shared/ui/Input';
 import Button from '@/shared/ui/Button';
 
-const LoginForm = () => {
+interface IProps {
+  openRegistration: () => void;
+}
+
+const LoginForm = ({ openRegistration }: IProps) => {
   return (
-    <div className={styles.container}>
+    <form className={styles.container}>
       <div className={classNames('title', styles.title)}>Войти в личный кабинет</div>
       <Input placeholder="Электронная почта" type="email" className={styles.input} />
-      <Input placeholder="Пароль" type="email" className={styles.input} />
-      <Button>Войти</Button>
-    </div>
+      <Input placeholder="Пароль" type="password" className={styles.input} />
+      <Button className={styles.button} type="submit">
+        Войти
+      </Button>
+      <div className={styles.label}>
+        Нет личного кабинета? <span onClick={openRegistration}>Зарегистрироваться</span>
+      </div>
+    </form>
   );
 };
 

@@ -4,7 +4,11 @@ import styles from './RegistrationForm.module.scss';
 import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
 
-const RegistrationForm = () => {
+interface IProps {
+  openLogin: () => void;
+}
+
+const RegistrationForm = ({ openLogin }: IProps) => {
   return (
     <div className={styles.container}>
       <div className={classNames('title', styles.title)}>Регистрация нового игрока</div>
@@ -12,7 +16,10 @@ const RegistrationForm = () => {
       <div className={styles.input_description}>
         Адрес электронной почты будет использован как логин для входа в личный кабинет
       </div>
-      <Button>Зарегистрироваться</Button>
+      <Button className={styles.button}>Зарегистрироваться</Button>
+      <div className={styles.label}>
+        У вас уже есть личный кабинет? <span onClick={openLogin}>Войти</span>
+      </div>
     </div>
   );
 };

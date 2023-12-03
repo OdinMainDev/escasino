@@ -9,6 +9,9 @@
 
 .input {
   margin-bottom: 8px;
+  &_description {
+    margin-bottom: 24px;
+  }
 }
 
 .input_description {
@@ -17,4 +20,25 @@
   font-style: normal;
   font-weight: 400;
   line-height: 16px;
+}
+
+.label {
+  color: #8E8E8E;
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  span {
+    color: #FFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    text-decoration-line: underline;
+  }
+}
+
+.button {
+  margin-bottom: 24px; 
 }

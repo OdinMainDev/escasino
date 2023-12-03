@@ -38,8 +38,16 @@ const AuthFooter = () => {
           Регистрация
         </Button>
       </div>
-      <AuthLoginModal isOpen={isOpenLogin} close={closeLoginModal} />
-      <AuthRegistrationModal isOpen={isOpenRegistration} close={closeRegistrationModal} />
+      <AuthLoginModal
+        isOpen={isOpenLogin}
+        close={closeLoginModal}
+        openRegistrationModal={openRegistrationModal}
+      />
+      <AuthRegistrationModal
+        isOpen={isOpenRegistration}
+        close={closeRegistrationModal}
+        openLoginModal={openLoginModal}
+      />
     </>
   );
 };
