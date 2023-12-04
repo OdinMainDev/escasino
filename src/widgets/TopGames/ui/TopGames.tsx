@@ -2,10 +2,10 @@ import classNames from 'classnames';
 import styles from './TopGames.module.scss';
 import { GamesSlider } from '@/features/GamesSlider';
 import { IGame } from '@/shared/models/interfaces/games';
-import { getTopGamesApi } from '@/shared/api/gamesApi';
+import { getGamesApi } from '@/shared/api/gamesApi';
 
 const TopGames = async () => {
-  const games: IGame[] = await getTopGamesApi();
+  const games: IGame[] = await getGamesApi();
   return (
     <div className={styles.container}>
       <div className={classNames('title', styles.title)}>Top Games</div>

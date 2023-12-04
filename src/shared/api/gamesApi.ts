@@ -10,17 +10,24 @@ interface ITopGames {
 }
 
 export const gamesApi = () => {
-  return `${process.env.BASE_URL}/api/v1/public/get/games/home`;
+  let domain;
+  if (process.env.BASE_URL) {
+    domain = `${process.env.BASE_URL}`;
+  }
+  if (process.env.NEXT_PUBLIC_BASE_DOMAIN) {
+    domain = `${process.env.NEXT_PUBLIC_BASE_DOMAIN}`;
+  }
+  return `${domain}/api/v1/public/get/games/home`;
 };
 
-export const getTopGamesApi = async (
+export const getGamesApi = async (
   options: ITopGames = { offset: 0, limit: 10 },
 ): Promise<IGame[]> => {
-  const { offset, limit } = options;
+  const { offset = 0, limit = 10 } = options;
   try {
     const res = await fetch(gamesApi(), {
       headers: {
-        'C-Token': process.env.CASINO_TOKEN || '',
+        'C-Token': process.env.CASINO_TOKEN || process.env.NEXT_PUBLIC_CASINO_TOKEN || '',
       },
     });
 
@@ -32,7 +39,7 @@ export const getTopGamesApi = async (
     const games: IGame[] = data;
 
     if (limit === 'all') {
-      return games;
+      return games.slice(offset);
     }
 
     return games.slice(offset, offset + limit);

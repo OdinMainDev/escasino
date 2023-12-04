@@ -1,10 +1,13 @@
 import classNames from 'classnames';
 import styles from './Games.module.scss';
-import { getTopGamesApi } from '@/shared/api/gamesApi';
 import { Game } from '@/entities/Game';
+import { IGame } from '@/shared/models/interfaces/games';
 
-const GamesTable = async () => {
-  const games = await getTopGamesApi({ offset: 10, limit: 'all' });
+interface IProps {
+  games: IGame[];
+}
+
+const GamesTable = ({ games }: IProps) => {
   return (
     <div className={styles.container}>
       <div className={classNames('title', styles.title)}>Games</div>

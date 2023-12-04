@@ -15,7 +15,7 @@ const Game = ({ game }: IProps) => {
           alt={game.name}
           className={styles.image}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="(max-width: 768px) 100%, (max-width: 1200px) 100%"
         />
       ) : (
         <div className={styles.without_image}>

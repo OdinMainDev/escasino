@@ -3,15 +3,15 @@ import { getProvidersApi } from '../api/providersApi';
 import ProviderItem from './ProviderItem';
 
 import styles from './ProvidersList.module.scss';
-
+import Link from 'next/link';
 const ProvidersList = async () => {
   const providers = await getProvidersApi();
   return (
     <DraggableScroll className={styles.container}>
       {providers.map((item, index) => (
-        <div className={styles.provider} key={index}>
+        <Link href={`/games?provider=${item.url}`} className={styles.provider} key={index}>
           <ProviderItem {...item} />
-        </div>
+        </Link>
       ))}
     </DraggableScroll>
   );
