@@ -2,53 +2,29 @@
 
 import Button from '@/shared/ui/Button';
 import styles from './AuthFooter.module.scss';
-import { useState } from 'react';
-import AuthLoginModal from './AuthLoginModal';
-import AuthRegistrationModal from './AuthRegistrationModal';
-
+import { useAppDispatch } from '@/shared/hooks/redux';
+import { openLoginModal, openRegistrationModal } from '@/store/slices/authModalSlice';
 const AuthFooter = () => {
-  const [isOpenLogin, setIsOpenLogin] = useState(false);
-  const [isOpenRegistration, setIsRegistraion] = useState(false);
+  const dispatch = useAppDispatch();
 
-  const openLoginModal = () => {
-    setIsOpenLogin(true);
-    setIsRegistraion(false);
+  const openLogin = () => {
+    document.body.classList.add('overflow-hidden');
+    dispatch(openLoginModal());
   };
 
-  const openRegistrationModal = () => {
-    setIsOpenLogin(false);
-    setIsRegistraion(true);
+  const openRegistration = () => {
+    document.body.classList.add('overflow-hidden');
+    dispatch(openRegistrationModal());
   };
-
-  const closeLoginModal = () => {
-    setIsOpenLogin(false);
-  };
-
-  const closeRegistrationModal = () => {
-    setIsRegistraion(false);
-  };
-
   return (
-    <>
-      <div className={styles.container}>
-        <Button elType="outlined" className={styles.button} onClick={openLoginModal}>
-          Войти
-        </Button>
-        <Button className={styles.button} onClick={openRegistrationModal}>
-          Регистрация
-        </Button>
-      </div>
-      <AuthLoginModal
-        isOpen={isOpenLogin}
-        close={closeLoginModal}
-        openRegistrationModal={openRegistrationModal}
-      />
-      <AuthRegistrationModal
-        isOpen={isOpenRegistration}
-        close={closeRegistrationModal}
-        openLoginModal={openLoginModal}
-      />
-    </>
+    <div className={styles.container}>
+      <Button elType="outlined" className={styles.button} onClick={openLogin}>
+        Войти
+      </Button>
+      <Button className={styles.button} onClick={openRegistration}>
+        Регистрация
+      </Button>
+    </div>
   );
 };
 

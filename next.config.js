@@ -6,9 +6,15 @@ const nextConfig = {
     includePaths: [path.join(__dirname, 'styles')],
   },
   images: {
-    domains: [
-      process.env.BASE_DOMAIN,
-      process.env.IMAGE_DOMAIN
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: process.env.IMAGE_DOMAIN,
+      },
+      {
+        protocol: 'https',
+        hostname: process.env.BASE_DOMAIN,
+      },
     ],
   },
 }

@@ -9,7 +9,7 @@ interface IProps {
 const Game = ({ game }: IProps) => {
   return (
     <div className={styles.container}>
-      {game.image && (
+      {game.image ? (
         <Image
           src={game.image}
           alt={game.name}
@@ -17,6 +17,11 @@ const Game = ({ game }: IProps) => {
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
+      ) : (
+        <div className={styles.without_image}>
+          <div className={styles.without_image_title}>No Image Available</div>
+          <div>{game.name}</div>
+        </div>
       )}
     </div>
   );

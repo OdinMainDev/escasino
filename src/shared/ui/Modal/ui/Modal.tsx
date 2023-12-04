@@ -3,13 +3,23 @@ import styles from './Modal.module.scss';
 import classNames from 'classnames';
 
 const Modal = ({ isOpen, close, children }: IModal) => {
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (e.target === e.currentTarget && close) {
+      close();
+    }
+  };
   return (
     <div
       className={classNames(styles.overlay, {
         [styles.isOpen]: isOpen,
       })}
+      onClick={handleBackdropClick}
     >
-      <div className={styles.content}>
+      <div
+        className={classNames(styles.content, {
+          [styles.isOpen]: isOpen,
+        })}
+      >
         <div className={styles.close} onClick={close}>
           <svg
             width="24"

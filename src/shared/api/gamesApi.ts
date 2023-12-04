@@ -16,7 +16,7 @@ export const gamesApi = () => {
 export const getTopGamesApi = async (
   options: ITopGames = { offset: 0, limit: 10 },
 ): Promise<IGame[]> => {
-  const { offset = 0, limit = 10 } = options;
+  const { offset, limit } = options;
   try {
     const res = await fetch(gamesApi(), {
       headers: {
@@ -28,8 +28,8 @@ export const getTopGamesApi = async (
       throw new Error('Authn error');
     }
 
-    const json = (await res.json()) as JsonResponse;
-    const games: IGame[] = json.data;
+    const { data } = (await res.json()) as JsonResponse;
+    const games: IGame[] = data;
 
     if (limit === 'all') {
       return games;
