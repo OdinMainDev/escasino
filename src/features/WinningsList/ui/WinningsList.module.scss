@@ -1,0 +1,18 @@
+.title {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  color: rgba(255, 255, 255, 0.87);
+  margin-bottom: 12px;
+}
+
+.list {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  overflow-x: scroll;
+  &::-webkit-scrollbar {
+    height: 0;
+  }
+}

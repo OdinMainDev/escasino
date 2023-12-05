@@ -7,6 +7,8 @@ import { IGame } from '@/shared/models/interfaces/games';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import styles from './ProviderGames.module.scss';
+
 const ProviderGames = () => {
   const searchParams = useSearchParams();
   const provider = searchParams.get('provider');
@@ -28,7 +30,13 @@ const ProviderGames = () => {
   }, [provider]);
 
   if (loading) {
-    return <div className="text-[#FFF]">Loading</div>;
+    return (
+      <div className={styles.container}>
+        <div className={styles.loader}>
+          <div className={styles.roulette_wheel}></div>
+        </div>
+      </div>
+    );
   }
 
   return (

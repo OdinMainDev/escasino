@@ -1,14 +1,23 @@
+'use client';
+
 import { IGame } from '@/shared/models/interfaces/games';
 import styles from './Game.module.scss';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface IProps {
   game: IGame;
 }
 
 const Game = ({ game }: IProps) => {
+  const router = useRouter();
+
+  const navigateToGame = () => {
+    router.push(`/games/${game.id}`);
+  };
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onClick={navigateToGame}>
       {game.image ? (
         <Image
           src={game.image}

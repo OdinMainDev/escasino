@@ -47,3 +47,23 @@ export const getGamesApi = async (
     return [];
   }
 };
+
+export const getGamesById = async (id: number): Promise<IGame | null> => {
+  try {
+    const res = await fetch(gamesApi(), {
+      headers: {
+        'C-Token': process.env.CASINO_TOKEN || process.env.NEXT_PUBLIC_CASINO_TOKEN || '',
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error('Authn error');
+    }
+
+    const { data } = (await res.json()) as JsonResponse;
+    const games: IGame[] = data;
+    return games.find((item) => item.id === id) ?? null;
+  } catch (e) {
+    return null;
+  }
+};

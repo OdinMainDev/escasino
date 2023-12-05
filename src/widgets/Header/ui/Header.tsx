@@ -2,7 +2,7 @@ import Input from '@/shared/ui/Input';
 import styles from './Header.module.scss';
 import { ProvidersList } from '@/features/ProvidersList';
 import UserIcon from './UserIcon';
-import GoBackButton from './GoBackButton';
+import GoBackButton from '@/shared/ui/GoBackButton';
 const Header = () => {
   const containerStyles = {
     backgroundColor: `#${process.env.HEADER_COLOR}`,

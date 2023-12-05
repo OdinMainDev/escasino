@@ -1,8 +1,22 @@
+'use client';
+
 import { IModal } from '@/shared/models/interfaces/modal';
 import styles from './Modal.module.scss';
 import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 
 const Modal = ({ isOpen, close, children }: IModal) => {
+  const [shouldRenderChildren, setShouldRenderChildren] = useState(isOpen);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRenderChildren(true);
+    } else {
+      const timer = setTimeout(() => setShouldRenderChildren(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget && close) {
       close();
@@ -37,7 +51,7 @@ const Modal = ({ isOpen, close, children }: IModal) => {
             />
           </svg>
         </div>
-        {children}
+        {shouldRenderChildren && children}
       </div>
     </div>
   );

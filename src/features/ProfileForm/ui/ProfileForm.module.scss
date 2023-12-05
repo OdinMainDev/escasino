@@ -1,0 +1,56 @@
+.input {
+  margin-bottom: 24px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.line {
+  height: 1px;
+  width: 100%;
+  margin: 24px 0;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.email_container {
+  padding: 24px 0;
+  margin: 24px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.email {
+  margin: 12px 0;
+  &_title {
+    display: flex;
+    color: #CF6679;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    svg {
+      flex-shrink: 0;
+      margin-right: 12px;
+    }
+  }
+
+  &_button {
+    font-size: 14px;
+    line-height: 20px;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+}
+
+.save_button {
+  font-size: 16px;
+  line-height: 24px;
+  text-transform: uppercase;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.textarea {
+  width: 100%;
+  margin-bottom: 20px;
+}
