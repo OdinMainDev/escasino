@@ -10,7 +10,7 @@ import {
   openRegistrationModal,
 } from '@/store/slices/authModalSlice';
 
-const Auth = () => {
+const AuthModal = () => {
   const dispatch = useAppDispatch();
   const { isOpenLogin, isOpenRegistration } = useAppSelector((state) => state.authModalReducer);
 
@@ -50,4 +50,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default AuthModal;

@@ -1,10 +1,10 @@
 import { Header } from '@/widgets/Header';
 import { TopGames } from '@/widgets/TopGames';
+import { GamesTable } from '@/features/GamesTable';
 
 import styles from './styles.module.scss';
-import { Auth, AuthFooter } from '@/widgets/Auth';
+import { AuthModal, AuthFooter } from '@/widgets/Auth';
 import { getGamesApi } from '@/shared/api/gamesApi';
-import { GamesTable } from '@/features/GamesTable';
 
 export default async function Home() {
   const games = await getGamesApi({ offset: 10, limit: 'all' });
@@ -20,7 +20,7 @@ export default async function Home() {
         <GamesTable games={games} />
       </div>
       <AuthFooter />
-      <Auth />
+      <AuthModal />
     </div>
   );
 }

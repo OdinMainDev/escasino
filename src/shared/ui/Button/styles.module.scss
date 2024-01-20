@@ -1,7 +1,7 @@
 .container {
   cursor: pointer;
   padding: 12px 20px;
-  border-radius: 2px;
+  border-radius: 4px;
   font-weight: 600;
   text-align: center;
   @media (min-width: 375px) {
@@ -11,8 +11,8 @@
 
 .outlined {
   background-color: transparent;
-  border: 2px solid #181818;
-  color: var(--secondary);
+  border: 1px solid var(--Divider-main, #4E4E4E);
+   color: var(--secondary);
 }
 
 .contained {

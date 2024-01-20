@@ -2,7 +2,7 @@
 
 import { useAppDispatch } from '@/shared/hooks/redux';
 import { openLoginModal } from '@/store/slices/authModalSlice';
-import styles from './Header.module.scss';
+import styles from '../Header.module.scss';
 
 const UserIcon = () => {
   const dispatch = useAppDispatch();

@@ -2,8 +2,8 @@
 
 import { IGame } from '@/shared/models/interfaces/games';
 import styles from './Game.module.scss';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 interface IProps {
   game: IGame;
@@ -32,6 +32,10 @@ const Game = ({ game }: IProps) => {
           <div>{game.name}</div>
         </div>
       )}
+      <div className={styles.without_image}>
+        <div className={styles.without_image_title}>No Image Available</div>
+        <div>{game.name}</div>
+      </div>
     </div>
   );
 };

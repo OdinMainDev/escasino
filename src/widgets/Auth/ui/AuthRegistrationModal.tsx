@@ -1,6 +1,6 @@
 import { RegistrationForm } from '@/features/AuthForm';
 import { IModal } from '@/shared/models/interfaces/modal';
-import { Modal } from '@/shared/ui/Modal';
+import Modal from '@/shared/ui/Modal';
 import styles from './AuthFormModal.module.scss';
 
 interface IProps extends IModal {

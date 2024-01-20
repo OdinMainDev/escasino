@@ -1,7 +1,7 @@
 'use client';
 
 import { IModal } from '@/shared/models/interfaces/modal';
-import styles from './Modal.module.scss';
+import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 
