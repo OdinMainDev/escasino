@@ -16,6 +16,6 @@
 }
 
 .contained {
-  background-color: var(--secondary);
+  background: var(--Action-active, #E1E1E1);
   color: var(--primary);
 }

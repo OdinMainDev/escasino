@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import Input from '@/shared/ui/Input';
 import styles from './Header.module.scss';
-import { ChatIcon, FilterIcon, UserIcon } from './Icons';
+import { ChatIcon, FilterIcon } from './Icons';
 import GoBackButton from '@/shared/ui/GoBackButton';
 import FilterModal from '@/features/FilterModal';
 import { usePathname } from 'next/navigation';

@@ -4,13 +4,17 @@
 }
 
 .title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #FFF;
   margin-bottom: 24px;
 }
+
 
 .input {
   margin-bottom: 8px;
   &_description {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 }
 
@@ -41,4 +45,39 @@
 
 .button {
   margin-bottom: 24px; 
+}
+
+.subtitle {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; 
+  letter-spacing: 0.32px;
+  color: var(--Text-primary, #F2F2F2);
+  margin-bottom: 10px;
+}
+
+.social {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  gap: 12px;
+  letter-spacing: 0.14px;
+  margin-top: 24px;
+  margin-bottom: 50px;
+  color: var(--Text-primary, #F2F2F2);
+
+  span {
+    text-decoration: underline;
+  }
+
 }

@@ -10,7 +10,7 @@ const useLanguageFromUrl = (): string | null => {
     if (/^[a-zA-Z]{2}$/.test(languageCode)) {
       setLanguage(languageCode);
     }
-  }, [window.location.pathname]);
+  }, []);
 
   return language;
 };
