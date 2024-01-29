@@ -2,8 +2,8 @@
 
 import { IGame } from '@/shared/models/interfaces/games';
 import styles from './Game.module.scss';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { useRouter } from '@/shared/hooks/navigation';
 
 interface IProps {
   game: IGame;
@@ -13,7 +13,7 @@ const Game = ({ game }: IProps) => {
   const router = useRouter();
 
   const navigateToGame = () => {
-    router.push(`/games/${game.id}`);
+    router.push({ pathname: '/games/[id]', params: { id: game.id } });
   };
 
   return (
@@ -32,10 +32,10 @@ const Game = ({ game }: IProps) => {
           <div>{game.name}</div>
         </div>
       )}
-      <div className={styles.without_image}>
+      {/* <div className={styles.without_image}>
         <div className={styles.without_image_title}>No Image Available</div>
         <div>{game.name}</div>
-      </div>
+      </div> */}
     </div>
   );
 };

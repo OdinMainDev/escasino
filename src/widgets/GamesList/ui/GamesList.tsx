@@ -1,33 +1,34 @@
 'use client';
 
 import { GamesTable } from '@/features/GamesTable';
-import { getGamesApi } from '@/shared/api/gamesApi';
-import { getProviderGames } from '@/shared/api/providersApi';
 import { IGame } from '@/shared/models/interfaces/games';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import styles from './ProviderGames.module.scss';
+import styles from './GamesList.module.scss';
+import { postSearchGamesApi } from '@/shared/api/searchApi';
+import { IFilter } from '@/shared/models/interfaces/filter';
 
-const ProviderGames = () => {
+const GamesList = () => {
   const searchParams = useSearchParams();
-  const provider = searchParams.get('provider');
   const [loading, setLoading] = useState(true);
   const [games, setGames] = useState<IGame[]>([]);
 
   useEffect(() => {
     const getGames = async () => {
+      const filter: IFilter = {
+        providers: searchParams.getAll('providers[]') ?? [],
+        categories: searchParams.getAll('categories[]') ?? [],
+        is_game_avail_for_bonus: searchParams.get('is_game_avail_for_bonus') == 'true' ?? false,
+        distinct_filters: searchParams.get('distinct_filters') === 'true' ?? true,
+      };
       setLoading(true);
-      if (provider) {
-        setGames(await getProviderGames(provider));
-      } else {
-        setGames(await getGamesApi({ limit: 'all' }));
-      }
+      setGames(await postSearchGamesApi(filter));
       setLoading(false);
     };
 
     void getGames();
-  }, [provider]);
+  }, [searchParams]);
 
   if (loading) {
     return (
@@ -46,4 +47,4 @@ const ProviderGames = () => {
   );
 };
 
-export default ProviderGames;
+export default GamesList;

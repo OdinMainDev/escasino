@@ -1,6 +1,6 @@
 import { Header } from '@/widgets/Header';
 import styles from './styles.module.scss';
-import { ProviderGames } from '@/widgets/ProviderGames';
+import { GamesList } from '@/widgets/GamesList';
 
 const Games = () => {
   return (
@@ -9,7 +9,7 @@ const Games = () => {
         <Header />
       </div>
       <div className={styles.games_table}>
-        <ProviderGames />
+        <GamesList />
       </div>
     </div>
   );

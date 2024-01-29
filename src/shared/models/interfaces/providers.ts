@@ -4,7 +4,7 @@ export interface IProvider {
 }
 
 export interface IProviderData {
-  texts: Text[];
+  texts: IProviderText[];
   image: string | null;
 }
 

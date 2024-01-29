@@ -5,7 +5,7 @@ import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 
-const Modal = ({ isOpen, close, children }: IModal) => {
+const Modal = ({ isOpen, close, children, reRendering = true }: IModal) => {
   const [shouldRenderChildren, setShouldRenderChildren] = useState(isOpen);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const Modal = ({ isOpen, close, children }: IModal) => {
             />
           </svg>
         </div>
-        {shouldRenderChildren && children}
+        {reRendering ? shouldRenderChildren && children : children}
       </div>
     </div>
   );

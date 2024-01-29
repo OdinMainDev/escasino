@@ -2,7 +2,7 @@ import styles from './styles.module.scss';
 
 interface IProps {
   isToggled?: boolean;
-  onToggle?: () => void;
+  onToggle?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Switch = ({ isToggled, onToggle }: IProps) => {

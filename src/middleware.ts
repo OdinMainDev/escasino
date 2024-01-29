@@ -1,10 +1,13 @@
 import createMiddleware from 'next-intl/middleware';
- 
+import { locales, localePrefix, pathnames } from './shared/hooks/navigation';
+
 export default createMiddleware({
-  locales: ['en', 'ru'],
-   defaultLocale: 'ru'
+  defaultLocale: 'ru',
+  localePrefix,
+  locales,
+  pathnames,
 });
- 
+
 export const config = {
-  matcher: ['/', '/(ru|en)/:path*']
+  matcher: ['/', '/(ru|en)/:path*'],
 };
