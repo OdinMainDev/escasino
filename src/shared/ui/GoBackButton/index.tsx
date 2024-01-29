@@ -11,7 +11,7 @@ const GoBackButton = ({ className }: IProps) => {
   const pathname = usePathname();
 
   const goBack = () => {
-    router.push('/');
+    router.back();
   };
 
   if (pathname == '/') {
