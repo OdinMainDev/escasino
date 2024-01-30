@@ -9,10 +9,16 @@ import {
   openLoginModal,
   openRegistrationModal,
 } from '@/store/slices/authModalSlice';
+import { useEffect } from 'react';
+import { getSettings } from '@/store/slices/settingsSlice';
 
 const AuthModal = () => {
   const dispatch = useAppDispatch();
   const { isOpenLogin, isOpenRegistration } = useAppSelector((state) => state.authModalReducer);
+
+  useEffect(() => {
+    void dispatch(getSettings());
+  }, []);
 
   const openLogin = () => {
     document.body.classList.add('overflow-hidden');

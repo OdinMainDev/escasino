@@ -1,9 +1,11 @@
 import { combineReducers, configureStore, ReducersMapObject } from '@reduxjs/toolkit';
 import { IReducers } from './models/interfaces';
 import { authModalSlice } from './slices/authModalSlice';
+import settingsReducer from './slices/settingsSlice';
 
 const reducers: ReducersMapObject<IReducers> = {
   authModalReducer: authModalSlice.reducer,
+  settingsReducer: settingsReducer,
 };
 
 const rootReducers = combineReducers(reducers);

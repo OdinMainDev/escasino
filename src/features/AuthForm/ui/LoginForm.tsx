@@ -1,17 +1,54 @@
+import ReCAPTCHA from 'react-google-recaptcha';
+import { useState } from 'react';
 import styles from './LoginForm.module.scss';
 import Input from '@/shared/ui/Input';
 import Button from '@/shared/ui/Button';
+import { ILoginData } from '../models/login';
+import { loginHandlerApi } from '../api/loginApi';
+import { getVisitorId } from '../helpers/getVisitorId';
+import { useAppSelector } from '@/shared/hooks/redux';
 
 interface IProps {
   openRegistration: () => void;
 }
 
 const LoginForm = ({ openRegistration }: IProps) => {
+  const { settings, loading } = useAppSelector((state) => state.settingsReducer);
+  const [loginData, setLoginData] = useState<ILoginData>({
+    email: '',
+    password: '',
+    fid: '',
+    captcha: '',
+    remember: false,
+  });
+
+  const sendData = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
+    try {
+      e.preventDefault();
+      const fid = await getVisitorId();
+      await loginHandlerApi({ ...loginData, fid });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <form className={styles.container}>
       <div className={styles.title}>Войти в личный кабинет</div>
-      <Input placeholder="Электронная почта" type="email" className={styles.input} />
-      <Input placeholder="Пароль" type="password" className={styles.input} />
+      <Input
+        placeholder="Электронная почта"
+        type="email"
+        className={styles.input}
+        value={loginData.email}
+        onChange={(e) => setLoginData((prev) => ({ ...prev, email: e.target.value }))}
+      />
+      <Input
+        placeholder="Пароль"
+        type="password"
+        className={styles.input}
+        value={loginData.password}
+        onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
+      />
       <div className={styles.forgot}>Я забыл пароль</div>
       <div className={styles.subtitle}>C помощью социальных сетей</div>
       <div className={styles.social}>
@@ -55,7 +92,17 @@ const LoginForm = ({ openRegistration }: IProps) => {
           />
         </svg>
       </div>
-      <Button className={styles.button} type="submit">
+      {!loading ? (
+        <ReCAPTCHA
+          className={styles.captcha}
+          sitekey={settings?.captcha_site_key ?? ''}
+          onChange={(value: string | null) =>
+            setLoginData((prev) => ({ ...prev, captcha: value ?? '' }))
+          }
+        />
+      ) : null}
+      ,
+      <Button className={styles.button} onClick={(e) => void sendData(e)}>
         Войти
       </Button>
       <div className={styles.label}>
