@@ -38,14 +38,14 @@ const LoginForm = ({ openRegistration }: IProps) => {
       <Input
         placeholder="Электронная почта"
         type="email"
-        className={styles.input}
+        containerClassName={styles.input}
         value={loginData.email}
         onChange={(e) => setLoginData((prev) => ({ ...prev, email: e.target.value }))}
       />
       <Input
         placeholder="Пароль"
         type="password"
-        className={styles.input}
+        containerClassName={styles.input}
         value={loginData.password}
         onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
       />

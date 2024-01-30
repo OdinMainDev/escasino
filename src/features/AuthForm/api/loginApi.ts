@@ -19,7 +19,6 @@ export const loginHandlerApi = async (loginData: ILoginData): Promise<string | n
         'C-Token': process.env.CASINO_TOKEN || process.env.NEXT_PUBLIC_CASINO_TOKEN || '',
       },
     });
-    console.log(res.data);
     return '';
   } catch (e) {
     return null;

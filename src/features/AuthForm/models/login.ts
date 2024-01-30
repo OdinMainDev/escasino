@@ -3,4 +3,5 @@ export interface ILoginData {
   password: string;
   fid: string;
   captcha: string;
+  remember: boolean;
 }

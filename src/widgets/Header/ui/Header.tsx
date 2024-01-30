@@ -34,7 +34,12 @@ const Header = () => {
     <div className={styles.container} style={containerStyles}>
       <div className={styles.search}>
         {`/${lang}` !== pathname && <GoBackButton className={styles.back} />}
-        <Input placeholder="Поиск игры" elType="search" className={styles.input} elSize="s" />
+        <Input
+          placeholder="Поиск игры"
+          elType="search"
+          containerClassName={styles.input}
+          elSize="s"
+        />
         {/* <UserIcon /> */}
         <div className={styles.icons_list}>
           <div className={styles.icon} onClick={openModal}>

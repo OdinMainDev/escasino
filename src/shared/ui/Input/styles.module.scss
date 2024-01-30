@@ -1,18 +1,35 @@
 .container {
+  width: 100%;
+  &.error {
+    .label {
+      border: 1px solid var(--Aditional-error, #CF6679);
+      .placeholder {
+        color: var(--Aditional-error, #CF6679);
+      }
+    }
+    .message {
+      color: var(--Aditional-error, #CF6679);
+    }
+  }
+}
+
+.label {
   display: flex;
   align-items: center;
+  position: relative;
   width: 100%;
   background: var(--Input-bg, #2F2F2F);
   border-radius: 4px;
-
 }
 
 .m {
-  padding: 16px;
+  height: 50px;
+  padding: 16px 16px 3px 16px;
 }
 
 .s {
-  padding: 8px 12px;
+  height: 40px;
+  padding: 13px 12px 2px 12px;
 }
 
 .input {
@@ -23,12 +40,7 @@
   font-weight: 500;
   width: 100%;
   outline: none;
-  &::placeholder {
-    color: #8E8E8E;
-    font-size: 14px;
-    font-weight: 500;
-  }
-
+  
   &::-webkit-search-cancel-button {
     position:relative;
     -webkit-appearance: none;
@@ -45,12 +57,41 @@
     -webkit-box-shadow: 0 0 0px 1000px rgb(47, 47, 47) inset !important;
     -webkit-text-fill-color: #8E8E8E;
   }
+
+  &.active + .placeholder {
+    transform: translateY(-20px);
+    font-size: 11px;
+  }
+}
+
+.placeholder {
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8E8E8E;
+  font-size: 14px;
+  font-weight: 500;
+  position: absolute;
+  pointer-events: none;
+  transition: transform 0.2s, font-size 0.2s;
 }
 
 .icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
   margin-left: 10px;
   svg {
     width: 24px;
     height: 24px;
   }
+}
+
+.message {
+  margin-top: 10px;
+  color: #8E8E8E;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
 }

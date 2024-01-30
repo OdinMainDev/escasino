@@ -14,9 +14,9 @@ const RegistrationForm = ({ openLogin }: IProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.title}>Регистрация нового игрока</div>
-      <Input placeholder="Электронная почта" type="email" className={styles.input} />
+      <Input placeholder="Электронная почта" type="email" containerClassName={styles.input} />
       <div className={styles.input_description}>Будет использоваться как логин для входа </div>
-      <Input placeholder="Пароль" type="password" className={styles.input} />
+      <Input placeholder="Пароль" type="password" containerClassName={styles.input} />
       <div className={styles.checkbox}>
         <Checkbox value={true} />
         <div>
