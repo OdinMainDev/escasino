@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { ILoginData } from '../models/login';
+import axios, { AxiosResponse, isAxiosError } from 'axios';
+import { ILoginData, ILoginError, ILoginRes } from '../models/login';
 
 export const loginApi = () => {
   let domain;
@@ -12,15 +12,30 @@ export const loginApi = () => {
   return `${domain}/api/v1/auth/login`;
 };
 
-export const loginHandlerApi = async (loginData: ILoginData): Promise<string | null> => {
+export const loginHandlerApi = async (loginData: ILoginData): Promise<ILoginRes> => {
   try {
-    const res = await axios.post(loginApi(), loginData, {
+    const res: AxiosResponse<ILoginRes> = await axios.post(loginApi(), loginData, {
       headers: {
         'C-Token': process.env.CASINO_TOKEN || process.env.NEXT_PUBLIC_CASINO_TOKEN || '',
       },
     });
-    return '';
-  } catch (e) {
-    return null;
+    const data = res.data;
+    return data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      if (error.response?.status === 422) {
+        const err = error.response?.data as ILoginError;
+        throw err;
+      }
+      throw {
+        errors: 'Unknown error',
+        success: false,
+      };
+    } else {
+      throw {
+        errors: 'Unknown error',
+        success: false,
+      };
+    }
   }
 };

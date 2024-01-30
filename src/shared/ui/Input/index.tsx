@@ -5,15 +5,15 @@ import classNames from 'classnames';
 import styles from './styles.module.scss';
 import Icons from '../Icons';
 
-interface IProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   elType?: 'input' | 'search';
   elSize?: 'm' | 's';
   isError?: boolean;
-  message?: string;
+  message?: string | null;
   containerClassName?: string;
 }
 
-const Input = forwardRef<HTMLInputElement, IProps>(
+const Input = forwardRef<HTMLInputElement, IInputProps>(
   (
     {
       elType = 'input',
@@ -83,7 +83,7 @@ const Input = forwardRef<HTMLInputElement, IProps>(
           <span className={styles.placeholder}>{placeholder}</span>
           {renderIcon()}
         </label>
-        <div className={styles.message}>{message}</div>
+        {message && <div className={styles.message}>{message}</div>}
       </div>
     );
   },
