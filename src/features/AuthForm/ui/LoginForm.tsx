@@ -9,6 +9,7 @@ import { getVisitorId } from '../helpers/getVisitorId';
 import { useAppSelector } from '@/shared/hooks/redux';
 import { Telegram, Twitter, VK } from './Icons';
 import { loginInputs } from '../constants/login';
+import { autoCompleteHandler } from '../helpers/autoCompleteHandler';
 
 interface IProps {
   openRegistration: () => void;
@@ -50,6 +51,7 @@ const LoginForm = ({ openRegistration }: IProps) => {
           type={item.type}
           containerClassName={styles.input}
           value={String(loginData[item.name as keyof ILoginData])}
+          autoComplete={autoCompleteHandler(item.type)}
           isError={isError}
           message={index === 1 && isError ? 'Логин или пароль введены неверно' : null}
           onChange={(e) => handleInputChange(item.name ?? '', e.target.value)}
