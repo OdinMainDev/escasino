@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { IFilter } from '@/shared/models/interfaces/filter';
 import Button from '@/shared/ui/Button';
 import CategoriesList from './CategoriesList';
-import { useRouter } from '@/shared/hooks/navigation';
+import { usePathname, useRouter } from '@/shared/hooks/navigation';
 import { useSearchParams } from 'next/navigation';
 import { countActiveKeys } from '../helpers/countActiveKeys';
 
@@ -22,8 +22,10 @@ const FilterModal = ({ isOpen, close, setFilterQuantity }: IProps) => {
     providers: searchParams.getAll('providers[]') ?? [],
     is_game_avail_for_bonus: searchParams.get('is_game_avail_for_bonus') == 'true' ?? false,
     distinct_filters: true,
+    query: searchParams.get('query') ?? '',
   });
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     setFilterQuantity(countActiveKeys(filter));
@@ -73,6 +75,7 @@ const FilterModal = ({ isOpen, close, setFilterQuantity }: IProps) => {
     router.push({
       pathname: '/games',
       query: {
+        query: filter.query,
         'categories[]': filter.categories,
         'providers[]': filter.providers,
         is_game_avail_for_bonus: filter.is_game_avail_for_bonus,
@@ -82,14 +85,17 @@ const FilterModal = ({ isOpen, close, setFilterQuantity }: IProps) => {
   };
 
   const cacel = () => {
-    const filter = {
-      categories: [],
-      providers: [],
-      is_game_avail_for_bonus: false,
-      distinct_filters: true,
-    };
-    setFilters(filter);
-    router.push('/games');
+    if (pathname !== '/') {
+      const filter = {
+        categories: [],
+        providers: [],
+        is_game_avail_for_bonus: false,
+        distinct_filters: true,
+        query: '',
+      };
+      setFilters(filter);
+      router.push('/games');
+    }
     if (close) {
       close();
     }

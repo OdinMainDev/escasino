@@ -26,6 +26,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
       type,
       placeholder,
       message,
+      value,
       validationFunction,
       validationTimeout = 0,
       ...otherProps
@@ -33,7 +34,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
     ref,
   ) => {
     const [isPassword, setIsPassword] = useState(true);
-    const [isActive, setIsActive] = useState(false);
+    const [isActive, setIsActive] = useState(!!value);
     const [isValid, setIsValid] = useState(true);
     const [errorMessage, setErrorMessage] = useState(message);
     const time = useRef<NodeJS.Timeout | null>(null);
@@ -109,6 +110,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
           <input
             {...otherProps}
             ref={ref}
+            value={value}
             onChange={onChangeHandler}
             onFocus={handleFocus}
             onBlur={handleBlur}

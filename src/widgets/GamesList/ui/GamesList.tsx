@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { postSearchGamesApi } from '@/shared/api/searchApi';
 import { IFilter } from '@/shared/models/interfaces/filter';
+import styles from './GamesList.module.scss';
 import Loader from '@/shared/ui/Loader';
 
 const GamesList = () => {
@@ -16,6 +17,7 @@ const GamesList = () => {
   useEffect(() => {
     const getGames = async () => {
       const filter: IFilter = {
+        query: searchParams.get('query') ?? '',
         providers: searchParams.getAll('providers[]') ?? [],
         categories: searchParams.getAll('categories[]') ?? [],
         is_game_avail_for_bonus: searchParams.get('is_game_avail_for_bonus') == 'true' ?? false,
@@ -34,8 +36,12 @@ const GamesList = () => {
   }
 
   return (
-    <div>
-      <GamesTable games={games} />
+    <div className={styles.container}>
+      {games.length > 0 ? (
+        <GamesTable games={games} />
+      ) : (
+        <div className={styles.warning}>К сожалению у нас нет таких игр</div>
+      )}
     </div>
   );
 };

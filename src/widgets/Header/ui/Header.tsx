@@ -1,20 +1,39 @@
 'use client';
 
-import { useState } from 'react';
+import { KeyboardEvent, useEffect, useState } from 'react';
 
 import Input from '@/shared/ui/Input';
 import styles from './Header.module.scss';
 import { ChatIcon, FilterIcon } from './Icons';
 import GoBackButton from '@/shared/ui/GoBackButton';
 import FilterModal from '@/features/FilterModal';
-import { usePathname } from 'next/navigation';
-import useLanguageFromUrl from '@/shared/hooks/laguage';
+import { usePathname, useRouter } from '@/shared/hooks/navigation';
+import { useSearchParams } from 'next/navigation';
+import { IFilter } from '@/shared/models/interfaces/filter';
 
 const Header = () => {
   const [openFilter, setOpenFilter] = useState<boolean>(false);
   const [filterQuantity, setFilterQuantity] = useState<number>(0);
+  const searchParams = useSearchParams();
+  const [filter, setFilters] = useState<IFilter>({
+    categories: searchParams.getAll('categories[]') ?? [],
+    providers: searchParams.getAll('providers[]') ?? [],
+    is_game_avail_for_bonus: searchParams.get('is_game_avail_for_bonus') == 'true' ?? false,
+    distinct_filters: true,
+    query: searchParams.get('query') ?? '',
+  });
   const pathname = usePathname();
-  const lang = useLanguageFromUrl();
+  const router = useRouter();
+
+  useEffect(() => {
+    setFilters({
+      categories: searchParams.getAll('categories[]') ?? [],
+      providers: searchParams.getAll('providers[]') ?? [],
+      is_game_avail_for_bonus: searchParams.get('is_game_avail_for_bonus') == 'true' ?? false,
+      distinct_filters: true,
+      query: searchParams.get('query') ?? '',
+    });
+  }, [searchParams]);
 
   const containerStyles = {
     backgroundColor: `#${process.env.NEXT_PUBLIC_HEADER_COLOR}` ?? '#121212',
@@ -30,17 +49,34 @@ const Header = () => {
     setOpenFilter(false);
   };
 
+  const searchGames = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      router.push({
+        pathname: '/games',
+        query: {
+          query: filter.query,
+          'categories[]': filter.categories,
+          'providers[]': filter.providers,
+          is_game_avail_for_bonus: filter.is_game_avail_for_bonus,
+          distinct_filters: filter.distinct_filters,
+        },
+      });
+    }
+  };
+
   return (
     <div className={styles.container} style={containerStyles}>
       <div className={styles.search}>
-        {`/${lang}` !== pathname && <GoBackButton className={styles.back} />}
+        {'/' !== pathname && <GoBackButton className={styles.back} />}
         <Input
           placeholder="Поиск игры"
           elType="search"
+          onKeyDown={searchGames}
           containerClassName={styles.input}
           elSize="s"
+          value={filter.query}
+          onChange={(e) => setFilters((prev) => ({ ...prev, query: e.target.value }))}
         />
-        {/* <UserIcon /> */}
         <div className={styles.icons_list}>
           <div className={styles.icon} onClick={openModal}>
             <FilterIcon quantity={filterQuantity} />
@@ -49,7 +85,6 @@ const Header = () => {
         </div>
       </div>
       <FilterModal isOpen={openFilter} close={closeModal} setFilterQuantity={setFilterQuantity} />
-      {/* <ProvidersList /> */}
     </div>
   );
 };

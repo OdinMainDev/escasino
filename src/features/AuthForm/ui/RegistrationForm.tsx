@@ -22,6 +22,7 @@ import { registerHandlerApi } from '../api/registerApi';
 import { IAuthError } from '../models/auth';
 import { registerRequireInputs } from '../constants/register';
 import Loader from '@/shared/ui/Loader';
+import { Link } from '@/shared/hooks/navigation';
 
 interface IProps {
   openLogin: () => void;
@@ -138,7 +139,7 @@ const RegistrationForm = ({ openLogin }: IProps) => {
           onChange={(value) => setRegisterData((prev) => ({ ...prev, terms: value }))}
         />
         <div>
-          Я ознакомился с <span>правилами и условиями</span>
+          Я ознакомился с <Link href="/terms">правилами и условиями</Link>
         </div>
       </div>
       <div className={styles.subtitle}>C помощью социальных сетей</div>
