@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, isAxiosError } from 'axios';
-import { ILoginData, ILoginError, ILoginRes } from '../models/login';
+import { ILoginData } from '../models/login';
+import { IAuthRes, IAuthError } from '../models/auth';
 
 export const loginApi = () => {
   let domain;
@@ -12,9 +13,9 @@ export const loginApi = () => {
   return `${domain}/api/v1/auth/login`;
 };
 
-export const loginHandlerApi = async (loginData: ILoginData): Promise<ILoginRes> => {
+export const loginHandlerApi = async (loginData: ILoginData): Promise<IAuthRes> => {
   try {
-    const res: AxiosResponse<ILoginRes> = await axios.post(loginApi(), loginData, {
+    const res: AxiosResponse<IAuthRes> = await axios.post(loginApi(), loginData, {
       headers: {
         'C-Token': process.env.CASINO_TOKEN || process.env.NEXT_PUBLIC_CASINO_TOKEN || '',
       },
@@ -24,7 +25,7 @@ export const loginHandlerApi = async (loginData: ILoginData): Promise<ILoginRes>
   } catch (error) {
     if (isAxiosError(error)) {
       if (error.response?.status === 422) {
-        const err = error.response?.data as ILoginError;
+        const err = error.response?.data as IAuthError;
         throw err;
       }
       throw {

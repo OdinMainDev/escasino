@@ -5,6 +5,13 @@
   justify-content: center;
   width: 18px;
   height: 18px;
+
+  .error {
+    .checkbox {
+      border: 2px solid  var(--Aditional-error, #F2F2F2);
+
+    }
+  }
   input {
     display: none;
   }

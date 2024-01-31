@@ -1,26 +1,32 @@
 import { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
+import classNames from 'classnames';
 
 interface IProps {
   value?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value: boolean) => void;
+  isError?: boolean;
 }
 
-const Checkbox = ({ value, onChange }: IProps) => {
+const Checkbox = ({ value, onChange, isError }: IProps) => {
   const [checked, setChecked] = useState<boolean>(value ?? false);
   useEffect(() => {
-    setChecked(value ?? false);
+    setChecked(!!value);
   }, [value]);
 
   const onCheck = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (onChange) {
-      onChange(e);
+      onChange(e.target.checked);
     }
     setChecked(e.target.checked);
   };
 
   return (
-    <label className={styles.container}>
+    <label
+      className={classNames(styles.container, {
+        [styles.error]: isError,
+      })}
+    >
       <input type="checkbox" checked={checked} onChange={onCheck} />
       {checked ? (
         <svg
