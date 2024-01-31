@@ -10,6 +10,8 @@ import { useAppSelector } from '@/shared/hooks/redux';
 import { Telegram, Twitter, VK } from './Icons';
 import { loginInputs } from '../constants/login';
 import { autoCompleteHandler } from '../helpers/autoCompleteHandler';
+import Loader from '@/shared/ui/Loader';
+import { validatLogin } from '../helpers/validators';
 
 interface IProps {
   openRegistration: () => void;
@@ -18,6 +20,7 @@ interface IProps {
 const LoginForm = ({ openRegistration }: IProps) => {
   const { settings, loading } = useAppSelector((state) => state.settingsReducer);
   const [isError, setIsError] = useState<boolean>(false);
+  const [loader, setLoader] = useState<boolean>(false);
   const [loginData, setLoginData] = useState<ILoginData>({
     email: '',
     password: '',
@@ -34,15 +37,23 @@ const LoginForm = ({ openRegistration }: IProps) => {
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
     try {
       e.preventDefault();
+      setLoader(true);
       const fid = await getVisitorId();
       await loginHandlerApi({ ...loginData, fid });
     } catch (e: unknown) {
       setIsError(true);
+    } finally {
+      setLoader(false);
     }
   };
 
   return (
     <form className={styles.container}>
+      {loader && (
+        <div className={styles.loader_container}>
+          <Loader />
+        </div>
+      )}
       <div className={styles.title}>Войти в личный кабинет</div>
       {loginInputs.map((item, index) => (
         <Input
@@ -74,7 +85,11 @@ const LoginForm = ({ openRegistration }: IProps) => {
         />
       ) : null}
       ,
-      <Button className={styles.button} onClick={(e) => void sendData(e)}>
+      <Button
+        disabled={!validatLogin(loginData)}
+        className={styles.button}
+        onClick={(e) => void sendData(e)}
+      >
         Войти
       </Button>
       <div className={styles.label}>

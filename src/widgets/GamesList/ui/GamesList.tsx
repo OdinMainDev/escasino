@@ -4,10 +4,9 @@ import { GamesTable } from '@/features/GamesTable';
 import { IGame } from '@/shared/models/interfaces/games';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
-import styles from './GamesList.module.scss';
 import { postSearchGamesApi } from '@/shared/api/searchApi';
 import { IFilter } from '@/shared/models/interfaces/filter';
+import Loader from '@/shared/ui/Loader';
 
 const GamesList = () => {
   const searchParams = useSearchParams();
@@ -31,13 +30,7 @@ const GamesList = () => {
   }, [searchParams]);
 
   if (loading) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.loader}>
-          <div className={styles.roulette_wheel}></div>
-        </div>
-      </div>
-    );
+    return <Loader />;
   }
 
   return (

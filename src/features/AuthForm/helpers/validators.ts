@@ -1,3 +1,6 @@
+import { ILoginData } from '../models/login';
+import { IRegisterData } from '../models/register';
+
 export function validateEmail(email: string): boolean {
   if (email.trim() === '') {
     return true;
@@ -20,4 +23,28 @@ export const validatePasswordMatching = (password: string, repeat_password: stri
   }
 
   return password.trim() === repeat_password.trim();
+};
+
+export const validateRegister = (registerData: IRegisterData): boolean => {
+  if (
+    validateEmail(registerData.email) &&
+    validatePasswordLength(registerData.password) &&
+    validatePasswordMatching(registerData.password, registerData.repeat_password) &&
+    registerData.terms &&
+    registerData.currency
+  ) {
+    return true;
+  }
+  return false;
+};
+
+export const validatLogin = (loginData: ILoginData): boolean => {
+  if (
+    validateEmail(loginData.email) &&
+    validatePasswordLength(loginData.password) &&
+    loginData.captcha
+  ) {
+    return true;
+  }
+  return false;
 };

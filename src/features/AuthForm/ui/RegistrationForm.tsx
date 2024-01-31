@@ -9,16 +9,19 @@ import { Telegram, Twitter, VK } from './Icons';
 import Select from '@/shared/ui/Select';
 import { useAppSelector } from '@/shared/hooks/redux';
 import { ISelectOption } from '@/shared/models/interfaces/select';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { IRegisterData } from '../models/register';
 import {
   validateEmail,
   validatePasswordLength,
   validatePasswordMatching,
+  validateRegister,
 } from '../helpers/validators';
 import { getVisitorId } from '../helpers/getVisitorId';
 import { registerHandlerApi } from '../api/registerApi';
 import { IAuthError } from '../models/auth';
+import { registerRequireInputs } from '../constants/register';
+import Loader from '@/shared/ui/Loader';
 
 interface IProps {
   openLogin: () => void;
@@ -26,7 +29,9 @@ interface IProps {
 
 const RegistrationForm = ({ openLogin }: IProps) => {
   const { settings, loading } = useAppSelector((state) => state.settingsReducer);
+  const [loader, setLoader] = useState<boolean>(false);
   const [errorList, setErrorList] = useState<string[]>([]);
+  const errorTimout = useRef<NodeJS.Timeout | null>(null);
   const [registerData, setRegisterData] = useState<IRegisterData>({
     promo: false,
     email: '',
@@ -44,25 +49,43 @@ const RegistrationForm = ({ openLogin }: IProps) => {
         ]
       : [];
 
-  const sendData = async () => {
+  const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
+      e.preventDefault();
+      setLoader(true);
       const fid = await getVisitorId();
       await registerHandlerApi({ ...registerData, fid });
     } catch (e: unknown) {
       const regError = e as IAuthError;
       const errorList = Object.keys(regError.error);
       if (Array.isArray(errorList)) {
-        console.log(errorList);
+        setErrorList(errorList);
+      } else {
+        if (errorTimout.current) {
+          clearTimeout(errorTimout.current);
+        }
+        setErrorList(registerRequireInputs);
+        errorTimout.current = setTimeout(() => {
+          setErrorList([]);
+        }, 1000);
       }
+    } finally {
+      setLoader(false);
     }
   };
 
   return (
-    <div className={styles.container}>
+    <form className={styles.container}>
+      {loader && (
+        <div className={styles.loader_container}>
+          <Loader />
+        </div>
+      )}
       <div className={styles.title}>Регистрация нового игрока</div>
       <Input
         placeholder="Электронная почта"
         type="email"
+        isError={!!errorList.find((item) => item === 'email')}
         validationTimeout={2500}
         validationFunction={validateEmail}
         onChange={(e) => setRegisterData((prev) => ({ ...prev, email: e.target.value }))}
@@ -76,6 +99,7 @@ const RegistrationForm = ({ openLogin }: IProps) => {
       <Input
         placeholder="Пароль"
         type="password"
+        isError={!!errorList.find((item) => item === 'password')}
         containerClassName={styles.input}
         value={registerData.password}
         validationTimeout={2500}
@@ -90,6 +114,7 @@ const RegistrationForm = ({ openLogin }: IProps) => {
       <Input
         placeholder="Повторите пароль"
         type="password"
+        isError={!!errorList.find((item) => item === 'repeat_password')}
         containerClassName={styles.input}
         validationTimeout={2500}
         validationFunction={(value) => validatePasswordMatching(registerData.password, value)}
@@ -101,12 +126,14 @@ const RegistrationForm = ({ openLogin }: IProps) => {
         onChange={(e) => setRegisterData((prev) => ({ ...prev, repeat_password: e.target.value }))}
       />
       <Select
+        isError={!!errorList.find((item) => item === 'currency')}
         optionList={optionList}
         value={registerData.currency}
         onChange={(e) => setRegisterData((prev) => ({ ...prev, currency: e.target.value }))}
       />
       <div className={styles.checkbox}>
         <Checkbox
+          isError={!!errorList.find((item) => item === 'terms')}
           value={registerData.terms}
           onChange={(value) => setRegisterData((prev) => ({ ...prev, terms: value }))}
         />
@@ -120,13 +147,18 @@ const RegistrationForm = ({ openLogin }: IProps) => {
         <Twitter />
         <VK />
       </div>
-      <Button type="submit" className={styles.button} onClick={() => void sendData()}>
+      <Button
+        type="submit"
+        disabled={!validateRegister(registerData)}
+        className={styles.button}
+        onClick={(e) => void sendData(e)}
+      >
         Зарегистрироваться
       </Button>
       <div className={styles.label}>
         У вас уже есть личный кабинет? <span onClick={openLogin}>Войти</span>
       </div>
-    </div>
+    </form>
   );
 };
 

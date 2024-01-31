@@ -6,9 +6,9 @@
   width: 18px;
   height: 18px;
 
-  .error {
+  &.error {
     .checkbox {
-      border: 2px solid  var(--Aditional-error, #F2F2F2);
+      border: 2px solid  var(--Aditional-error, #CF6679);
 
     }
   }
