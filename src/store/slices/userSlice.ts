@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getMeUserApi } from '@/shared/api/userApi';
 import { IInitialUser } from '../models/user';
+import Cookies from 'js-cookie';
 import { IUser } from '@/shared/models/interfaces/user';
 
 const initialState: IInitialUser = {
@@ -33,7 +34,14 @@ export const userSlice = createSlice({
       state.isError = true;
     });
   },
-  reducers: {},
+  reducers: {
+    logout(state) {
+      state.isAuth = false;
+      state.user = null;
+      Cookies.remove('token');
+    },
+  },
 });
 
+export const { logout } = userSlice.actions;
 export default userSlice.reducer;

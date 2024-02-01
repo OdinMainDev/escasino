@@ -3,15 +3,22 @@
 import GoBackButton from '@/shared/ui/GoBackButton';
 import styles from './styles.module.scss';
 import SupportButton from '@/shared/ui/SupportButton';
-import { useAppSelector } from '@/shared/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/shared/hooks/redux';
 import Button from '@/shared/ui/Button';
 import Icons from '@/shared/ui/Icons';
 import classNames from 'classnames';
 import { useRouter } from '@/shared/hooks/navigation';
+import { logout } from '@/store/slices/userSlice';
 
 const Profile = () => {
   const { user } = useAppSelector((store) => store.userReducer);
+  const dispatch = useAppDispatch();
   const router = useRouter();
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    router.push('/');
+  };
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -90,7 +97,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <Button>Выйти из аккаунта</Button>
+      <Button onClick={logoutHandler}>Выйти из аккаунта</Button>
     </div>
   );
 };

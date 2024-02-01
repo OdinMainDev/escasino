@@ -7,12 +7,14 @@ import Button from '@/shared/ui/Button';
 import { ILoginData } from '../models/login';
 import { loginHandlerApi } from '../api/loginApi';
 import { getVisitorId } from '../helpers/getVisitorId';
-import { useAppSelector } from '@/shared/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/shared/hooks/redux';
 import { Telegram, Twitter, VK } from './Icons';
 import { loginInputs } from '../constants/login';
 import { autoCompleteHandler } from '../helpers/autoCompleteHandler';
 import Loader from '@/shared/ui/Loader';
 import { validatLogin } from '../helpers/validators';
+import { getMeUser } from '@/store/slices/userSlice';
+import { closeLoginModal } from '@/store/slices/authModalSlice';
 
 interface IProps {
   openRegistration: () => void;
@@ -22,6 +24,7 @@ const LoginForm = ({ openRegistration }: IProps) => {
   const { settings, loading } = useAppSelector((state) => state.settingsReducer);
   const [isError, setIsError] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
   const [loginData, setLoginData] = useState<ILoginData>({
     email: '',
     password: '',
@@ -42,6 +45,9 @@ const LoginForm = ({ openRegistration }: IProps) => {
       const fid = await getVisitorId();
       const data = await loginHandlerApi({ ...loginData, fid });
       Cookies.set('token', data.token);
+      document.body.classList.remove('overflow-hidden');
+      dispatch(closeLoginModal());
+      await dispatch(getMeUser());
     } catch (e: unknown) {
       setIsError(true);
     } finally {

@@ -1,13 +1,13 @@
 'use client';
 
 import styles from './RegistrationForm.module.scss';
-
+import Cookies from 'js-cookie';
 import Button from '@/shared/ui/Button';
 import Checkbox from '@/shared/ui/Checkbox';
 import Input from '@/shared/ui/Input';
 import { Telegram, Twitter, VK } from './Icons';
 import Select from '@/shared/ui/Select';
-import { useAppSelector } from '@/shared/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/shared/hooks/redux';
 import { ISelectOption } from '@/shared/models/interfaces/select';
 import { useRef, useState } from 'react';
 import { IRegisterData } from '../models/register';
@@ -22,7 +22,9 @@ import { registerHandlerApi } from '../api/registerApi';
 import { IAuthError } from '../models/auth';
 import { registerRequireInputs } from '../constants/register';
 import Loader from '@/shared/ui/Loader';
-import { Link } from '@/shared/hooks/navigation';
+import { Link, useRouter } from '@/shared/hooks/navigation';
+import { getMeUser } from '@/store/slices/userSlice';
+import { closeRegistrationModal } from '@/store/slices/authModalSlice';
 
 interface IProps {
   openLogin: () => void;
@@ -33,6 +35,8 @@ const RegistrationForm = ({ openLogin }: IProps) => {
   const [loader, setLoader] = useState<boolean>(false);
   const [errorList, setErrorList] = useState<string[]>([]);
   const errorTimout = useRef<NodeJS.Timeout | null>(null);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const [registerData, setRegisterData] = useState<IRegisterData>({
     promo: false,
     email: '',
@@ -55,7 +59,12 @@ const RegistrationForm = ({ openLogin }: IProps) => {
       e.preventDefault();
       setLoader(true);
       const fid = await getVisitorId();
-      await registerHandlerApi({ ...registerData, fid });
+      const data = await registerHandlerApi({ ...registerData, fid });
+      Cookies.set('token', data.token);
+      document.body.classList.remove('overflow-hidden');
+      dispatch(closeRegistrationModal());
+      await dispatch(getMeUser());
+      router.push('/profile/edit');
     } catch (e: unknown) {
       const regError = e as IAuthError;
       const errorList = Object.keys(regError.error);
