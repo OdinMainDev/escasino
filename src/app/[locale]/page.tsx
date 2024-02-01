@@ -1,5 +1,5 @@
 import { Header } from '@/widgets/Header';
-import { TopGames } from '@/widgets/TopGames';
+// import { TopGames } from '@/widgets/TopGames';
 import { GamesTable } from '@/features/GamesTable';
 
 import styles from './styles.module.scss';
@@ -13,9 +13,9 @@ export default async function Home() {
       <div className={styles.header}>
         <Header />
       </div>
-      <div className={styles.top_games}>
+      {/* <div className={styles.top_games}>
         <TopGames />
-      </div>
+      </div> */}
       <div className={styles.games_table}>
         <GamesTable games={games} />
       </div>
