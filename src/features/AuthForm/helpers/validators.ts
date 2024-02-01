@@ -1,5 +1,6 @@
 import { ILoginData } from '../models/login';
 import { IRegisterData } from '../models/register';
+import { IResetPasswordData } from '../models/resetPassword';
 
 export function validateEmail(email: string): boolean {
   if (email.trim() === '') {
@@ -38,12 +39,19 @@ export const validateRegister = (registerData: IRegisterData): boolean => {
   return false;
 };
 
-export const validatLogin = (loginData: ILoginData): boolean => {
+export const validateLogin = (loginData: ILoginData): boolean => {
   if (
     validateEmail(loginData.email) &&
     validatePasswordLength(loginData.password) &&
     loginData.captcha
   ) {
+    return true;
+  }
+  return false;
+};
+
+export const validateResetPassword = (resetPasswordData: IResetPasswordData): boolean => {
+  if (validateEmail(resetPasswordData.email) && resetPasswordData.captcha) {
     return true;
   }
   return false;

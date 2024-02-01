@@ -12,9 +12,9 @@ import { Telegram, Twitter, VK } from './Icons';
 import { loginInputs } from '../constants/login';
 import { autoCompleteHandler } from '../helpers/autoCompleteHandler';
 import Loader from '@/shared/ui/Loader';
-import { validatLogin } from '../helpers/validators';
+import { validateLogin } from '../helpers/validators';
 import { getMeUser } from '@/store/slices/userSlice';
-import { closeLoginModal } from '@/store/slices/authModalSlice';
+import { closeLoginModal, openResetPasswordModal } from '@/store/slices/authModalSlice';
 
 interface IProps {
   openRegistration: () => void;
@@ -76,7 +76,9 @@ const LoginForm = ({ openRegistration }: IProps) => {
           onChange={(e) => handleInputChange(item.name ?? '', e.target.value)}
         />
       ))}
-      <div className={styles.forgot}>Я забыл пароль</div>
+      <div className={styles.forgot} onClick={() => dispatch(openResetPasswordModal())}>
+        Я забыл пароль
+      </div>
       <div className={styles.subtitle}>C помощью социальных сетей</div>
       <div className={styles.social}>
         <Telegram />
@@ -94,7 +96,7 @@ const LoginForm = ({ openRegistration }: IProps) => {
       ) : null}
       ,
       <Button
-        disabled={!validatLogin(loginData)}
+        disabled={!validateLogin(loginData)}
         className={styles.button}
         onClick={(e) => void sendData(e)}
       >
