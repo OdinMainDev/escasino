@@ -10,17 +10,25 @@ import { useAppSelector } from '@/shared/hooks/redux';
 import { userDataMapper } from '../mapper/userDataMapper';
 import Loader from '@/shared/ui/Loader';
 import Icons from '@/shared/ui/Icons';
+import Select from '@/shared/ui/Select';
+import { genderSelect } from '../constants/genderSelect';
 
 const ProfileForm = () => {
   const { user, loading } = useAppSelector((state) => state.userReducer);
   const [loader, setLoader] = useState(false);
   const [userData, setUserData] = useState<IUserData>({
-    first_name: '',
-    last_name: '',
-    second_name: '',
     email: '',
     phone: '',
+    username: '',
+    first_name: '',
+    second_name: '',
+    last_name: '',
+    gender: '',
+    dob: 0,
+    country: '',
+    city: '',
     address: '',
+    zip: '',
   });
 
   useEffect(() => {
@@ -77,7 +85,7 @@ const ProfileForm = () => {
         )}
         <Input
           type="email"
-          className={styles.email}
+          containerClassName={styles.input}
           placeholder="Электронная почта"
           disabled
           value={userData.email}
@@ -86,13 +94,50 @@ const ProfileForm = () => {
           Подтвердить электронную почту
         </Button> */}
         <Input
-          placeholder="Телефон"
-          type="number"
+          placeholder="Дата рождения"
+          type="datetime-local"
+          containerClassName={styles.input}
           value={userData.phone}
           onChange={(e) => setUserData((prev) => ({ ...prev, phone: e.target.value }))}
         />
+        <Input
+          placeholder="Телефон"
+          type="number"
+          containerClassName={styles.input}
+          value={userData.phone}
+          onChange={(e) => setUserData((prev) => ({ ...prev, phone: e.target.value }))}
+        />
+        <Input
+          containerClassName={styles.input}
+          placeholder="username"
+          value={userData.username}
+          onChange={(e) => setUserData((prev) => ({ ...prev, username: e.target.value }))}
+        />
+        <Select
+          optionList={genderSelect}
+          value={userData.gender}
+          onChange={(e) => setUserData((prev) => ({ ...prev, gender: e.target.value }))}
+        />
       </div>
       <div className={styles.textarea}>
+        <Input
+          placeholder="Страна"
+          containerClassName={styles.input}
+          value={userData.country}
+          onChange={(e) => setUserData((prev) => ({ ...prev, country: e.target.value }))}
+        />
+        <Input
+          placeholder="Город"
+          containerClassName={styles.input}
+          value={userData.city}
+          onChange={(e) => setUserData((prev) => ({ ...prev, city: e.target.value }))}
+        />
+        <Input
+          placeholder="Zip"
+          containerClassName={styles.input}
+          value={userData.zip}
+          onChange={(e) => setUserData((prev) => ({ ...prev, zip: e.target.value }))}
+        />
         <Textarea
           placeholder="Адрес"
           value={userData.address}
