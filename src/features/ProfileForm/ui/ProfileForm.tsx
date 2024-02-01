@@ -6,16 +6,20 @@ import Button from '@/shared/ui/Button';
 import Textarea from '@/shared/ui/Textarea';
 import { IUserData } from '../models/user';
 import { useEffect, useState } from 'react';
-import { useAppSelector } from '@/shared/hooks/redux';
-import { userDataMapper } from '../mapper/userDataMapper';
+import { useAppDispatch, useAppSelector } from '@/shared/hooks/redux';
+import { formatDateType, userDataMapper } from '../mapper/userDataMapper';
 import Loader from '@/shared/ui/Loader';
 import Icons from '@/shared/ui/Icons';
 import Select from '@/shared/ui/Select';
 import { genderSelect } from '../constants/genderSelect';
+import { editProfileHandlerApi } from '../api/profile';
+import { getVisitorId } from '@/features/AuthForm/helpers/getVisitorId';
+import { getMeUser } from '@/store/slices/userSlice';
 
 const ProfileForm = () => {
   const { user, loading } = useAppSelector((state) => state.userReducer);
   const [loader, setLoader] = useState(false);
+  const dispatch = useAppDispatch();
   const [userData, setUserData] = useState<IUserData>({
     email: '',
     phone: '',
@@ -29,6 +33,7 @@ const ProfileForm = () => {
     city: '',
     address: '',
     zip: '',
+    fid: '',
   });
 
   useEffect(() => {
@@ -37,10 +42,18 @@ const ProfileForm = () => {
     }
   }, [user]);
 
-  const sendData = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
       setLoader(true);
+      const fid = await getVisitorId();
+      const formattedDate = formatDateType(typeof userData.dob === 'number' ? userData.dob : 0);
+      await editProfileHandlerApi({
+        ...userData,
+        dob: new Date(formattedDate).getTime(),
+        fid,
+      });
+      await dispatch(getMeUser());
     } catch (e: unknown) {
       /* empty */
     } finally {
@@ -97,8 +110,8 @@ const ProfileForm = () => {
           placeholder="Дата рождения"
           type="datetime-local"
           containerClassName={styles.input}
-          value={userData.phone}
-          onChange={(e) => setUserData((prev) => ({ ...prev, phone: e.target.value }))}
+          value={userData.dob}
+          onChange={(e) => setUserData((prev) => ({ ...prev, dob: e.target.value }))}
         />
         <Input
           placeholder="Телефон"
@@ -145,7 +158,7 @@ const ProfileForm = () => {
         />
       </div>
 
-      <Button className={styles.save_button} onClick={(e) => sendData(e)}>
+      <Button className={styles.save_button} onClick={(e) => void sendData(e)}>
         Сохранить
       </Button>
     </form>

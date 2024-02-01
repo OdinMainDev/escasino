@@ -11,4 +11,5 @@ export interface IUserData {
   city: string;
   address: string;
   zip: string;
+  fid: string | null;
 }
