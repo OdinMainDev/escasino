@@ -7,6 +7,8 @@ export const pathnames = {
   '/games/[id]': '/games/[id]',
   '/games': '/games',
   '/terms': '/terms',
+  '/profile': '/profile',
+  '/profile/edit': '/profile/edit',
 } satisfies Pathnames<typeof locales>;
 
 export const { Link, redirect, usePathname, useRouter, getPathname } =

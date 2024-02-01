@@ -1,0 +1,14 @@
+'use client';
+import { useAppDispatch } from '@/shared/hooks/redux';
+import { useEffect } from 'react';
+import { getMeUser } from '../slices/userSlice';
+
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    void dispatch(getMeUser());
+  }, []);
+  return children;
+};
+
+export default AuthProvider;

@@ -1,31 +1,35 @@
-import { getSettingsApi } from '@/shared/api/settingsApi';
-import { ISettings } from '@/shared/models/interfaces/settings';
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { IInitialSettings } from '../models/settings';
+import { getMeUserApi } from '@/shared/api/userApi';
+import { IInitialUser } from '../models/user';
+import { IUser } from '@/shared/models/interfaces/user';
 
-const initialState: IInitialSettings = {
+const initialState: IInitialUser = {
   loading: false,
-  settings: null,
   isError: false,
+  isAuth: false,
+  user: null,
 };
 
-export const getSettings = createAsyncThunk('getSettings', async () => {
-  const data = await getSettingsApi();
-  return data;
+export const getMeUser = createAsyncThunk('getMeUserApi', async () => {
+  const user = await getMeUserApi();
+  return user;
 });
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: initialState,
   extraReducers: (builder) => {
-    builder.addCase(getSettings.pending, (state) => {
+    builder.addCase(getMeUser.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getSettings.fulfilled, (state, action: PayloadAction<ISettings | null>) => {
+    builder.addCase(getMeUser.fulfilled, (state, action: PayloadAction<IUser | null>) => {
       state.loading = false;
-      state.settings = action.payload;
+      if (action.payload) {
+        state.isAuth = true;
+      }
+      state.user = action.payload;
     });
-    builder.addCase(getSettings.rejected, (state) => {
+    builder.addCase(getMeUser.rejected, (state) => {
       state.isError = true;
     });
   },

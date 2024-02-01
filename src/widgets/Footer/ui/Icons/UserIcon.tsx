@@ -1,19 +1,17 @@
 'use client';
 
-import { useAppDispatch } from '@/shared/hooks/redux';
-import { openLoginModal } from '@/store/slices/authModalSlice';
-import styles from '../Header.module.scss';
+import { useRouter } from '@/shared/hooks/navigation';
+import styles from './Icon.module.scss';
 
 const UserIcon = () => {
-  const dispatch = useAppDispatch();
+  const router = useRouter();
 
-  const openLogin = () => {
-    document.body.classList.add('overflow-hidden');
-    dispatch(openLoginModal());
+  const openProfile = () => {
+    router.push('/profile');
   };
 
   return (
-    <div className={styles.icon} onClick={openLogin}>
+    <div className={styles.icon} onClick={openProfile}>
       <svg
         width="24"
         height="24"

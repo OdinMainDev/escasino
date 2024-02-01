@@ -1,4 +1,5 @@
 import ReCAPTCHA from 'react-google-recaptcha';
+import Cookies from 'js-cookie';
 import { useState } from 'react';
 import styles from './LoginForm.module.scss';
 import Input from '@/shared/ui/Input';
@@ -39,7 +40,8 @@ const LoginForm = ({ openRegistration }: IProps) => {
       e.preventDefault();
       setLoader(true);
       const fid = await getVisitorId();
-      await loginHandlerApi({ ...loginData, fid });
+      const data = await loginHandlerApi({ ...loginData, fid });
+      Cookies.set('token', data.token);
     } catch (e: unknown) {
       setIsError(true);
     } finally {

@@ -3,6 +3,7 @@ import { Montserrat } from 'next/font/google';
 
 import { Providers } from '@/store';
 import '@/shared/assets/styles/globals.scss';
+import AuthProvider from '@/store/ui/AuthProvider';
 
 const inter = Montserrat({ subsets: ['latin'] });
 
@@ -21,7 +22,9 @@ export default function LocaleLayout({
   return (
     <html lang={locale}>
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <AuthProvider>{children}</AuthProvider>
+        </Providers>
       </body>
     </html>
   );
