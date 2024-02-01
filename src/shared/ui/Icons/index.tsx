@@ -1,5 +1,5 @@
 interface IProps {
-  icon: 'search' | 'eye' | 'eye-off' | 'star' | 'settings' | 'chat';
+  icon: 'search' | 'eye' | 'eye-off' | 'star' | 'settings' | 'chat' | 'file' | 'edit' | 'warning';
 }
 
 const Icons = ({ icon }: IProps) => {
@@ -130,6 +130,68 @@ const Icons = ({ icon }: IProps) => {
           stroke="white"
           strokeOpacity="0.87"
           strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  if (icon === 'file') {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M20 12.5V6.8C20 5.11984 20 4.27976 19.673 3.63803C19.3854 3.07354 18.9265 2.6146 18.362 2.32698C17.7202 2 16.8802 2 15.2 2H8.8C7.11984 2 6.27976 2 5.63803 2.32698C5.07354 2.6146 4.6146 3.07354 4.32698 3.63803C4 4.27976 4 5.11984 4 6.8V17.2C4 18.8802 4 19.7202 4.32698 20.362C4.6146 20.9265 5.07354 21.3854 5.63803 21.673C6.27976 22 7.11984 22 8.8 22H12M14 11H8M10 15H8M16 7H8M14.5 19L16.5 21L21 16.5"
+          stroke="white"
+          strokeOpacity="0.87"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  if (icon === 'edit') {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M18 10L14 6M2.5 21.5L5.88437 21.124C6.29786 21.078 6.5046 21.055 6.69785 20.9925C6.86929 20.937 7.03245 20.8586 7.18289 20.7594C7.35245 20.6475 7.49955 20.5005 7.79373 20.2063L21 7C22.1046 5.89543 22.1046 4.10457 21 3C19.8955 1.89543 18.1046 1.89543 17 3L3.79373 16.2063C3.49955 16.5005 3.35246 16.6475 3.24064 16.8171C3.14143 16.9676 3.06301 17.1307 3.00751 17.3022C2.94496 17.4954 2.92198 17.7021 2.87604 18.1156L2.5 21.5Z"
+          stroke="white"
+          strokeOpacity="0.67"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  if (icon === 'warning') {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+      >
+        <path
+          d="M7.99976 5.99997V8.66664M7.99976 11.3333H8.00642M7.07663 2.59445L1.59338 12.0655C1.28924 12.5909 1.13717 12.8535 1.15965 13.0691C1.17925 13.2571 1.27776 13.428 1.43067 13.5392C1.60597 13.6666 1.90948 13.6666 2.5165 13.6666H13.483C14.09 13.6666 14.3935 13.6666 14.5688 13.5392C14.7217 13.428 14.8203 13.2571 14.8399 13.0691C14.8623 12.8535 14.7103 12.5909 14.4061 12.0655L8.92288 2.59445C8.61983 2.07101 8.46831 1.80929 8.27062 1.72139C8.09818 1.64471 7.90133 1.64471 7.72889 1.72139C7.5312 1.80929 7.37968 2.07101 7.07663 2.59445Z"
+          stroke="#CF6679"
+          strokeWidth="1.33333"
           strokeLinecap="round"
           strokeLinejoin="round"
         />

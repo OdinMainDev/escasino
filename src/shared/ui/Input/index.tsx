@@ -29,6 +29,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
       value,
       validationFunction,
       validationTimeout = 0,
+      disabled,
       ...otherProps
     },
     ref,
@@ -44,12 +45,19 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
       messageRef.current = message;
     }, [message]);
 
+    useEffect(() => {
+      setIsActive(!!value);
+    }, [value]);
+
     const handleFocus = () => setIsActive(true);
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) =>
       setIsActive(e.target.value !== '');
 
     const containerClass = useMemo(
-      () => classNames(styles.label, styles[elSize], className),
+      () =>
+        classNames(styles.label, styles[elSize], className, {
+          [styles.disabled]: disabled,
+        }),
       [elSize, className],
     );
 

@@ -9,7 +9,7 @@ const EditProfile = () => {
         <div className={styles.back}>
           <GoBackButton />
         </div>
-        <div className={styles.title}>Профиль</div>
+        <div className="header_title">Персональные данные</div>
       </div>
       <ProfileForm />
     </div>
