@@ -4,6 +4,7 @@ import { Montserrat } from 'next/font/google';
 import { Providers } from '@/store';
 import '@/shared/assets/styles/globals.scss';
 import AuthProvider from '@/store/ui/AuthProvider';
+import DesktopLayout from '@/shared/ui/DesktopLayout';
 
 const inter = Montserrat({ subsets: ['latin'] });
 
@@ -23,7 +24,9 @@ export default function LocaleLayout({
     <html lang={locale}>
       <body className={inter.className}>
         <Providers>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <DesktopLayout>{children}</DesktopLayout>
+          </AuthProvider>
         </Providers>
       </body>
     </html>

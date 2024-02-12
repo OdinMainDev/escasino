@@ -1,0 +1,27 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: url('../../assets/img/layout-image.jpg') center center/cover no-repeat;
+  &::after {
+    content: '';
+    position: absolute;
+    background-color: #000;
+    opacity: 0.6;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}
+
+.wrapper {
+  max-width: 568px;
+  height: 100vh;
+  z-index: 1;
+  overflow-y: scroll;
+  margin: 0 auto;
+  position: relative;
+  background-color: var(--background);
+}
