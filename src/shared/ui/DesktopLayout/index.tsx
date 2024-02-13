@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
-import styles from './styles.module.scss';
+import './styles.scss';
 interface IProps {
   children: ReactNode;
 }
 const DesktopLayout = ({ children }: IProps) => {
   return (
-    <div className={styles.container}>
-      <div className={styles.wrapper}>{children}</div>
+    <div className="desktop-container">
+      <div className="desktop-wrapper">{children}</div>
     </div>
   );
 };

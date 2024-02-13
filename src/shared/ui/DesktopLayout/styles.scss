@@ -1,4 +1,13 @@
-.container {
+body {
+  &.overflow-hidden {
+    .desktop-wrapper {
+      overflow: hidden;
+    }
+  }
+}
+
+
+.desktop-container {
   width: 100vw;
   height: 100vh;
   position: relative;
@@ -16,8 +25,8 @@
   }
 }
 
-.wrapper {
-  max-width: 568px;
+.desktop-wrapper {
+  max-width: var(--desktop-max-width);
   height: 100vh;
   z-index: 1;
   overflow-y: scroll;
