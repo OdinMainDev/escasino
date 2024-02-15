@@ -1,8 +1,10 @@
+import { useRouter } from '@/shared/hooks/navigation';
 import styles from './Icon.module.scss';
 
 const Wallet = () => {
+  const router = useRouter();
   return (
-    <div className={styles.wallet}>
+    <div className={styles.wallet} onClick={() => router.push('/wallet')}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"

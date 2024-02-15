@@ -1,5 +1,6 @@
 'use client';
 
+import classNames from 'classnames';
 import { usePathname, useRouter } from 'next/navigation';
 
 interface IProps {
@@ -19,7 +20,7 @@ const GoBackButton = ({ className }: IProps) => {
   }
 
   return (
-    <div onClick={goBack} className={className}>
+    <div onClick={goBack} className={classNames(className, 'cursor-pointer')}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"

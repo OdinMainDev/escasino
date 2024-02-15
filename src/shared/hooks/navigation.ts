@@ -9,6 +9,7 @@ export const pathnames = {
   '/terms': '/terms',
   '/profile': '/profile',
   '/profile/edit': '/profile/edit',
+  '/wallet': '/wallet',
 } satisfies Pathnames<typeof locales>;
 
 export const { Link, redirect, usePathname, useRouter, getPathname } =

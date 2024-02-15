@@ -25,6 +25,7 @@
 .icons_list {
   display: flex;
   .icon {
+    cursor: pointer;
     margin-right: 10px;
     &:last-child {
       margin-right: 0;
@@ -44,6 +45,7 @@
 }
 
 .back {
+  cursor: pointer;
   margin-right: 10px;
 }
 

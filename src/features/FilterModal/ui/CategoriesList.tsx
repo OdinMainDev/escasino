@@ -3,7 +3,7 @@ import { getCategoriesApi } from '../api/categoriesApi';
 import { ICategory } from '@/shared/models/interfaces/categories';
 
 import styles from './CategoriesList.module.scss';
-import classNames from 'classnames';
+import { TabItem } from '@/entities/TabItem';
 
 interface IProps {
   selectedCategories: string[];
@@ -29,17 +29,15 @@ const CategoriesList = ({ selectedCategories, selectCategory }: IProps) => {
       {loading
         ? Array(8)
             .fill(0)
-            .map((item, index) => <div className={styles.skeleton} key={index}></div>)
+            .map((item, index) => <TabItem skeleton={true} key={index}></TabItem>)
         : categories.map((item) => (
-            <div
+            <TabItem
               onClick={() => selectCategory(item.url)}
-              className={classNames(styles.category, {
-                [styles.selected]: selectedCategories.includes(item.url),
-              })}
+              selected={selectedCategories.includes(item.url)}
               key={item.url}
             >
               {item.data.texts.find((item) => item.language.toLocaleLowerCase() === 'ru')?.value}
-            </div>
+            </TabItem>
           ))}
     </div>
   );

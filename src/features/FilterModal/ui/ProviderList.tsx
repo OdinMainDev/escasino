@@ -3,7 +3,7 @@ import { getProvidersApi } from '../api/providersApi';
 
 import styles from './ProviderList.module.scss';
 import { IProvider } from '@/shared/models/interfaces/providers';
-import classNames from 'classnames';
+import { TabBlock } from '@/entities/TabBlock';
 // import Image from 'next/image';
 
 interface IProps {
@@ -31,18 +31,16 @@ const ProviderList = memo(({ selectedProviders, selectProvider }: IProps) => {
       {loading
         ? Array(6)
             .fill(0)
-            .map((item, index) => <div className={styles.skeleton} key={index}></div>)
+            .map((item, index) => <TabBlock skeleton={true} key={index}></TabBlock>)
         : providersList.map((item) => (
-            <div
+            <TabBlock
+              selected={selectedProviders.includes(item.url)}
               onClick={() => selectProvider(item.url)}
-              className={classNames(styles.provider, {
-                [styles.selected]: selectedProviders.includes(item.url),
-              })}
               key={item.url}
             >
               {/* <Image src={item.data.image || ''} alt={item.url} width={25} height={65} /> */}
               <div className={styles.text}>{item.url}</div>
-            </div>
+            </TabBlock>
           ))}
     </div>
   );
