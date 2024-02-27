@@ -25,15 +25,23 @@
   }
 }
 
+
 .m {
   height: 50px;
   padding: 16px 16px 3px 16px;
+  &.withoutPlaceholder {
+    padding: 0 16px 0 16px;
+  }
 }
 
 .s {
   height: 40px;
   padding: 13px 12px 2px 12px;
+  &.withoutPlaceholder {
+    padding: 0 12px 0 12px;
+  }
 }
+
 
 .input {
   height: 20px;

@@ -8,9 +8,17 @@ interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   childred?: ReactElement;
   loading?: boolean;
   elType?: 'outlined' | 'contained';
+  disabledOpacityOff?: boolean;
 }
 
-const Button = ({ children, elType = 'contained', loading, disabled, ...otherProps }: IProps) => {
+const Button = ({
+  children,
+  elType = 'contained',
+  loading,
+  disabled,
+  disabledOpacityOff,
+  ...otherProps
+}: IProps) => {
   return (
     <button
       {...otherProps}
@@ -20,7 +28,7 @@ const Button = ({ children, elType = 'contained', loading, disabled, ...otherPro
         {
           [styles.contained]: elType === 'contained',
           [styles.outlined]: elType === 'outlined',
-          [styles.disabled]: disabled,
+          [styles.disabled]: disabled && !disabledOpacityOff,
         },
         otherProps.className,
       )}

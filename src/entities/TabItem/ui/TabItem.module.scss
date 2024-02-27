@@ -2,11 +2,12 @@
   padding: 6px 16px;
   background: var(--Input-bg, #333);
   color: var(--Text-primary, #F2F2F2);
-  font-size: 12px;
+  font-size: 14px;
   font-style: normal;
   border-radius: 2px;
-  font-weight: 400;
-  line-height: 16px;
+  font-weight: 300;
+  line-height: 143%;
+  cursor: pointer;
   &.selected {
     color:  var(--Input-bg, #333);
     background: var(--Action-active, #E1E1E1);

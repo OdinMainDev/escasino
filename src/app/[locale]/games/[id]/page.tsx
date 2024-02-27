@@ -6,6 +6,7 @@ import Button from '@/shared/ui/Button';
 import Icons from '@/shared/ui/Icons';
 import classNames from 'classnames';
 import { WinningsList } from '@/features/WinningsList';
+import { Footer } from '@/widgets/Footer';
 
 interface IProps {
   params: {
@@ -62,6 +63,7 @@ const GameItem = async ({ params }: IProps) => {
           biggest ones.
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

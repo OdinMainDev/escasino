@@ -19,11 +19,55 @@
   margin-bottom: 12px;
 }
 
+.subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.01em;
+  color: #FFF;
+  opacity: 0.6;
+}
+
 .block {
   margin-bottom: 24px;
   &_line {
     padding-bottom: 24px;
     border-bottom: 1px solid var(--Divider-main);
   }
+}
+
+.input_icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.slider {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.check {
+  padding: 16px;
+  background-color: #2A2A2A;
+  border-radius: 2px;
+  &_value {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 20px;
+    letter-spacing: 0.01em;
+    color: #FFF;
+    opacity: 0.8;
+  }
+
+
 }
 

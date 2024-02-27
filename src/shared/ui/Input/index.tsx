@@ -1,9 +1,18 @@
 'use client';
 
-import { InputHTMLAttributes, forwardRef, useState, useMemo, useRef, useEffect } from 'react';
+import {
+  InputHTMLAttributes,
+  forwardRef,
+  useState,
+  useMemo,
+  useRef,
+  useEffect,
+  ReactNode,
+} from 'react';
 import classNames from 'classnames';
 import styles from './styles.module.scss';
 import Icons from '../Icons';
+import InputMask from 'react-input-mask';
 
 export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   elType?: 'input' | 'search';
@@ -12,7 +21,10 @@ export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   message?: string | null;
   containerClassName?: string;
   validationTimeout?: number;
+  icon?: ReactNode;
   validationFunction?: (value: string) => boolean;
+  disabledOpacityOff?: boolean;
+  mask?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, IInputProps>(
@@ -30,6 +42,9 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
       validationFunction,
       validationTimeout = 0,
       disabled,
+      disabledOpacityOff,
+      mask,
+      icon,
       ...otherProps
     },
     ref,
@@ -56,7 +71,8 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
     const containerClass = useMemo(
       () =>
         classNames(styles.label, styles[elSize], className, {
-          [styles.disabled]: disabled,
+          [styles.disabled]: disabled && !disabledOpacityOff,
+          [styles.withoutPlaceholder]: !placeholder,
         }),
       [elSize, className],
     );
@@ -66,6 +82,9 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
     });
 
     const renderIcon = () => {
+      if (icon) {
+        return icon;
+      }
       if (type === 'password') {
         return (
           <div className={styles.icon} onClick={() => setIsPassword((prev) => !prev)}>
@@ -107,6 +126,35 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
         }, validationTimeout);
       }
     };
+
+    if (mask) {
+      return (
+        <div
+          className={classNames(styles.container, containerClassName, {
+            [styles.error]: isError || !isValid,
+          })}
+        >
+          <label className={containerClass}>
+            <InputMask
+              mask={mask}
+              maskChar={null}
+              alwaysShowMask={true}
+              {...otherProps}
+              value={value}
+              onChange={onChangeHandler}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              placeholder=""
+              className={inputClass}
+              type={type === 'password' ? (isPassword ? 'password' : 'text') : type}
+            />
+            <span className={styles.placeholder}>{placeholder}</span>
+            {renderIcon()}
+          </label>
+          {errorMessage && <div className={styles.message}>{errorMessage}</div>}
+        </div>
+      );
+    }
 
     return (
       <div
