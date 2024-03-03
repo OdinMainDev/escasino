@@ -13,6 +13,7 @@ import { useRef, useState } from 'react';
 import { IRegisterData } from '../models/register';
 import {
   validateEmail,
+  validatePhone,
   validatePasswordLength,
   validatePasswordMatching,
   validateRegister,
@@ -38,13 +39,24 @@ const RegistrationForm = ({ openLogin }: IProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [registerData, setRegisterData] = useState<IRegisterData>({
-    promo: false,
-    email: '',
-    password: '',
+    currency: "",
+    password: "",
+    repeat_password: "",
     terms: false,
-    fid: '',
-    currency: '',
-    repeat_password: '',
+    email: "",
+    phone: "",
+    username: "",
+    first_name: "",
+    second_name: "",
+    last_name: "",
+    city: "",
+    country: "",
+    dob: 0,
+    zip: "",
+    address: "",
+    gender: "",
+    promo: true,
+    fid: "",
   });
   const optionList: ISelectOption[] =
     !loading && settings
@@ -84,6 +96,9 @@ const RegistrationForm = ({ openLogin }: IProps) => {
     }
   };
 
+  var typeOfForm = settings?.auth.register.phone && settings?.auth.register.email ? "full" : "email";
+  typeOfForm = typeOfForm == "full" ? "full" : (settings?.auth.register.phone ? "phone" : "email");
+
   return (
     <form className={styles.container}>
       {loader && (
@@ -92,20 +107,75 @@ const RegistrationForm = ({ openLogin }: IProps) => {
         </div>
       )}
       <div className={styles.title}>Регистрация нового игрока</div>
-      <Input
-        placeholder="Электронная почта"
-        type="email"
-        isError={!!errorList.find((item) => item === 'email')}
-        validationTimeout={2500}
-        validationFunction={validateEmail}
-        onChange={(e) => setRegisterData((prev) => ({ ...prev, email: e.target.value }))}
-        containerClassName={styles.input}
-        message={
-          validateEmail(registerData.email)
-            ? 'Будет использоваться как логин для входа'
-            : 'Введите корректный e-mail'
-        }
-      />
+      {typeOfForm == "full" && (
+        <div className='row'>
+          <div className='tab' style={{display: "flex"}}>
+            <Input
+              placeholder="Электронная почта"
+              type="email"
+              isError={!!errorList.find((item) => item === 'email')}
+              validationTimeout={2500}
+              validationFunction={validateEmail}
+              onChange={(e) => setRegisterData((prev) => ({ ...prev, email: e.target.value }))}
+              containerClassName={styles.input}
+              message={
+                validateEmail(registerData.email)
+                  ? 'Будет использоваться как логин для входа'
+                  : 'Введите корректный e-mail'
+              }
+            />
+             <Input
+              placeholder={'Телефон'}
+              type={'text'}
+              containerClassName={styles.input}
+              isError={!!errorList.find((item) => item === 'phone')}
+              validationTimeout={2500}
+              validationFunction={validatePhone}
+              onChange={(e) => setRegisterData((prev) => ({ ...prev, phone: e.target.value }))}
+              message={
+                validatePhone(registerData.phone)
+                  ? 'Будет использоваться как логин для входа'
+                  : 'Введите корректный телефон'
+              }
+            />
+        </div>
+      </div>
+      )}
+
+      {typeOfForm == "email" && (
+        <Input
+          placeholder="Электронная почта"
+          type="email"
+          isError={!!errorList.find((item) => item === 'email')}
+          validationTimeout={2500}
+          validationFunction={validateEmail}
+          onChange={(e) => setRegisterData((prev) => ({ ...prev, email: e.target.value }))}
+          containerClassName={styles.input}
+          message={
+            validateEmail(registerData.email)
+              ? 'Будет использоваться как логин для входа'
+              : 'Введите корректный e-mail'
+          }
+        />
+      )}
+
+      {typeOfForm == "phone" && (
+        <Input
+          placeholder={'Телефон'}
+          type={'text'}
+          containerClassName={styles.input}
+          isError={!!errorList.find((item) => item === 'phone')}
+          validationTimeout={2500}
+          onChange={(e) => setRegisterData((prev) => ({ ...prev, phone: e.target.value }))}
+          validationFunction={validatePhone}
+          message={
+            validatePhone(registerData.phone)
+              ? 'Будет использоваться как логин для входа'
+              : 'Введите корректный телефон'
+          }
+        />
+      )}
+
       <Input
         placeholder="Пароль"
         type="password"
@@ -141,6 +211,103 @@ const RegistrationForm = ({ openLogin }: IProps) => {
         value={registerData.currency}
         onChange={(e) => setRegisterData((prev) => ({ ...prev, currency: e.target.value }))}
       />
+      <br />
+      {settings?.auth.register.username && (
+        <Input
+          placeholder={'Username'}
+          type={'text'}
+          containerClassName={styles.input}
+          isError={!!errorList.find((item) => item === 'username')}
+          onChange={(e) => setRegisterData((prev) => ({ ...prev, username: e.target.value }))}
+        />
+      )}
+
+
+      {/* Тут красиво группировать */}
+       {settings?.auth.register.full_name && (
+        <div className='row' style={{display: "flex"}}>
+            <Input
+              placeholder={'Фамилия'}
+              type={'text'}
+              containerClassName={styles.input}
+              isError={!!errorList.find((item) => item === 'last_name')}
+              onChange={(e) => setRegisterData((prev) => ({ ...prev, last_name: e.target.value }))}
+            />
+            <Input
+              placeholder={'Имя'}
+              type={'text'}
+              containerClassName={styles.input}
+              isError={!!errorList.find((item) => item === 'first_name')}
+              onChange={(e) => setRegisterData((prev) => ({ ...prev, first_name: e.target.value }))}
+            />
+            <Input
+              placeholder={'Отчество'}
+              type={'text'}
+              containerClassName={styles.input}
+              isError={!!errorList.find((item) => item === 'second_name')}
+              onChange={(e) => setRegisterData((prev) => ({ ...prev, second_name: e.target.value }))}
+            />
+        </div>
+      )}
+
+      {/* Тут красиво группировать */}
+      {settings?.auth.register.city && (
+        <div className='row' style={{display: "flex"}}>
+            <Input
+              placeholder={'Страна'}
+              type={'text'}
+              containerClassName={styles.input}
+              isError={!!errorList.find((item) => item === 'country')}
+              onChange={(e) => setRegisterData((prev) => ({ ...prev, country: e.target.value }))}
+            /><Input
+              placeholder={'Город'}
+              type={'text'}
+              containerClassName={styles.input}
+              isError={!!errorList.find((item) => item === 'city')}
+              onChange={(e) => setRegisterData((prev) => ({ ...prev, city: e.target.value }))}
+            />
+        </div>
+      )}
+
+      {settings?.auth.register.dob && (
+        <Input
+          placeholder={'Дата рождения'}
+          type={'text'}
+          containerClassName={styles.input}
+          isError={!!errorList.find((item) => item === 'dob')}
+          onChange={(e) => setRegisterData((prev) => ({ ...prev, dob: parseInt(e.target.value) }))}
+        />
+      )}
+
+      {/* Тут красиво группировать */}
+      {settings?.auth.register.address && (
+        <div className='row' style={{display: "flex"}}>
+            <Input
+              placeholder={'Адрес'}
+              type={'text'}
+              containerClassName={styles.input}
+              isError={!!errorList.find((item) => item === 'address')}
+              onChange={(e) => setRegisterData((prev) => ({ ...prev, address: e.target.value }))}
+            /><Input
+              placeholder={'Почтовый индекс'}
+              type={'text'}
+              containerClassName={styles.input}
+              isError={!!errorList.find((item) => item === 'city')}
+              onChange={(e) => setRegisterData((prev) => ({ ...prev, zip: e.target.value }))}
+            />
+        </div>
+      )}
+
+      {settings?.auth.register.gender && (
+        <Input
+          placeholder={'Пол ( сделать селект из 3ех видов ( он она другое)'}
+          type={'text'}
+          containerClassName={styles.input}
+          isError={!!errorList.find((item) => item === 'gender')}
+          onChange={(e) => setRegisterData((prev) => ({ ...prev, gender: e.target.value }))}
+        />
+      )}
+      
       <div className={styles.checkbox}>
         <Checkbox
           isError={!!errorList.find((item) => item === 'terms')}
@@ -151,6 +318,18 @@ const RegistrationForm = ({ openLogin }: IProps) => {
           Я ознакомился с <Link href="/terms">правилами и условиями</Link>
         </div>
       </div>
+      {settings?.auth.register.promo && (
+        <div className={styles.checkbox}>
+          <Checkbox
+            isError={!!errorList.find((item) => item === 'promo')}
+            value={registerData.promo}
+            onChange={(value) => setRegisterData((prev) => ({ ...prev, promo: value }))}
+          />
+          <div>
+            Я согласен на промо рассылку
+          </div>
+        </div>
+      )}
       <div className={styles.subtitle}>C помощью социальных сетей</div>
       <div className={styles.social}>
         <VK />

@@ -10,7 +10,6 @@ import { loginHandlerApi } from '../api/loginApi';
 import { getVisitorId } from '../helpers/getVisitorId';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/redux';
 import { Telegram, Twitter, VK } from './Icons';
-import { loginInputs } from '../constants/login';
 import { autoCompleteHandler } from '../helpers/autoCompleteHandler';
 import Loader from '@/shared/ui/Loader';
 import { validateLogin } from '../helpers/validators';
@@ -83,7 +82,7 @@ const LoginForm = ({ openRegistration }: IProps) => {
               value={String(loginData['email' as keyof ILoginData])}
               autoComplete={autoCompleteHandler('email')}
               isError={isError}
-              message={isError ? 'Логин или пароль введены неверно' : null}
+              message={isError ? 'Почта или пароль введены неверно' : null}
               onChange={(e) => handleInputChange('email', e.target.value)}
             />
             <Input
@@ -93,7 +92,7 @@ const LoginForm = ({ openRegistration }: IProps) => {
               value={String(loginData['phone' as keyof ILoginData])}
               autoComplete={autoCompleteHandler('phone')}
               isError={isError}
-              message={isError ? 'Логин или пароль введены неверно' : null}
+              message={isError ? 'Телефон или пароль введены неверно' : null}
               onChange={(e) => handleInputChange('phone', e.target.value)}
             />
           </div>
@@ -110,7 +109,7 @@ const LoginForm = ({ openRegistration }: IProps) => {
               value={String(loginData['email' as keyof ILoginData])}
               autoComplete={autoCompleteHandler('email')}
               isError={isError}
-              message={isError ? 'Логин или пароль введены неверно' : null}
+              message={isError ? 'Почта или пароль введены неверно' : null}
               onChange={(e) => handleInputChange('email', e.target.value)}
             />
           </div>
@@ -127,7 +126,7 @@ const LoginForm = ({ openRegistration }: IProps) => {
               value={String(loginData['phone' as keyof ILoginData])}
               autoComplete={autoCompleteHandler('phone')}
               isError={isError}
-              message={isError ? 'Логин или пароль введены неверно' : null}
+              message={isError ? 'Телефон или пароль введены неверно' : null}
               onChange={(e) => handleInputChange('phone', e.target.value)}
             />
           </div>
@@ -144,9 +143,26 @@ const LoginForm = ({ openRegistration }: IProps) => {
         message={isError ? 'Логин или пароль введены неверно' : null}
         onChange={(e) => handleInputChange('password', e.target.value)}
       />
-      <div className={styles.forgot} onClick={() => dispatch(openResetPasswordModal())}>
-        Я забыл пароль
-      </div>
+
+      {/* TODO: ИСПРАВИТЬ ВЕРСТКУ ЕСЛИ ЕСТЬ ЗАПОМНИТЬ МЕНЯ */}
+      {settings?.auth.login.remember ? (
+        <div className={styles.forgot} style={{display: "flex"}}>
+          <Checkbox
+            value={false}
+            onChange={(value) => setLoginData((prev) => ({ ...prev, remember: value }))}
+          />
+          <div style={{margin: "0px 0px 0px 5px"}}>
+            Запомнить меня
+          </div>
+          <div className={styles.forgot} onClick={() => dispatch(openResetPasswordModal())} style={{float: "right", textAlign: "right", width: "70%"}}>
+            Я забыл пароль
+          </div>
+        </div>
+      ) : (
+        <div className={styles.forgot} onClick={() => dispatch(openResetPasswordModal())}>
+          Я забыл пароль
+        </div>
+      )}
       <div className={styles.subtitle}>C помощью социальных сетей</div>
       <div className={styles.social}>
         <Telegram />
@@ -154,17 +170,6 @@ const LoginForm = ({ openRegistration }: IProps) => {
         <VK />
       </div>
 
-      {settings?.auth.login.remember && (
-        <div className={styles.subtitle}>
-          <Checkbox
-            value={false}
-            onChange={(value) => setLoginData((prev) => ({ ...prev, remember: value }))}
-          />
-          <div>
-            Запомнить меня
-          </div>
-        </div>
-      )}
 
       {!loading && settings?.auth.login.captcha && (
         <ReCAPTCHA
@@ -175,7 +180,6 @@ const LoginForm = ({ openRegistration }: IProps) => {
           }
         />
       )}
-      ,
       <Button
         disabled={!validateLogin(loginData)}
         className={styles.button}

@@ -10,6 +10,11 @@ export function validateEmail(email: string): boolean {
   return emailRegex.test(email);
 }
 
+export function validatePhone(phone: string): boolean {
+  const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+  return phoneRegex.test(phone.trim());
+}
+
 export const validatePasswordLength = (password: string): boolean => {
   if (password.trim() === '') {
     return true;
