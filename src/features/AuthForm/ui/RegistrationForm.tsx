@@ -81,6 +81,8 @@ const RegistrationForm = ({ openLogin }: IProps) => {
     !loading && settings
       ? [
           { value: '', label: 'Ваша страна', disabled: true },
+          { value: 'RU', label: 'RU', disabled: false },
+          { value: 'US', label: 'US', disabled: false },
          // тут надо из запроса выдавать список ( /api/v1/public/get/countries )
         ]
       : [];
@@ -135,7 +137,11 @@ const RegistrationForm = ({ openLogin }: IProps) => {
               isError={!!errorList.find((item) => item === 'email')}
               validationTimeout={2500}
               validationFunction={validateEmail}
-              onChange={(e) => setRegisterData((prev) => ({ ...prev, email: e.target.value }))}
+              onChange={(e) => {
+                  setRegisterData((prev) => ({ ...prev, email: e.target.value }));
+                  setRegisterData((prev) => ({ ...prev, phone: "" }));
+                }
+              }
               containerClassName={styles.input}
               message={
                 validateEmail(registerData.email)
@@ -150,7 +156,11 @@ const RegistrationForm = ({ openLogin }: IProps) => {
               isError={!!errorList.find((item) => item === 'phone')}
               validationTimeout={2500}
               validationFunction={validatePhone}
-              onChange={(e) => setRegisterData((prev) => ({ ...prev, phone: e.target.value }))}
+              onChange={(e) => {
+                setRegisterData((prev) => ({ ...prev, phone: e.target.value }));
+                setRegisterData((prev) => ({ ...prev, email: "" }));
+              }
+            }
               message={
                 validatePhone(registerData.phone)
                   ? 'Будет использоваться как логин для входа'

@@ -83,7 +83,11 @@ const LoginForm = ({ openRegistration }: IProps) => {
               autoComplete={autoCompleteHandler('email')}
               isError={isError}
               message={isError ? 'Почта или пароль введены неверно' : null}
-              onChange={(e) => handleInputChange('email', e.target.value)}
+              onChange={(e) => {
+                handleInputChange('phone', "");
+                handleInputChange('email', e.target.value);
+              }
+            }
             />
             <Input
               placeholder={'Телефон'}
@@ -93,7 +97,11 @@ const LoginForm = ({ openRegistration }: IProps) => {
               autoComplete={autoCompleteHandler('phone')}
               isError={isError}
               message={isError ? 'Телефон или пароль введены неверно' : null}
-              onChange={(e) => handleInputChange('phone', e.target.value)}
+              onChange={(e) => {
+                  handleInputChange('email', "");
+                  handleInputChange('phone', e.target.value);
+                }
+              }
             />
           </div>
         </div>

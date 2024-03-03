@@ -72,8 +72,8 @@ interface Auth {
 }
 interface Reset {
   email: boolean;
-  captcha: boolean;
   phone: boolean;
+  captcha: boolean;
 }
 interface Register {
   email: boolean;

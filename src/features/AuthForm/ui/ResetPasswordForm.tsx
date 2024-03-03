@@ -8,7 +8,7 @@ import { getVisitorId } from '../helpers/getVisitorId';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/redux';
 import { autoCompleteHandler } from '../helpers/autoCompleteHandler';
 import Loader from '@/shared/ui/Loader';
-import { validateEmail, validateResetPassword } from '../helpers/validators';
+import { validateEmail, validatePhone, validateResetPassword } from '../helpers/validators';
 import { closeResetPasswordModal, openLoginModal } from '@/store/slices/authModalSlice';
 import { IResetPasswordData } from '../models/resetPassword';
 import { resetPasswordHandlerApi } from '../api/resetPasswordApi';
@@ -20,13 +20,14 @@ const ResetPasswordForm = () => {
   const dispatch = useAppDispatch();
   const [resetPasswordData, setResetPasswordData] = useState<IResetPasswordData>({
     email: '',
+    phone: '',
     fid: '',
     captcha: '',
     remember: false,
   });
 
-  const handleInputChange = (value: string) => {
-    setResetPasswordData((prev) => ({ ...prev, email: value }));
+  const handleInputChange = (key: string, value: string) => {
+    setResetPasswordData((prev) => ({ ...prev, key: value }));
     setIsError(false);
   };
 
@@ -51,6 +52,9 @@ const ResetPasswordForm = () => {
     dispatch(openLoginModal());
   };
 
+  var typeOfForm = settings?.auth.reset.phone && settings?.auth.reset.email ? "full" : "email";
+  typeOfForm = typeOfForm == "full" ? "full" : (settings?.auth.reset.phone ? "phone" : "email");
+
   return (
     <form className={styles.container}>
       {loader && (
@@ -59,19 +63,75 @@ const ResetPasswordForm = () => {
         </div>
       )}
       <div className={styles.title}>Забыли пароль?</div>
-      <Input
-        placeholder="Электронная почта"
-        type="email"
-        containerClassName={styles.input}
-        value={String(resetPasswordData.email)}
-        validationFunction={validateEmail}
-        validationTimeout={2500}
-        message={!validateEmail(resetPasswordData.email) ? 'Введите корректный e-mail' : null}
-        autoComplete={autoCompleteHandler('email')}
-        isError={isError}
-        onChange={(e) => handleInputChange(e.target.value)}
-      />
-      {!loading ? (
+      {typeOfForm == "full" && (
+        <div className='row'>
+          <div className='tab' style={{display: "flex"}}>
+            <Input
+              placeholder="Электронная почта"
+              type="email"
+              containerClassName={styles.input}
+              value={String(resetPasswordData.email)}
+              validationFunction={validateEmail}
+              validationTimeout={2500}
+              message={!validateEmail(resetPasswordData.email) ? 'Введите корректный e-mail' : null}
+              autoComplete={autoCompleteHandler('email')}
+              isError={isError}
+              onChange={(e) => {
+                handleInputChange('phone', "");
+                handleInputChange('email', e.target.value);
+              }
+            }
+            />
+            <Input
+             placeholder="Номер телефона"
+             type="text"
+             containerClassName={styles.input}
+             value={String(resetPasswordData.phone)}
+             validationFunction={validatePhone}
+             validationTimeout={2500}
+             message={!validatePhone(resetPasswordData.phone) ? 'Введите корректный телефон' : null}
+             autoComplete={autoCompleteHandler('phone')}
+             isError={isError}
+              onChange={(e) => {
+                  handleInputChange('email', "");
+                  handleInputChange('phone', e.target.value);
+                }
+              }
+            />
+          </div>
+        </div>
+      )}
+
+      {typeOfForm == "email" && (
+        <Input
+          placeholder="Электронная почта"
+          type="email"
+          containerClassName={styles.input}
+          value={String(resetPasswordData.email)}
+          validationFunction={validateEmail}
+          validationTimeout={2500}
+          message={!validateEmail(resetPasswordData.email) ? 'Введите корректный e-mail' : null}
+          autoComplete={autoCompleteHandler('email')}
+          isError={isError}
+          onChange={(e) => handleInputChange('email', e.target.value)}
+        />
+      )}
+
+      {typeOfForm == "phone" && (
+        <Input
+          placeholder="Номер телефона"
+          type="text"
+          containerClassName={styles.input}
+          value={String(resetPasswordData.phone)}
+          validationFunction={validatePhone}
+          validationTimeout={2500}
+          message={!validatePhone(resetPasswordData.phone) ? 'Введите корректный телефон' : null}
+          autoComplete={autoCompleteHandler('phone')}
+          isError={isError}
+          onChange={(e) => handleInputChange('phone', e.target.value)}
+        />
+      )}
+      {!loading && settings?.auth.reset.captcha ? (
         <ReCAPTCHA
           className={styles.captcha}
           sitekey={settings?.captcha_site_key ?? ''}
