@@ -68,6 +68,23 @@ const RegistrationForm = ({ openLogin }: IProps) => {
         ]
       : [];
 
+  const genderList: ISelectOption[] =
+    !loading && settings
+      ? [
+          { value: '', label: 'Ваш пол', disabled: true },
+          { value: 'male', label: 'Мужской' },
+          { value: 'female', label: 'Женский' },
+          { value: 'other', label: 'Другое' },
+        ]
+      : [];
+  const countriesList: ISelectOption[] =
+    !loading && settings
+      ? [
+          { value: '', label: 'Ваша страна', disabled: true },
+         // тут надо из запроса выдавать список ( /api/v1/public/get/countries )
+        ]
+      : [];
+
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
@@ -255,13 +272,13 @@ const RegistrationForm = ({ openLogin }: IProps) => {
       {/* Тут красиво группировать */}
       {settings?.auth.register.city && (
         <div className='row' style={{display: "flex"}}>
-            <Input
-              placeholder={'Страна'}
-              type={'text'}
-              containerClassName={styles.input}
+            <Select
               isError={!!errorList.find((item) => item === 'country')}
+              optionList={countriesList}
+              value={registerData.country}
               onChange={(e) => setRegisterData((prev) => ({ ...prev, country: e.target.value }))}
-            /><Input
+            />
+            <Input
               placeholder={'Город'}
               type={'text'}
               containerClassName={styles.input}
@@ -301,11 +318,10 @@ const RegistrationForm = ({ openLogin }: IProps) => {
       )}
 
       {settings?.auth.register.gender && (
-        <Input
-          placeholder={'Пол ( сделать селект из 3ех видов ( он она другое)'}
-          type={'text'}
-          containerClassName={styles.input}
+        <Select
           isError={!!errorList.find((item) => item === 'gender')}
+          optionList={genderList}
+          value={registerData.gender}
           onChange={(e) => setRegisterData((prev) => ({ ...prev, gender: e.target.value }))}
         />
       )}
