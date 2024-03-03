@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styles from './LoginForm.module.scss';
 import Input from '@/shared/ui/Input';
 import Button from '@/shared/ui/Button';
+import Checkbox from '@/shared/ui/Checkbox';
 import { ILoginData } from '../models/login';
 import { loginHandlerApi } from '../api/loginApi';
 import { getVisitorId } from '../helpers/getVisitorId';
@@ -27,6 +28,7 @@ const LoginForm = ({ openRegistration }: IProps) => {
   const dispatch = useAppDispatch();
   const [loginData, setLoginData] = useState<ILoginData>({
     email: '',
+    phone: '',
     password: '',
     fid: '',
     captcha: '',
@@ -55,6 +57,10 @@ const LoginForm = ({ openRegistration }: IProps) => {
     }
   };
 
+  
+  var typeOfForm = settings?.auth.login.phone && settings?.auth.login.email ? "full" : "email";
+  typeOfForm = typeOfForm == "full" ? "full" : (settings?.auth.login.phone ? "phone" : "email");
+
   return (
     <form className={styles.container}>
       {loader && (
@@ -63,19 +69,81 @@ const LoginForm = ({ openRegistration }: IProps) => {
         </div>
       )}
       <div className={styles.title}>Войти в личный кабинет</div>
-      {loginInputs.map((item, index) => (
-        <Input
-          key={index}
-          placeholder={item.placeholder}
-          type={item.type}
-          containerClassName={styles.input}
-          value={String(loginData[item.name as keyof ILoginData])}
-          autoComplete={autoCompleteHandler(item.type)}
-          isError={isError}
-          message={index === 1 && isError ? 'Логин или пароль введены неверно' : null}
-          onChange={(e) => handleInputChange(item.name ?? '', e.target.value)}
-        />
-      ))}
+      
+      {/* На будущее */}
+      {/* TODO: СДЕЛАТЬ ТУТ НОРМ ВЕРСТКУ В ФУЛЛ ( ЕСЛИ ИЗ АДМИНКИ ВКЛЮЧЕНО ЧТО И ПОЧТА И ТЕЛЕФОН ЕСТЬ ) */}
+      {/* TODO: СДЕЛАТЬ ИНПУТ ТЕЛЕФОНА ( НОРМАЛЬНЫЙ А НЕ КАК ЭТО СДЕЛАНО КОНЕЧНО (КРАСИВЕНЬКО)) ) */}
+      {typeOfForm == "full" && (
+        <div className='row'>
+          <div className='tab' style={{display: "flex"}}>
+            <Input
+              placeholder={'Почта'}
+              type={'email'}
+              containerClassName={styles.input}
+              value={String(loginData['email' as keyof ILoginData])}
+              autoComplete={autoCompleteHandler('email')}
+              isError={isError}
+              message={isError ? 'Логин или пароль введены неверно' : null}
+              onChange={(e) => handleInputChange('email', e.target.value)}
+            />
+            <Input
+              placeholder={'Телефон'}
+              type={'text'}
+              containerClassName={styles.input}
+              value={String(loginData['phone' as keyof ILoginData])}
+              autoComplete={autoCompleteHandler('phone')}
+              isError={isError}
+              message={isError ? 'Логин или пароль введены неверно' : null}
+              onChange={(e) => handleInputChange('phone', e.target.value)}
+            />
+          </div>
+        </div>
+      )}
+
+      {typeOfForm == "email" && (
+        <div className='row'>
+          <div className='tab' style={{display: "flex"}}>
+            <Input
+              placeholder={'Почта'}
+              type={'email'}
+              containerClassName={styles.input}
+              value={String(loginData['email' as keyof ILoginData])}
+              autoComplete={autoCompleteHandler('email')}
+              isError={isError}
+              message={isError ? 'Логин или пароль введены неверно' : null}
+              onChange={(e) => handleInputChange('email', e.target.value)}
+            />
+          </div>
+        </div>
+      )}
+
+      {typeOfForm == "phone" && (
+        <div className='row'>
+          <div className='tab' style={{display: "flex"}}>
+            <Input
+              placeholder={'Телефон'}
+              type={'text'}
+              containerClassName={styles.input}
+              value={String(loginData['phone' as keyof ILoginData])}
+              autoComplete={autoCompleteHandler('phone')}
+              isError={isError}
+              message={isError ? 'Логин или пароль введены неверно' : null}
+              onChange={(e) => handleInputChange('phone', e.target.value)}
+            />
+          </div>
+        </div>
+      )}
+
+      <Input
+        placeholder={'Пароль'}
+        type={'password'}
+        containerClassName={styles.input}
+        value={String(loginData['password' as keyof ILoginData])}
+        autoComplete={autoCompleteHandler('password')}
+        isError={isError}
+        message={isError ? 'Логин или пароль введены неверно' : null}
+        onChange={(e) => handleInputChange('password', e.target.value)}
+      />
       <div className={styles.forgot} onClick={() => dispatch(openResetPasswordModal())}>
         Я забыл пароль
       </div>
@@ -85,7 +153,20 @@ const LoginForm = ({ openRegistration }: IProps) => {
         <Twitter />
         <VK />
       </div>
-      {!loading ? (
+
+      {settings?.auth.login.remember && (
+        <div className={styles.subtitle}>
+          <Checkbox
+            value={false}
+            onChange={(value) => setLoginData((prev) => ({ ...prev, remember: value }))}
+          />
+          <div>
+            Запомнить меня
+          </div>
+        </div>
+      )}
+
+      {!loading && settings?.auth.login.captcha && (
         <ReCAPTCHA
           className={styles.captcha}
           sitekey={settings?.captcha_site_key ?? ''}
@@ -93,7 +174,7 @@ const LoginForm = ({ openRegistration }: IProps) => {
             setLoginData((prev) => ({ ...prev, captcha: value ?? '' }))
           }
         />
-      ) : null}
+      )}
       ,
       <Button
         disabled={!validateLogin(loginData)}
