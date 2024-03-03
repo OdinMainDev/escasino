@@ -17,4 +17,5 @@ export interface IRegisterData {
   gender: string;
   promo: boolean;
   fid: string;
+  captcha: string;
 }

@@ -26,6 +26,7 @@ import Loader from '@/shared/ui/Loader';
 import { Link, useRouter } from '@/shared/hooks/navigation';
 import { getMeUser } from '@/store/slices/userSlice';
 import { closeRegistrationModal } from '@/store/slices/authModalSlice';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface IProps {
   openLogin: () => void;
@@ -57,6 +58,7 @@ const RegistrationForm = ({ openLogin }: IProps) => {
     gender: "",
     promo: true,
     fid: "",
+    captcha: "",
   });
   const optionList: ISelectOption[] =
     !loading && settings
@@ -338,6 +340,16 @@ const RegistrationForm = ({ openLogin }: IProps) => {
         <FB />
         <Twitter />
       </div>
+
+      {!loading && settings?.auth.register.captcha && (
+        <ReCAPTCHA
+          className={styles.captcha}
+          sitekey={settings?.captcha_site_key ?? ''}
+          onChange={(value: string | null) =>
+            setRegisterData((prev) => ({ ...prev, captcha: value ?? '' }))
+          }
+        />
+      )}
       <Button
         type="submit"
         disabled={!validateRegister(registerData)}
