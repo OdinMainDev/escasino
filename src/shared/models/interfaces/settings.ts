@@ -64,6 +64,11 @@ interface Auth {
   login: Login;
   register: Register;
   reset: Reset;
+  social_fb: boolean;
+  social_ok: boolean;
+  social_vk: boolean;
+  social_tg: boolean;
+  social_tw: boolean;
 }
 interface Reset {
   email: boolean;

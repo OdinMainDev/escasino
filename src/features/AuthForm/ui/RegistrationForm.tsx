@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import Button from '@/shared/ui/Button';
 import Checkbox from '@/shared/ui/Checkbox';
 import Input from '@/shared/ui/Input';
-import { Telegram, Twitter, VK } from './Icons';
+import { Telegram, Twitter, VK, OK, FB } from './Icons';
 import Select from '@/shared/ui/Select';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/redux';
 import { ISelectOption } from '@/shared/models/interfaces/select';
@@ -153,9 +153,11 @@ const RegistrationForm = ({ openLogin }: IProps) => {
       </div>
       <div className={styles.subtitle}>C помощью социальных сетей</div>
       <div className={styles.social}>
-        <Telegram />
-        <Twitter />
         <VK />
+        <Telegram />
+        <OK />
+        <FB />
+        <Twitter />
       </div>
       <Button
         type="submit"

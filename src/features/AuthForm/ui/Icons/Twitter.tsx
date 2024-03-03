@@ -1,6 +1,13 @@
+'use client';
+
+import { useAppSelector } from '@/shared/hooks/redux';
 import React from 'react';
 
 const Twitter = () => {
+  const { settings } = useAppSelector((state) => state.settingsReducer);
+  if(!settings?.auth?.social_tw){
+    return;
+  }
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
       <rect x="0.5" y="0.5" width="39" height="39" rx="3.5" stroke="#1F1F1F" />
