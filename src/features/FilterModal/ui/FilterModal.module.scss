@@ -15,14 +15,14 @@
   font-weight: 500;
   line-height: 32px;
   letter-spacing: 0.24px;
-  color: rgba(255, 255, 255);
+  color: var(--secondary);
   @media (min-width: 375px) {
     font-size: 22px;
   }
 }
 
 .subtitle {
-  color:#FFF;
+  color:var(--secondary);;
   font-size: 12px;
   font-weight: 500;
   margin-bottom: 8px;
@@ -34,7 +34,7 @@
 .bonus {
   display: flex;
   justify-content: space-between;
-  color:#FFF;
+  color:var(--secondary);;
 
   &_subtitle {
     font-size: 9px;

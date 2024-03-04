@@ -11,7 +11,7 @@
   display: flex;
   justify-content: space-between;
   &_name {
-    color: #FFF;
+    color: var(--secondary);
     font-weight: 700;
     font-size: 16px;
     text-transform: uppercase;
