@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getMeUserApi } from '@/shared/api/userApi';
+import { checkAuthUserApi } from '@/shared/api/checkAuthApi';
 import { IInitialUser } from '../models/user';
 import Cookies from 'js-cookie';
 import { IUser } from '@/shared/models/interfaces/user';
@@ -14,6 +15,11 @@ const initialState: IInitialUser = {
 export const getMeUser = createAsyncThunk('getMeUserApi', async () => {
   const user = await getMeUserApi();
   return user;
+});
+
+export const checkAuthUser = createAsyncThunk('checkAuthUserApi', async () => {
+  const api = await checkAuthUserApi();
+  return api;
 });
 
 export const userSlice = createSlice({
