@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faCog, faCircleExclamation, faFilter, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { faEye, faEyeSlash, faStar, faComments, faFile, faPenToSquare } from '@fortawesome/free-regular-svg-icons'
 
@@ -8,69 +8,47 @@ interface IProps {
 
 const Icons = ({ icon }: IProps) => {
   if (icon === 'search') {
-    return (
-      <FontAwesomeIcon icon={faSearch}/>
-    );
+    return <FontAwesomeIcon icon={faSearch} />;
   }
 
   if (icon === 'eye-off') {
-    return (
-      <FontAwesomeIcon icon={faEyeSlash}/>
-    );
+    return <FontAwesomeIcon icon={faEyeSlash} />;
   }
 
   if (icon === 'eye') {
-    return (
-      <FontAwesomeIcon icon={faEye}/>
-    );
+    return <FontAwesomeIcon icon={faEye} />;
   }
 
   if (icon === 'star') {
-    return (
-      <FontAwesomeIcon icon={faStar}/>
-    );
+    return <FontAwesomeIcon icon={faStar} />;
   }
 
   if (icon === 'settings') {
-    return (
-      <FontAwesomeIcon icon={faCog}/>
-    );
+    return <FontAwesomeIcon icon={faCog} />;
   }
 
   if (icon === 'chat') {
-    return (
-      <FontAwesomeIcon icon={faComments}/>
-    );
+    return <FontAwesomeIcon icon={faComments} />;
   }
 
   if (icon === 'file') {
-    return (
-      <FontAwesomeIcon icon={faFile}/>
-    );
+    return <FontAwesomeIcon icon={faFile} />;
   }
 
   if (icon === 'edit') {
-    return (
-      <FontAwesomeIcon icon={faPenToSquare}/>
-    );
+    return <FontAwesomeIcon icon={faPenToSquare} />;
   }
 
   if (icon === 'warning') {
-    return (
-      <FontAwesomeIcon icon={faCircleExclamation}/>
-    );
+    return <FontAwesomeIcon icon={faCircleExclamation} />;
   }
 
   if (icon === 'filter') {
-    return (
-      <FontAwesomeIcon icon={faFilter}/>
-    );
+    return <FontAwesomeIcon icon={faFilter} />;
   }
 
   if (icon === 'goback') {
-    return (
-      <FontAwesomeIcon icon={faArrowLeft}/>
-    );
+    return <FontAwesomeIcon icon={faArrowLeft} />;
   }
 
   return null;

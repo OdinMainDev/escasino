@@ -21,5 +21,6 @@ export const userDataMapper = (user: IUser): IUserData => {
     address: user.data.address,
     zip: user.data.zip,
     fid: null,
+    promo: true,
   };
 };
