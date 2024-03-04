@@ -18,7 +18,7 @@
     width: 27px;
     height: 27px;
     cursor: pointer;
-    background-color: #2f2f2f;
+    background-color: var(--Input-bg);
     top: 50%;
     transform: translateY(-50%);
     z-index: 1;

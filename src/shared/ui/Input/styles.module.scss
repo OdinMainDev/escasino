@@ -18,7 +18,7 @@
   align-items: center;
   position: relative;
   width: 100%;
-  background: var(--Input-bg, #2F2F2F);
+  background: var(--Input-bg, var(--Input-bg));
   border-radius: 2px;
   &.disabled {
     opacity: 0.5;

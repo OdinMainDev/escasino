@@ -10,7 +10,7 @@ interface IProps {
 const GamesTable = ({ games }: IProps) => {
   return (
     <div className={styles.container}>
-      <div className={classNames('title', styles.title)}>Games</div>
+      {/* <div className={classNames('title', styles.title)}>Games</div> */}
       <div className={styles.table}>
         {games.map((item) => (
           <div className={styles.game} key={item.id}>
