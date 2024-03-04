@@ -35,10 +35,6 @@ const Header = () => {
     });
   }, [searchParams]);
 
-  const containerStyles = {
-    backgroundColor: `#${process.env.NEXT_PUBLIC_HEADER_COLOR}` ?? '#121212',
-  };
-
   const openModal = () => {
     document.body.classList.add('overflow-hidden');
     setOpenFilter(true);
@@ -65,7 +61,7 @@ const Header = () => {
   };
 
   return (
-    <div className={styles.container} style={containerStyles}>
+    <div className={styles.container}>
       <div className={styles.search}>
         {'/' !== pathname && <GoBackButton className={styles.back} />}
         <Input

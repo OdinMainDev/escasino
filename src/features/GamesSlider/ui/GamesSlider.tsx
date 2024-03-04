@@ -17,7 +17,7 @@ interface IArrowProps {
 const PrevArrow = ({ onClick }: IArrowProps) => {
   return (
     <div onClick={onClick} className="games-slider__button games-slider__button_prev">
-      <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="6" height="10" viewBox="0 0 6 10" fill="#000" xmlns="http://www.w3.org/2000/svg">
         <path
           fillRule="evenodd"
           clipRule="evenodd"
@@ -32,7 +32,7 @@ const PrevArrow = ({ onClick }: IArrowProps) => {
 const NextArrow = ({ onClick }: IArrowProps) => {
   return (
     <div onClick={onClick} className="games-slider__button games-slider__button_next">
-      <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="6" height="10" viewBox="0 0 6 10" fill="#000" xmlns="http://www.w3.org/2000/svg">
         <path
           fillRule="evenodd"
           clipRule="evenodd"

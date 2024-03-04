@@ -19,6 +19,12 @@ const Profile = () => {
     dispatch(logout());
     router.push('/');
   };
+
+  const IsUserVerified = user?.data.email_verified_at == 0 ? false : (
+    user?.data.phone_verified_at == 0 ? false : (
+      user?.data.documents_verified_at == 0 ? false : true
+    )
+  );
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -70,30 +76,40 @@ const Profile = () => {
           </div>
         </div>
         <div className={styles.profile}>
-          <div className={styles.profile_info}>
-            <div className={styles.profile_label}>ФИО</div>
-            <div className={styles.profile_value}>
-              {user?.data.first_name} {user?.data.last_name}
+          {!user?.data.first_name ? "" : (
+            <div className={styles.profile_info}>
+              <div className={styles.profile_label}>ФИО</div>
+              <div className={styles.profile_value}>
+                {user?.data.first_name} {user?.data.last_name}
+              </div>
             </div>
-          </div>
-          <div className={styles.profile_info}>
-            <div className={styles.profile_label}>Электронная почта</div>
-            <div className={styles.profile_value}>{user?.email}</div>
-          </div>
-          <div className={styles.profile_info}>
-            <div className={styles.profile_label}>Телефон</div>
-            <div className={styles.profile_value}>{user?.phone}</div>
-          </div>
-          <div className={styles.profile_info}>
-            <div className={styles.profile_label}>Адрес</div>
-            <div className={styles.profile_value}>{user?.data.address}</div>
-          </div>
+          )}
+          {!user?.email ? "" : (
+            <div className={styles.profile_info}>
+              <div className={styles.profile_label}>Электронная почта</div>
+              <div className={styles.profile_value}>{user?.email}</div>
+            </div>
+          )}
+          {!user?.phone ? "" : (
+            <div className={styles.profile_info}>
+              <div className={styles.profile_label}>Телефон</div>
+              <div className={styles.profile_value}>{user?.phone}</div>
+            </div>
+          )}
+          {!user?.username ? "" : (
+            <div className={styles.profile_info}>
+              <div className={styles.profile_label}>Username</div>
+              <div className={styles.profile_value}>{user?.username}</div>
+            </div>
+          )}
+
+
           <div
             className={classNames(styles.profile_verification, {
-              [styles.is_verificated]: user?.data.email_verified_at === 0,
+              [styles.is_verificated]: !IsUserVerified,
             })}
           >
-            {user?.data.email_verified_at === 0 ? 'Игрок не верифицирован' : 'Игрок верифицирован'}
+            {IsUserVerified ? 'Игрок верифицирован' : 'Игрок не верифицирован'}
           </div>
         </div>
       </div>

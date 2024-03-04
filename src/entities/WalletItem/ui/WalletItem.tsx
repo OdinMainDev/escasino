@@ -9,7 +9,7 @@ const WalletItem = () => {
             width="39"
             height="24"
             viewBox="0 0 39 24"
-            fill="none"
+            fill="#000"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -28,7 +28,7 @@ const WalletItem = () => {
           width="20"
           height="22"
           viewBox="0 0 20 22"
-          fill="none"
+          fill="#000"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path

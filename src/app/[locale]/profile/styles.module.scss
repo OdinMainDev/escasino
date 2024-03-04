@@ -52,7 +52,8 @@
 
 .balance {
   &_title {
-    color: rgba(255, 255, 255, 0.60);
+    color: var(--color-title-main);
+    opacity: 0.6;
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
@@ -75,7 +76,8 @@
   flex-direction: column;
   gap: 16px;
   &_label {
-    color: rgba(255, 255, 255, 0.60);
+    color: var(--color-title-main);
+    opacity: 0.6;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;

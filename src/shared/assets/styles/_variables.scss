@@ -10,11 +10,30 @@
   --Aditional-error: #CF6679;
   --Background-secondary: #1C1C1C;
   --desktop-max-width: 568px;
+  --color-title-main: #ffffff;
+  --color-tab-main: rgba(255, 255, 255, 0.60);
+}
+
+// OVERRIDE
+:root {
+  --background: #F9F9F9;
+  --primary: #F9F9F9;
+  --secondary: #000;
+  --Input-bg: #f2f2f2;
+  --Text-primary: #121212;
+  --Divider-main: #2F2F2F;
+  --Action-active: #E1E1E1;
+  --Icon-primary: #E1E1E1;
+  --Aditional-error: #CF6679;
+  --Background-secondary: #F0F0F0;
+  --desktop-max-width: 568px;
+  --color-title-main: #000;
+  --color-tab-main: rgba(0, 0, 0, 0.60);
 }
 
 
-@media (prefers-color-scheme: white) {
-  :root {
-    --background: #000000;
-  }
-}
+// @media (prefers-color-scheme: white) {
+//   :root {
+//     --background: #000000;
+//   }
+// }

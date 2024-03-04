@@ -28,7 +28,7 @@ const WalletWithdraw = () => {
               width="51"
               height="16"
               viewBox="0 0 51 16"
-              fill="none"
+              fill="#000"
               xmlns="http://www.w3.org/2000/svg"
             >
               <g clipPath="url(#clip0_222_572)">
@@ -51,7 +51,7 @@ const WalletWithdraw = () => {
               width="56"
               height="16"
               viewBox="0 0 56 16"
-              fill="none"
+              fill="#000"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -75,7 +75,7 @@ const WalletWithdraw = () => {
               width="14"
               height="14"
               viewBox="0 0 14 14"
-              fill="none"
+              fill="#000"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -99,7 +99,7 @@ const WalletWithdraw = () => {
                 width="42"
                 height="26"
                 viewBox="0 0 42 26"
-                fill="none"
+                fill="#000"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path

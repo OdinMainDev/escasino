@@ -13,7 +13,7 @@ const FilterIcon = ({ quantity }: IProps) => {
         width="24"
         height="24"
         viewBox="0 0 24 24"
-        fill="none"
+        fill="#000"
       >
         <path
           d="M6 12H18M3 6H21M9 18H15"

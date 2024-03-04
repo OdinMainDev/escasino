@@ -34,7 +34,7 @@ const Checkbox = ({ value, onChange, isError }: IProps) => {
           width="24"
           height="24"
           viewBox="0 0 24 24"
-          fill="none"
+          fill="#000"
         >
           <path
             fillRule="evenodd"

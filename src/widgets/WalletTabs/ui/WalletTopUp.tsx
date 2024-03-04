@@ -44,7 +44,7 @@ const WalletTopUp = () => {
           width="23"
           height="22"
           viewBox="0 0 23 22"
-          fill="none"
+          fill="#000"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -76,7 +76,7 @@ const WalletTopUp = () => {
               width="51"
               height="16"
               viewBox="0 0 51 16"
-              fill="none"
+              fill="#000"
               xmlns="http://www.w3.org/2000/svg"
             >
               <g clipPath="url(#clip0_222_572)">
@@ -99,7 +99,7 @@ const WalletTopUp = () => {
               width="56"
               height="16"
               viewBox="0 0 56 16"
-              fill="none"
+              fill="#000"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
