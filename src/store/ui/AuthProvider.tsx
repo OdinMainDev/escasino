@@ -7,7 +7,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     void dispatch(getMeUser());
-  }, []);
+  }, [dispatch]);
   return children;
 };
 

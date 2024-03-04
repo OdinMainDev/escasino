@@ -74,7 +74,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
           [styles.disabled]: disabled && !disabledOpacityOff,
           [styles.withoutPlaceholder]: !placeholder,
         }),
-      [elSize, className],
+      [elSize, className, disabled, disabledOpacityOff, placeholder],
     );
 
     const inputClass = classNames(styles.input, {

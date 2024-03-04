@@ -22,7 +22,7 @@ const AuthModal = () => {
 
   useEffect(() => {
     void dispatch(getSettings());
-  }, []);
+  }, [dispatch]);
 
   const openLogin = () => {
     document.body.classList.add('overflow-hidden');

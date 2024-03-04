@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { IUser } from '../models/interfaces/user';
 
 export const authApi = () => {
   let domain;

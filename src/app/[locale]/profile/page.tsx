@@ -5,7 +5,6 @@ import styles from './styles.module.scss';
 import SupportButton from '@/shared/ui/SupportButton';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/redux';
 import Button from '@/shared/ui/Button';
-import Icons from '@/shared/ui/Icons';
 import classNames from 'classnames';
 import { useRouter } from '@/shared/hooks/navigation';
 import { logout } from '@/store/slices/userSlice';
@@ -21,11 +20,14 @@ const Profile = () => {
     router.push('/');
   };
 
-  const IsUserVerified = user?.data.email_verified_at == 0 ? false : (
-    user?.data.phone_verified_at == 0 ? false : (
-      user?.data.documents_verified_at == 0 ? false : true
-    )
-  );
+  const IsUserVerified =
+    user?.data.email_verified_at == 0
+      ? false
+      : user?.data.phone_verified_at == 0
+        ? false
+        : user?.data.documents_verified_at == 0
+          ? false
+          : true;
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -38,8 +40,13 @@ const Profile = () => {
       <div className={styles.block}>
         <div className={styles.block_header}>
           <div className={styles.title}>Баланс</div>
-          {settings && settings?.currencies?.length <= 1 ? "" : (
-            <div onClick={() => router.push('/profile/edit')} style={{textDecoration: "underline", opacity: 0.7, cursor: "pointer"}}>
+          {settings && settings?.currencies?.length <= 1 ? (
+            <div></div>
+          ) : (
+            <div
+              onClick={() => router.push('/profile/edit')}
+              style={{ textDecoration: 'underline', opacity: 0.7, cursor: 'pointer' }}
+            >
               {user?.balance.currency}: сменить
             </div>
           )}
@@ -66,7 +73,10 @@ const Profile = () => {
       <div className={styles.block}>
         <div className={styles.block_header}>
           <div className={styles.title}>Активный бонус</div>
-          <div onClick={() => router.push('/profile/edit')} style={{textDecoration: "underline", opacity: 0.7, cursor: "pointer"}}>
+          <div
+            onClick={() => router.push('/profile/edit')}
+            style={{ textDecoration: 'underline', opacity: 0.7, cursor: 'pointer' }}
+          >
             смотреть
           </div>
         </div>
@@ -84,12 +94,15 @@ const Profile = () => {
       <div className={styles.block}>
         <div className={styles.block_header}>
           <div className={styles.title}>Персональные данные</div>
-          <div onClick={() => router.push('/profile/edit')} style={{textDecoration: "underline", opacity: 0.7, cursor: "pointer"}}>
+          <div
+            onClick={() => router.push('/profile/edit')}
+            style={{ textDecoration: 'underline', opacity: 0.7, cursor: 'pointer' }}
+          >
             редактировать
           </div>
         </div>
         <div className={styles.profile}>
-          {!user?.data.first_name ? "" : (
+          {user?.data.first_name ?? (
             <div className={styles.profile_info}>
               <div className={styles.profile_label}>ФИО</div>
               <div className={styles.profile_value}>
@@ -97,26 +110,24 @@ const Profile = () => {
               </div>
             </div>
           )}
-          {!user?.email ? "" : (
+          {user?.email ?? (
             <div className={styles.profile_info}>
               <div className={styles.profile_label}>Электронная почта</div>
               <div className={styles.profile_value}>{user?.email}</div>
             </div>
           )}
-          {!user?.phone ? "" : (
+          {user?.phone ?? (
             <div className={styles.profile_info}>
               <div className={styles.profile_label}>Телефон</div>
               <div className={styles.profile_value}>{user?.phone}</div>
             </div>
           )}
-          {!user?.username ? "" : (
+          {user?.username ?? (
             <div className={styles.profile_info}>
               <div className={styles.profile_label}>Username</div>
               <div className={styles.profile_value}>{user?.username}</div>
             </div>
           )}
-
-
           <div
             className={classNames(styles.profile_verification, {
               [styles.is_verificated]: !IsUserVerified,

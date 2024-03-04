@@ -12,7 +12,7 @@ export interface ISettings {
 
 export interface Public {
   logo: string;
-  names: any;
+  names: string[]; // переделать
 }
 
 export interface Auth {
@@ -99,7 +99,7 @@ export interface Register2 {
   has_zip: boolean;
   has_dob: boolean;
   has_gender: boolean;
-  has_verifications: any;
+  has_verifications: boolean;
   need_company_name: boolean;
   need_traffic_sources: boolean;
   need_telegram: boolean;

@@ -83,7 +83,7 @@ const RegistrationForm = ({ openLogin }: IProps) => {
           { value: '', label: 'Ваша страна', disabled: true },
           { value: 'RU', label: 'RU', disabled: false },
           { value: 'US', label: 'US', disabled: false },
-         // тут надо из запроса выдавать список ( /api/v1/public/get/countries )
+          // тут надо из запроса выдавать список ( /api/v1/public/get/countries )
         ]
       : [];
 
@@ -117,8 +117,9 @@ const RegistrationForm = ({ openLogin }: IProps) => {
     }
   };
 
-  var typeOfForm = settings?.auth.register.phone && settings?.auth.register.email ? "full" : "email";
-  typeOfForm = typeOfForm == "full" ? "full" : (settings?.auth.register.phone ? "phone" : "email");
+  let typeOfForm =
+    settings?.auth.register.phone && settings?.auth.register.email ? 'full' : 'email';
+  typeOfForm = typeOfForm == 'full' ? 'full' : settings?.auth.register.phone ? 'phone' : 'email';
 
   return (
     <form className={styles.container}>
@@ -128,9 +129,9 @@ const RegistrationForm = ({ openLogin }: IProps) => {
         </div>
       )}
       <div className={styles.title}>Регистрация нового игрока</div>
-      {typeOfForm == "full" && (
-        <div className='row'>
-          <div className='tab' style={{display: "flex"}}>
+      {typeOfForm == 'full' && (
+        <div className="row">
+          <div className="tab" style={{ display: 'flex' }}>
             <Input
               placeholder="Электронная почта"
               type="email"
@@ -138,10 +139,9 @@ const RegistrationForm = ({ openLogin }: IProps) => {
               validationTimeout={2500}
               validationFunction={validateEmail}
               onChange={(e) => {
-                  setRegisterData((prev) => ({ ...prev, email: e.target.value }));
-                  setRegisterData((prev) => ({ ...prev, phone: "" }));
-                }
-              }
+                setRegisterData((prev) => ({ ...prev, email: e.target.value }));
+                setRegisterData((prev) => ({ ...prev, phone: '' }));
+              }}
               containerClassName={styles.input}
               message={
                 validateEmail(registerData.email)
@@ -149,7 +149,7 @@ const RegistrationForm = ({ openLogin }: IProps) => {
                   : 'Введите корректный e-mail'
               }
             />
-             <Input
+            <Input
               placeholder={'Телефон'}
               type={'text'}
               containerClassName={styles.input}
@@ -158,20 +158,19 @@ const RegistrationForm = ({ openLogin }: IProps) => {
               validationFunction={validatePhone}
               onChange={(e) => {
                 setRegisterData((prev) => ({ ...prev, phone: e.target.value }));
-                setRegisterData((prev) => ({ ...prev, email: "" }));
-              }
-            }
+                setRegisterData((prev) => ({ ...prev, email: '' }));
+              }}
               message={
                 validatePhone(registerData.phone)
                   ? 'Будет использоваться как логин для входа'
                   : 'Введите корректный телефон'
               }
             />
+          </div>
         </div>
-      </div>
       )}
 
-      {typeOfForm == "email" && (
+      {typeOfForm == 'email' && (
         <Input
           placeholder="Электронная почта"
           type="email"
@@ -188,7 +187,7 @@ const RegistrationForm = ({ openLogin }: IProps) => {
         />
       )}
 
-      {typeOfForm == "phone" && (
+      {typeOfForm == 'phone' && (
         <Input
           placeholder={'Телефон'}
           type={'text'}
@@ -251,50 +250,49 @@ const RegistrationForm = ({ openLogin }: IProps) => {
         />
       )}
 
-
       {/* Тут красиво группировать */}
-       {settings?.auth.register.full_name && (
-        <div className='row' style={{display: "flex"}}>
-            <Input
-              placeholder={'Фамилия'}
-              type={'text'}
-              containerClassName={styles.input}
-              isError={!!errorList.find((item) => item === 'last_name')}
-              onChange={(e) => setRegisterData((prev) => ({ ...prev, last_name: e.target.value }))}
-            />
-            <Input
-              placeholder={'Имя'}
-              type={'text'}
-              containerClassName={styles.input}
-              isError={!!errorList.find((item) => item === 'first_name')}
-              onChange={(e) => setRegisterData((prev) => ({ ...prev, first_name: e.target.value }))}
-            />
-            <Input
-              placeholder={'Отчество'}
-              type={'text'}
-              containerClassName={styles.input}
-              isError={!!errorList.find((item) => item === 'second_name')}
-              onChange={(e) => setRegisterData((prev) => ({ ...prev, second_name: e.target.value }))}
-            />
+      {settings?.auth.register.full_name && (
+        <div className="row" style={{ display: 'flex' }}>
+          <Input
+            placeholder={'Фамилия'}
+            type={'text'}
+            containerClassName={styles.input}
+            isError={!!errorList.find((item) => item === 'last_name')}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, last_name: e.target.value }))}
+          />
+          <Input
+            placeholder={'Имя'}
+            type={'text'}
+            containerClassName={styles.input}
+            isError={!!errorList.find((item) => item === 'first_name')}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, first_name: e.target.value }))}
+          />
+          <Input
+            placeholder={'Отчество'}
+            type={'text'}
+            containerClassName={styles.input}
+            isError={!!errorList.find((item) => item === 'second_name')}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, second_name: e.target.value }))}
+          />
         </div>
       )}
 
       {/* Тут красиво группировать */}
       {settings?.auth.register.city && (
-        <div className='row' style={{display: "flex"}}>
-            <Select
-              isError={!!errorList.find((item) => item === 'country')}
-              optionList={countriesList}
-              value={registerData.country}
-              onChange={(e) => setRegisterData((prev) => ({ ...prev, country: e.target.value }))}
-            />
-            <Input
-              placeholder={'Город'}
-              type={'text'}
-              containerClassName={styles.input}
-              isError={!!errorList.find((item) => item === 'city')}
-              onChange={(e) => setRegisterData((prev) => ({ ...prev, city: e.target.value }))}
-            />
+        <div className="row" style={{ display: 'flex' }}>
+          <Select
+            isError={!!errorList.find((item) => item === 'country')}
+            optionList={countriesList}
+            value={registerData.country}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, country: e.target.value }))}
+          />
+          <Input
+            placeholder={'Город'}
+            type={'text'}
+            containerClassName={styles.input}
+            isError={!!errorList.find((item) => item === 'city')}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, city: e.target.value }))}
+          />
         </div>
       )}
 
@@ -310,20 +308,21 @@ const RegistrationForm = ({ openLogin }: IProps) => {
 
       {/* Тут красиво группировать */}
       {settings?.auth.register.address && (
-        <div className='row' style={{display: "flex"}}>
-            <Input
-              placeholder={'Адрес'}
-              type={'text'}
-              containerClassName={styles.input}
-              isError={!!errorList.find((item) => item === 'address')}
-              onChange={(e) => setRegisterData((prev) => ({ ...prev, address: e.target.value }))}
-            /><Input
-              placeholder={'Почтовый индекс'}
-              type={'text'}
-              containerClassName={styles.input}
-              isError={!!errorList.find((item) => item === 'city')}
-              onChange={(e) => setRegisterData((prev) => ({ ...prev, zip: e.target.value }))}
-            />
+        <div className="row" style={{ display: 'flex' }}>
+          <Input
+            placeholder={'Адрес'}
+            type={'text'}
+            containerClassName={styles.input}
+            isError={!!errorList.find((item) => item === 'address')}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, address: e.target.value }))}
+          />
+          <Input
+            placeholder={'Почтовый индекс'}
+            type={'text'}
+            containerClassName={styles.input}
+            isError={!!errorList.find((item) => item === 'city')}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, zip: e.target.value }))}
+          />
         </div>
       )}
 
@@ -335,7 +334,7 @@ const RegistrationForm = ({ openLogin }: IProps) => {
           onChange={(e) => setRegisterData((prev) => ({ ...prev, gender: e.target.value }))}
         />
       )}
-      
+
       <div className={styles.checkbox}>
         <Checkbox
           isError={!!errorList.find((item) => item === 'terms')}
@@ -353,9 +352,7 @@ const RegistrationForm = ({ openLogin }: IProps) => {
             value={registerData.promo}
             onChange={(value) => setRegisterData((prev) => ({ ...prev, promo: value }))}
           />
-          <div>
-            Я согласен на промо рассылку
-          </div>
+          <div>Я согласен на промо рассылку</div>
         </div>
       )}
       <div className={styles.subtitle}>C помощью социальных сетей</div>

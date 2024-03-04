@@ -5,7 +5,7 @@ import React from 'react';
 
 const Telegram = () => {
   const { settings } = useAppSelector((state) => state.settingsReducer);
-  if(!settings?.auth?.social_tg){
+  if (!settings?.auth?.social_tg) {
     return;
   }
   return (

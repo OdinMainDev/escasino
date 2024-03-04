@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import styles from './Games.module.scss';
 import { Game } from '@/entities/Game';
 import { IGame } from '@/shared/models/interfaces/games';

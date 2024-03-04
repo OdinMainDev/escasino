@@ -29,7 +29,7 @@ const FilterModal = ({ isOpen, close, setFilterQuantity }: IProps) => {
 
   useEffect(() => {
     setFilterQuantity(countActiveKeys(filter));
-  }, []);
+  }, [filter, setFilterQuantity]);
 
   const selectCategory = useCallback(
     (selectedCategory: string) => {

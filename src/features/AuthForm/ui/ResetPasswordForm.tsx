@@ -52,8 +52,8 @@ const ResetPasswordForm = () => {
     dispatch(openLoginModal());
   };
 
-  var typeOfForm = settings?.auth.reset.phone && settings?.auth.reset.email ? "full" : "email";
-  typeOfForm = typeOfForm == "full" ? "full" : (settings?.auth.reset.phone ? "phone" : "email");
+  let typeOfForm = settings?.auth.reset.phone && settings?.auth.reset.email ? 'full' : 'email';
+  typeOfForm = typeOfForm == 'full' ? 'full' : settings?.auth.reset.phone ? 'phone' : 'email';
 
   return (
     <form className={styles.container}>
@@ -63,9 +63,9 @@ const ResetPasswordForm = () => {
         </div>
       )}
       <div className={styles.title}>Забыли пароль?</div>
-      {typeOfForm == "full" && (
-        <div className='row'>
-          <div className='tab' style={{display: "flex"}}>
+      {typeOfForm == 'full' && (
+        <div className="row">
+          <div className="tab" style={{ display: 'flex' }}>
             <Input
               placeholder="Электронная почта"
               type="email"
@@ -77,32 +77,31 @@ const ResetPasswordForm = () => {
               autoComplete={autoCompleteHandler('email')}
               isError={isError}
               onChange={(e) => {
-                handleInputChange('phone', "");
+                handleInputChange('phone', '');
                 handleInputChange('email', e.target.value);
-              }
-            }
+              }}
             />
             <Input
-             placeholder="Номер телефона"
-             type="text"
-             containerClassName={styles.input}
-             value={String(resetPasswordData.phone)}
-             validationFunction={validatePhone}
-             validationTimeout={2500}
-             message={!validatePhone(resetPasswordData.phone) ? 'Введите корректный телефон' : null}
-             autoComplete={autoCompleteHandler('phone')}
-             isError={isError}
-              onChange={(e) => {
-                  handleInputChange('email', "");
-                  handleInputChange('phone', e.target.value);
-                }
+              placeholder="Номер телефона"
+              type="text"
+              containerClassName={styles.input}
+              value={String(resetPasswordData.phone)}
+              validationFunction={validatePhone}
+              validationTimeout={2500}
+              message={
+                !validatePhone(resetPasswordData.phone) ? 'Введите корректный телефон' : null
               }
+              autoComplete={autoCompleteHandler('phone')}
+              isError={isError}
+              onChange={(e) => {
+                handleInputChange('email', '');
+                handleInputChange('phone', e.target.value);
+              }}
             />
           </div>
         </div>
       )}
-
-      {typeOfForm == "email" && (
+      {typeOfForm == 'email' && (
         <Input
           placeholder="Электронная почта"
           type="email"
@@ -116,8 +115,7 @@ const ResetPasswordForm = () => {
           onChange={(e) => handleInputChange('email', e.target.value)}
         />
       )}
-
-      {typeOfForm == "phone" && (
+      {typeOfForm == 'phone' && (
         <Input
           placeholder="Номер телефона"
           type="text"

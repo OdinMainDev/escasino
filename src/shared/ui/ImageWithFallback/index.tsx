@@ -22,8 +22,15 @@ const ImageWithFallback: FC<ImageWithFallbackProps> = ({ dummy, src, ...props })
       </div>
     );
   }
-
-  return <Image src={src} {...props} onError={handleError} />;
+  // TODO: сделать общий alt а так же все альты заполнять
+  return (
+    <Image
+      src={src}
+      {...props}
+      onError={handleError}
+      alt={process.env.BASE_NAME ? process.env.BASE_NAME : 'WhiteHole'}
+    />
+  );
 };
 
 export default ImageWithFallback;

@@ -5,7 +5,7 @@ import React from 'react';
 
 const Twitter = () => {
   const { settings } = useAppSelector((state) => state.settingsReducer);
-  if(!settings?.auth?.social_tw){
+  if (!settings?.auth?.social_tw) {
     return;
   }
   return (

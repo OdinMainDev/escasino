@@ -56,9 +56,8 @@ const LoginForm = ({ openRegistration }: IProps) => {
     }
   };
 
-  
-  var typeOfForm = settings?.auth.login.phone && settings?.auth.login.email ? "full" : "email";
-  typeOfForm = typeOfForm == "full" ? "full" : (settings?.auth.login.phone ? "phone" : "email");
+  let typeOfForm = settings?.auth.login.phone && settings?.auth.login.email ? 'full' : 'email';
+  typeOfForm = typeOfForm == 'full' ? 'full' : settings?.auth.login.phone ? 'phone' : 'email';
 
   return (
     <form className={styles.container}>
@@ -68,13 +67,13 @@ const LoginForm = ({ openRegistration }: IProps) => {
         </div>
       )}
       <div className={styles.title}>Войти в личный кабинет</div>
-      
+
       {/* На будущее */}
       {/* TODO: СДЕЛАТЬ ТУТ НОРМ ВЕРСТКУ В ФУЛЛ ( ЕСЛИ ИЗ АДМИНКИ ВКЛЮЧЕНО ЧТО И ПОЧТА И ТЕЛЕФОН ЕСТЬ ) */}
       {/* TODO: СДЕЛАТЬ ИНПУТ ТЕЛЕФОНА ( НОРМАЛЬНЫЙ А НЕ КАК ЭТО СДЕЛАНО КОНЕЧНО (КРАСИВЕНЬКО)) ) */}
-      {typeOfForm == "full" && (
-        <div className='row'>
-          <div className='tab' style={{display: "flex"}}>
+      {typeOfForm == 'full' && (
+        <div className="row">
+          <div className="tab" style={{ display: 'flex' }}>
             <Input
               placeholder={'Почта'}
               type={'email'}
@@ -84,10 +83,9 @@ const LoginForm = ({ openRegistration }: IProps) => {
               isError={isError}
               message={isError ? 'Почта или пароль введены неверно' : null}
               onChange={(e) => {
-                handleInputChange('phone', "");
+                handleInputChange('phone', '');
                 handleInputChange('email', e.target.value);
-              }
-            }
+              }}
             />
             <Input
               placeholder={'Телефон'}
@@ -98,18 +96,17 @@ const LoginForm = ({ openRegistration }: IProps) => {
               isError={isError}
               message={isError ? 'Телефон или пароль введены неверно' : null}
               onChange={(e) => {
-                  handleInputChange('email', "");
-                  handleInputChange('phone', e.target.value);
-                }
-              }
+                handleInputChange('email', '');
+                handleInputChange('phone', e.target.value);
+              }}
             />
           </div>
         </div>
       )}
 
-      {typeOfForm == "email" && (
-        <div className='row'>
-          <div className='tab' style={{display: "flex"}}>
+      {typeOfForm == 'email' && (
+        <div className="row">
+          <div className="tab" style={{ display: 'flex' }}>
             <Input
               placeholder={'Почта'}
               type={'email'}
@@ -124,9 +121,9 @@ const LoginForm = ({ openRegistration }: IProps) => {
         </div>
       )}
 
-      {typeOfForm == "phone" && (
-        <div className='row'>
-          <div className='tab' style={{display: "flex"}}>
+      {typeOfForm == 'phone' && (
+        <div className="row">
+          <div className="tab" style={{ display: 'flex' }}>
             <Input
               placeholder={'Телефон'}
               type={'text'}
@@ -154,15 +151,17 @@ const LoginForm = ({ openRegistration }: IProps) => {
 
       {/* TODO: ИСПРАВИТЬ ВЕРСТКУ ЕСЛИ ЕСТЬ ЗАПОМНИТЬ МЕНЯ */}
       {settings?.auth.login.remember ? (
-        <div className={styles.forgot} style={{display: "flex"}}>
+        <div className={styles.forgot} style={{ display: 'flex' }}>
           <Checkbox
             value={false}
             onChange={(value) => setLoginData((prev) => ({ ...prev, remember: value }))}
           />
-          <div style={{margin: "0px 0px 0px 5px"}}>
-            Запомнить меня
-          </div>
-          <div className={styles.forgot} onClick={() => dispatch(openResetPasswordModal())} style={{float: "right", textAlign: "right", width: "70%"}}>
+          <div style={{ margin: '0px 0px 0px 5px' }}>Запомнить меня</div>
+          <div
+            className={styles.forgot}
+            onClick={() => dispatch(openResetPasswordModal())}
+            style={{ float: 'right', textAlign: 'right', width: '70%' }}
+          >
             Я забыл пароль
           </div>
         </div>
@@ -177,7 +176,6 @@ const LoginForm = ({ openRegistration }: IProps) => {
         <Twitter />
         <VK />
       </div>
-
 
       {!loading && settings?.auth.login.captcha && (
         <ReCAPTCHA
