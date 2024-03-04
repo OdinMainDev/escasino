@@ -5,7 +5,6 @@ import styles from './ProfileForm.module.scss';
 import Button from '@/shared/ui/Button';
 import Checkbox from '@/shared/ui/Checkbox';
 import { IUserData } from '../models/user';
-import { ISettings } from '@/shared/models/interfaces/settings';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks/redux';
 import { formatDateType, userDataMapper } from '../mapper/userDataMapper';
@@ -14,13 +13,14 @@ import Icons from '@/shared/ui/Icons';
 import Select from '@/shared/ui/Select';
 import { genderSelect } from '../constants/genderSelect';
 import { editProfileHandlerApi } from '../api/profile';
+import { verificationEmailHandlerApi } from '../api/verifyEmail';
 import { getVisitorId } from '@/features/AuthForm/helpers/getVisitorId';
 import { getMeUser } from '@/store/slices/userSlice';
-import { getSettings } from '@/store/slices/settingsSlice';
 
 const ProfileForm = () => {
   const { user, loading } = useAppSelector((state) => state.userReducer);
-  const { settings } = useAppSelector((state) => state.settingsReducer);
+  // TODO: исправить настройки
+  const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
   const [loader, setLoader] = useState(false);
   const dispatch = useAppDispatch();
   const [userData, setUserData] = useState<IUserData>({
@@ -39,12 +39,14 @@ const ProfileForm = () => {
     fid: '',
     promo: true,
   });
+
   
   useEffect(() => {
     if (user) {
       setUserData(userDataMapper(user));
     }
   }, [user]);
+
 
   if (user?.balance.currency == "") {
     // TODO: тут нужно сделать обновление user так как после регистрации он может долго регистрироваться
@@ -71,9 +73,30 @@ const ProfileForm = () => {
     }
   };
 
+  const verifyEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    try {
+      e.preventDefault();
+      setLoader(true);
+      const fid = await getVisitorId();
+      var resp = await verificationEmailHandlerApi({
+        fid
+      });
+      console.log(resp);
+      console.log(resp?.hash);
+
+      // TODO: затем мы открываем модалку подтвердите адрес электронной почты
+      // открываем его но там еще должен быть инпут введите код из почтового письма
+      // мы должны отправить код с хешем  ( console.log(resp?.hash))
+    } catch (e: unknown) {
+      /* empty */
+    } finally {
+      setLoader(false);
+    }
+  };
+
   return (
     <form className={styles.container}>
-      {(loading || loader) && (
+      {(loading || loadingSettings || loader) && (
         <div className={styles.loading}>
           <Loader />
         </div>
@@ -143,9 +166,10 @@ const ProfileForm = () => {
             disabled={settings?.profile.user_can_change_data && userData.email != ""}
             readOnly={settings?.profile.user_can_change_data && userData.email != ""}
             value={userData.email}
+            onChange={(e) => setUserData((prev) => ({ ...prev, email: e.target.value }))}
           />
           {/* ПРИ НАЖАТИИ ПРОВЕРЯЕТ НА ТО ИЗМЕНЕНО ИЛИ НЕТ ТЕКУЩЕЕ ПОЛЕ И ПОТОМ ОТКРЫВАЕТ МОДАЛКУ */}
-          <Button elType="outlined" className={styles.email_button}>
+          <Button elType="outlined" className={styles.email_button} onClick={verifyEmail} type='button'>
             Подтвердить электронную почту
           </Button>
         </div>
@@ -173,9 +197,10 @@ const ProfileForm = () => {
             disabled={settings?.profile.user_can_change_data && userData.phone != ""}
             readOnly={settings?.profile.user_can_change_data && userData.phone != ""}
             value={userData.phone}
+            onChange={(e) => setUserData((prev) => ({ ...prev, phone: e.target.value }))}
           />
           {/* ПРИ НАЖАТИИ ПРОВЕРЯЕТ НА ТО ИЗМЕНЕНО ИЛИ НЕТ ТЕКУЩЕЕ ПОЛЕ И ПОТОМ ОТКРЫВАЕТ МОДАЛКУ */}
-          <Button elType="outlined" className={styles.email_button}>
+          <Button elType="outlined" className={styles.email_button} onClick={verifyEmail} type='button'>
             Подтвердить телефон
           </Button>
         </div>
