@@ -51,6 +51,14 @@
 }
 
 .balance {
+  &_bonus {
+    color: var(--Text-primary);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 32px;
+    letter-spacing: 0.24px;
+  }
   &_title {
     color: var(--color-title-main);
     opacity: 0.6;

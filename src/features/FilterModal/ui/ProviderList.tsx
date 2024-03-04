@@ -4,7 +4,7 @@ import { getProvidersApi } from '../api/providersApi';
 import styles from './ProviderList.module.scss';
 import { IProvider } from '@/shared/models/interfaces/providers';
 import { TabBlock } from '@/entities/TabBlock';
-// import Image from 'next/image';
+import Image from 'next/image';
 
 interface IProps {
   selectedProviders: string[];
@@ -38,7 +38,8 @@ const ProviderList = memo(({ selectedProviders, selectProvider }: IProps) => {
               onClick={() => selectProvider(item.url)}
               key={item.url}
             >
-              {/* <Image src={item.data.image || ''} alt={item.url} width={25} height={65} /> */}
+              {/* TODO: надо сделать чтобы картинка была больше и над текстом */}
+              <Image src={item.data.image || ''} alt={item.url} width={25} height={65} />
               <div className={styles.text}>{item.url}</div>
             </TabBlock>
           ))}

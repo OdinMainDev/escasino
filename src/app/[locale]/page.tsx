@@ -7,8 +7,8 @@ import { getGamesApi } from '@/shared/api/gamesApi';
 import { Footer } from '@/widgets/Footer';
 
 export default async function Home() {
-  const games = await getGamesApi({ offset: 10, limit: 'all' });
-
+  // TODO: починить список игр( не работает почему то )
+  const games = await getGamesApi({ offset: 0, limit: 'all' });
   return (
     <div className={styles.container}>
       <div className={styles.header}>

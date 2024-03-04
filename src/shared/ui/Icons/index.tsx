@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faCog, faCircleExclamation, faFilter } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faCog, faCircleExclamation, faFilter, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { faEye, faEyeSlash, faStar, faComments, faFile, faPenToSquare } from '@fortawesome/free-regular-svg-icons'
 
 interface IProps {
-  icon: 'search' | 'eye' | 'eye-off' | 'star' | 'settings' | 'chat' | 'file' | 'edit' | 'warning' | 'filter';
+  icon: 'search' | 'eye' | 'eye-off' | 'star' | 'settings' | 'chat' | 'file' | 'edit' | 'warning' | 'filter' | 'goback';
 }
 
 const Icons = ({ icon }: IProps) => {
@@ -64,6 +64,12 @@ const Icons = ({ icon }: IProps) => {
   if (icon === 'filter') {
     return (
       <FontAwesomeIcon icon={faFilter}/>
+    );
+  }
+
+  if (icon === 'goback') {
+    return (
+      <FontAwesomeIcon icon={faArrowLeft}/>
     );
   }
 

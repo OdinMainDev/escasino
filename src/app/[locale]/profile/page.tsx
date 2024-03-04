@@ -12,6 +12,7 @@ import { logout } from '@/store/slices/userSlice';
 
 const Profile = () => {
   const { user } = useAppSelector((store) => store.userReducer);
+  const { settings } = useAppSelector((store) => store.settingsReducer);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -35,11 +36,24 @@ const Profile = () => {
         <SupportButton />
       </div>
       <div className={styles.block}>
-        <div className={styles.title}>Баланс</div>
+        <div className={styles.block_header}>
+          <div className={styles.title}>Баланс</div>
+          {settings && settings?.currencies?.length <= 1 ? "" : (
+            <div onClick={() => router.push('/profile/edit')} style={{textDecoration: "underline", opacity: 0.7, cursor: "pointer"}}>
+              {user?.balance.currency}: сменить
+            </div>
+          )}
+        </div>
         <div className={styles.balance}>
           <div className={styles.balance_title}>Реальный счет</div>
           <div className={styles.balance_value}>
             {user?.balance.balance_real} {user?.balance.currency}
+          </div>
+        </div>
+        <div className={styles.balance}>
+          <div className={styles.balance_title}>Бонусный счет</div>
+          <div className={styles.balance_bonus}>
+            {user?.balance.balance_bonus} {user?.balance.currency}
           </div>
         </div>
         <div className={styles.buttons}>
@@ -50,11 +64,10 @@ const Profile = () => {
         </div>
       </div>
       <div className={styles.block}>
-        <div className={styles.title}>Активный бонус</div>
-        <div className={styles.balance}>
-          <div className={styles.balance_title}>Бонусный счет</div>
-          <div className={styles.balance_value}>
-            {user?.balance.balance_bonus} {user?.balance.currency}
+        <div className={styles.block_header}>
+          <div className={styles.title}>Активный бонус</div>
+          <div onClick={() => router.push('/profile/edit')} style={{textDecoration: "underline", opacity: 0.7, cursor: "pointer"}}>
+            смотреть
           </div>
         </div>
         <div className={styles.balance}>
@@ -71,8 +84,8 @@ const Profile = () => {
       <div className={styles.block}>
         <div className={styles.block_header}>
           <div className={styles.title}>Персональные данные</div>
-          <div onClick={() => router.push('/profile/edit')}>
-            <Icons icon="edit" />
+          <div onClick={() => router.push('/profile/edit')} style={{textDecoration: "underline", opacity: 0.7, cursor: "pointer"}}>
+            редактировать
           </div>
         </div>
         <div className={styles.profile}>
