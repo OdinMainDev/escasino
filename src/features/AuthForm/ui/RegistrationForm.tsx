@@ -299,10 +299,14 @@ const RegistrationForm = ({ openLogin }: IProps) => {
       {settings?.auth.register.dob && (
         <Input
           placeholder={'Дата рождения'}
-          type={'text'}
+          type="datetime-local"
           containerClassName={styles.input}
           isError={!!errorList.find((item) => item === 'dob')}
-          onChange={(e) => setRegisterData((prev) => ({ ...prev, dob: parseInt(e.target.value) }))}
+          onChange={(e) => {
+            const inputDate = new Date(e.target.value);
+            const timestamp = Math.floor(inputDate.getTime() / 1000);
+            setRegisterData((prev) => ({ ...prev, dob: timestamp }));
+          }}
         />
       )}
 

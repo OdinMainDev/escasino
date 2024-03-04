@@ -102,31 +102,39 @@ const Profile = () => {
           </div>
         </div>
         <div className={styles.profile}>
-          {user?.data.first_name ?? (
+          {user?.data.first_name ? (
             <div className={styles.profile_info}>
               <div className={styles.profile_label}>ФИО</div>
               <div className={styles.profile_value}>
                 {user?.data.first_name} {user?.data.last_name}
               </div>
             </div>
+          ) : (
+            <div></div>
           )}
-          {user?.email ?? (
+          {user?.email ? (
             <div className={styles.profile_info}>
               <div className={styles.profile_label}>Электронная почта</div>
               <div className={styles.profile_value}>{user?.email}</div>
             </div>
+          ) : (
+            <div></div>
           )}
-          {user?.phone ?? (
+          {user?.phone ? (
             <div className={styles.profile_info}>
               <div className={styles.profile_label}>Телефон</div>
               <div className={styles.profile_value}>{user?.phone}</div>
             </div>
+          ) : (
+            <div></div>
           )}
-          {user?.username ?? (
+          {user?.username ? (
             <div className={styles.profile_info}>
               <div className={styles.profile_label}>Username</div>
               <div className={styles.profile_value}>{user?.username}</div>
             </div>
+          ) : (
+            <div></div>
           )}
           <div
             className={classNames(styles.profile_verification, {

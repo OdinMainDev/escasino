@@ -6,8 +6,8 @@ import Button from '@/shared/ui/Button';
 import Checkbox from '@/shared/ui/Checkbox';
 import { IUserData } from '../models/user';
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@/shared/hooks/redux';
-import { formatDateType, userDataMapper } from '../mapper/userDataMapper';
+import { useAppSelector } from '@/shared/hooks/redux';
+import { userDataMapper } from '../mapper/userDataMapper';
 import Loader from '@/shared/ui/Loader';
 import Icons from '@/shared/ui/Icons';
 import Select from '@/shared/ui/Select';
@@ -15,14 +15,14 @@ import { genderSelect } from '../constants/genderSelect';
 import { editProfileHandlerApi } from '../api/profile';
 // import { verificationEmailHandlerApi } from '../api/verifyEmail';
 import { getVisitorId } from '@/features/AuthForm/helpers/getVisitorId';
-import { getMeUser } from '@/store/slices/userSlice';
+// import { getMeUser } from '@/store/slices/userSlice';
 
 const ProfileForm = () => {
   const { user, loading } = useAppSelector((state) => state.userReducer);
   // TODO: исправить настройки
   const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
   const [loader, setLoader] = useState(false);
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const [userData, setUserData] = useState<IUserData>({
     email: '',
     phone: '',
@@ -57,13 +57,18 @@ const ProfileForm = () => {
       e.preventDefault();
       setLoader(true);
       const fid = await getVisitorId();
-      const formattedDate = formatDateType(typeof userData.dob === 'number' ? userData.dob : 0);
+      // const formattedDate = formatDateType(typeof userData.dob === 'number' ? userData.dob : 0);
+      if (typeof userData.dob !== 'number') {
+        const inputDate = new Date(userData.dob);
+        const timestamp = Math.floor(inputDate.getTime() / 1000);
+        userData.dob = timestamp;
+      }
       await editProfileHandlerApi({
         ...userData,
-        dob: new Date(formattedDate).getTime(),
+        dob: userData.dob, // почему то та что отправляется != той что устанавливается
         fid,
       });
-      await dispatch(getMeUser());
+      // await dispatch(getMeUser());
     } catch (e: unknown) {
       /* empty */
     } finally {
@@ -215,7 +220,9 @@ const ProfileForm = () => {
           value={userData.dob}
           disabled={settings?.profile.user_can_change_data && userData.dob != 0}
           readOnly={settings?.profile.user_can_change_data && userData.dob != 0}
-          onChange={(e) => setUserData((prev) => ({ ...prev, dob: e.target.value }))}
+          onChange={(e) => {
+            setUserData((prev) => ({ ...prev, dob: e.target.value }));
+          }}
         />
       )}
       {settings?.profile.has_gender ?? (
