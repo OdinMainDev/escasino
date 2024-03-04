@@ -25,6 +25,7 @@
 
 .icons_list {
   display: flex;
+  align-items: center;
   .icon {
     cursor: pointer;
     margin-right: 10px;
@@ -61,8 +62,9 @@
     height: 16px;
     top: -8px;
     right: -8px;
+    color: #FFF;
     border-radius: 50%;
-    background: var(--Icon-primary, #E1E1E1);
+    background: var(--Text-primary, #E1E1E1);
     position: absolute;
   }
 }

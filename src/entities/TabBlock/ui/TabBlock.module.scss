@@ -6,15 +6,19 @@
   box-sizing: border-box;
   align-items: center;
   justify-content: center;
-  background: var(--Input-bg, #333);
+  background: var(--Tabs-main, #333);
   border-radius: 2px;
   font-size: 12px;
   font-weight: 600;
-  color: var(--Text-primary, #F2F2F2);
+  color: #F2F2F2;
   cursor: pointer;
   &.selected {
-    color:var(--Input-bg, #333);
+    color:var(--Tabs-main, #333);
     background: var(--Action-active, #E1E1E1);
+  }
+
+  img {
+    margin-right: 10px;
   }
 }
 

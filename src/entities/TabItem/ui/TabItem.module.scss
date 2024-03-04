@@ -1,7 +1,7 @@
 .container {
   padding: 6px 16px;
-  background: var(--Input-bg, #333);
-  color: var(--Text-primary, #F2F2F2);
+  background: var(--Tabs-main, #333);
+  color: #F2F2F2;
   font-size: 14px;
   font-style: normal;
   border-radius: 2px;
@@ -9,7 +9,7 @@
   line-height: 143%;
   cursor: pointer;
   &.selected {
-    color:  var(--Input-bg, #333);
+    color:  var(--Tabs-main, #333);
     background: var(--Action-active, #E1E1E1);
   }
 }
