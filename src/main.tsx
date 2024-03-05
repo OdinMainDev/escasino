@@ -6,9 +6,7 @@ import { router } from './app/Routes';
 import './i18n';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <Providers>
-      <RouterProvider router={router} />
-    </Providers>
-  </React.StrictMode>,
+  <Providers>
+    <RouterProvider router={router} />
+  </Providers>,
 );

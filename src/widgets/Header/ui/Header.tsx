@@ -7,8 +7,7 @@ import styles from './Header.module.scss';
 import { ChatIcon, FilterIcon } from './Icons';
 import GoBackButton from '@/shared/ui/GoBackButton';
 import FilterModal from '@/features/FilterModal';
-import { usePathname, useRouter } from '@/shared/hooks/navigation';
-import { useQuery } from '@/shared/hooks/navigation';
+import { usePathname, useRouter, useQuery } from '@/shared/hooks/navigation';
 import { IFilter } from '@/shared/models/interfaces/filter';
 
 const Header = () => {
@@ -33,7 +32,7 @@ const Header = () => {
       distinct_filters: true,
       query: searchParams.get('query') ?? '',
     });
-  }, [searchParams]);
+  }, []);
 
   const openModal = () => {
     document.body.classList.add('overflow-hidden');
@@ -80,7 +79,7 @@ const Header = () => {
           <ChatIcon />
         </div>
       </div>
-      {/* <FilterModal isOpen={openFilter} close={closeModal} setFilterQuantity={setFilterQuantity} /> */}
+      <FilterModal isOpen={openFilter} close={closeModal} setFilterQuantity={setFilterQuantity} />
     </div>
   );
 };

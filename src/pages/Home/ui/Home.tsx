@@ -23,9 +23,9 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      {/* <div className={styles.header}>
+      <div className={styles.header}>
         <Header />
-      </div> */}
+      </div>
       {/* <div className={styles.top_games}>
         <TopGames />
       </div> */}
