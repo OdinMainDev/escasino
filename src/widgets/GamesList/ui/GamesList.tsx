@@ -27,7 +27,7 @@ const GamesList = () => {
     };
 
     void getGames();
-  }, [searchParams]);
+  }, []);
 
   if (loading) {
     return <Loader />;

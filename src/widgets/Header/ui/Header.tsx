@@ -47,7 +47,7 @@ const Header = () => {
   const searchGames = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       router.push({
-        pathname: '/games',
+        pathname: '/',
         query: {
           query: filter.query,
           'categories[]': filter.categories,

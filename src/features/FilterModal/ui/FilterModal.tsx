@@ -72,7 +72,7 @@ const FilterModal = ({ isOpen, close, setFilterQuantity }: IProps) => {
     }
     setFilterQuantity(countActiveKeys(filter));
     router.push({
-      pathname: '/games',
+      pathname: '/',
       query: {
         query: filter.query,
         'categories[]': filter.categories,
@@ -93,7 +93,7 @@ const FilterModal = ({ isOpen, close, setFilterQuantity }: IProps) => {
         query: '',
       };
       setFilters(filter);
-      router.push('/games');
+      router.push('/');
     }
     if (close) {
       close();

@@ -3,6 +3,7 @@ import {
   createSearchParams,
   useLocation,
   useNavigate,
+  useParams,
 } from 'react-router-dom';
 import { useCallback, useMemo } from 'react';
 
@@ -51,19 +52,21 @@ interface IPushData {
 }
 export function useRouter() {
   const navigate = useNavigate();
+  const { lang } = useParams();
 
   const push = useCallback(
     (pathOrObj: string | IPushData) => {
-      // Проверяем, является ли аргумент строкой
       if (typeof pathOrObj === 'string') {
-        navigate(pathOrObj);
+        navigate(`/${lang}/${pathOrObj}`);
       } else {
-        // Обработка объекта с pathname и query
         const { pathname, query } = pathOrObj;
         const searchParams = query
           ? `?${createSearchParams(query as URLSearchParamsInit).toString()}`
           : '';
-        navigate(`${pathname}${searchParams}`);
+        navigate({
+          pathname: `/${lang}${pathname}`,
+          search: searchParams,
+        });
       }
     },
     [navigate],
