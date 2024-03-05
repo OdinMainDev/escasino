@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+
+  &.error {
+    .checkbox {
+      border: 2px solid  var(--Aditional-error, #CF6679);
+
+    }
+  }
+  input {
+    display: none;
+  }
+
+  svg {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+  }
+
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid  var(--Text-primary, #F2F2F2);
+    border-radius: 2px;
+  }
+  
+}

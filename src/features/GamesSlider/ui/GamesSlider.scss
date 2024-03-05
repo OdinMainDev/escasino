@@ -1,0 +1,48 @@
+.games-slider {
+  display: block;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  .slick-list {
+    overflow: hidden;
+  }
+  .slick-track {
+    display: flex;
+  }
+
+  &__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 27px;
+    height: 27px;
+    cursor: pointer;
+    background-color: var(--Input-bg);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    font-size: 0;
+    border-radius: 50%;
+    &_next {
+      right: -12px;
+      svg {
+        margin-left: 3px;
+      }
+    }
+  
+    &_prev {
+      left: -12px;
+      svg {
+        margin-right: 3px;
+      }
+    }
+  }
+
+
+  &__slide {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+  }
+}

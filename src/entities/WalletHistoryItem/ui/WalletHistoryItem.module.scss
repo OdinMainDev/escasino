@@ -1,0 +1,53 @@
+.container {
+  width: 100%;
+  min-height: 176px;
+  padding: 16px;
+  border-radius: 2px;
+  background-color: rgba($color: var(--secondary), $alpha: 0.05);
+}
+
+.status {
+  height: 24px;
+  padding: 4px 12px;
+  border-radius: 24px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.01em;
+  background-color: #F9B166;
+}
+
+.cancel {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.01em;
+  text-align: left;
+  color: rgba($color: var(--secondary), $alpha: 0.8);
+  cursor: pointer;
+}
+
+.data {
+  flex: 1px
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.01em;
+  color: var(--secondary);
+  opacity: 0.6;
+  margin-bottom: 4px;
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.01em;
+  color: var(--secondary);
+  opacity: 0.8;
+}

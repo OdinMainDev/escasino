@@ -1,0 +1,42 @@
+.container {
+  height: 82px;
+  width: 100%;
+  bottom: 0;
+  position: sticky;
+  z-index: 1;
+}
+
+.footer {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 16px;
+  z-index: 4;
+  height: 82px;
+  position: relative;
+  justify-content: space-between;
+  bottom: 0;
+  background-color: var(--primary);
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  @media (min-width: 375px) {
+    gap: 25px
+  }
+  @media (min-width: 425px) {
+    gap: 30px
+  }
+}
+
+.loading {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
