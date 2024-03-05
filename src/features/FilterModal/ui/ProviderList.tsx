@@ -37,9 +37,11 @@ const ProviderList = memo(({ selectedProviders, selectProvider }: IProps) => {
               onClick={() => selectProvider(item.url)}
               key={item.url}
             >
+              <div className={styles.provider}>
+                <img src={item.data.image || ''} alt={item.url} className={styles.image} />
+                <div className={styles.text}>{item.url}</div>
+              </div>
               {/* TODO: надо сделать чтобы картинка была больше и над текстом */}
-              <img src={item.data.image || ''} alt={item.url} width={25} height={65} />
-              <div className={styles.text}>{item.url}</div>
             </TabBlock>
           ))}
     </div>

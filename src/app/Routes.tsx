@@ -1,7 +1,10 @@
 import { RouteObject, createBrowserRouter } from 'react-router-dom';
 import App from './App';
-import { GamePage, } from '@/pages/Games';
+import { GamePage } from '@/pages/Games';
 import { Home } from '@/pages/Home';
+import { Profile, ProfileEdit } from '@/pages/Profile';
+import { Terms } from '@/pages/Terms';
+import { Wallet } from '@/pages/Wallet';
 
 const routes: RouteObject[] = [
   {
@@ -20,6 +23,24 @@ const routes: RouteObject[] = [
             element: <GamePage />,
           },
         ],
+      },
+      {
+        path: 'profile',
+        element: <Profile />,
+        children: [
+          {
+            path: 'edit',
+            element: <ProfileEdit />,
+          },
+        ],
+      },
+      {
+        path: 'terms',
+        element: <Terms />,
+      },
+      {
+        path: 'wallet',
+        element: <Wallet />,
       },
     ],
   },
