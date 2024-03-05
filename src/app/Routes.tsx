@@ -1,6 +1,6 @@
 import { RouteObject, createBrowserRouter } from 'react-router-dom';
 import App from './App';
-import { GamePage, GamesListPage } from '@/pages/Games';
+import { GamePage, } from '@/pages/Games';
 import { Home } from '@/pages/Home';
 
 const routes: RouteObject[] = [
@@ -14,7 +14,6 @@ const routes: RouteObject[] = [
       },
       {
         path: 'games',
-        element: <GamesListPage />,
         children: [
           {
             path: ':id',

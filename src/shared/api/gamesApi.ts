@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { IGame } from '../models/interfaces/games';
 
 interface JsonResponse {
@@ -9,7 +10,10 @@ interface ITopGames {
   limit?: number | 'all';
 }
 
-export const gamesApi = () => {
+export const gamesApi = (id?: number) => {
+  if (id) {
+    return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/public/get/game/${id}`;
+  }
   return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/public/get/games/home`;
 };
 
@@ -43,19 +47,12 @@ export const getGamesApi = async (
 
 export const getGamesByIdApi = async (id: number): Promise<IGame | null> => {
   try {
-    const res = await fetch(gamesApi(), {
+    const res = await axios.get<{ data: IGame }>(gamesApi(id), {
       headers: {
         'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
       },
     });
-
-    if (!res.ok) {
-      throw new Error('Authn error');
-    }
-
-    const { data } = (await res.json()) as JsonResponse;
-    const games: IGame[] = data;
-    return games.find((item) => item.id === id) ?? null;
+    return res.data.data;
   } catch (e) {
     return null;
   }

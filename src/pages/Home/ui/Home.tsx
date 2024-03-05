@@ -9,11 +9,13 @@ import { IGame } from '@/shared/models/interfaces/games';
 import { postSearchGamesApi } from '@/shared/api/searchApi';
 import { IFilter } from '@/shared/models/interfaces/filter';
 import { useQuery } from '@/shared/hooks/navigation';
+import { useLocation } from 'react-router-dom';
 
 export default function Home() {
   // TODO: починить список игр( не работает почему то )
   const [games, setGames] = useState<IGame[]>([]);
   const searchParams = useQuery();
+  const location = useLocation();
   useEffect(() => {
     const getGames = async () => {
       const filter: IFilter = {
@@ -28,7 +30,7 @@ export default function Home() {
     };
 
     void getGames();
-  }, [searchParams]);
+  }, [location]);
 
   return (
     <div className={styles.container}>

@@ -21,7 +21,7 @@ const GameItem = () => {
     };
 
     void getGameById();
-  });
+  }, []);
 
   if (!game) {
     return null;
@@ -31,12 +31,8 @@ const GameItem = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <GoBackButton />
-      </div>
-      <div className={styles.provider}>
         <div className={styles.provider_name}>{game.game_provider}</div>
-        <div className={styles.provider_favorite}>
-          <Icons icon="star" />
-        </div>
+        <Icons icon="chat" />
       </div>
       <div className={styles.image_container}>
         {game?.image ? (
