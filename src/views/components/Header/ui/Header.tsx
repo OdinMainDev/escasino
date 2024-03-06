@@ -18,14 +18,14 @@ const Header = () => {
   const openModal = () => {
     // TODO: сделать страницу с сортировкой ( вместо модалки )
     router.push({
-      pathname: '/sort-games',
+      pathname: '/games/filter',
     });
   };
 
   const searchGames = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && filterVal.length > 0) {
       router.push({
-        pathname: '/terms',
+        pathname: '/games/search',
         query: {
           query: filterVal,
         },

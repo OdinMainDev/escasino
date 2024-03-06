@@ -2,7 +2,6 @@ import styles from './Home.module.scss';
 import { useHomeGames } from '@/app/repositories/homegames';
 import { usePreloader } from '@/app/providers/preloader';
 import { GamesGrid } from '@/views/components/GamesGrid';
-import { useSettings } from '@/app/repositories/settings';
 import { themeHasTopGames } from '@/common/config/appearance';
 import { IGame } from '@/app/entities/game';
 import { Header } from '@/views/components/Header';
@@ -11,9 +10,8 @@ import { TopGames } from '@/views/components/TopGames';
 
 export default function Home() {
   const { games, loading: loadingGames } = useHomeGames();
-  const { loading: loadingSettings } = useSettings();
   const { hidePreloader } = usePreloader();
-  if (loadingGames || loadingSettings) {
+  if (loadingGames) {
     return null;
   }
 
