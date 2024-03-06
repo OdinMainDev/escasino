@@ -26,10 +26,10 @@ export default function Search() {
       };
       const data = await getSearchGamesApi(filter);
       setGames(data);
+      hidePreloader();
     };
 
     void getGames();
-    hidePreloader();
   }, [location]);
 
   if (isLoading) {
