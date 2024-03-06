@@ -24,6 +24,7 @@ import { IAuthError } from '@/app/api/auth/entity';
 import { useModal } from '@/app/providers/ModalProvider';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCountries } from '@/app/repositories/countries';
+import classNames from 'classnames';
 
 interface IProps {
   openLoginModal: () => void;
@@ -327,7 +328,7 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
         />
       )}
       {settings?.auth.register.promo && (
-        <div className={`${styles.checkbox} ${styles.promo}`}>
+        <div className={classNames(styles.checkbox, styles.promo)}>
           <Checkbox
             isError={!!errorList.find((item) => item === 'promo')}
             value={registerData.promo}
