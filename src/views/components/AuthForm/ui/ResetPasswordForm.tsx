@@ -49,6 +49,7 @@ const ResetPasswordForm = ({ openLoginModal }: IProps) => {
       const data = await doResetApi({ ...resetPasswordData, fid });
       console.log(data);
       // TODO: сделать вторую часть модалки ( 3 поля ввода, код с почты/смс и новый пароль + повторить пароль)
+      // TODO: в ответе приходит хеш, который так же нужно отправлять
       // doOpenModal("reset-complete")
     } catch (e: unknown) {
       setIsError(true);
