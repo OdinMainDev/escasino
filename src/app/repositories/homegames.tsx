@@ -10,14 +10,12 @@ import { getHomeGamesApi } from '@/app/api/games/getHomeGames';
 import { IGame } from '@/app/entities/game';
 
 interface HomeGamesContextType {
-  homeGames: IGame[] | null; // Assuming getHomeGamesApi returns an array of games or null
+  homeGames: IGame[] | null;
   loading: boolean;
 }
 
-// Create the context with an explicit type
 const HomeGamesContext = createContext<HomeGamesContextType>({ homeGames: null, loading: true });
 
-// Custom hook for consuming the context
 export const useHomeGames = (): HomeGamesContextType => {
   const context = useContext(HomeGamesContext);
   if (context === undefined) {
@@ -26,12 +24,10 @@ export const useHomeGames = (): HomeGamesContextType => {
   return context;
 };
 
-// Define props type for the provider component
 interface HomeGamesProviderProps {
   children: ReactNode;
 }
 
-// HomeGamesProvider component with TypeScript
 export const HomeGamesProvider: FunctionComponent<HomeGamesProviderProps> = ({ children }) => {
   const [homeGames, setHomeGames] = useState<IGame[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
