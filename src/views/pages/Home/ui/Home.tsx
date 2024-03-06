@@ -1,19 +1,39 @@
 import styles from './Home.module.scss';
 import { useHomeGames } from '@/app/repositories/homegames';
+import { usePreloader } from '@/app/providers/preloader';
+import { GamesGrid } from '@/views/components/GamesGrid';
+import { useSettings } from '@/app/repositories/settings';
+import { themeHasTopGames } from '@/common/config/appearance';
+import { IGame } from '@/app/entities/game';
+import { Header } from '@/views/components/Header';
+import { Footer } from '@/views/components/Footer';
 
 export default function Home() {
-  const { games } = useHomeGames();
+  const { games, loading: loadingGames } = useHomeGames();
+  const { loading: loadingSettings } = useSettings();
+  const { hidePreloader } = usePreloader();
+  if (loadingGames || loadingSettings) {
+    return null;
+  }
 
+  let gamesGrid: IGame[] = games ? games : [];
+  // let topGamesGrid: IGame[] = gamesGrid;
+  if (themeHasTopGames) {
+    // topGamesGrid = gamesGrid.slice(0, 20);
+    gamesGrid = gamesGrid.slice(20);
+  }
+
+  hidePreloader();
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <Header />
       </div>
       {/* <div className={styles.top_games}>
-        <TopGames />
+        <TopGames games={topGamesGrid} />
       </div> */}
       <div className={styles.games_table}>
-        <GamesTable games={games} />
+        <GamesGrid games={gamesGrid} />
       </div>
       <Footer />
     </div>

@@ -6,6 +6,7 @@ import {
   useParams,
 } from 'react-router-dom';
 import { useCallback, useMemo } from 'react';
+import { defaultLanguages } from '@/common/config/locales';
 
 interface UseSearchParams {
   get: (name: string) => string | null;
@@ -32,7 +33,7 @@ export function usePathname(): string {
   const { pathname } = useLocation();
 
   const normalizedPathname = useMemo(() => {
-    const langPrefixPattern = /^\/(ru|en)(\/|$)/;
+    const langPrefixPattern = new RegExp(`^/(${defaultLanguages.join('|')})(/|$)`);
     if (langPrefixPattern.test(pathname)) {
       return pathname.replace(langPrefixPattern, '/');
     }
@@ -43,7 +44,7 @@ export function usePathname(): string {
 }
 
 interface QueryParams {
-  [key: string]: string | string[] | boolean | undefined;
+  [key: string]: string | string[] | boolean | undefined | null;
 }
 
 interface IPushData {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from '@/shared/hooks/navigation';
+import { useRouter } from '@/app/helpers/navigation';
 import styles from './Icon.module.scss';
 
 const UserIcon = () => {

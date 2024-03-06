@@ -1,12 +1,15 @@
-import { AuthFooter, AuthModal } from '@/widgets/Auth';
 import styles from './Footer.module.scss';
-import { useAppSelector } from '@/shared/hooks/redux';
 import Select from './Select';
 import { UserIcon, Wallet } from './Icons';
-import Loader from '@/shared/ui/Loader';
+import { useIsAuth } from '@/app/repositories/auth';
+import { AuthFooter } from '@/views/components/Auth';
 
 const Footer = () => {
-  const { isAuth, loading } = useAppSelector((state) => state.userReducer);
+  const { isAuth, loading } = useIsAuth();
+  if (loading) {
+    return null;
+  }
+
   return (
     <div className={styles.container}>
       {isAuth ? (
@@ -20,13 +23,8 @@ const Footer = () => {
       ) : (
         <>
           <AuthFooter />
-          <AuthModal />
+          {/* <AuthModal /> */}
         </>
-      )}
-      {loading && (
-        <div className={styles.loading}>
-          <Loader />
-        </div>
       )}
     </div>
   );

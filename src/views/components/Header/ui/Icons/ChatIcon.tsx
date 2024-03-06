@@ -1,4 +1,4 @@
-import Icons from '@/shared/ui/Icons';
+import Icons from '@/views/components/Icons';
 
 const ChatIcon = () => {
   return <Icons icon="chat" />;
