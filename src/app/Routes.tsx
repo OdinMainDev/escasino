@@ -1,10 +1,11 @@
 import { RouteObject, createBrowserRouter } from 'react-router-dom';
 import App from './App';
-import { GamePage } from '@/pages/Games';
-import { Home } from '@/pages/Home';
-import { Profile, ProfileEdit } from '@/pages/Profile';
-import { Terms } from '@/pages/Terms';
-import { Wallet } from '@/pages/Wallet';
+import HomePage from '@/views/pages/Home';
+import GamePage from '@/views/pages/Home';
+import ProfilePage from '@/views/pages/Home';
+import ProfileEditPage from '@/views/pages/Home';
+import TermsPage from '@/views/pages/Home';
+import WalletPage from '@/views/pages/Home';
 
 const routes: RouteObject[] = [
   {
@@ -13,7 +14,7 @@ const routes: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <Home />,
+        element: <HomePage />,
       },
       {
         path: 'games',
@@ -26,21 +27,21 @@ const routes: RouteObject[] = [
       },
       {
         path: 'profile',
-        element: <Profile />,
+        element: <ProfilePage />,
         children: [
           {
             path: 'edit',
-            element: <ProfileEdit />,
+            element: <ProfileEditPage />,
           },
         ],
       },
       {
         path: 'terms',
-        element: <Terms />,
+        element: <TermsPage />,
       },
       {
         path: 'wallet',
-        element: <Wallet />,
+        element: <WalletPage />,
       },
     ],
   },

@@ -1,17 +1,13 @@
 import { Outlet } from 'react-router-dom';
-import DesktopLayout from './layout/DesktopLayout';
-import AuthProvider from './providers/AuthProvider';
 import LangProvider from './providers/LangProvider';
-import './assets/styles/global.scss';
+import DesktopLayout from '@/views/layout/DesktopLayout';
 
 function App() {
   return (
     <LangProvider>
-      <AuthProvider>
-        <DesktopLayout>
-          <Outlet />
-        </DesktopLayout>
-      </AuthProvider>
+      <DesktopLayout>
+        <Outlet />
+      </DesktopLayout>
     </LangProvider>
   );
 }
