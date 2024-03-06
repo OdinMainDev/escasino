@@ -23,6 +23,7 @@ import { getVisitorId } from '@/app/helpers/getVisitorId';
 import { IAuthError } from '@/app/api/auth/entity';
 import { useModal } from '@/app/providers/ModalProvider';
 import { Link, useNavigate } from 'react-router-dom';
+import { useCountries } from '@/app/repositories/countries';
 
 interface IProps {
   openLoginModal: () => void;
@@ -30,6 +31,7 @@ interface IProps {
 
 const RegistrationForm = ({ openLoginModal }: IProps) => {
   const { settings, loading: loadingSettings } = useSettings();
+  const { countries, loading: loadingCountries } = useCountries();
   const { isAuth, setAuthenticated } = useIsAuth();
   const { doCloseModals } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
@@ -58,7 +60,7 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
     captcha: '',
   });
 
-  if (loadingSettings || isAuth || !settings) {
+  if (loadingSettings || isAuth || !settings || loadingCountries || !countries) {
     return '';
   }
   const formType =
@@ -81,9 +83,7 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
   ];
   const countriesList: ISelectOption[] = [
     { value: '', label: 'Ваша страна', disabled: true },
-    { value: 'RU', label: 'RU', disabled: false },
-    { value: 'US', label: 'US', disabled: false },
-    // тут надо из запроса выдавать список ( /api/v1/public/get/countries )
+    ...countries.map((item) => ({ label: item, value: item })),
   ];
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -326,7 +326,16 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
           onChange={(e) => setRegisterData((prev) => ({ ...prev, gender: e.target.value }))}
         />
       )}
-
+      {settings?.auth.register.promo && (
+        <div className={`${styles.checkbox} ${styles.promo}`}>
+          <Checkbox
+            isError={!!errorList.find((item) => item === 'promo')}
+            value={registerData.promo}
+            onChange={(value) => setRegisterData((prev) => ({ ...prev, promo: value }))}
+          />
+          <div>Я согласен на промо рассылку</div>
+        </div>
+      )}
       <div className={styles.checkbox}>
         <Checkbox
           isError={!!errorList.find((item) => item === 'terms')}
@@ -337,16 +346,6 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
           Я ознакомился с <Link to="/terms">правилами и условиями</Link>
         </div>
       </div>
-      {settings?.auth.register.promo && (
-        <div className={styles.checkbox}>
-          <Checkbox
-            isError={!!errorList.find((item) => item === 'promo')}
-            value={registerData.promo}
-            onChange={(value) => setRegisterData((prev) => ({ ...prev, promo: value }))}
-          />
-          <div>Я согласен на промо рассылку</div>
-        </div>
-      )}
       <div className={styles.subtitle}>C помощью социальных сетей</div>
       <div className={styles.social}>
         <VK />
