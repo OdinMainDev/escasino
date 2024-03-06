@@ -5,7 +5,7 @@ export const homeGamesApi = () => {
   return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/public/get/games/home`;
 };
 
-export const getHomeGamesApi = async (): Promise<null | IGame> => {
+export const getHomeGamesApi = async (): Promise<null | IGame[]> => {
   try {
     const res = await axios.get(homeGamesApi(), {
       headers: {
@@ -14,7 +14,7 @@ export const getHomeGamesApi = async (): Promise<null | IGame> => {
     });
     if (res.status === 200) {
       const { data } = res.data as {
-        data: IGame;
+        data: IGame[];
       };
       return data;
     }
