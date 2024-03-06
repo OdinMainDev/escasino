@@ -10,11 +10,11 @@ import { getHomeGamesApi } from '@/app/api/games/getHomeGames';
 import { IGame } from '@/app/entities/game';
 
 interface HomeGamesContextType {
-  homeGames: IGame[] | null;
+  games: IGame[] | null;
   loading: boolean;
 }
 
-const HomeGamesContext = createContext<HomeGamesContextType>({ homeGames: null, loading: true });
+const HomeGamesContext = createContext<HomeGamesContextType>({ games: null, loading: true });
 
 export const useHomeGames = (): HomeGamesContextType => {
   const context = useContext(HomeGamesContext);
@@ -29,7 +29,7 @@ interface HomeGamesProviderProps {
 }
 
 export const HomeGamesProvider: FunctionComponent<HomeGamesProviderProps> = ({ children }) => {
-  const [homeGames, setHomeGames] = useState<IGame[] | null>(null);
+  const [games, setHomeGames] = useState<IGame[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -44,6 +44,6 @@ export const HomeGamesProvider: FunctionComponent<HomeGamesProviderProps> = ({ c
   }, []);
 
   return (
-    <HomeGamesContext.Provider value={{ homeGames, loading }}>{children}</HomeGamesContext.Provider>
+    <HomeGamesContext.Provider value={{ games, loading }}>{children}</HomeGamesContext.Provider>
   );
 };

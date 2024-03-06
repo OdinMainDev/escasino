@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import './variables';
+
+body {
+  background: var(--background);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-title-main);
+}
+
+.header_title {
+  color: var(--Text-primary);
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+}
