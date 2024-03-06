@@ -12,9 +12,14 @@ import { getIsAuthApi } from '@/app/api/auth/getIsAuth';
 interface IsAuthContextType {
   isAuth: boolean;
   loading: boolean;
+  setAuthenticated: () => void;
 }
 
-const IsAuthContext = createContext<IsAuthContextType>({ isAuth: false, loading: true });
+const IsAuthContext = createContext<IsAuthContextType>({
+  isAuth: false,
+  loading: true,
+  setAuthenticated: () => {},
+});
 
 export const useIsAuth = (): IsAuthContextType => {
   const context = useContext(IsAuthContext);
@@ -43,5 +48,11 @@ export const IsAuthProvider: FunctionComponent<IsAuthProviderProps> = ({ childre
     void loadIsAuth();
   }, []);
 
-  return <IsAuthContext.Provider value={{ isAuth, loading }}>{children}</IsAuthContext.Provider>;
+  const setAuthenticated = () => setIsAuth(true);
+
+  return (
+    <IsAuthContext.Provider value={{ isAuth, loading, setAuthenticated }}>
+      {children}
+    </IsAuthContext.Provider>
+  );
 };

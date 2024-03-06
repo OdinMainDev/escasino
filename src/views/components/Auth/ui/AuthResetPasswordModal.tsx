@@ -1,15 +1,20 @@
-import Modal from '@/shared/ui/Modal';
+import { ResetForm } from '../../AuthForm';
+import { IModal } from '@/app/entities/modal';
+import { useModal } from '@/app/providers/ModalProvider';
+import Modal from '@/views/components/Modal';
 import styles from './AuthFormModal.module.scss';
-import { IModal } from '@/shared/models/interfaces/modal';
-import ResetPasswordForm from '@/features/AuthForm/ui/ResetPasswordForm';
 
-interface IProps extends IModal {}
+interface IProps extends IModal {
+  openLoginModal: () => void;
+}
 
-const AuthResetPasswordModal = ({ isOpen, close }: IProps) => {
+const AuthResetPasswordModal = ({ close, openLoginModal }: IProps) => {
+  const { modalName, isModalOpen } = useModal();
+  const isOpen = !isModalOpen ? false : modalName == 'reset';
   return (
     <Modal isOpen={isOpen} close={close}>
       <div className={styles.container}>
-        <ResetPasswordForm />
+        <ResetForm openLoginModal={openLoginModal} />
       </div>
     </Modal>
   );

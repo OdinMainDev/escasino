@@ -1,17 +1,21 @@
-import { LoginForm } from '@/features/AuthForm';
-import { IModal } from '@/shared/models/interfaces/modal';
-import Modal from '@/shared/ui/Modal';
 import styles from './AuthFormModal.module.scss';
+import { IModal } from '@/app/entities/modal';
+import { useModal } from '@/app/providers/ModalProvider';
+import { LoginForm } from '@/views/components/AuthForm';
+import Modal from '@/views/components/Modal';
 
 interface IProps extends IModal {
   openRegistrationModal: () => void;
+  openResetModal: () => void;
 }
 
-const AuthLoginModal = ({ isOpen, close, openRegistrationModal }: IProps) => {
+const AuthLoginModal = ({ close, openRegistrationModal, openResetModal }: IProps) => {
+  const { modalName, isModalOpen } = useModal();
+  const isOpen = !isModalOpen ? false : modalName == 'login';
   return (
     <Modal isOpen={isOpen} close={close}>
       <div className={styles.container}>
-        <LoginForm openRegistration={openRegistrationModal} />
+        <LoginForm openRegistration={openRegistrationModal} openResetModal={openResetModal} />
       </div>
     </Modal>
   );

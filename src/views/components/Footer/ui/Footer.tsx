@@ -2,7 +2,7 @@ import styles from './Footer.module.scss';
 import Select from './Select';
 import { UserIcon, Wallet } from './Icons';
 import { useIsAuth } from '@/app/repositories/auth';
-import { AuthFooter } from '@/views/components/Auth';
+import { AuthFooter, AuthModal } from '@/views/components/Auth';
 
 const Footer = () => {
   const { isAuth, loading } = useIsAuth();
@@ -23,7 +23,7 @@ const Footer = () => {
       ) : (
         <>
           <AuthFooter />
-          {/* <AuthModal /> */}
+          <AuthModal />
         </>
       )}
     </div>

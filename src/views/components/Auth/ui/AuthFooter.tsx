@@ -1,17 +1,17 @@
 import Button from '@/views/components/Button';
 import styles from './AuthFooter.module.scss';
+import { useModal } from '@/app/providers/ModalProvider';
 
 const AuthFooter = () => {
-  // const dispatch = useDispatch<AppDispatch>();
-
+  const { doOpenModal } = useModal();
   const openLogin = () => {
     document.body.classList.add('overflow-hidden');
-    // dispatch(openLoginModal());
+    doOpenModal('login');
   };
 
   const openRegistration = () => {
     document.body.classList.add('overflow-hidden');
-    // dispatch(openRegistrationModal());
+    doOpenModal('register');
   };
 
   return (
