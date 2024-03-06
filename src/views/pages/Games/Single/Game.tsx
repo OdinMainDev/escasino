@@ -56,10 +56,14 @@ export default function Game() {
         <Button elType="contained" className={styles.button}>
           Играть на деньги
         </Button>
-        <Button elType="outlined" className={classNames(styles.button, styles.button_big)}>
-          <Icons icon="settings" />
-          <span>Сконфигурировать бонус</span>
-        </Button>
+        {!game?.has_freerounds ? (
+          ''
+        ) : (
+          <Button elType="outlined" className={classNames(styles.button, styles.button_big)}>
+            <Icons icon="settings" />
+            <span>Сконфигурировать бонус</span>
+          </Button>
+        )}
       </div>
       <div className={styles.winnings}>
         <WinningsList />
