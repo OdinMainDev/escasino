@@ -16,7 +16,7 @@ const Header = () => {
   }, []);
 
   const openModal = () => {
-    // TODO: сделать страницу с сортировкой
+    // TODO: сделать страницу с сортировкой ( вместо модалки )
     router.push({
       pathname: '/sort-games',
     });
@@ -25,7 +25,7 @@ const Header = () => {
   const searchGames = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && filterVal.length > 0) {
       router.push({
-        pathname: '/search',
+        pathname: '/terms',
         query: {
           query: filterVal,
         },
