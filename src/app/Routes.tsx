@@ -2,11 +2,10 @@ import { RouteObject, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import HomePage from '@/views/pages/Home';
 import GamePage from '@/views/pages/Games/Single/Game';
-import ProfilePage from '@/views/pages/Home';
-import ProfileEditPage from '@/views/pages/Home';
 import TermsPage from '@/views/pages/Terms';
 import WalletPage from '@/views/pages/Home';
 import SearchPage from '@/views/pages/Games/Search';
+import { Profile, ProfileEdit } from '@/views/pages/Profile';
 
 const routes: RouteObject[] = [
   {
@@ -32,11 +31,11 @@ const routes: RouteObject[] = [
       },
       {
         path: 'profile',
-        element: <ProfilePage />,
+        element: <Profile />,
         children: [
           {
             path: 'edit',
-            element: <ProfileEditPage />,
+            element: <ProfileEdit />,
           },
         ],
       },

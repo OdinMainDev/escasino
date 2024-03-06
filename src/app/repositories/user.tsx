@@ -49,7 +49,7 @@ export const UserProvider: FunctionComponent<UserProviderProps> = ({ children })
   };
 
   useEffect(() => {
-    void fetchUser();
+    updateUser();
   }, []);
 
   return (
