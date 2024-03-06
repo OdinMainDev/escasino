@@ -1,9 +1,13 @@
-import { IModal } from '@/shared/models/interfaces/modal';
+import { IModal } from '@/app/entities/modal';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 
-const Modal = ({ isOpen, close, children, reRendering = true }: IModal) => {
+interface IProps extends IModal {
+  isOpen: boolean;
+}
+
+const Modal = ({ isOpen, close, children, reRendering = true }: IProps) => {
   const [shouldRenderChildren, setShouldRenderChildren] = useState(isOpen);
 
   useEffect(() => {
