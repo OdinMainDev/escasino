@@ -1,16 +1,13 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { PropsWithChildren } from 'react';
 import { SettingsProvider } from './settings';
 import { IsAuthProvider } from './auth';
 import { HomeGamesProvider } from './homegames';
 
-function Repositories() {
+function Repositories({ children }: PropsWithChildren) {
   return (
     <SettingsProvider>
       <IsAuthProvider>
-        <HomeGamesProvider>
-          <Outlet />
-        </HomeGamesProvider>
+        <HomeGamesProvider>{children}</HomeGamesProvider>
       </IsAuthProvider>
     </SettingsProvider>
   );
