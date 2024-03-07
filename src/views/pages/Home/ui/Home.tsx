@@ -28,9 +28,13 @@ export default function Home() {
       <div className={styles.header}>
         <Header />
       </div>
-      <div className={styles.top_games}>
-        <TopGames games={topGamesGrid} />
-      </div>
+      {themeHasTopGames ? (
+        <div className={styles.top_games}>
+          <TopGames games={topGamesGrid} />
+        </div>
+      ) : (
+        ''
+      )}
       <div className={styles.games_table}>
         <GamesGrid games={gamesGrid} />
       </div>
