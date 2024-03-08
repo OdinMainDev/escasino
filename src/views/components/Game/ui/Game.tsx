@@ -4,6 +4,7 @@ import { IGame } from '@/app/entities/game';
 import styles from './Game.module.scss';
 import { HTMLAttributes } from 'react';
 import { useRouter } from '@/app/helpers/navigation';
+import { ImagePlaceholder } from '@/views/components/ImagePlaceholder';
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   game: IGame;
@@ -21,10 +22,7 @@ const Game = ({ game, ...otherProps }: IProps) => {
         <img src={game.image} alt={game.name} className={styles.image} />
       ) : (
         // TODO: тут надо убрать текст ( No Image Available ) ( название игры оставить) и на задний фон картинку поставить
-        <div className={styles.without_image}>
-          <div className={styles.without_image_title}>No Image Available</div>
-          <div>{game.name}</div>
-        </div>
+        <ImagePlaceholder {...game} />
       )}
       {/* <div className={styles.without_image}>
         <div className={styles.without_image_title}>No Image Available</div>

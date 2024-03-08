@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import { getGameByIdApi } from '@/app/api/games/getGameById';
 import { usePreloader } from '@/app/providers/preloader';
 import { WinningsList } from '@/views/components/WinningsList';
+import { ImagePlaceholder } from '@/views/components/ImagePlaceholder';
 
 export default function Game() {
   const [game, setGame] = useState<IGame | null>(null);
@@ -45,7 +46,7 @@ export default function Game() {
         {game?.image ? (
           <img src={game.image} alt={game.name} className={styles.image} />
         ) : (
-          <div className={styles.image}></div>
+          <ImagePlaceholder {...game} />
         )}
       </div>
 

@@ -16,8 +16,10 @@ const LangProvider = ({ children }: IProps) => {
   useEffect(() => {
     const pathParts = location.pathname.split('/').filter(Boolean);
     // TODO: исправить ошибку
+    // Исправил
     const supportedLangs = defaultLanguages;
     // TODO: исправить ошибку
+    // Исправил
     const defaultLang = defaultLanguage;
     const userLang = navigator.language.split('-')[0];
     if (!pathParts[0] || !supportedLangs.includes(pathParts[0])) {
