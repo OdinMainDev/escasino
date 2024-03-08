@@ -1,59 +1,66 @@
 import { RouteObject, createBrowserRouter } from 'react-router-dom';
 import App from './App';
-import HomePage from '@/views/pages/Home';
-import GamePage from '@/views/pages/Games/Single/Game';
-import TermsPage from '@/views/pages/Terms';
-import WalletPage from '@/views/pages/Home';
-import SearchPage from '@/views/pages/Games/Search';
-import { Profile, ProfileEdit } from '@/views/pages/Profile';
+import Layout from './assets/layout';
+
+import Home from '@/pages/Home';
+// import { Profile, ProfileEdit } from '@/pages/Profile';
+// import TermsPage from '@/pages/Terms';
+// import Game from '@/pages/Games/Game';
+// import Search from '@/pages/Search/Results/ui/Search';
+import { HomeGames } from './providers/pages';
+import { ErrorCountry, ErrorUnavailable, Error404 } from '@/pages/Error';
+
+const availRoutes: RouteObject[] = [
+  {
+    path: '',
+    element: (
+      <HomeGames>
+        <Home />
+      </HomeGames>
+    ),
+  },
+
+  // TODO: сделать внешку ошибкам
+  {
+    path: 'error',
+    children: [
+      {
+        path: 'unavailable', // казино недоступно ( ремонтные работы )
+        element: <ErrorUnavailable />,
+      },
+      {
+        path: 'country', // блок по стране
+        element: <ErrorCountry />,
+      },
+    ],
+  },
+];
 
 const routes: RouteObject[] = [
   {
     element: <App />,
-    path: '/:lang',
     children: [
       {
-        index: true,
-        element: <HomePage />,
-      },
-      {
-        path: 'games',
+        element: <Layout />,
         children: [
           {
-            path: ':id',
-            element: <GamePage />,
+            // TODO: переделать на значение из конфига
+            path: '/:lang',
+            children: availRoutes,
           },
           {
-            path: 'search',
-            element: <SearchPage />,
+            children: availRoutes,
           },
-        ],
-      },
-      {
-        path: 'profile',
-        element: <Profile />,
-        children: [
           {
-            path: 'edit',
-            element: <ProfileEdit />,
+            path: '*',
+            element: <Error404 />,
           },
         ],
-      },
-      {
-        path: 'terms',
-        element: <TermsPage />,
-      },
-      {
-        path: 'wallet',
-        element: <WalletPage />,
       },
     ],
   },
-  {
-    path: '*',
-    element: <App />,
-  },
 ];
+
 export const router = createBrowserRouter(routes);
 
 export default routes;
