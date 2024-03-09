@@ -1,8 +1,8 @@
 import Slider, { Settings } from 'react-slick';
 import './GamesSlider.scss';
 import { settingsResponsive } from '../constants';
-import { IGame } from '@/entities/game';
-import { Game } from '@/features/Games/ui/Game';
+import { IGame } from '@/entities/Game';
+import { GridItem } from '@/features/Games/ui/GridItem';
 
 interface IProps {
   games: IGame[];
@@ -60,7 +60,7 @@ const GamesSlider = ({ games }: IProps) => {
       <Slider {...settings}>
         {games.map((item) => (
           <div className="games-slider__slide" key={item.id}>
-            <Game game={item} />
+            <GridItem game={item} />
           </div>
         ))}
       </Slider>

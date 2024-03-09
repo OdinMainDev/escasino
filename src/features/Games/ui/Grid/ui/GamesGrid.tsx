@@ -1,6 +1,6 @@
+import { IGame } from '@/entities/Game';
 import styles from './GamesGrid.module.scss';
-import { IGame } from '@/entities/game';
-import { Game } from '@/features/Games/ui/Game';
+import { GridItem } from '@/features/Games/ui/GridItem';
 
 interface IProps {
   games: IGame[];
@@ -13,7 +13,7 @@ const GamesGrid = ({ games }: IProps) => {
       <div className={styles.table}>
         {games.map((item) => (
           <div className={styles.game} key={item.id}>
-            <Game game={item} />
+            <GridItem game={item} />
           </div>
         ))}
       </div>
