@@ -1,0 +1,361 @@
+import { useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
+
+import styles from './Form.module.scss';
+import { FB, OK, Telegram, Twitter, VK } from './Icons';
+import {
+  validateEmail,
+  validatePasswordLength,
+  validatePasswordMatching,
+  validateRegister,
+} from '@/features/Auth/helpers/validators';
+
+import Loader from '@/shared/components/Loader';
+import Input from '@/shared/components/Input';
+import Button from '@/shared/components/Button';
+import { useAuthProvider } from '@/app/providers/AuthProvider';
+import { useModal } from '@/app/providers/ModalProvider';
+import Checkbox from '@/shared/components/Checkbox';
+import { getVisitorId } from '@/shared/helpers/getVisitorId';
+import { useAppSelector } from '@/store/hooks/redux';
+import { AuthErrorResponse, IAuthError } from '@/app/api/auth/entity';
+import { IRegisterData, doRegisterApi, sampleIRegisterData } from '@/app/api/auth/doRegister';
+import { Link } from 'react-router-dom';
+import Select, { ISelectOption } from '@/shared/components/Select';
+import { isAppDebug } from '@/app/config/app';
+import classNames from 'classnames';
+
+interface IProps {
+  openLoginModal: () => void;
+}
+
+const RegistrationForm = ({ openLoginModal }: IProps) => {
+  const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
+  const { isAuth, setAuthenticated } = useAuthProvider();
+  const { doCloseModals } = useModal();
+  const [loader, setLoader] = useState<boolean>(false);
+  const [errorData, setErrorData] = useState<IAuthError>();
+  const [registerData, setRegisterData] = useState<IRegisterData>(sampleIRegisterData);
+
+  // const { countries, loading: loadingCountries } = useCountries();
+  // const [errorList, setErrorList] = useState<string[]>([]);
+  const formType =
+    settings?.auth.register.phone && settings?.auth.register.email
+      ? 'full'
+      : settings?.auth.register.phone
+        ? 'phone'
+        : 'email';
+  const hasSocials =
+    settings?.auth.social_vk ||
+    settings?.auth.social_ok ||
+    settings?.auth.social_fb ||
+    settings?.auth.social_tg ||
+    settings?.auth.social_tw;
+
+  // OVERRIDE FOR TESTS
+  // TODO: проверить с этими параметрами включенными и поправить верстку
+  // const formType = 'full';
+  // const hasSocials = false;
+
+  let currenciesList: ISelectOption[] = [{ value: 'PLN', label: 'PLN', disabled: false }];
+
+  if (!settings || settings.currencies.length == 0) {
+    currenciesList = [{ value: 'PLN', label: 'PLN', disabled: false }];
+  } else if (settings.currencies.length == 1) {
+    currenciesList = [
+      { value: settings.currencies[0], label: settings.currencies[0], disabled: false },
+    ];
+  } else if (settings.currencies.length > 1) {
+    currenciesList = [
+      { value: '', label: 'Выберите валюту', disabled: true },
+      ...settings.currencies.map((item) => ({ label: item, value: item })),
+    ];
+  }
+
+  const genderList: ISelectOption[] = [
+    { value: '', label: 'Ваш пол', disabled: true },
+    { value: 'male', label: 'Мужской' },
+    { value: 'female', label: 'Женский' },
+    { value: 'other', label: 'Другое' },
+  ];
+
+  const countriesList: ISelectOption[] = [{ value: 'PL', label: 'Poland', disabled: false }];
+  //   { value: '', label: 'Ваша страна', disabled: true },
+  //   // ...countries.map((item) => ({ label: item, value: item })),
+  // ];
+
+  // if (!countries) {
+  //   currenciesList = [{ value: 'PLN', label: 'PLN', disabled: false }];
+  // } else if (settings.currencies.length == 1) {
+  //   currenciesList = [
+  //     { value: settings.currencies[0], label: settings.currencies[0], disabled: false },
+  //   ];
+  // } else if (settings.currencies.length > 1) {
+  //   currenciesList = [
+  //     { value: '', label: 'Выберите валюту', disabled: true },
+  //     ...settings.currencies.map((item) => ({ label: item, value: item })),
+  //   ];
+  // }
+
+  const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    try {
+      e.preventDefault();
+      setLoader(true);
+      const fid = await getVisitorId();
+      const data = await doRegisterApi({ ...registerData, fid });
+      setAuthenticated(data.token);
+      doCloseModals();
+      document.body.classList.remove('overflow-hidden');
+      // navigate('/profile/edit');
+    } catch (e: unknown) {
+      const regError = e as IAuthError;
+      const regErrorList = Object.keys(regError.errors);
+      if (!Array.isArray(regErrorList)) {
+        return;
+      }
+      setErrorData(regError);
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  return (
+    <form className={styles.container}>
+      {(loader || loadingSettings || isAuth || !settings) && ( // || loadingCountries || !countries
+        <div className={styles.loader_container}>
+          <Loader />
+        </div>
+      )}
+      <div className={styles.title}>Регистрация нового игрока</div>
+      {formType == 'full' && (
+        <div className="row">
+          <div className="tab" style={{ display: 'flex' }}>
+            <Input
+              placeholder="Электронная почта"
+              type="email"
+              onChange={(e) => {
+                setRegisterData((prev) => ({ ...prev, email: e.target.value }));
+                if (!isAppDebug) {
+                  setRegisterData((prev) => ({ ...prev, phone: '' }));
+                }
+              }}
+              containerClassName={styles.input}
+              validationFunction={validateEmail}
+              isError={!!errorData?.errors['email']}
+              message={AuthErrorResponse('email', 'Введите корректный e-mail', errorData)}
+            />
+            <Input
+              placeholder="Номер телефона"
+              type="text"
+              onChange={(e) => {
+                setRegisterData((prev) => ({ ...prev, phone: e.target.value }));
+                if (!isAppDebug) {
+                  setRegisterData((prev) => ({ ...prev, email: '' }));
+                }
+              }}
+              containerClassName={styles.input}
+              validationFunction={validateEmail}
+              isError={!!errorData?.errors['phone']}
+              message={AuthErrorResponse('phone', 'Введите корректный телефон', errorData)}
+            />
+          </div>
+        </div>
+      )}
+
+      <Input
+        placeholder="Пароль"
+        type="password"
+        isError={!!errorData?.errors['password']}
+        containerClassName={styles.input}
+        value={registerData.password}
+        validationFunction={validatePasswordLength}
+        message={AuthErrorResponse('password', 'Введите корректный пароль', errorData)}
+        onChange={(e) => setRegisterData((prev) => ({ ...prev, password: e.target.value }))}
+      />
+      <Input
+        placeholder="Повторите пароль"
+        type="password"
+        isError={!!errorData?.errors['repeat_password']}
+        containerClassName={styles.input}
+        validationFunction={(value) => validatePasswordMatching(registerData.password, value)}
+        message={AuthErrorResponse('repeat_password', 'Введите корректный пароль', errorData)}
+        onChange={(e) => setRegisterData((prev) => ({ ...prev, repeat_password: e.target.value }))}
+      />
+      <Select
+        isError={!!errorData?.errors['currency']}
+        optionList={currenciesList}
+        value={registerData.currency}
+        // containerClassName={styles.input} // TODO
+        // message={AuthErrorResponse('currency', 'Введите корректный пароль', errorData)} // TODO
+        onChange={(e) => setRegisterData((prev) => ({ ...prev, currency: e.target.value }))}
+      />
+      <br />
+      {settings?.auth.register.username && (
+        <Input
+          placeholder={'Username'}
+          type={'text'}
+          containerClassName={styles.input}
+          isError={!!errorData?.errors['username']}
+          message={AuthErrorResponse('username', 'Введите корректный username', errorData)}
+          onChange={(e) => setRegisterData((prev) => ({ ...prev, username: e.target.value }))}
+        />
+      )}
+
+      {/* Тут красиво группировать */}
+      {settings?.auth.register.full_name && (
+        <div className="row" style={{ display: 'flex' }}>
+          <Input
+            placeholder={'Фамилия'}
+            type={'text'}
+            containerClassName={styles.input}
+            isError={!!errorData?.errors['last_name']}
+            message={AuthErrorResponse('last_name', 'Введите фамилию корректно', errorData)}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, last_name: e.target.value }))}
+          />
+          <Input
+            placeholder={'Имя'}
+            type={'text'}
+            containerClassName={styles.input}
+            isError={!!errorData?.errors['first_name']}
+            message={AuthErrorResponse('first_name', 'Введите имя корректно', errorData)}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, first_name: e.target.value }))}
+          />
+          <Input
+            placeholder={'Отчество'}
+            type={'text'}
+            containerClassName={styles.input}
+            isError={!!errorData?.errors['second_name']}
+            message={AuthErrorResponse('second_name', 'Введите отчество корректно', errorData)}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, second_name: e.target.value }))}
+          />
+        </div>
+      )}
+
+      {/* TODO: *ВЕЗДЕ* Тут красиво группировать */}
+      {settings?.auth.register.city && (
+        <div className="row" style={{ display: 'flex' }}>
+          <Select
+            isError={!!errorData?.errors['country']}
+            optionList={countriesList}
+            value={registerData.country}
+            // containerClassName={styles.input} // TODO
+            // message={AuthErrorResponse('second_name', 'Укажите страну из списка', errorData)} // TODO
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, country: e.target.value }))}
+          />
+          <Input
+            placeholder={'Город'}
+            type={'text'}
+            containerClassName={styles.input}
+            isError={!!errorData?.errors['city']}
+            message={AuthErrorResponse('city', 'Укажите город правильно', errorData)}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, city: e.target.value }))}
+          />
+        </div>
+      )}
+
+      {settings?.auth.register.dob && (
+        <Input
+          placeholder={'Дата рождения'}
+          type="datetime-local"
+          containerClassName={styles.input}
+          isError={!!errorData?.errors['dob']}
+          message={AuthErrorResponse('dob', 'Укажите дату рождения корректно', errorData)}
+          onChange={(e) => {
+            const inputDate = new Date(e.target.value);
+            const timestamp = Math.floor(inputDate.getTime() / 1000);
+            setRegisterData((prev) => ({ ...prev, dob: timestamp }));
+          }}
+        />
+      )}
+
+      {/* Тут красиво группировать */}
+      {settings?.auth.register.address && (
+        <div className="row" style={{ display: 'flex' }}>
+          <Input
+            placeholder={'Адрес'}
+            type={'text'}
+            containerClassName={styles.input}
+            isError={!!errorData?.errors['address']}
+            message={AuthErrorResponse('address', 'Укажите адрес корректно', errorData)}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, address: e.target.value }))}
+          />
+          <Input
+            placeholder={'Почтовый индекс'}
+            type={'text'}
+            containerClassName={styles.input}
+            isError={!!errorData?.errors['zip']}
+            message={AuthErrorResponse('zip', 'Укажите почтовый индекс корректно', errorData)}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, zip: e.target.value }))}
+          />
+        </div>
+      )}
+
+      {settings?.auth.register.gender && (
+        <Select
+          isError={!!errorData?.errors['gender']}
+          optionList={genderList}
+          value={registerData.gender}
+          // containerClassName={styles.input} // TODO
+          // message={AuthErrorResponse('zip', 'Укажите гендер корректно', errorData)}
+          onChange={(e) => setRegisterData((prev) => ({ ...prev, gender: e.target.value }))}
+        />
+      )}
+      {settings?.auth.register.promo && (
+        <div className={classNames(styles.checkbox, styles.promo)}>
+          <Checkbox
+            value={registerData.promo}
+            onChange={(value) => setRegisterData((prev) => ({ ...prev, promo: value }))}
+          />
+          <div>Я согласен на промо рассылку</div>
+        </div>
+      )}
+      <div className={styles.checkbox}>
+        <Checkbox
+          isError={!!errorData?.errors['terms']}
+          value={registerData.terms}
+          onChange={(value) => setRegisterData((prev) => ({ ...prev, terms: value }))}
+        />
+        <div>
+          Я ознакомился с <Link to="/terms">правилами и условиями</Link>
+        </div>
+      </div>
+      {hasSocials ? (
+        <div>
+          <div className={styles.subtitle}>C помощью социальных сетей</div>
+          <div className={styles.social}>
+            <VK />
+            <Telegram />
+            <OK />
+            <Twitter />
+            <FB />
+          </div>
+        </div>
+      ) : (
+        ''
+      )}
+
+      {settings?.auth.register.captcha && (
+        <ReCAPTCHA
+          className={styles.captcha}
+          sitekey={settings?.captcha_site_key ?? ''}
+          onChange={(value: string | null) =>
+            setRegisterData((prev) => ({ ...prev, captcha: value ?? '' }))
+          }
+        />
+      )}
+      <Button
+        type="submit"
+        disabled={!validateRegister(registerData)}
+        className={styles.button}
+        onClick={(e) => void sendData(e)}
+      >
+        Зарегистрироваться
+      </Button>
+      <div className={styles.label}>
+        У вас уже есть личный кабинет? <span onClick={openLoginModal}>Войти</span>
+      </div>
+    </form>
+  );
+};
+
+export default RegistrationForm;

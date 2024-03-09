@@ -1,6 +1,6 @@
 import { useModal } from '@/app/providers/ModalProvider';
 import AuthLoginModal from '@/features/Auth/ui/Login';
-// import AuthRegisterModal from '@/features/Auth/ui/Register';
+import AuthRegisterModal from '@/features/Auth/ui/Register';
 // import AuthResetModal from '@/features/Auth/ui/Reset';
 // import AuthResetModal from '@/features/Auth/ui/ResetSendComplete';
 // import AuthResetModal from '@/features/Auth/ui/ResetSetPassword';
@@ -44,7 +44,7 @@ const FooterAuthModals = () => {
         openRegistrationModal={openRegistration}
         openResetModal={openReset}
       />
-      {/* <AuthRegistrationModal close={closeRegistration} openLoginModal={openLogin} /> */}
+      <AuthRegisterModal close={closeRegistration} openLoginModal={openLogin} />
       {/* <AuthResetPasswordModal close={closeResetPassword} openLoginModal={openLogin} /> */}
     </>
   );

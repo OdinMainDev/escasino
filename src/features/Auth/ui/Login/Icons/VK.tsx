@@ -14,7 +14,7 @@ const VK = () => {
     <div
       onClick={() =>
         alert(
-          'REQUEST POST (fid (fingerprint), returt_url (string)) /api/v1/auth/socials/vk/register',
+          'REQUEST POST (fid (fingerprint), returt_url (string))   /api/v1/auth/socials/vk/login',
         )
       }
     >

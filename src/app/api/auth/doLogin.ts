@@ -1,6 +1,10 @@
 import axios, { AxiosResponse, isAxiosError } from 'axios';
 import { IAuthError, IAuthRes } from './entity';
 
+export const loginApi = () => {
+  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/login`;
+};
+
 export interface ILoginData {
   email: string;
   phone: string;
@@ -9,10 +13,6 @@ export interface ILoginData {
   captcha: string;
   remember: boolean;
 }
-
-export const loginApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/login`;
-};
 
 export const sampleILoginData: ILoginData = {
   email: '',

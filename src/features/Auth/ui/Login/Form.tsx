@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import styles from './Form.module.scss';
 import { FB, OK, Telegram, Twitter, VK } from './Icons';
-// import { autoCompleteHandler } from '@/features/Auth/helpers/autoCompleteHandler';
 import {
   validateEmail,
   validateLogin,
   validatePasswordLength,
   validatePhone,
 } from '@/features/Auth/helpers/validators';
+import { autoCompleteHandler } from '@/features/Auth/helpers/autoCompleteHandler';
 
 import Loader from '@/shared/components/Loader';
 import Input from '@/shared/components/Input';
@@ -20,7 +20,8 @@ import { useModal } from '@/app/providers/ModalProvider';
 import Checkbox from '@/shared/components/Checkbox';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { useAppSelector } from '@/store/hooks/redux';
-import { IAuthError } from '@/app/api/auth/entity';
+import { AuthErrorResponse, IAuthError } from '@/app/api/auth/entity';
+import { isAppDebug } from '@/app/config/app';
 
 interface IProps {
   openRegistration: () => void;
@@ -50,6 +51,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
     settings?.auth.social_tw;
 
   // OVERRIDE FOR TESTS
+  // TODO: проверить с этими параметрами включенными и поправить верстку
   // const formType = 'full';
   // const hasRemember = true;
   // const hasSocials = false;
@@ -74,9 +76,6 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
       setLoader(false);
     }
   };
-  useEffect(() => {
-    console.log(errorData);
-  }, [errorData]);
 
   return (
     <form className={styles.container}>
@@ -90,6 +89,8 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
 
         {/* На будущее */}
         {/* TODO: СДЕЛАТЬ ТУТ НОРМ ВЕРСТКУ В ФУЛЛ ( ЕСЛИ ИЗ АДМИНКИ ВКЛЮЧЕНО ЧТО И ПОЧТА И ТЕЛЕФОН ЕСТЬ ) */}
+        {/* TODO: НУЖНО ВСТАВИТЬ ВСЕГО ЛИШЬ 2 ИНУТА ПРОВЕРИТЬ ИХ:  formType == 'full' || formType == 'phone' */}
+        {/* TODO: а таб сам по себе все сделает*/}
         {/* TODO: СДЕЛАТЬ ИНПУТ ТЕЛЕФОНА ( НОРМАЛЬНЫЙ А НЕ КАК ЭТО СДЕЛАНО КОНЕЧНО (КРАСИВЕНЬКО)) ) */}
         {formType == 'full' && (
           <div className="row">
@@ -99,18 +100,15 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
                 type="email"
                 onChange={(e) => {
                   setLoginData((prev) => ({ ...prev, email: e.target.value }));
-                  setLoginData((prev) => ({ ...prev, phone: '' }));
+                  if (!isAppDebug) {
+                    setLoginData((prev) => ({ ...prev, phone: '' }));
+                  }
                 }}
                 containerClassName={styles.input}
                 validationFunction={validateEmail}
+                autoComplete={autoCompleteHandler('email')}
                 isError={!!errorData?.errors['email']}
-                message={
-                  errorData?.errors['email']
-                    ? 'Введите корректный e-mail (Ошибка: ' +
-                      (errorData?.errors['email'].join(', ') ?? '#UNDEFINED') +
-                      ')'
-                    : ''
-                }
+                message={AuthErrorResponse('email', 'Введите корректный e-mail', errorData)}
               />
               <Input
                 placeholder={'Телефон'}
@@ -118,62 +116,17 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
                 containerClassName={styles.input}
                 isError={!!errorData?.errors['phone']}
                 validationFunction={validatePhone}
+                autoComplete={autoCompleteHandler('phone')}
                 onChange={(e) => {
                   setLoginData((prev) => ({ ...prev, phone: e.target.value }));
-                  setLoginData((prev) => ({ ...prev, email: '' }));
+                  if (!isAppDebug) {
+                    setLoginData((prev) => ({ ...prev, email: '' }));
+                  }
                 }}
-                message={
-                  errorData?.errors['phone']
-                    ? 'Введите корректный телефон (Ошибка: ' +
-                      (errorData?.errors['phone'].join(', ') ?? '#UNDEFINED') +
-                      ')'
-                    : ''
-                }
+                message={AuthErrorResponse('phone', 'Введите корректный телефон', errorData)}
               />
             </div>
           </div>
-        )}
-
-        {formType == 'email' && (
-          <Input
-            placeholder="Электронная почта"
-            type="email"
-            onChange={(e) => {
-              setLoginData((prev) => ({ ...prev, email: e.target.value }));
-              setLoginData((prev) => ({ ...prev, phone: '' }));
-            }}
-            containerClassName={styles.input}
-            validationFunction={validateEmail}
-            isError={!!errorData?.errors['email']}
-            message={
-              errorData?.errors['email']
-                ? 'Введите корректный e-mail (Ошибка: ' +
-                  (errorData?.errors['email'].join(', ') ?? '#UNDEFINED') +
-                  ')'
-                : ''
-            }
-          />
-        )}
-
-        {formType == 'phone' && (
-          <Input
-            placeholder={'Телефон'}
-            type={'text'}
-            containerClassName={styles.input}
-            isError={!!errorData?.errors['phone']}
-            validationFunction={validatePhone}
-            onChange={(e) => {
-              setLoginData((prev) => ({ ...prev, phone: e.target.value }));
-              setLoginData((prev) => ({ ...prev, email: '' }));
-            }}
-            message={
-              errorData?.errors['phone']
-                ? 'Введите корректный телефон (Ошибка: ' +
-                  (errorData?.errors['phone'].join(', ') ?? '#UNDEFINED') +
-                  ')'
-                : ''
-            }
-          />
         )}
 
         <Input
@@ -183,13 +136,8 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
           containerClassName={styles.input}
           value={loginData.password}
           validationFunction={validatePasswordLength}
-          message={
-            errorData?.errors['password']
-              ? 'Введите корректный пароль (Ошибка: ' +
-                (errorData?.errors['password'].join(', ') ?? '#UNDEFINED') +
-                ')'
-              : ''
-          }
+          autoComplete={autoCompleteHandler('password')}
+          message={AuthErrorResponse('password', 'Введите корректный пароль', errorData)}
           onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
         />
 

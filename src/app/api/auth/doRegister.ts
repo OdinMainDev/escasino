@@ -1,6 +1,10 @@
 import axios, { AxiosResponse, isAxiosError } from 'axios';
 import { IAuthError, IAuthRes } from './entity';
 
+export const registerApi = () => {
+  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/register`;
+};
+
 export interface IRegisterData {
   currency: string;
   password: string;
@@ -23,8 +27,26 @@ export interface IRegisterData {
   captcha: string;
 }
 
-export const registerApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/register`;
+export const sampleIRegisterData: IRegisterData = {
+  currency: '',
+  password: '',
+  repeat_password: '',
+  terms: false,
+  email: '',
+  phone: '',
+  username: '',
+  first_name: '',
+  second_name: '',
+  last_name: '',
+  city: '',
+  country: '',
+  dob: 0,
+  zip: '',
+  address: '',
+  gender: '',
+  promo: true,
+  fid: '',
+  captcha: '',
 };
 
 export const doRegisterApi = async (registerData: IRegisterData) => {
