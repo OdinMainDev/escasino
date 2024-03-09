@@ -4,10 +4,10 @@ import { themeHasTopGames } from '@/app/config/appearance';
 import { usePreloader } from '@/app/providers/PreloaderProvider';
 import { TopGames } from '@/features/Games/ui/TopGames';
 import { Header } from '@/shared/components/Header';
-import { IGame } from '@/entities/game';
 import { useAppSelector } from '@/store/hooks/redux';
 import { GamesGrid } from '@/features/Games/ui/GamesGrid';
 import { Footer } from '@/shared/components/Footer';
+import { IGame } from '@/entities/Game';
 
 export default function Home() {
   const { games } = useAppSelector((state) => state.homeGamesReducer);

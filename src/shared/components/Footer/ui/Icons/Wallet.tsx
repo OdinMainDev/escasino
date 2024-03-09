@@ -1,4 +1,4 @@
-import { useRouter } from '@/app/helpers/navigation';
+import { useRouter } from '@/shared/helpers/navigation';
 import styles from './Icon.module.scss';
 
 const Wallet = () => {

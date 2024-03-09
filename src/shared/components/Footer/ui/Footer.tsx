@@ -1,31 +1,48 @@
+import { FooterAuthButtons, FooterAuthModal } from './Auth';
 import styles from './Footer.module.scss';
-import Select from './Select';
+// import Select from './Select';
 import { UserIcon, Wallet } from './Icons';
-import { useIsAuth } from '@/app/repositories/auth';
-import { AuthFooter, AuthModal } from '@/views/components/Auth';
+// import { AuthFooter, AuthModal } from '@/views/components/Auth';
+import { useAuthProvider } from '@/app/providers/AuthProvider';
+import Loader from '@/shared/components/Loader';
 
 const Footer = () => {
-  const { isAuth, loading } = useIsAuth();
+  const { isAuth, loading } = useAuthProvider();
   if (loading) {
-    return null;
+    return footerLoading();
   }
 
   return (
     <div className={styles.container}>
-      {isAuth ? (
-        <div className={styles.footer}>
-          <Select />
-          <div className={styles.icons}>
-            <UserIcon />
-            <Wallet />
+      <div className={styles.footer}>
+        {isAuth ? (
+          // Меню если авторизован
+          <div className={styles.footer}>
+            {/* <Select /> */}
+            {/* <FooterSelect /> */}
+            <div className={styles.icons}>
+              <UserIcon />
+              <Wallet />
+            </div>
           </div>
-        </div>
-      ) : (
-        <>
-          <AuthFooter />
-          <AuthModal />
-        </>
-      )}
+        ) : (
+          // Меню если не авторизован
+          <>
+            <FooterAuthButtons />
+            <FooterAuthModal />
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const footerLoading = () => {
+  return (
+    <div className={styles.container}>
+      <div className={styles.footer}>
+        <Loader />
+      </div>
     </div>
   );
 };

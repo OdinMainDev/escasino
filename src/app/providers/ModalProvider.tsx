@@ -24,10 +24,12 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const doOpenModal = (name: string) => {
     setIsModalOpen(true);
     setModalName(name);
+    // Todo: скрыть модалки
   };
   const doCloseModals = () => {
     setIsModalOpen(false);
     setModalName('');
+    // Todo: скрыть модалки
   };
 
   return (

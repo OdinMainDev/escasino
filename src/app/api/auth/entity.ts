@@ -1,14 +1,13 @@
-interface IError {
-  email?: string[];
-  password?: string[];
-}
-
 export interface IAuthRes {
   success: boolean;
   token: string;
 }
 
+export interface IAuthErrorCont {
+  [key: string]: string[];
+}
+
 export interface IAuthError {
-  error: IError | string;
+  errors: IAuthErrorCont;
   success: boolean;
 }

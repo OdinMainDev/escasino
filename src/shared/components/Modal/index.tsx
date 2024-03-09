@@ -1,4 +1,4 @@
-import { IModal } from '@/app/entities/modal';
+import { IModal } from '@/entities/modal';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';

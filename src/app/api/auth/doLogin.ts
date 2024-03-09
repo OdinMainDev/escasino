@@ -14,6 +14,15 @@ export const loginApi = () => {
   return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/login`;
 };
 
+export const sampleILoginData: ILoginData = {
+  email: '',
+  phone: '',
+  password: '',
+  fid: '',
+  captcha: '',
+  remember: false,
+};
+
 export const doLoginApi = async (loginData: ILoginData): Promise<IAuthRes> => {
   try {
     const res: AxiosResponse<IAuthRes> = await axios.post(loginApi(), loginData, {

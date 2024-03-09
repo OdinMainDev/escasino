@@ -38,7 +38,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
       message,
       value,
       validationFunction,
-      validationTimeout = 0,
+      validationTimeout = 100,
       disabled,
       disabledOpacityOff,
       mask,
@@ -56,11 +56,8 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
 
     useEffect(() => {
       messageRef.current = message;
-    }, [message]);
-
-    useEffect(() => {
       setIsActive(!!value);
-    }, [value]);
+    }, [message, value]);
 
     const handleFocus = () => setIsActive(true);
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) =>
@@ -118,7 +115,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
         } else {
           setErrorMessage(messageRef.current);
         }
-        time.current = setTimeout(() => {
+        time.current = setInterval(() => {
           setIsValid(validationFunction(value));
           setErrorMessage(messageRef.current);
         }, validationTimeout);
