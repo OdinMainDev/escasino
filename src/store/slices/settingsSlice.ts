@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // import Cookies from 'js-cookie';
-import { ISlice } from './slices';
+import { ParentPending, ParentFilled, ParentRejected, ISlice } from './slices';
 import { ISettings } from '@/entities/settings';
 import { IResponseSettings, getSettingsApi } from '@/app/api/core/getSettings';
 import { isAppDebug } from '@/app/config/app';
@@ -39,23 +39,15 @@ export const settingsSlice = createSlice({
   initialState: initialState,
   extraReducers: (builder) => {
     builder.addCase(getSettings.pending, (state) => {
-      if (!state.isFinished) {
-        state.loading = true;
-      }
-      // TODO: попоробовать то что выше обернуть в ф-ю
+      ParentPending(state);
     });
     builder.addCase(getSettings.fulfilled, (state, action) => {
-      state.loading = false;
-      state.isFinished = true;
-      // TODO: попоробовать то что выше обернуть в ф-ю
+      ParentFilled(state);
       state.status = action.payload?.status ?? 200;
       state.settings = action.payload?.settings ?? null;
     });
     builder.addCase(getSettings.rejected, (state, action) => {
-      state.loading = false;
-      state.hasError = true;
-      state.isFinished = true;
-      // TODO: попоробовать то что выше обернуть в ф-ю
+      ParentRejected(state);
       state.settings = action?.payload?.settings ?? null;
       state.status = action?.payload?.status ?? 500;
     });

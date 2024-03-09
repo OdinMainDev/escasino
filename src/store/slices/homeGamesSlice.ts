@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { ISlice } from './slices';
+import { ISlice, ParentFilled, ParentPending, ParentRejected } from './slices';
 import { IGame } from '@/entities/game';
 import { IResponseHomeGames, getHomeGamesApi } from '@/app/api/games/getHomeGames';
 
@@ -33,18 +33,15 @@ export const homeGamesSlice = createSlice({
   initialState: initialState,
   extraReducers: (builder) => {
     builder.addCase(getHomeGames.pending, (state) => {
-      state.loading = true;
+      ParentPending(state);
     });
     builder.addCase(getHomeGames.fulfilled, (state, action) => {
-      state.loading = false;
-      state.isFinished = true;
+      ParentFilled(state);
       state.status = action.payload?.status ?? 200;
       state.games = action.payload?.games ?? null;
     });
     builder.addCase(getHomeGames.rejected, (state, action) => {
-      state.loading = false;
-      state.hasError = true;
-      state.isFinished = true;
+      ParentRejected(state);
       state.games = action?.payload?.games ?? null;
       state.status = action?.payload?.status ?? 500;
     });

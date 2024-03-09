@@ -17,27 +17,35 @@ import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { useModal } from '@/app/providers/ModalProvider';
 import Checkbox from '@/shared/components/Checkbox';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
-import { useAppSelector } from '@/store/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { AuthErrorResponse, IAuthError } from '@/app/api/auth/entity';
 import { IRegisterData, doRegisterApi, sampleIRegisterData } from '@/app/api/auth/doRegister';
 import { Link } from 'react-router-dom';
 import Select, { ISelectOption } from '@/shared/components/Select';
 import { isAppDebug } from '@/app/config/app';
 import classNames from 'classnames';
+import { getCountries } from '@/store/slices/countriesSlice';
 
 interface IProps {
   openLoginModal: () => void;
 }
 
-const RegistrationForm = ({ openLoginModal }: IProps) => {
+const AuthRegisterForm = ({ openLoginModal }: IProps) => {
   const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
   const { isAuth, setAuthenticated } = useAuthProvider();
   const { doCloseModals } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IAuthError>();
   const [registerData, setRegisterData] = useState<IRegisterData>(sampleIRegisterData);
-
-  // const { countries, loading: loadingCountries } = useCountries();
+  const {
+    isFinished: isFinishedCountries,
+    loading: loadingCountries,
+    countries,
+  } = useAppSelector((state) => state.countriesReducer);
+  const dispatch = useAppDispatch();
+  if (!loadingCountries && !isFinishedCountries) {
+    void dispatch(getCountries());
+  }
   const formType =
     settings?.auth.register.phone && settings?.auth.register.email
       ? 'full'
@@ -92,23 +100,18 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
     { value: 'other', label: 'Другое' },
   ];
 
-  const countriesList: ISelectOption[] = [{ value: 'PL', label: 'Poland', disabled: false }];
-  //   { value: '', label: 'Ваша страна', disabled: true },
-  //   // ...countries.map((item) => ({ label: item, value: item })),
-  // ];
+  let countriesList: ISelectOption[] = [];
 
-  // if (!countries) {
-  //   currenciesList = [{ value: 'PLN', label: 'PLN', disabled: false }];
-  // } else if (settings.currencies.length == 1) {
-  //   currenciesList = [
-  //     { value: settings.currencies[0], label: settings.currencies[0], disabled: false },
-  //   ];
-  // } else if (settings.currencies.length > 1) {
-  //   currenciesList = [
-  //     { value: '', label: 'Выберите валюту', disabled: true },
-  //     ...settings.currencies.map((item) => ({ label: item, value: item })),
-  //   ];
-  // }
+  if (countries.length == 0) {
+    countriesList = [{ value: '', label: 'Загрузка стран', disabled: true }];
+  } else if (countries.length == 1) {
+    countriesList = [{ value: countries[0], label: countries[0], disabled: false }];
+  } else {
+    countriesList = [
+      { value: '', label: 'Ваша страна', disabled: true },
+      ...countries.map((item) => ({ label: item, value: item })),
+    ];
+  }
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
@@ -134,7 +137,7 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
 
   return (
     <form className={styles.container}>
-      {(loader || loadingSettings || isAuth || !settings) && ( // || loadingCountries || !countries
+      {(loader || loadingSettings || isAuth || !settings) && (
         <div className={styles.loader_container}>
           <Loader />
         </div>
@@ -245,6 +248,7 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
       )}
 
       {/* TODO: *ВЕЗДЕ* Тут красиво группировать */}
+      {/* TODO: когда загружаются страны может как то обыграть и глянуть как реализованы  countriesList ( то что отсюда подгружаются и таким образом )*/}
       {hasCity && (
         <div className="row" style={{ display: 'flex' }}>
           <Select
@@ -372,4 +376,4 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
   );
 };
 
-export default RegistrationForm;
+export default AuthRegisterForm;
