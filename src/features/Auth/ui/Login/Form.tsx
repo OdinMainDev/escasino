@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import styles from './Form.module.scss';
-// import { Telegram, Twitter, VK } from './Icons';
+import { FB, OK, Telegram, Twitter, VK } from './Icons';
 // import { autoCompleteHandler } from '@/features/Auth/helpers/autoCompleteHandler';
 import {
   validateEmail,
@@ -42,10 +42,17 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
         ? 'phone'
         : 'email';
   const hasRemember = settings?.auth.login.remember;
+  const hasSocials =
+    settings?.auth.social_vk ||
+    settings?.auth.social_ok ||
+    settings?.auth.social_fb ||
+    settings?.auth.social_tg ||
+    settings?.auth.social_tw;
 
-  // // OVERRIDE FOR TESTS
+  // OVERRIDE FOR TESTS
   // const formType = 'full';
   // const hasRemember = true;
+  // const hasSocials = false;
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
@@ -207,13 +214,20 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
             Я забыл пароль
           </div>
         )}
-
-        <div className={styles.subtitle}>C помощью социальных сетей</div>
-        <div className={styles.social}>
-          {/* <Telegram />
-      <Twitter />
-      <VK /> */}
-        </div>
+        {hasSocials ? (
+          <div>
+            <div className={styles.subtitle}>C помощью социальных сетей</div>
+            <div className={styles.social}>
+              <VK />
+              <Telegram />
+              <OK />
+              <Twitter />
+              <FB />
+            </div>
+          </div>
+        ) : (
+          ''
+        )}
 
         {settings?.auth.login.captcha && (
           <ReCAPTCHA

@@ -1,13 +1,15 @@
 'use client';
 
-import { useSettings } from '@/app/repositories/settings';
 import React from 'react';
 
+import { useAppSelector } from '@/store/hooks/redux';
+
 const Twitter = () => {
-  const { settings } = useSettings();
-  if (!settings?.auth?.social_tw) {
+  const { settings, loading } = useAppSelector((state) => state.settingsReducer);
+  if (loading || !settings?.auth?.social_tw) {
     return;
   }
+
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="#000">
       <rect x="0.5" y="0.5" width="39" height="39" rx="3.5" stroke="#1F1F1F" />

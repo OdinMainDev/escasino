@@ -1,13 +1,15 @@
 'use client';
 
-import { useSettings } from '@/app/repositories/settings';
 import React from 'react';
 
+import { useAppSelector } from '@/store/hooks/redux';
+
 const VK = () => {
-  const { settings } = useSettings();
-  if (!settings?.auth?.social_vk) {
+  const { settings, loading } = useAppSelector((state) => state.settingsReducer);
+  if (loading || !settings?.auth?.social_vk) {
     return;
   }
+
   return (
     <div
       onClick={() =>

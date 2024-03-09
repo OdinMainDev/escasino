@@ -1,13 +1,15 @@
 'use client';
 
-import { useSettings } from '@/app/repositories/settings';
 import React from 'react';
 
+import { useAppSelector } from '@/store/hooks/redux';
+
 const OK = () => {
-  const { settings } = useSettings();
-  if (!settings?.auth?.social_ok) {
+  const { settings, loading } = useAppSelector((state) => state.settingsReducer);
+  if (loading || !settings?.auth?.social_ok) {
     return;
   }
+
   return (
     <svg width="40" height="40" viewBox="0 0 40 40" fill="#000" xmlns="http://www.w3.org/2000/svg">
       <rect x="0.5" y="0.5" width="39" height="39" rx="3.5" />
