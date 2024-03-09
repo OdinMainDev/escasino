@@ -38,7 +38,6 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
   const [registerData, setRegisterData] = useState<IRegisterData>(sampleIRegisterData);
 
   // const { countries, loading: loadingCountries } = useCountries();
-  // const [errorList, setErrorList] = useState<string[]>([]);
   const formType =
     settings?.auth.register.phone && settings?.auth.register.email
       ? 'full'
@@ -51,11 +50,25 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
     settings?.auth.social_fb ||
     settings?.auth.social_tg ||
     settings?.auth.social_tw;
+  const hasUsername = settings?.auth.register.username;
+  const hasFullName = settings?.auth.register.full_name;
+  const hasCity = settings?.auth.register.city;
+  const hasDob = settings?.auth.register.dob;
+  const hasAddress = settings?.auth.register.address;
+  const hasGender = settings?.auth.register.gender;
+  const hasPromo = settings?.auth.register.promo;
 
   // OVERRIDE FOR TESTS
   // TODO: проверить с этими параметрами включенными и поправить верстку
   // const formType = 'full';
   // const hasSocials = false;
+  // const hasUsername = true;
+  // const hasFullName = true;
+  // const hasCity = true;
+  // const hasDob = true;
+  // const hasAddress = true;
+  // const hasGender = true;
+  // const hasPromo = true;
 
   let currenciesList: ISelectOption[] = [{ value: 'PLN', label: 'PLN', disabled: false }];
 
@@ -190,7 +203,7 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
         onChange={(e) => setRegisterData((prev) => ({ ...prev, currency: e.target.value }))}
       />
       <br />
-      {settings?.auth.register.username && (
+      {hasUsername && (
         <Input
           placeholder={'Username'}
           type={'text'}
@@ -202,7 +215,7 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
       )}
 
       {/* Тут красиво группировать */}
-      {settings?.auth.register.full_name && (
+      {hasFullName && (
         <div className="row" style={{ display: 'flex' }}>
           <Input
             placeholder={'Фамилия'}
@@ -232,7 +245,7 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
       )}
 
       {/* TODO: *ВЕЗДЕ* Тут красиво группировать */}
-      {settings?.auth.register.city && (
+      {hasCity && (
         <div className="row" style={{ display: 'flex' }}>
           <Select
             isError={!!errorData?.errors['country']}
@@ -253,7 +266,7 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
         </div>
       )}
 
-      {settings?.auth.register.dob && (
+      {hasDob && (
         <Input
           placeholder={'Дата рождения'}
           type="datetime-local"
@@ -269,7 +282,7 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
       )}
 
       {/* Тут красиво группировать */}
-      {settings?.auth.register.address && (
+      {hasAddress && (
         <div className="row" style={{ display: 'flex' }}>
           <Input
             placeholder={'Адрес'}
@@ -290,7 +303,7 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
         </div>
       )}
 
-      {settings?.auth.register.gender && (
+      {hasGender && (
         <Select
           isError={!!errorData?.errors['gender']}
           optionList={genderList}
@@ -300,7 +313,7 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
           onChange={(e) => setRegisterData((prev) => ({ ...prev, gender: e.target.value }))}
         />
       )}
-      {settings?.auth.register.promo && (
+      {hasPromo && (
         <div className={classNames(styles.checkbox, styles.promo)}>
           <Checkbox
             value={registerData.promo}
@@ -309,6 +322,7 @@ const RegistrationForm = ({ openLoginModal }: IProps) => {
           <div>Я согласен на промо рассылку</div>
         </div>
       )}
+
       <div className={styles.checkbox}>
         <Checkbox
           isError={!!errorData?.errors['terms']}
