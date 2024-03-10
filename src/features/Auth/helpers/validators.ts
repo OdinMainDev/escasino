@@ -1,6 +1,6 @@
 import { ILoginData } from '@/app/api/auth/doLogin';
 import { IRegisterData } from '@/app/api/auth/doRegister';
-import { IResetPasswordData } from '@/app/api/auth/doReset';
+import { IResetData } from '@/app/api/auth/doReset';
 
 export function validateEmail(email: string): boolean {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -48,11 +48,11 @@ export const validateLogin = (loginData: ILoginData): boolean => {
   return false;
 };
 
-export const validateResetPassword = (resetPasswordData: IResetPasswordData): boolean => {
-  if (
-    (validateEmail(resetPasswordData.email) || validatePhone(resetPasswordData.phone)) &&
-    resetPasswordData.captcha
-  ) {
+export const validateResetPassword = (resetData: IResetData): boolean => {
+  if (resetData.email.length == 0 && resetData.phone.length == 0) {
+    return false;
+  }
+  if (validateEmail(resetData.email) || validatePhone(resetData.phone)) {
     return true;
   }
   return false;

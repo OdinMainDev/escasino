@@ -1,6 +1,7 @@
 import { useModal } from '@/app/providers/ModalProvider';
 import AuthLoginModal from '@/features/Auth/ui/Login';
 import AuthRegisterModal from '@/features/Auth/ui/Register';
+import AuthResetModal from '@/features/Auth/ui/Reset';
 // import AuthResetModal from '@/features/Auth/ui/Reset';
 // import AuthResetModal from '@/features/Auth/ui/ResetSendComplete';
 // import AuthResetModal from '@/features/Auth/ui/ResetSetPassword';
@@ -22,30 +23,25 @@ const FooterAuthModals = () => {
     doOpenModal('reset');
   };
 
-  const closeLogin = () => {
+  const closeAll = () => {
     document.body.classList.remove('overflow-hidden');
     doCloseModals();
   };
 
-  const closeRegistration = () => {
-    document.body.classList.remove('overflow-hidden');
-    doCloseModals();
-  };
-
-  const closeResetPassword = () => {
-    document.body.classList.remove('overflow-hidden');
-    doCloseModals();
-  };
+  // const closeResetPassword = () => {
+  //   document.body.classList.remove('overflow-hidden');
+  //   doCloseModals();
+  // };
 
   return (
     <>
       <AuthLoginModal
-        close={closeLogin}
+        close={closeAll}
         openRegistrationModal={openRegistration}
         openResetModal={openReset}
       />
-      <AuthRegisterModal close={closeRegistration} openLoginModal={openLogin} />
-      {/* <AuthResetPasswordModal close={closeResetPassword} openLoginModal={openLogin} /> */}
+      <AuthRegisterModal close={closeAll} openLoginModal={openLogin} />
+      <AuthResetModal close={closeAll} openLoginModal={openLogin} />
     </>
   );
 };

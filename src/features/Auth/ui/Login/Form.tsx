@@ -153,6 +153,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
               className={styles.forgot}
               // onClick={() => dispatch(openResetPasswordModal())}
               style={{ float: 'right', textAlign: 'right', width: '70%' }}
+              onClick={openResetModal}
             >
               Я забыл пароль
             </div>

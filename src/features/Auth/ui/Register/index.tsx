@@ -11,11 +11,8 @@ interface IProps extends IModal {
 const AuthRegisterModal = ({ close, openLoginModal }: IProps) => {
   const { modalName, isModalOpen } = useModal();
   const isOpen = !isModalOpen ? false : modalName == 'register';
-  if (!isOpen) {
-    return;
-  }
   return (
-    <Modal isOpen={true} close={close}>
+    <Modal isOpen={isOpen} close={close}>
       <div className={styles.container}>
         <Form openLoginModal={openLoginModal} />
       </div>

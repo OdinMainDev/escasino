@@ -27,7 +27,7 @@ export const AuthErrorResponse = (
     return '#undefined2';
   }
   if (!data.errors[key]) {
-    return '#undefined3';
+    return '';
   }
   return prefix + '(Ошибка: ' + data.errors[key].join(', ') + ' )';
 };

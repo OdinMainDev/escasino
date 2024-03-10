@@ -5,6 +5,8 @@ interface ModalContextType {
   isModalOpen: boolean;
   doOpenModal: (name: string) => void;
   doCloseModals: () => void;
+  resetHash: string;
+  doSetResetHash: (name: string) => void;
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -20,6 +22,7 @@ export const useModal = () => {
 export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalName, setModalName] = useState('');
+  const [resetHash, setResetHash] = useState('');
 
   const doOpenModal = (name: string) => {
     setIsModalOpen(true);
@@ -32,8 +35,14 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     // Todo: скрыть модалки
   };
 
+  const doSetResetHash = (hash: string) => {
+    setResetHash(hash);
+  };
+
   return (
-    <ModalContext.Provider value={{ modalName, isModalOpen, doOpenModal, doCloseModals }}>
+    <ModalContext.Provider
+      value={{ modalName, isModalOpen, doOpenModal, doCloseModals, resetHash, doSetResetHash }}
+    >
       {children}
     </ModalContext.Provider>
   );

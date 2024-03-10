@@ -1,7 +1,11 @@
 import axios, { AxiosResponse, isAxiosError } from 'axios';
 import { IAuthError, IAuthRes } from './entity';
 
-export interface IResetPasswordData {
+export const resetPasswordApi = () => {
+  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/reset-password`;
+};
+
+export interface IResetData {
   email: string;
   phone: string;
   fid: string;
@@ -9,15 +13,19 @@ export interface IResetPasswordData {
   remember: boolean;
 }
 
-export const resetPasswordApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/reset-password`;
+export const sampleIResetData: IResetData = {
+  email: '',
+  phone: '',
+  fid: '',
+  captcha: '',
+  remember: false,
 };
 
-export const doResetApi = async (resetPasswordData: IResetPasswordData): Promise<IAuthRes> => {
+export const doResetApi = async (resetData: IResetData): Promise<IAuthRes> => {
   try {
-    const res: AxiosResponse<IAuthRes> = await axios.post(resetPasswordApi(), resetPasswordData, {
+    const res: AxiosResponse<IAuthRes> = await axios.post(resetPasswordApi(), resetData, {
       headers: {
-        'C-Token': import.meta.env.VITE_APP_BASE_DOMAIN ?? '',
+        'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
       },
     });
     const data = res.data;
