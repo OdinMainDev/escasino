@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, isAxiosError } from 'axios';
-import { IAuthError, IAuthRes } from './entity';
+import { IAuthError, IAuthHashRes } from './entity';
 
 export const resetPasswordApi = () => {
   return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/reset-password`;
@@ -21,9 +21,9 @@ export const sampleIResetData: IResetData = {
   remember: false,
 };
 
-export const doResetApi = async (resetData: IResetData): Promise<IAuthRes> => {
+export const doResetApi = async (resetData: IResetData): Promise<IAuthHashRes> => {
   try {
-    const res: AxiosResponse<IAuthRes> = await axios.post(resetPasswordApi(), resetData, {
+    const res: AxiosResponse<IAuthHashRes> = await axios.post(resetPasswordApi(), resetData, {
       headers: {
         'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
       },

@@ -26,8 +26,8 @@ interface IProps {
 
 const AuthResetForm = ({ openLoginModal }: IProps) => {
   const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
-  const { isAuth, setAuthenticated } = useAuthProvider();
-  const { doSetResetHash, doCloseModals } = useModal();
+  const { isAuth } = useAuthProvider();
+  const { doSetResetHash, doOpenModal } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IAuthError>();
   const [resetData, setResetData] = useState<IResetData>(sampleIResetData);
@@ -39,27 +39,25 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
         ? 'phone'
         : 'email';
 
-  // OVERRIDE FOR TESTS
-  // TODO: проверить с этими параметрами включенными и поправить верстку
-  // const formType = 'full';
-
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
       setLoader(true);
       const fid = await getVisitorId();
       const data = await doResetApi({ ...resetData, fid });
-      // doSetResetHash(data.token);
-      // setAuthenticated(data.token);
-      // doCloseModals();
-      // document.body.classList.remove('overflow-hidden');
+      // TODO: для себя ( сделать в админке новый параметр reset_type и если он code то так делаем)
+      doSetResetHash(data.hash);
+      doOpenModal(resetData.email != '' ? 'reset-confirm-email' : 'reset-confirm-phone');
+
+      // если другой ( пока 2 будет пароль и код )
+      // doOpenModal('reset-send-complete');
     } catch (e: unknown) {
-      const loginError = e as IAuthError;
-      const loginErrorList = Object.keys(loginError.errors);
-      if (!Array.isArray(loginErrorList)) {
+      const resetError = e as IAuthError;
+      const errorList = Object.keys(resetError.errors);
+      if (!Array.isArray(errorList)) {
         return;
       }
-      setErrorData(loginError);
+      setErrorData(resetError);
     } finally {
       setLoader(false);
     }
@@ -119,7 +117,7 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
             }
           />
         )}
-        ,
+
         <Button
           disabled={!validateResetPassword(resetData)}
           className={styles.button}

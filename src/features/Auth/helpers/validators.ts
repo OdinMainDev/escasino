@@ -1,6 +1,7 @@
 import { ILoginData } from '@/app/api/auth/doLogin';
 import { IRegisterData } from '@/app/api/auth/doRegister';
 import { IResetData } from '@/app/api/auth/doReset';
+import { IResetSetPasswordData } from '@/app/api/auth/doResetSetPassword';
 
 export function validateEmail(email: string): boolean {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -53,6 +54,13 @@ export const validateResetPassword = (resetData: IResetData): boolean => {
     return false;
   }
   if (validateEmail(resetData.email) || validatePhone(resetData.phone)) {
+    return true;
+  }
+  return false;
+};
+
+export const validateResetSetPassword = (resetData: IResetSetPasswordData): boolean => {
+  if (validatePasswordMatching(resetData.password, resetData.repeat_password)) {
     return true;
   }
   return false;

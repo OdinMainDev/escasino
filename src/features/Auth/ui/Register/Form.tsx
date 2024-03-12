@@ -118,7 +118,11 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
       e.preventDefault();
       setLoader(true);
       const fid = await getVisitorId();
-      const data = await doRegisterApi({ ...registerData, fid });
+      const postData = { ...registerData, fid };
+      if (currenciesList.length == 1) {
+        postData.currency = settings?.currencies[0] ? settings?.currencies[0] : '';
+      }
+      const data = await doRegisterApi(postData);
       setAuthenticated(data.token);
       doCloseModals();
       document.body.classList.remove('overflow-hidden');
@@ -197,15 +201,18 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
         message={AuthErrorResponse('repeat_password', 'Введите корректный пароль', errorData)}
         onChange={(e) => setRegisterData((prev) => ({ ...prev, repeat_password: e.target.value }))}
       />
-      <Select
-        isError={!!errorData?.errors['currency']}
-        optionList={currenciesList}
-        value={registerData.currency}
-        // containerClassName={styles.input} // TODO
-        // message={AuthErrorResponse('currency', 'Введите корректный пароль', errorData)} // TODO
-        onChange={(e) => setRegisterData((prev) => ({ ...prev, currency: e.target.value }))}
-      />
-      <br />
+      {currenciesList.length > 1 ? (
+        <Select
+          isError={!!errorData?.errors['currency']}
+          optionList={currenciesList}
+          value={registerData.currency}
+          // containerClassName={styles.input} // TODO
+          // message={AuthErrorResponse('currency', 'Введите корректный пароль', errorData)} // TODO
+          onChange={(e) => setRegisterData((prev) => ({ ...prev, currency: e.target.value }))}
+        />
+      ) : (
+        ''
+      )}
       {hasUsername && (
         <Input
           placeholder={'Username'}

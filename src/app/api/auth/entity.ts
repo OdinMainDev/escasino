@@ -3,6 +3,11 @@ export interface IAuthRes {
   token: string;
 }
 
+export interface IAuthHashRes {
+  success: boolean;
+  hash: string;
+}
+
 export interface IAuthErrorCont {
   [key: string]: string[];
 }
