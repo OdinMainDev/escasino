@@ -1,8 +1,7 @@
 import { FooterAuthButtons, FooterAuthModal } from './Auth';
 import styles from './Footer.module.scss';
-// import Select from './Select';
+import FooterSelect from './FooterSelect';
 import { UserIcon, Wallet } from './Icons';
-// import { AuthFooter, AuthModal } from '@/views/components/Auth';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
 import Loader from '@/shared/components/Loader';
 
@@ -18,8 +17,7 @@ const Footer = () => {
         {isAuth ? (
           // Меню если авторизован
           <div className={styles.footer}>
-            {/* <Select /> */}
-            {/* <FooterSelect /> */}
+            <FooterSelect />
             <div className={styles.icons}>
               <UserIcon />
               <Wallet />
