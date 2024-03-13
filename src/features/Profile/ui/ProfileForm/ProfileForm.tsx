@@ -7,7 +7,7 @@ import Loader from '@/shared/components/Loader';
 import Input from '@/shared/components/Input';
 import Icons from '@/shared/components/Icons';
 import Button from '@/shared/components/Button';
-import Select from '@/shared/components/Select';
+import Select, { ISelectOption } from '@/shared/components/Select';
 import { genderSelect } from '@/app/constants/genders';
 import Checkbox from '@/shared/components/Checkbox';
 import { userDataMapper } from '../../helpers/user';
@@ -17,6 +17,7 @@ import { doVerifyEmailSendApi } from '@/app/api/auth/verification/emailSend';
 import { useModal } from '@/app/providers/ModalProvider';
 import { getUser } from '@/store/slices/userSlice';
 import { doVerifyPhoneSendApi } from '@/app/api/auth/verification/phoneSend';
+import { getCountries } from '@/store/slices/countriesSlice';
 
 const ProfileForm = () => {
   const { user } = useAppSelector((state) => state.userReducer);
@@ -25,7 +26,28 @@ const ProfileForm = () => {
   const [loader, setLoader] = useState(false);
   const [userData, setUserData] = useState<IUserData>(sampleIUserData);
   const [errorData, setErrorData] = useState<IResponseError>();
+  const {
+    isFinished: isFinishedCountries,
+    loading: loadingCountries,
+    countries,
+  } = useAppSelector((state) => state.countriesReducer);
   const dispatch = useAppDispatch();
+  if (!loadingCountries && !isFinishedCountries) {
+    void dispatch(getCountries());
+  }
+
+  let countriesList: ISelectOption[] = [];
+
+  if (countries.length == 0) {
+    countriesList = [{ value: '', label: 'Загрузка стран', disabled: true }];
+  } else if (countries.length == 1) {
+    countriesList = [{ value: countries[0], label: countries[0], disabled: false }];
+  } else {
+    countriesList = [
+      { value: '', label: 'Ваша страна', disabled: true },
+      ...countries.map((item) => ({ label: item, value: item })),
+    ];
+  }
 
   useEffect(() => {
     if (user) {
@@ -309,15 +331,13 @@ const ProfileForm = () => {
       )}
       {settings?.profile.has_country && (
         <div className={styles.textarea}>
-          <Input
-            placeholder="Страна"
-            containerClassName={styles.input}
-            value={userData.country}
-            disabled={!settings?.profile.user_can_change_data && !!user?.data.country}
-            readOnly={!settings?.profile.user_can_change_data && !!user?.data.country}
-            onChange={(e) => setUserData((prev) => ({ ...prev, country: e.target.value }))}
+          <Select
             isError={!!errorData?.errors['country']}
-            message={ErrorResponseAsString('country', 'Введите корректный country', errorData)}
+            optionList={countriesList}
+            value={userData.country}
+            // containerClassName={styles.input} // TODO
+            // message={ErrorResponseAsString('second_name', 'Укажите страну из списка', errorData)} // TODO
+            onChange={(e) => setUserData((prev) => ({ ...prev, country: e.target.value }))}
           />
         </div>
       )}
