@@ -13,6 +13,7 @@ import Checkbox from '@/shared/components/Checkbox';
 import { userDataMapper } from '../../helpers/user';
 import { ErrorResponseAsString } from '@/app/api/helpers';
 import { IResponseError } from '@/entities/misc';
+import { doVerifyEmailSendApi } from '@/app/api/auth/verification/emailSend';
 
 const ProfileForm = () => {
   const { user } = useAppSelector((state) => state.userReducer);
@@ -63,24 +64,31 @@ const ProfileForm = () => {
     }
   };
 
-  // const verifyEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   try {
-  //     e.preventDefault();
-  //     setLoader(true);
-  //     const fid = await getVisitorId();
-  //     const resp = await verificationEmailHandlerApi({ fid });
-  //     console.log(resp);
-  //     console.log(resp?.hash);
+  const verifyEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (userData.email != user?.email) {
+      // TODO: сделать сюда красивую модалку
+      if (confirm('Вы изменили email, сохранить новый? Или вы хотите подтвердить старый?')) {
+        // TODO: наверное сюда не очень хорошо отправлять этот 'e' но может и похуй, проверить стоит
+        void sendData(e);
+      }
+    }
+    try {
+      e.preventDefault();
+      setLoader(true);
+      const fid = await getVisitorId();
+      await doVerifyEmailSendApi({ fid });
+      // doOpenModal('verification-email');
 
-  //     // TODO: затем мы открываем модалку подтвердите адрес электронной почты
-  //     // открываем его но там еще должен быть инпут введите код из почтового письма
-  //     // мы должны отправить код с хешем  ( console.log(resp?.hash))
-  //   } catch (e: unknown) {
-  //     /* empty */
-  //   } finally {
-  //     setLoader(false);
-  //   }
-  // };
+      // TODO: затем мы открываем модалку подтвердите адрес электронной почты
+      // открываем его но там еще должен быть инпут введите код из почтового письма
+      // мы должны отправить код с хешем  ( console.log(resp?.hash))
+    } catch (e: unknown) {
+      /* empty */
+    } finally {
+      setLoader(false);
+    }
+  };
 
   return (
     <form className={styles.container}>
@@ -177,7 +185,7 @@ const ProfileForm = () => {
           <Button
             elType="outlined"
             className={styles.email_button}
-            // onClick={verifyEmail}
+            onClick={(e) => void verifyEmail(e)}
             type="button"
           >
             Подтвердить электронную почту
