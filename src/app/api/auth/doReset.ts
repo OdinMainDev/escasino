@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, isAxiosError } from 'axios';
-import { IAuthError, IAuthHashRes } from './entity';
+import { IAuthHashRes } from './entity';
+import { IResponseError } from '@/entities/misc';
 
 export const resetPasswordApi = () => {
   return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/reset-password`;
@@ -33,12 +34,12 @@ export const doResetApi = async (resetData: IResetData): Promise<IAuthHashRes> =
   } catch (error) {
     if (isAxiosError(error)) {
       if (error.response?.status === 422) {
-        const err = error.response?.data as IAuthError;
+        const err = error.response?.data as IResponseError;
         throw err;
       }
       if (error.response?.status === 429) {
         // TODO: хендлинг ошибки слишком много попыток
-        const err = error.response?.data as IAuthError;
+        const err = error.response?.data as IResponseError;
         throw err;
       }
       throw {

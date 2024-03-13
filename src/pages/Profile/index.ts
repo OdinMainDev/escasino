@@ -1,5 +1,4 @@
-import Profile from './ui/Profile';
-import ProfileEdit from './ui/Profile';
-// import ProfileEdit from './ui/ProfileEdit';
+import Profile from './View';
+import ProfileEdit from './Edit';
 
 export { Profile, ProfileEdit };

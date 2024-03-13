@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, isAxiosError } from 'axios';
-import { IAuthError, IAuthRes } from './entity';
+import { IAuthRes } from './entity';
+import { IResponseError } from '@/entities/misc';
 
 export const registerApi = () => {
   return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/register`;
@@ -61,12 +62,12 @@ export const doRegisterApi = async (registerData: IRegisterData) => {
   } catch (error) {
     if (isAxiosError(error)) {
       if (error.response?.status === 422) {
-        const err = error.response?.data as IAuthError;
+        const err = error.response?.data as IResponseError;
         throw err;
       }
       if (error.response?.status === 429) {
         // TODO: хендлинг ошибки слишком много попыток
-        const err = error.response?.data as IAuthError;
+        const err = error.response?.data as IResponseError;
         throw err;
       }
       throw {

@@ -20,8 +20,9 @@ import { useModal } from '@/app/providers/ModalProvider';
 import Checkbox from '@/shared/components/Checkbox';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { useAppSelector } from '@/store/hooks/redux';
-import { AuthErrorResponse, IAuthError } from '@/app/api/auth/entity';
 import { isAppDebug } from '@/app/config/app';
+import { IResponseError } from '@/entities/misc';
+import { ErrorResponseAsString } from '@/app/api/helpers';
 
 interface IProps {
   openRegistration: () => void;
@@ -33,7 +34,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
   const { isAuth, setAuthenticated } = useAuthProvider();
   const { doCloseModals } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
-  const [errorData, setErrorData] = useState<IAuthError>();
+  const [errorData, setErrorData] = useState<IResponseError>();
   const [loginData, setLoginData] = useState<ILoginData>(sampleILoginData);
 
   const formType =
@@ -66,7 +67,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
       doCloseModals();
       document.body.classList.remove('overflow-hidden');
     } catch (e: unknown) {
-      const loginError = e as IAuthError;
+      const loginError = e as IResponseError;
       const loginErrorList = Object.keys(loginError.errors);
       if (!Array.isArray(loginErrorList)) {
         return;
@@ -108,7 +109,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
                 validationFunction={validateEmail}
                 autoComplete={autoCompleteHandler('email')}
                 isError={!!errorData?.errors['email']}
-                message={AuthErrorResponse('email', 'Введите корректный e-mail', errorData)}
+                message={ErrorResponseAsString('email', 'Введите корректный e-mail', errorData)}
               />
               <Input
                 placeholder={'Телефон'}
@@ -123,7 +124,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
                     setLoginData((prev) => ({ ...prev, email: '' }));
                   }
                 }}
-                message={AuthErrorResponse('phone', 'Введите корректный телефон', errorData)}
+                message={ErrorResponseAsString('phone', 'Введите корректный телефон', errorData)}
               />
             </div>
           </div>
@@ -137,7 +138,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
           value={loginData.password}
           validationFunction={validatePasswordLength}
           autoComplete={autoCompleteHandler('password')}
-          message={AuthErrorResponse('password', 'Введите корректный пароль', errorData)}
+          message={ErrorResponseAsString('password', 'Введите корректный пароль', errorData)}
           onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
         />
 

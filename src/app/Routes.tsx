@@ -3,7 +3,7 @@ import App from './App';
 import Layout from './assets/layout';
 
 import Home from '@/pages/Home';
-// import { Profile, ProfileEdit } from '@/pages/Profile';
+import { Profile, ProfileEdit } from '@/pages/Profile';
 // import TermsPage from '@/pages/Terms';
 // import Game from '@/pages/Games/Game';
 // import Search from '@/pages/Search/Results/ui/Search';
@@ -18,6 +18,19 @@ const availRoutes: RouteObject[] = [
         <Home />
       </HomeGames>
     ),
+  },
+  {
+    path: 'profile',
+    children: [
+      {
+        path: '',
+        element: <Profile />,
+      },
+      {
+        path: 'edit',
+        element: <ProfileEdit />,
+      },
+    ],
   },
 
   // TODO: сделать внешку ошибкам

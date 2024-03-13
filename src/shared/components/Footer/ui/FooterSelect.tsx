@@ -5,7 +5,6 @@ import styles from './FooterSelect.module.scss';
 import { usePreloader } from '@/app/providers/PreloaderProvider';
 import { useAppSelector } from '@/store/hooks/redux';
 
-// import classNames from 'classnames';
 const FooterSelect = () => {
   const { user, loading } = useAppSelector((state) => state.userReducer);
   const { hidePreloader } = usePreloader();

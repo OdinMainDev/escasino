@@ -30,11 +30,6 @@ const FooterAuthModals = () => {
     doCloseModals();
   };
 
-  // const closeResetPassword = () => {
-  //   document.body.classList.remove('overflow-hidden');
-  //   doCloseModals();
-  // };
-
   return (
     <>
       <AuthLoginModal

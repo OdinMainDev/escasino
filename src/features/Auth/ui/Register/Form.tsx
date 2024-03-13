@@ -18,13 +18,15 @@ import { useModal } from '@/app/providers/ModalProvider';
 import Checkbox from '@/shared/components/Checkbox';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
-import { AuthErrorResponse, IAuthError } from '@/app/api/auth/entity';
 import { IRegisterData, doRegisterApi, sampleIRegisterData } from '@/app/api/auth/doRegister';
 import { Link } from 'react-router-dom';
 import Select, { ISelectOption } from '@/shared/components/Select';
 import { isAppDebug } from '@/app/config/app';
 import classNames from 'classnames';
 import { getCountries } from '@/store/slices/countriesSlice';
+import { genderSelect } from '@/app/constants/genders';
+import { IResponseError } from '@/entities/misc';
+import { ErrorResponseAsString } from '@/app/api/helpers';
 
 interface IProps {
   openLoginModal: () => void;
@@ -35,7 +37,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
   const { isAuth, setAuthenticated } = useAuthProvider();
   const { doCloseModals } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
-  const [errorData, setErrorData] = useState<IAuthError>();
+  const [errorData, setErrorData] = useState<IResponseError>();
   const [registerData, setRegisterData] = useState<IRegisterData>(sampleIRegisterData);
   const {
     isFinished: isFinishedCountries,
@@ -93,13 +95,6 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
     ];
   }
 
-  const genderList: ISelectOption[] = [
-    { value: '', label: 'Ваш пол', disabled: true },
-    { value: 'male', label: 'Мужской' },
-    { value: 'female', label: 'Женский' },
-    { value: 'other', label: 'Другое' },
-  ];
-
   let countriesList: ISelectOption[] = [];
 
   if (countries.length == 0) {
@@ -128,7 +123,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
       document.body.classList.remove('overflow-hidden');
       // navigate('/profile/edit');
     } catch (e: unknown) {
-      const regError = e as IAuthError;
+      const regError = e as IResponseError;
       const regErrorList = Object.keys(regError.errors);
       if (!Array.isArray(regErrorList)) {
         return;
@@ -162,7 +157,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
               containerClassName={styles.input}
               validationFunction={validateEmail}
               isError={!!errorData?.errors['email']}
-              message={AuthErrorResponse('email', 'Введите корректный e-mail', errorData)}
+              message={ErrorResponseAsString('email', 'Введите корректный e-mail', errorData)}
             />
             <Input
               placeholder="Номер телефона"
@@ -176,7 +171,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
               containerClassName={styles.input}
               validationFunction={validateEmail}
               isError={!!errorData?.errors['phone']}
-              message={AuthErrorResponse('phone', 'Введите корректный телефон', errorData)}
+              message={ErrorResponseAsString('phone', 'Введите корректный телефон', errorData)}
             />
           </div>
         </div>
@@ -189,7 +184,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
         containerClassName={styles.input}
         value={registerData.password}
         validationFunction={validatePasswordLength}
-        message={AuthErrorResponse('password', 'Введите корректный пароль', errorData)}
+        message={ErrorResponseAsString('password', 'Введите корректный пароль', errorData)}
         onChange={(e) => setRegisterData((prev) => ({ ...prev, password: e.target.value }))}
       />
       <Input
@@ -198,7 +193,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
         isError={!!errorData?.errors['repeat_password']}
         containerClassName={styles.input}
         validationFunction={(value) => validatePasswordMatching(registerData.password, value)}
-        message={AuthErrorResponse('repeat_password', 'Введите корректный пароль', errorData)}
+        message={ErrorResponseAsString('repeat_password', 'Введите корректный пароль', errorData)}
         onChange={(e) => setRegisterData((prev) => ({ ...prev, repeat_password: e.target.value }))}
       />
       {currenciesList.length > 1 ? (
@@ -207,7 +202,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           optionList={currenciesList}
           value={registerData.currency}
           // containerClassName={styles.input} // TODO
-          // message={AuthErrorResponse('currency', 'Введите корректный пароль', errorData)} // TODO
+          // message={ErrorResponseAsString('currency', 'Введите корректный пароль', errorData)} // TODO
           onChange={(e) => setRegisterData((prev) => ({ ...prev, currency: e.target.value }))}
         />
       ) : (
@@ -219,7 +214,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           type={'text'}
           containerClassName={styles.input}
           isError={!!errorData?.errors['username']}
-          message={AuthErrorResponse('username', 'Введите корректный username', errorData)}
+          message={ErrorResponseAsString('username', 'Введите корректный username', errorData)}
           onChange={(e) => setRegisterData((prev) => ({ ...prev, username: e.target.value }))}
         />
       )}
@@ -232,7 +227,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             type={'text'}
             containerClassName={styles.input}
             isError={!!errorData?.errors['last_name']}
-            message={AuthErrorResponse('last_name', 'Введите фамилию корректно', errorData)}
+            message={ErrorResponseAsString('last_name', 'Введите фамилию корректно', errorData)}
             onChange={(e) => setRegisterData((prev) => ({ ...prev, last_name: e.target.value }))}
           />
           <Input
@@ -240,7 +235,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             type={'text'}
             containerClassName={styles.input}
             isError={!!errorData?.errors['first_name']}
-            message={AuthErrorResponse('first_name', 'Введите имя корректно', errorData)}
+            message={ErrorResponseAsString('first_name', 'Введите имя корректно', errorData)}
             onChange={(e) => setRegisterData((prev) => ({ ...prev, first_name: e.target.value }))}
           />
           <Input
@@ -248,7 +243,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             type={'text'}
             containerClassName={styles.input}
             isError={!!errorData?.errors['second_name']}
-            message={AuthErrorResponse('second_name', 'Введите отчество корректно', errorData)}
+            message={ErrorResponseAsString('second_name', 'Введите отчество корректно', errorData)}
             onChange={(e) => setRegisterData((prev) => ({ ...prev, second_name: e.target.value }))}
           />
         </div>
@@ -263,7 +258,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             optionList={countriesList}
             value={registerData.country}
             // containerClassName={styles.input} // TODO
-            // message={AuthErrorResponse('second_name', 'Укажите страну из списка', errorData)} // TODO
+            // message={ErrorResponseAsString('second_name', 'Укажите страну из списка', errorData)} // TODO
             onChange={(e) => setRegisterData((prev) => ({ ...prev, country: e.target.value }))}
           />
           <Input
@@ -271,7 +266,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             type={'text'}
             containerClassName={styles.input}
             isError={!!errorData?.errors['city']}
-            message={AuthErrorResponse('city', 'Укажите город правильно', errorData)}
+            message={ErrorResponseAsString('city', 'Укажите город правильно', errorData)}
             onChange={(e) => setRegisterData((prev) => ({ ...prev, city: e.target.value }))}
           />
         </div>
@@ -283,7 +278,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           type="datetime-local"
           containerClassName={styles.input}
           isError={!!errorData?.errors['dob']}
-          message={AuthErrorResponse('dob', 'Укажите дату рождения корректно', errorData)}
+          message={ErrorResponseAsString('dob', 'Укажите дату рождения корректно', errorData)}
           onChange={(e) => {
             const inputDate = new Date(e.target.value);
             const timestamp = Math.floor(inputDate.getTime() / 1000);
@@ -300,7 +295,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             type={'text'}
             containerClassName={styles.input}
             isError={!!errorData?.errors['address']}
-            message={AuthErrorResponse('address', 'Укажите адрес корректно', errorData)}
+            message={ErrorResponseAsString('address', 'Укажите адрес корректно', errorData)}
             onChange={(e) => setRegisterData((prev) => ({ ...prev, address: e.target.value }))}
           />
           <Input
@@ -308,7 +303,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             type={'text'}
             containerClassName={styles.input}
             isError={!!errorData?.errors['zip']}
-            message={AuthErrorResponse('zip', 'Укажите почтовый индекс корректно', errorData)}
+            message={ErrorResponseAsString('zip', 'Укажите почтовый индекс корректно', errorData)}
             onChange={(e) => setRegisterData((prev) => ({ ...prev, zip: e.target.value }))}
           />
         </div>
@@ -317,10 +312,10 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
       {hasGender && (
         <Select
           isError={!!errorData?.errors['gender']}
-          optionList={genderList}
+          optionList={genderSelect}
           value={registerData.gender}
           // containerClassName={styles.input} // TODO
-          // message={AuthErrorResponse('zip', 'Укажите гендер корректно', errorData)}
+          // message={ErrorResponseAsString('zip', 'Укажите гендер корректно', errorData)}
           onChange={(e) => setRegisterData((prev) => ({ ...prev, gender: e.target.value }))}
         />
       )}

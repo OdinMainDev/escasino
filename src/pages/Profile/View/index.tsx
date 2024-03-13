@@ -1,17 +1,19 @@
-import styles from './Profile.module.scss';
-import { useUser } from '@/app/repositories/user';
-import { useSettings } from '@/app/repositories/settings';
-import { useRouter } from '@/app/helpers/navigation';
-import Button from '@/views/components/Button';
 import classNames from 'classnames';
-import GoBackButton from '@/views/components/GoBackButton';
-import { usePreloader } from '@/app/providers/preloader';
+
+import styles from './styles.module.scss';
+import { useAppSelector } from '@/store/hooks/redux';
+import { usePreloader } from '@/app/providers/PreloaderProvider';
+import { useRouter } from '@/shared/helpers/navigation';
+import { useAuthProvider } from '@/app/providers/AuthProvider';
+import GoBackButton from '@/shared/components/GoBackButton';
+import Button from '@/shared/components/Button';
 
 const Profile = () => {
-  const { user, loading: loadingUser } = useUser();
-  const { settings, loading: loadingSettings } = useSettings();
+  const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
+  const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
   const { hidePreloader } = usePreloader();
   const router = useRouter();
+  const { unsetAuthenticated } = useAuthProvider();
 
   if (loadingUser || loadingSettings) {
     return;
@@ -19,8 +21,8 @@ const Profile = () => {
 
   hidePreloader();
   const logoutHandler = () => {
-    // dispatch(logout());
-    // router.push('/');
+    unsetAuthenticated();
+    router.push('/');
   };
 
   const IsUserVerified =

@@ -59,22 +59,25 @@ export function useRouter() {
 
   const push = useCallback(
     (pathOrObj: string | IPushData) => {
-      if (!lang || !supportedLangs.includes(lang)) {
-        navigate(`/${typeof pathOrObj === 'string' ? pathOrObj : ''}`);
-        return;
+      let url = '';
+      if (lang && !supportedLangs.includes(lang)) {
+        url = '/' + lang;
       }
       if (typeof pathOrObj === 'string') {
-        navigate(`/${lang}/${pathOrObj}`);
-      } else {
-        const { pathname, query } = pathOrObj;
-        const searchParams = query
-          ? `?${createSearchParams(query as URLSearchParamsInit).toString()}`
-          : '';
-        navigate({
-          pathname: `/${lang}${pathname}`,
-          search: searchParams,
-        });
+        url += pathOrObj;
+        navigate(url);
+        return;
       }
+
+      const { pathname, query } = pathOrObj;
+      const searchParams = query
+        ? `?${createSearchParams(query as URLSearchParamsInit).toString()}`
+        : '';
+      navigate({
+        pathname: `/${lang}${pathname}`,
+        search: searchParams,
+      });
+      return;
     },
     [navigate],
   );

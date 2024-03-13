@@ -14,12 +14,13 @@ import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { useModal } from '@/app/providers/ModalProvider';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { useAppSelector } from '@/store/hooks/redux';
-import { AuthErrorResponse, IAuthError } from '@/app/api/auth/entity';
 import {
   IResetSetPasswordData,
   doResetSetPasswordApi,
   sampleIResetSetPasswordData,
 } from '@/app/api/auth/doResetSetPassword';
+import { IResponseError } from '@/entities/misc';
+import { ErrorResponseAsString } from '@/app/api/helpers';
 
 interface IProps {
   isPhone: boolean;
@@ -30,7 +31,7 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
   const { isAuth } = useAuthProvider();
   const { resetHash, doSetResetHash, doOpenModal } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
-  const [errorData, setErrorData] = useState<IAuthError>();
+  const [errorData, setErrorData] = useState<IResponseError>();
   const [resetData, setResetData] = useState<IResetSetPasswordData>(sampleIResetSetPasswordData);
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -42,7 +43,7 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
       doSetResetHash('');
       doOpenModal('reset-set-password-complete');
     } catch (e: unknown) {
-      const resetError = e as IAuthError;
+      const resetError = e as IResponseError;
       const errorList = Object.keys(resetError.errors);
       if (!Array.isArray(errorList)) {
         return;
@@ -55,7 +56,7 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
   };
 
   // TODO: сделать красивую модалку с визардом ( пошаговое заполнение ) как из дизайна
-  // TODO: исправить отображение ошибок из запроса ( AuthErrorResponse) ошибка при введенном не верном коде не показывается
+  // TODO: исправить отображение ошибок из запроса ( ErrorResponseAsString) ошибка при введенном не верном коде не показывается
   return (
     <form className={styles.container}>
       {(loader || loadingSettings || isAuth || !settings) && (
@@ -71,7 +72,7 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
           isError={!!errorData?.errors['code']}
           containerClassName={styles.input}
           value={resetData.code}
-          message={AuthErrorResponse('code', 'Проверочный код указан не верно', errorData)}
+          message={ErrorResponseAsString('code', 'Проверочный код указан не верно', errorData)}
           onChange={(e) => setResetData((prev) => ({ ...prev, code: e.target.value }))}
         />
         <Input
@@ -81,7 +82,7 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
           containerClassName={styles.input}
           value={resetData.password}
           validationFunction={validatePasswordLength}
-          message={AuthErrorResponse('password', 'Введите корректный пароль', errorData)}
+          message={ErrorResponseAsString('password', 'Введите корректный пароль', errorData)}
           onChange={(e) => setResetData((prev) => ({ ...prev, password: e.target.value }))}
         />
         <Input
@@ -90,7 +91,7 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
           isError={!!errorData?.errors['repeat_password']}
           containerClassName={styles.input}
           validationFunction={(value) => validatePasswordMatching(resetData.password, value)}
-          message={AuthErrorResponse('repeat_password', 'Введите корректный пароль', errorData)}
+          message={ErrorResponseAsString('repeat_password', 'Введите корректный пароль', errorData)}
           onChange={(e) => setResetData((prev) => ({ ...prev, repeat_password: e.target.value }))}
         />
 

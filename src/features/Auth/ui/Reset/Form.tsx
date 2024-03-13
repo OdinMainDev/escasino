@@ -16,9 +16,10 @@ import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { useModal } from '@/app/providers/ModalProvider';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { useAppSelector } from '@/store/hooks/redux';
-import { AuthErrorResponse, IAuthError } from '@/app/api/auth/entity';
 import { isAppDebug } from '@/app/config/app';
 import { IResetData, doResetApi, sampleIResetData } from '@/app/api/auth/doReset';
+import { IResponseError } from '@/entities/misc';
+import { ErrorResponseAsString } from '@/app/api/helpers';
 
 interface IProps {
   openLoginModal: () => void;
@@ -29,7 +30,7 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
   const { isAuth } = useAuthProvider();
   const { doSetResetHash, doOpenModal } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
-  const [errorData, setErrorData] = useState<IAuthError>();
+  const [errorData, setErrorData] = useState<IResponseError>();
   const [resetData, setResetData] = useState<IResetData>(sampleIResetData);
 
   const formType =
@@ -52,7 +53,7 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
       // если другой ( пока 2 будет пароль и код )
       // doOpenModal('reset-send-complete');
     } catch (e: unknown) {
-      const resetError = e as IAuthError;
+      const resetError = e as IResponseError;
       const errorList = Object.keys(resetError.errors);
       if (!Array.isArray(errorList)) {
         return;
@@ -88,7 +89,7 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
                 validationFunction={validateEmail}
                 autoComplete={autoCompleteHandler('email')}
                 isError={!!errorData?.errors['email']}
-                message={AuthErrorResponse('email', 'Введите корректный e-mail', errorData)}
+                message={ErrorResponseAsString('email', 'Введите корректный e-mail', errorData)}
               />
               <Input
                 placeholder={'Телефон'}
@@ -103,7 +104,7 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
                     setResetData((prev) => ({ ...prev, email: '' }));
                   }
                 }}
-                message={AuthErrorResponse('phone', 'Введите корректный телефон', errorData)}
+                message={ErrorResponseAsString('phone', 'Введите корректный телефон', errorData)}
               />
             </div>
           </div>
