@@ -9,6 +9,8 @@ interface ModalContextType {
   doSetResetHash: (name: string) => void;
   verifyHash: string;
   doSetVerifyHash: (name: string) => void;
+  changeHash: string;
+  doSetChangeHash: (name: string) => void;
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -26,6 +28,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [modalName, setModalName] = useState('');
   const [resetHash, setResetHash] = useState('');
   const [verifyHash, setVerifyHash] = useState('');
+  const [changeHash, setChangeHash] = useState('');
 
   const doOpenModal = (name: string) => {
     setIsModalOpen(true);
@@ -46,6 +49,10 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setVerifyHash(hash);
   };
 
+  const doSetChangeHash = (hash: string) => {
+    setChangeHash(hash);
+  };
+
   return (
     <ModalContext.Provider
       value={{
@@ -57,6 +64,8 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         doSetResetHash,
         verifyHash,
         doSetVerifyHash,
+        changeHash,
+        doSetChangeHash,
       }}
     >
       {children}

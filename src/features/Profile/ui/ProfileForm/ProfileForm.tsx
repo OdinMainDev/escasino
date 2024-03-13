@@ -21,7 +21,7 @@ import { doVerifyPhoneSendApi } from '@/app/api/auth/verification/phoneSend';
 const ProfileForm = () => {
   const { user } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
-  const { doSetVerifyHash, doOpenModal } = useModal();
+  const { doSetVerifyHash, doSetChangeHash, doOpenModal } = useModal();
   const [loader, setLoader] = useState(false);
   const [userData, setUserData] = useState<IUserData>(sampleIUserData);
   const [errorData, setErrorData] = useState<IResponseError>();
@@ -57,6 +57,16 @@ const ProfileForm = () => {
           success: true,
         });
       }
+
+      // Делаем так чтобы 2 модалки не открылось одновременно
+      if (data.email_change_hash) {
+        doSetChangeHash(data.email_change_hash);
+        doOpenModal('change-email');
+      } else if (data.phone_change_hash) {
+        doSetChangeHash(data.phone_change_hash);
+        doOpenModal('change-phone');
+      }
+
       void dispatch(getUser());
     } catch (e: unknown) {
       const loginError = e as IResponseError;
