@@ -1,6 +1,6 @@
 import { IGame } from '@/entities/Game';
 import styles from './GamesGrid.module.scss';
-import { GridItem } from '@/features/Games/ui/GridItem';
+import { GridItem } from '@/shared/components/Games/ui/GridItem';
 
 interface IProps {
   games: IGame[];

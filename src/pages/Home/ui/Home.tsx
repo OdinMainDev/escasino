@@ -2,11 +2,11 @@ import styles from './Home.module.scss';
 
 import { themeHasTopGames } from '@/app/config/appearance';
 import { usePreloader } from '@/app/providers/PreloaderProvider';
-import { TopGames } from '@/features/Games/ui/TopGames';
+import { TopGames } from '@/shared/components/Games/ui/TopGames';
 import { Header } from '@/shared/components/Header';
 import { useAppSelector } from '@/store/hooks/redux';
 import { Footer } from '@/shared/components/Footer';
-import { GamesGrid } from '@/features/Games/ui/Grid';
+import { GamesGrid } from '@/shared/components/Games/ui/Grid';
 import { IGame } from '@/entities/game';
 
 export default function Home() {

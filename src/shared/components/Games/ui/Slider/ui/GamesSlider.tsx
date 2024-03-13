@@ -2,7 +2,7 @@ import Slider, { Settings } from 'react-slick';
 import './GamesSlider.scss';
 import { settingsResponsive } from '../constants';
 import { IGame } from '@/entities/Game';
-import { GridItem } from '@/features/Games/ui/GridItem';
+import { GridItem } from '@/shared/components/Games/ui/GridItem';
 
 interface IProps {
   games: IGame[];
