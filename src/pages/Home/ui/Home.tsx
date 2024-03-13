@@ -2,12 +2,12 @@ import styles from './Home.module.scss';
 
 import { themeHasTopGames } from '@/app/config/appearance';
 import { usePreloader } from '@/app/providers/PreloaderProvider';
-import { TopGames } from '@/shared/components/Games/ui/TopGames';
-import { Header } from '@/shared/components/Header';
 import { useAppSelector } from '@/store/hooks/redux';
-import { Footer } from '@/shared/components/Footer';
-import { GamesGrid } from '@/shared/components/Games/ui/Grid';
 import { IGame } from '@/entities/game';
+import { Header } from '@/widgets/Header';
+import { TopGames } from '@/widgets/Games/ui/TopGames';
+import { GamesGrid } from '@/widgets/Games/ui/Grid';
+import { Footer } from '@/widgets/Footer';
 
 export default function Home() {
   const { games } = useAppSelector((state) => state.homeGamesReducer);

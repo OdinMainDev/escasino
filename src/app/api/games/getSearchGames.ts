@@ -1,4 +1,4 @@
-import { IGame } from '@/app/entities/game';
+import { IGame } from '@/entities/game';
 import axios from 'axios';
 
 interface JsonResponse {
@@ -9,9 +9,15 @@ export interface IFilter {
   categories: string[];
   providers: string[];
   is_game_avail_for_bonus: boolean;
-  distinct_filters: boolean;
   query: string;
 }
+
+export const sampleIFilter: IFilter = {
+  categories: [],
+  providers: [],
+  is_game_avail_for_bonus: false,
+  query: '',
+};
 
 export const searchGamesApi = () => {
   return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/public/get/games/search`;

@@ -74,7 +74,7 @@ export function useRouter() {
         ? `?${createSearchParams(query as URLSearchParamsInit).toString()}`
         : '';
       navigate({
-        pathname: `/${lang}${pathname}`,
+        pathname: `${lang ? '/' + lang : ''}${pathname}`,
         search: searchParams,
       });
       return;

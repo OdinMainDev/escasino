@@ -4,6 +4,7 @@ import Layout from './assets/layout';
 
 import Home from '@/pages/Home';
 import { Profile, ProfileEdit } from '@/pages/Profile';
+import GamesFilter from '@/pages/Games/Filter';
 // import TermsPage from '@/pages/Terms';
 // import Game from '@/pages/Games/Game';
 // import Search from '@/pages/Search/Results/ui/Search';
@@ -18,6 +19,19 @@ const availRoutes: RouteObject[] = [
         <Home />
       </HomeGames>
     ),
+  },
+  {
+    path: 'games',
+    children: [
+      // {
+      //   path: 'search',
+      //   element: <GamesSearch />,
+      // },
+      {
+        path: 'filter',
+        element: <GamesFilter />,
+      },
+    ],
   },
   {
     path: 'profile',
