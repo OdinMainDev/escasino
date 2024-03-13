@@ -16,6 +16,7 @@ import { IResponseError } from '@/entities/misc';
 import { doVerifyEmailSendApi } from '@/app/api/auth/verification/emailSend';
 import { useModal } from '@/app/providers/ModalProvider';
 import { getUser } from '@/store/slices/userSlice';
+import { doVerifyPhoneSendApi } from '@/app/api/auth/verification/phoneSend';
 
 const ProfileForm = () => {
   const { user } = useAppSelector((state) => state.userReducer);
@@ -70,6 +71,11 @@ const ProfileForm = () => {
   };
 
   const verifyEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    // TODO: сделать красивую модалку под проверку, или алерт
+    if (userData.email == '') {
+      alert('Сначала надо сохранить данные, а потом уже их верифицировать!');
+      return;
+    }
     e.preventDefault();
     if (userData.email != user?.email) {
       // TODO: сделать сюда красивую модалку
@@ -88,6 +94,37 @@ const ProfileForm = () => {
       const data = await doVerifyEmailSendApi({ fid });
       doSetVerifyHash(data.hash);
       doOpenModal('verification-email');
+    } catch (e: unknown) {
+      /* empty */
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  const verifyPhone = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    // TODO: сделать красивую модалку под проверку, или алерт
+    if (userData.phone == '') {
+      alert('Сначала надо сохранить данные, а потом уже их верифицировать!');
+      return;
+    }
+    e.preventDefault();
+    if (userData.phone != user?.phone) {
+      // TODO: сделать сюда красивую модалку
+      if (confirm('Вы изменили телефон, сохранить новый? Или вы хотите подтвердить старый?')) {
+        // TODO: наверное сюда не очень хорошо отправлять этот 'e' но может и похуй, проверить стоит
+
+        // TODO: так же сделать проверку на то что в ответе нет ошибок,
+        // ( если почта занята то будет 200ый ответ но в нем внутри ошибки, так как остальные данные заменяются )
+        void sendData(e);
+      }
+    }
+    try {
+      e.preventDefault();
+      setLoader(true);
+      const fid = await getVisitorId();
+      const data = await doVerifyPhoneSendApi({ fid });
+      doSetVerifyHash(data.hash);
+      doOpenModal('verification-phone');
     } catch (e: unknown) {
       /* empty */
     } finally {
@@ -221,15 +258,16 @@ const ProfileForm = () => {
             isError={!!errorData?.errors['phone']}
             message={ErrorResponseAsString('phone', 'Введите корректный phone', errorData)}
           />
-          {/* ПРИ НАЖАТИИ ПРОВЕРЯЕТ НА ТО ИЗМЕНЕНО ИЛИ НЕТ ТЕКУЩЕЕ ПОЛЕ И ПОТОМ ОТКРЫВАЕТ МОДАЛКУ */}
-          <Button
-            elType="outlined"
-            className={styles.email_button}
-            // onClick={verifyEmail}
-            type="button"
-          >
-            Подтвердить телефон
-          </Button>
+          {!user?.data.phone_verified_at && (
+            <Button
+              elType="outlined"
+              className={styles.email_button}
+              onClick={(e) => void verifyPhone(e)}
+              type="button"
+            >
+              Подтвердить телефон
+            </Button>
+          )}
         </div>
       )}
 
