@@ -3,23 +3,27 @@ import { IAuthHashRes } from '../entity';
 import { IResponseError } from '@/entities/misc';
 import Cookies from 'js-cookie';
 
-export const verifyEmailSendApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/verification/email/send`;
+export const changeEmailSendApi = () => {
+  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/change/user/email`;
 };
 
-export interface IVerifyEmailSendData {
+export interface IChangeEmailSendData {
+  hash: string;
+  code: string;
   fid: string;
 }
 
-export const sampleIVerifyEmailSendData: IVerifyEmailSendData = {
+export const sampleIChangeEmailSendData: IChangeEmailSendData = {
+  hash: '',
+  code: '',
   fid: '',
 };
 
-export const doVerifyEmailSendApi = async (
-  resetData: IVerifyEmailSendData,
+export const doChangeEmailSendApi = async (
+  resetData: IChangeEmailSendData,
 ): Promise<IAuthHashRes> => {
   try {
-    const res: AxiosResponse<IAuthHashRes> = await axios.post(verifyEmailSendApi(), resetData, {
+    const res: AxiosResponse<IAuthHashRes> = await axios.post(changeEmailSendApi(), resetData, {
       headers: {
         Authorization: `Bearer: ${Cookies.get('token')}`,
         'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',

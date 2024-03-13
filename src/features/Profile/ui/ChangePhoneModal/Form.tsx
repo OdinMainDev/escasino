@@ -32,6 +32,7 @@ const ProfileChangePhoneForm = () => {
       await doChangePhoneSendApi({ ...changeData, hash: changeHash, fid });
       doSetChangeHash('');
       doOpenModal('change-phone-complete');
+      // TODO: исправить, не обновляет страницу личного кабинета после ( а должно, по логике работы ) ( описал в email модалке подробнее)
       void dispatch(getUser());
     } catch (e: unknown) {
       const errors = e as IResponseError;

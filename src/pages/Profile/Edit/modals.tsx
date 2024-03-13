@@ -1,4 +1,6 @@
 import { useModal } from '@/app/providers/ModalProvider';
+import ProfileChangeEmailModal from '@/features/Profile/ui/ChangeEmailModal';
+import ProfileChangeEmailCompleteModal from '@/features/Profile/ui/ChangeEmailModalComplete';
 import ProfileChangePhoneModal from '@/features/Profile/ui/ChangePhoneModal';
 import ProfileChangePhoneCompleteModal from '@/features/Profile/ui/ChangePhoneModalComplete';
 import ProfileVerificationEmailModal from '@/features/Profile/ui/VerificationModalEmail';
@@ -21,6 +23,8 @@ const FooterAuthModals = () => {
       <ProfileVerificationPhoneCompleteModal close={closeAll} />
       <ProfileChangePhoneModal close={closeAll} />
       <ProfileChangePhoneCompleteModal close={closeAll} />
+      <ProfileChangeEmailModal close={closeAll} />
+      <ProfileChangeEmailCompleteModal close={closeAll} />
     </>
   );
 };

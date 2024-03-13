@@ -12,7 +12,7 @@ const ProfileChangePhoneCompleteForm = () => {
   return (
     <form className={styles.container}>
       <div>
-        <div className={styles.title}>Успешно подтвержден телефон</div>
+        <div className={styles.title}>Успешно изменен телефон</div>
         <Button className={styles.button} onClick={sendData}>
           Закрыть
         </Button>
