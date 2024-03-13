@@ -7,6 +7,8 @@ interface ModalContextType {
   doCloseModals: () => void;
   resetHash: string;
   doSetResetHash: (name: string) => void;
+  verifyHash: string;
+  doSetVerifyHash: (name: string) => void;
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -23,6 +25,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalName, setModalName] = useState('');
   const [resetHash, setResetHash] = useState('');
+  const [verifyHash, setVerifyHash] = useState('');
 
   const doOpenModal = (name: string) => {
     setIsModalOpen(true);
@@ -39,9 +42,22 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setResetHash(hash);
   };
 
+  const doSetVerifyHash = (hash: string) => {
+    setVerifyHash(hash);
+  };
+
   return (
     <ModalContext.Provider
-      value={{ modalName, isModalOpen, doOpenModal, doCloseModals, resetHash, doSetResetHash }}
+      value={{
+        modalName,
+        isModalOpen,
+        doOpenModal,
+        doCloseModals,
+        resetHash,
+        doSetResetHash,
+        verifyHash,
+        doSetVerifyHash,
+      }}
     >
       {children}
     </ModalContext.Provider>

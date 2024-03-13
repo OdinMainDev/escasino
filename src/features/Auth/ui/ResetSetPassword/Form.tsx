@@ -67,7 +67,7 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
       <div>
         <div className={styles.title}>Код подтверждения</div>
         <Input
-          placeholder={!isPhone ? 'Введите код из смс' : 'Введите код отправленный на почту'}
+          placeholder={isPhone ? 'Введите код из смс' : 'Введите код отправленный на почту'}
           type="text"
           isError={!!errorData?.errors['code']}
           containerClassName={styles.input}

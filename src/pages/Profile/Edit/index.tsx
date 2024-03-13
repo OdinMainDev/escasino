@@ -3,6 +3,7 @@ import styles from './styles.module.scss';
 import GoBackButton from '@/shared/components/GoBackButton';
 import { useAppSelector } from '@/store/hooks/redux';
 import { usePreloader } from '@/app/providers/PreloaderProvider';
+import ProfileModals from './modals';
 
 const ProfileEdit = () => {
   const { loading: loadingUser } = useAppSelector((state) => state.userReducer);
@@ -15,15 +16,18 @@ const ProfileEdit = () => {
 
   hidePreloader();
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.back}>
-          <GoBackButton />
+    <>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <div className={styles.back}>
+            <GoBackButton />
+          </div>
+          <div className="header_title">Персональные данные</div>
         </div>
-        <div className="header_title">Персональные данные</div>
+        <ProfileForm />
       </div>
-      <ProfileForm />
-    </div>
+      <ProfileModals />
+    </>
   );
 };
 

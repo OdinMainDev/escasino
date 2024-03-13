@@ -1,4 +1,4 @@
-import { useAppSelector } from '@/store/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import styles from './styles.module.scss';
 import { useEffect, useState } from 'react';
 import { IUserData, doSetUserData, sampleIUserData } from '@/app/api/user/setUserData';
@@ -14,13 +14,17 @@ import { userDataMapper } from '../../helpers/user';
 import { ErrorResponseAsString } from '@/app/api/helpers';
 import { IResponseError } from '@/entities/misc';
 import { doVerifyEmailSendApi } from '@/app/api/auth/verification/emailSend';
+import { useModal } from '@/app/providers/ModalProvider';
+import { getUser } from '@/store/slices/userSlice';
 
 const ProfileForm = () => {
   const { user } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
+  const { doSetVerifyHash, doOpenModal } = useModal();
   const [loader, setLoader] = useState(false);
   const [userData, setUserData] = useState<IUserData>(sampleIUserData);
   const [errorData, setErrorData] = useState<IResponseError>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (user) {
@@ -52,6 +56,7 @@ const ProfileForm = () => {
           success: true,
         });
       }
+      void dispatch(getUser());
     } catch (e: unknown) {
       const loginError = e as IResponseError;
       const loginErrorList = Object.keys(loginError.errors);
@@ -70,6 +75,9 @@ const ProfileForm = () => {
       // TODO: сделать сюда красивую модалку
       if (confirm('Вы изменили email, сохранить новый? Или вы хотите подтвердить старый?')) {
         // TODO: наверное сюда не очень хорошо отправлять этот 'e' но может и похуй, проверить стоит
+
+        // TODO: так же сделать проверку на то что в ответе нет ошибок,
+        // ( если почта занята то будет 200ый ответ но в нем внутри ошибки, так как остальные данные заменяются )
         void sendData(e);
       }
     }
@@ -77,12 +85,9 @@ const ProfileForm = () => {
       e.preventDefault();
       setLoader(true);
       const fid = await getVisitorId();
-      await doVerifyEmailSendApi({ fid });
-      // doOpenModal('verification-email');
-
-      // TODO: затем мы открываем модалку подтвердите адрес электронной почты
-      // открываем его но там еще должен быть инпут введите код из почтового письма
-      // мы должны отправить код с хешем  ( console.log(resp?.hash))
+      const data = await doVerifyEmailSendApi({ fid });
+      doSetVerifyHash(data.hash);
+      doOpenModal('verification-email');
     } catch (e: unknown) {
       /* empty */
     } finally {
@@ -181,15 +186,16 @@ const ProfileForm = () => {
             isError={!!errorData?.errors['email']}
             message={ErrorResponseAsString('email', 'Введите корректный email', errorData)}
           />
-          {/* ПРИ НАЖАТИИ ПРОВЕРЯЕТ НА ТО ИЗМЕНЕНО ИЛИ НЕТ ТЕКУЩЕЕ ПОЛЕ И ПОТОМ ОТКРЫВАЕТ МОДАЛКУ */}
-          <Button
-            elType="outlined"
-            className={styles.email_button}
-            onClick={(e) => void verifyEmail(e)}
-            type="button"
-          >
-            Подтвердить электронную почту
-          </Button>
+          {!user?.data.email_verified_at && (
+            <Button
+              elType="outlined"
+              className={styles.email_button}
+              onClick={(e) => void verifyEmail(e)}
+              type="button"
+            >
+              Подтвердить электронную почту
+            </Button>
+          )}
         </div>
       )}
       {settings?.profile.has_phone && (

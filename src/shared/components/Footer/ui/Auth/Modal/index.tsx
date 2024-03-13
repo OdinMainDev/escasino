@@ -4,9 +4,6 @@ import AuthRegisterModal from '@/features/Auth/ui/Register';
 import AuthResetModal from '@/features/Auth/ui/Reset';
 import AuthResetFormSetPasswordModal from '@/features/Auth/ui/ResetSetPassword';
 import AuthResetSetPasswordCompleteModal from '@/features/Auth/ui/ResetSetPasswordComplete';
-// import AuthResetModal from '@/features/Auth/ui/Reset';
-// import AuthResetModal from '@/features/Auth/ui/ResetSendComplete';
-// import AuthResetModal from '@/features/Auth/ui/ResetSetPassword';
 
 const FooterAuthModals = () => {
   const { doOpenModal, doCloseModals } = useModal();
