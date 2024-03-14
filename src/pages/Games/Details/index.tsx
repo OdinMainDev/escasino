@@ -10,12 +10,14 @@ import { getGameApi } from '@/app/api/games/getGameById';
 import GoBackButton from '@/shared/components/GoBackButton';
 import Icons from '@/shared/components/Icons';
 import Button from '@/shared/components/Button';
-import { Footer, FooterHidden } from '@/widgets/Footer';
 import { WinningsList } from '@/widgets/WinningsList';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { useRouter } from '@/shared/helpers/navigation';
 import { useModal } from '@/app/providers/ModalProvider';
+import Footer from '@/widgets/Footer';
+import { useAppSelector } from '@/store/hooks/redux';
+import ModalZeroBalance from './ui/ModalZeroBalance';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
@@ -23,7 +25,8 @@ const Details = () => {
   const { hidePreloader } = usePreloader();
   const { isAuth } = useAuthProvider();
   const router = useRouter();
-  const { doOpenModal } = useModal();
+  const { doOpenModal, doCloseModals } = useModal();
+  const { user } = useAppSelector((state) => state.userReducer);
 
   useEffect(() => {
     const getGameById = async () => {
@@ -41,6 +44,10 @@ const Details = () => {
 
   const openRealPlay = () => {
     if (isAuth) {
+      if (user?.balance.balance_bonus == 0 && user?.balance.balance_real == 0) {
+        doOpenModal('play-real-zero-balance');
+        return;
+      }
       router.push('/play/real/' + id);
       return;
     }
@@ -100,7 +107,8 @@ const Details = () => {
           biggest ones.
         </div>
       </div>
-      {isAuth ? <Footer /> : <FooterHidden />}
+      <Footer isHidden={!isAuth} />
+      <ModalZeroBalance close={doCloseModals} gameId={game?.id} />
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 
 import styles from './styles.module.scss';
-import { Header } from '@/widgets/Header';
-import { Footer } from '@/widgets/Footer';
+import Header from '@/widgets/Header';
+import Footer from '@/widgets/Footer';
 
 interface IProps {
   children: ReactNode;

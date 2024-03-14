@@ -9,14 +9,12 @@ import Button from '@/shared/components/Button';
 import Switch from '@/shared/components/Switch';
 import { usePreloader } from '@/app/providers/PreloaderProvider';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
-import { useNavigate } from 'react-router-dom';
 
 const Filter = () => {
   const { setFilters, getFilters } = useGamesFilters();
   const router = useRouter();
   const { hidePreloader } = usePreloader();
   const [withBonuses, setWithBonuses] = useState<boolean>(getFilters().is_game_avail_for_bonus);
-  const navigate = useNavigate();
   const [isReseted, setIsReseted] = useState<boolean>(false);
 
   const selectCategory = useCallback((selectedCategory: string) => {
@@ -69,9 +67,6 @@ const Filter = () => {
       setIsReseted(false);
     }, 1);
     // setIsReseted(false);
-    //
-    return;
-    navigate(-1);
   };
 
   hidePreloader();

@@ -6,6 +6,7 @@ import { useAppSelector } from '@/store/hooks/redux';
 import { IGame } from '@/entities/game';
 import { TopGames } from '@/widgets/Games/ui/TopGames';
 import { GamesGrid } from '@/widgets/Games/ui/Grid';
+import IndexLayout from '@/shared/ui/home';
 
 export default function Home() {
   const { games } = useAppSelector((state) => state.homeGamesReducer);
@@ -19,7 +20,7 @@ export default function Home() {
 
   hidePreloader();
   return (
-    <div>
+    <IndexLayout>
       {themeHasTopGames ? (
         <div className={styles.top_games}>
           <TopGames games={topGamesGrid} />
@@ -30,6 +31,6 @@ export default function Home() {
       <div className={styles.games_table}>
         <GamesGrid games={gamesGrid} />
       </div>
-    </div>
+    </IndexLayout>
   );
 }

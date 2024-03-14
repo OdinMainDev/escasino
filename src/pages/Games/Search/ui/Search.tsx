@@ -9,6 +9,7 @@ import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 import { useQuery } from '@/shared/helpers/navigation';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import IndexLayout from '@/shared/ui/home';
 
 export default function Search() {
   const [games, setGames] = useState<IGame[]>([]);
@@ -42,7 +43,7 @@ export default function Search() {
 
   // TODO: сделать в хидере или где то кнопку дополнительную, что сбросить поиск по тексту или фильтры ( тут надо тебе подумать надо ли )
   return (
-    <div>
+    <IndexLayout>
       <div className={styles.games_table}>
         {games?.length > 0 ? (
           <GamesGrid games={games} />
@@ -50,6 +51,6 @@ export default function Search() {
           <div className={styles.not_found}>По вашему запросу ничего не найдено</div>
         )}
       </div>
-    </div>
+    </IndexLayout>
   );
 }

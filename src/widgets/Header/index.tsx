@@ -1,13 +1,21 @@
 'use client';
 import React, { KeyboardEvent, useState } from 'react';
-import styles from './Header.module.scss';
-import { ChatIcon, FilterIcon } from './Icons';
+
+import styles from './styles.module.scss';
+import FilterIcon from './ui/FilterIcon';
+import ChatIcon from './ui/ChatIcon';
+
 import { usePathname, useRouter } from '@/shared/helpers/navigation';
 import GoBackButton from '@/shared/components/GoBackButton';
 import Input from '@/shared/components/Input';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 
-const Header = () => {
+type HeaderProps = {
+  hasNotSearch?: boolean;
+  hasTitle?: string;
+};
+
+const Header = ({ hasNotSearch, hasTitle }: HeaderProps) => {
   const { getFilters, countActiveKeys } = useGamesFilters();
   const [filterVal, setFilterVal] = useState<string>(getFilters().query);
   const router = useRouter();
@@ -21,6 +29,9 @@ const Header = () => {
 
   // TODO: сделать кнопку поиска ( иконку лупу ) нажимаемой
   const searchGames = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (hasNotSearch) {
+      return;
+    }
     if (event.key === 'Enter') {
       if (pathname == '/' && filterVal == '') {
         return;
@@ -41,15 +52,19 @@ const Header = () => {
     <div className={styles.container}>
       <div className={styles.search}>
         <GoBackButton className={styles.back} customPath="/" />
-        <Input
-          placeholder="Поиск игры"
-          elType="search"
-          onKeyDown={searchGames}
-          containerClassName={styles.input}
-          elSize="s"
-          value={filterVal}
-          onChange={(e) => setFilterVal(() => e.target.value)}
-        />
+        {!hasNotSearch && (
+          <Input
+            placeholder="Поиск игры"
+            elType="search"
+            onKeyDown={searchGames}
+            containerClassName={styles.input}
+            elSize="s"
+            value={filterVal}
+            onChange={(e) => setFilterVal(() => e.target.value)}
+          />
+        )}
+
+        {hasTitle && <div className={styles.title}>{hasTitle}</div>}
         <div className={styles.icons_list}>
           <div className={styles.icon} onClick={clickFilter}>
             <FilterIcon quantity={availKeys} />

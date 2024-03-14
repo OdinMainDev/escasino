@@ -12,18 +12,18 @@ import { HomeGames } from './providers/pages';
 import { ErrorCountry, ErrorUnavailable, Error404 } from '@/pages/Error';
 import GameCategoriesProvider from './providers/pages/GameCategories';
 import GameProvidersProvider from './providers/pages/GameProviders';
-import IndexLayout from '@/shared/ui/home';
 import GamesSearch from '@/pages/Games/Search';
 import Details from '@/pages/Games/Details';
+import AuthGuardProvider from './providers/pages/AuthGuard';
+import Demo from '@/pages/Play/Demo';
+import Real from '@/pages/Play/Real';
 
 const availRoutes: RouteObject[] = [
   {
     path: '',
     element: (
       <HomeGames>
-        <IndexLayout>
-          <Home />
-        </IndexLayout>
+        <Home />
       </HomeGames>
     ),
   },
@@ -36,11 +36,7 @@ const availRoutes: RouteObject[] = [
       },
       {
         path: 'search',
-        element: (
-          <IndexLayout>
-            <GamesSearch />
-          </IndexLayout>
-        ),
+        element: <GamesSearch />,
       },
       {
         path: 'filter',
@@ -59,7 +55,26 @@ const availRoutes: RouteObject[] = [
     ],
   },
   {
+    path: 'play',
+    children: [
+      {
+        path: 'demo/:id',
+        element: <Demo />,
+      },
+      {
+        path: 'real/:id',
+        element: <Real />,
+      },
+      {
+        path: ':id',
+        element: <Details />,
+      },
+    ],
+  },
+
+  {
     path: 'profile',
+    element: <AuthGuardProvider />,
     children: [
       {
         path: '',
