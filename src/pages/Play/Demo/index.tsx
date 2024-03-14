@@ -10,12 +10,16 @@ import { getDemoApi } from '@/app/api/play/getDemo';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { getGameApi } from '@/app/api/games/getGameById';
 import { useRouter } from '@/shared/helpers/navigation';
-// import { isAppDebug } from '@/app/config/app';
+import { isAppDebug } from '@/app/config/app';
+import Loader from '@/shared/components/Loader';
+import ModalOpenReal from './ui/ModalOpenReal';
+import { useModal } from '@/app/providers/ModalProvider';
 
 export default function Demo() {
   const [demoUrl, setDemoUrl] = useState<string>('');
   const [headerTitle, setHeaderTitle] = useState<string>('');
   const { id } = useParams();
+  const { doOpenModal, doCloseModals } = useModal();
   const { isAuth } = useAuthProvider();
   const router = useRouter();
 
@@ -23,6 +27,10 @@ export default function Demo() {
     const getDemo = async () => {
       const isMobile = true;
       const data = await getDemoApi(Number(id), isAuth, isMobile);
+      if (isAppDebug) {
+        const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+        await sleep(5000);
+      }
       if (data.status > 200) {
         router.push('/');
         return;
@@ -35,23 +43,33 @@ export default function Demo() {
       setHeaderTitle(data.game?.name ?? '');
     };
 
+    setTimeout(
+      () => {
+        doOpenModal('play-demo-open-real');
+      },
+      isAppDebug ? 10000 : 90000,
+    );
+
     void getDemo();
     void getHeader();
   }, []);
 
   return (
     <GameLayout gameTitle={headerTitle}>
-      <div className={styles.games_table}>
-        {!demoUrl || demoUrl == '' ? (
-          <div className={styles.not_found}>
-            TODO: Идет загрузка игры тут прелоадер или что то такое
-          </div>
-        ) : (
-          <div className={styles.game_frame}>
-            <iframe src={demoUrl} />
-          </div>
-        )}
-      </div>
+      <>
+        <div className={styles.games_table}>
+          {!demoUrl || demoUrl == '' ? (
+            <div className={styles.not_found}>
+              <Loader />
+            </div>
+          ) : (
+            <div className={styles.game_frame}>
+              <iframe src={demoUrl} />
+            </div>
+          )}
+        </div>
+        <ModalOpenReal close={doCloseModals} gameId={parseInt(id ?? '0')} />
+      </>
     </GameLayout>
   );
 }

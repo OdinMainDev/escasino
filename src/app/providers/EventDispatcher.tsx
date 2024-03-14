@@ -6,6 +6,7 @@ import { usePathname } from '@/shared/helpers/navigation';
 import { getUser } from '@/store/slices/userSlice';
 import { useAppDispatch } from '@/store/hooks/redux';
 import { useGamesFilters } from './pages/GamesFilter';
+import { useModal } from './ModalProvider';
 
 interface EventDispatcherProviderProps {
   children: ReactNode;
@@ -15,6 +16,7 @@ interface EventDispatcherProviderProps {
 export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = ({ children }) => {
   const pathname = usePathname();
   const { isAuth } = useAuthProvider();
+  const { doCloseModals } = useModal();
   const dispatch = useAppDispatch();
   const { getFilters, setFilters } = useGamesFilters();
 
@@ -22,7 +24,6 @@ export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = (
   // если авторизован человек то при каждом обновлении страницы делаем запрос к getMe
   useEffect(() => {
     if (isAuth) {
-      // TODO: желательно убрать void чтобы было асинхронно
       void dispatch(getUser());
     }
     if (pathname != '/games/filter' && pathname != '/games/search') {
@@ -33,6 +34,7 @@ export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = (
       newFilters.query = '';
       setFilters(newFilters);
     }
+    doCloseModals();
   }, [pathname, isAuth]);
 
   return <>{children}</>;
