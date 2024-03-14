@@ -23,17 +23,17 @@ const ModalOpenReal = ({ close, gameId }: IProps) => {
     router.push('/play/real/' + gameId?.toString());
   };
   return (
-    <Modal isOpen={isOpen} close={close}>
+    <Modal isOpen={isOpen}>
       <div className={styles.container}>
         <div className={styles.container}>
           <div>
-            <div className={styles.title}>Может хватит играть в демо?</div>
+            <div className={styles.title}>Не заебался от демо игр?</div>
             <div className={styles.buttons_container}>
               <Button elType="outlined" className={styles.button} onClick={close}>
                 Вернутся
               </Button>
               <Button className={styles.button} onClick={openGame}>
-                На реал
+                Уйти в реал
               </Button>
             </div>
           </div>
