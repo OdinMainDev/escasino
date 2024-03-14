@@ -1,27 +1,27 @@
 {
   "env": {
-    "browser": true,
-    "es6": true,
-    "jest": true
+      "browser": true,
+      "es2021": true
   },
   "extends": [
-    "next/core-web-vitals",
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "parserOptions": {
-    "project": "./tsconfig.json"
+      "project": "./tsconfig.json"
   },
   "plugins": [
-    "react",
-    "react-hooks",
-    "@typescript-eslint",
-    "prettier"
-  ],
+      "react",
+      "react-hooks",
+      "@typescript-eslint",
+      "prettier"
+    ],
+  "parser": "@typescript-eslint/parser",
   "rules": {
     "react/react-in-jsx-scope": "off",
     "indent": "off",
@@ -42,7 +42,7 @@
   },
   "settings": {
     "react": {
-      "version": "detect"
+    "version": "detect"
     }
   }
 }

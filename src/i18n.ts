@@ -1,14 +1,25 @@
-import { notFound } from 'next/navigation';
-import { getRequestConfig } from 'next-intl/server';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
 
-const locales = ['en', 'ru'];
+import translationEN from '@/app/assets/locales/en/translation.json';
+import translationRU from '@/app/assets/locales/ru/translation.json';
 
-export default getRequestConfig(async ({ locale }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  if (!locales.includes(locale)) notFound();
+const resources = {
+  en: {
+    translation: translationEN,
+  },
+  ru: {
+    translation: translationRU,
+  },
+};
 
-  return {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-    messages: (await import(`../messages/${locale}.json`)).default,
-  };
+void i18n.use(initReactI18next).init({
+  resources,
+  lng: 'ru',
+  fallbackLng: 'ru',
+  interpolation: {
+    escapeValue: false,
+  },
 });
+
+export default i18n;

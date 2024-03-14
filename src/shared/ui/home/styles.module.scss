@@ -1,0 +1,14 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.top_games {
+  margin-bottom: 30px;
+}
+
+.games_table {
+  flex: 1;
+}

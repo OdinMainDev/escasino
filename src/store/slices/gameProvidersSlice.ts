@@ -1,0 +1,52 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { ISlice, ParentFilled, ParentPending, ParentRejected } from './slices';
+import { IResponseGameProviders, getGameProvidersApi } from '@/app/api/games/getGameProviders';
+import { IProvider } from '@/entities/providers';
+
+export interface IInitialGameProviders extends ISlice {
+  providers: IProvider[] | null;
+  status: number;
+}
+
+const initialState: IInitialGameProviders = {
+  isFinished: false,
+  loading: false,
+  hasError: false,
+  providers: null,
+  status: 0,
+};
+
+export const getGameProviders = createAsyncThunk<
+  IResponseGameProviders,
+  void,
+  { rejectValue: IResponseGameProviders }
+>('getGameProvidersApi', async (_gameProviders, { rejectWithValue }) => {
+  const data = await getGameProvidersApi();
+  if (data.status != 200) {
+    return rejectWithValue(data);
+  }
+  return data;
+});
+
+export const gameProvidersSlice = createSlice({
+  name: 'gameProviders',
+  initialState: initialState,
+  extraReducers: (builder) => {
+    builder.addCase(getGameProviders.pending, (state) => {
+      ParentPending(state);
+    });
+    builder.addCase(getGameProviders.fulfilled, (state, action) => {
+      ParentFilled(state);
+      state.status = action.payload?.status ?? 200;
+      state.providers = action.payload?.providers ?? null;
+    });
+    builder.addCase(getGameProviders.rejected, (state, action) => {
+      ParentRejected(state);
+      state.status = action?.payload?.status ?? 500;
+      state.providers = action?.payload?.providers ?? null;
+    });
+  },
+  reducers: {},
+});
+
+export default gameProvidersSlice.reducer;

@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import './variables';
+@import 'slick-carousel/slick/slick.css';
+@import 'slick-carousel/slick/slick-theme.css';
+
+* {
+  font-family: "Montserrat", sans-serif;
+}
+
+body {
+  background: var(--background);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-title-main);
+}
+
+.header_title {
+  color: var(--Text-primary);
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+}

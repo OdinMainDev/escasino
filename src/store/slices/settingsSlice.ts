@@ -1,16 +1,36 @@
-import { getSettingsApi } from '@/shared/api/settingsApi';
-import { ISettings } from '@/shared/models/interfaces/settings';
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { IInitialSettings } from '../models/settings';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+// import Cookies from 'js-cookie';
+import { ParentPending, ParentFilled, ParentRejected, ISlice } from './slices';
+import { ISettings } from '@/entities/settings';
+import { IResponseSettings, getSettingsApi } from '@/app/api/core/getSettings';
+import { isAppDebug } from '@/app/config/app';
+
+export interface IInitialSettings extends ISlice {
+  settings: ISettings | null;
+  status: number;
+}
 
 const initialState: IInitialSettings = {
+  isFinished: false,
   loading: false,
+  hasError: false,
   settings: null,
-  isError: false,
+  status: 0,
 };
 
-export const getSettings = createAsyncThunk('getSettings', async () => {
+export const getSettings = createAsyncThunk<
+  IResponseSettings,
+  void,
+  { rejectValue: IResponseSettings }
+>('getSettingsApi', async (_settings, { rejectWithValue }) => {
   const data = await getSettingsApi();
+  if (isAppDebug) {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    await sleep(5000);
+  }
+  if (data.status != 200) {
+    return rejectWithValue(data);
+  }
   return data;
 });
 
@@ -19,17 +39,21 @@ export const settingsSlice = createSlice({
   initialState: initialState,
   extraReducers: (builder) => {
     builder.addCase(getSettings.pending, (state) => {
-      state.loading = true;
+      ParentPending(state);
     });
-    builder.addCase(getSettings.fulfilled, (state, action: PayloadAction<ISettings | null>) => {
-      state.loading = false;
-      state.settings = action.payload;
+    builder.addCase(getSettings.fulfilled, (state, action) => {
+      ParentFilled(state);
+      state.status = action.payload?.status ?? 200;
+      state.settings = action.payload?.settings ?? null;
     });
-    builder.addCase(getSettings.rejected, (state) => {
-      state.isError = true;
+    builder.addCase(getSettings.rejected, (state, action) => {
+      ParentRejected(state);
+      state.settings = action?.payload?.settings ?? null;
+      state.status = action?.payload?.status ?? 500;
     });
   },
   reducers: {},
 });
 
+// export const { logout, setIsAuth, setRole } = settingsSlice.actions;
 export default settingsSlice.reducer;

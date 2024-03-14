@@ -1,13 +1,13 @@
 'use client';
 
-import { useRouter } from '@/shared/hooks/navigation';
+import { useRouter } from '@/shared/helpers/navigation';
 import styles from './Icon.module.scss';
 
 const UserIcon = () => {
   const router = useRouter();
 
   const openProfile = () => {
-    router.push('/profile');
+    router.push('profile');
   };
 
   return (

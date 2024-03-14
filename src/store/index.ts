@@ -1,3 +1,3 @@
-import { Providers } from './ui/Providers';
+import { Providers } from './ui/Provider';
 
 export { Providers };

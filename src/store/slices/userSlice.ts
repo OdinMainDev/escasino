@@ -1,53 +1,57 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getMeUserApi } from '@/shared/api/userApi';
-import { checkAuthUserApi } from '@/shared/api/checkAuthApi';
-import { IInitialUser } from '../models/user';
-import Cookies from 'js-cookie';
-import { IUser } from '@/shared/models/interfaces/user';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { ISlice, ParentFilled, ParentPending, ParentRejected } from './slices';
+import { isAppDebug } from '@/app/config/app';
+import { IUser } from '@/entities/user';
+import { IResponseUser, getUserApi } from '@/app/api/user/getUser';
+
+export interface IInitialUser extends ISlice {
+  user: IUser | null;
+  status: number;
+}
 
 const initialState: IInitialUser = {
+  isFinished: false,
   loading: false,
-  isError: false,
-  isAuth: false,
+  hasError: false,
   user: null,
+  status: 0,
 };
 
-export const getMeUser = createAsyncThunk('getMeUserApi', async () => {
-  const user = await getMeUserApi();
-  return user;
-});
-
-export const checkAuthUser = createAsyncThunk('checkAuthUserApi', async () => {
-  const api = await checkAuthUserApi();
-  return api;
-});
+export const getUser = createAsyncThunk<IResponseUser, void, { rejectValue: IResponseUser }>(
+  'getUserApi',
+  async (_user, { rejectWithValue }) => {
+    const data = await getUserApi();
+    if (isAppDebug) {
+      const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+      await sleep(5000);
+    }
+    if (data.status != 200) {
+      return rejectWithValue(data);
+    }
+    return data;
+  },
+);
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: initialState,
   extraReducers: (builder) => {
-    builder.addCase(getMeUser.pending, (state) => {
-      state.loading = true;
+    builder.addCase(getUser.pending, (state) => {
+      ParentPending(state);
     });
-    builder.addCase(getMeUser.fulfilled, (state, action: PayloadAction<IUser | null>) => {
-      state.loading = false;
-      if (action.payload) {
-        state.isAuth = true;
-      }
-      state.user = action.payload;
+    builder.addCase(getUser.fulfilled, (state, action) => {
+      ParentFilled(state);
+      state.status = action.payload?.status ?? 200;
+      state.user = action.payload?.user ?? null;
     });
-    builder.addCase(getMeUser.rejected, (state) => {
-      state.isError = true;
+    builder.addCase(getUser.rejected, (state, action) => {
+      ParentRejected(state);
+      state.user = action.payload?.user ?? null;
+      state.status = action?.payload?.status ?? 500;
     });
   },
-  reducers: {
-    logout(state) {
-      state.isAuth = false;
-      state.user = null;
-      Cookies.remove('token');
-    },
-  },
+  reducers: {},
 });
 
-export const { logout } = userSlice.actions;
+// export const { logout, setIsAuth, setRole } = userSlice.actions;
 export default userSlice.reducer;

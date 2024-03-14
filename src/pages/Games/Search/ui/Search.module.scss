@@ -1,0 +1,19 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.games_table {
+  flex: 1;
+}
+
+.not_found {
+  padding-top: 25%;
+  padding-bottom: 25%;
+  padding-left: 2%;
+  padding-right: 2%;
+  gap: 24px;
+  text-align: center;
+}

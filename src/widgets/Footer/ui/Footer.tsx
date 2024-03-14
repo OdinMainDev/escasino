@@ -1,37 +1,57 @@
-'use client';
-
-import { AuthFooter, AuthModal } from '@/widgets/Auth';
+import { FooterAuthButtons, FooterAuthModal } from './Auth';
 import styles from './Footer.module.scss';
-import { useAppSelector } from '@/shared/hooks/redux';
-import Select from './Select';
+import FooterSelect from './FooterSelect';
 import { UserIcon, Wallet } from './Icons';
-import Loader from '@/shared/ui/Loader';
+import { useAuthProvider } from '@/app/providers/AuthProvider';
+import Loader from '@/shared/components/Loader';
 
-const Footer = () => {
-  const { isAuth, loading } = useAppSelector((state) => state.userReducer);
+type FooterProps = {
+  isHidden?: boolean;
+};
+
+export const Footer = ({ isHidden }: FooterProps) => {
+  const { isAuth, loading } = useAuthProvider();
+  if (loading) {
+    return footerLoading();
+  }
+
+  if (isHidden) {
+    return (
+      <>
+        <FooterAuthModal />
+      </>
+    );
+  }
   return (
     <div className={styles.container}>
-      {isAuth ? (
-        <div className={styles.footer}>
-          <Select />
-          <div className={styles.icons}>
-            <UserIcon />
-            <Wallet />
+      <div className={styles.footer}>
+        {isAuth ? (
+          // Меню если авторизован
+          <div className={styles.footer}>
+            <FooterSelect />
+            <div className={styles.icons}>
+              <UserIcon />
+              <Wallet />
+            </div>
           </div>
-        </div>
-      ) : (
-        <>
-          <AuthFooter />
-          <AuthModal />
-        </>
-      )}
-      {loading && (
-        <div className={styles.loading}>
-          <Loader />
-        </div>
-      )}
+        ) : (
+          // Меню если не авторизован
+          <>
+            <FooterAuthButtons />
+            <FooterAuthModal />
+          </>
+        )}
+      </div>
     </div>
   );
 };
 
-export default Footer;
+const footerLoading = () => {
+  return (
+    <div className={styles.container}>
+      <div className={styles.footer}>
+        <Loader />
+      </div>
+    </div>
+  );
+};
