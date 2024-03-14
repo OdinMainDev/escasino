@@ -10,6 +10,7 @@ import GamesFilter from '@/pages/Games/Filter';
 // import Search from '@/pages/Search/Results/ui/Search';
 import { HomeGames } from './providers/pages';
 import { ErrorCountry, ErrorUnavailable, Error404 } from '@/pages/Error';
+import GameCageroriesProvider from './providers/pages/GameCategories';
 
 const availRoutes: RouteObject[] = [
   {
@@ -29,6 +30,14 @@ const availRoutes: RouteObject[] = [
       // },
       {
         path: 'filter',
+        element: (
+          <GameCageroriesProvider>
+            <GamesFilter />
+          </GameCageroriesProvider>
+        ),
+      },
+      {
+        path: 'bugpage',
         element: <GamesFilter />,
       },
     ],

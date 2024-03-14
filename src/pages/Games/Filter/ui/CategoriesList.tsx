@@ -1,9 +1,9 @@
+import { useAppSelector } from '@/store/hooks/redux';
 import { useEffect, useState } from 'react';
-// import { getCategoriesApi } from '../api/categoriesApi';
-// import { ICategory } from '@/entities/interfaces/categories';
 
-// import styles from './CategoriesList.module.scss';
-// import { TabItem } from '@/entities/TabItem';
+import styles from './CategoriesList.module.scss';
+import { TabItem } from '@/shared/components/TabItem';
+import Loader from '@/shared/components/Loader';
 
 interface IProps {
   selectedCategories: string[];
@@ -11,37 +11,34 @@ interface IProps {
 }
 
 const CategoriesList = ({ selectedCategories, selectCategory }: IProps) => {
-  return '';
-  // const [categories, setCategories] = useState<ICategory[]>([]);
-  // const [loading, setLoading] = useState<boolean>(true);
-  // useEffect(() => {
-  //   const getCategories = async () => {
-  //     setLoading(true);
-  //     const categories = await getCategoriesApi();
-  //     setLoading(false);
-  //     setCategories(categories);
-  //   };
+  const { categories, loading } = useAppSelector((state) => state.gameCategoriesReducer);
+  const [loader, setLoader] = useState<boolean>(true);
 
-  //   void getCategories();
-  // }, []);
+  useEffect(() => {
+    if (!loading) {
+      setLoader(false);
+    }
+  }, [loading]);
 
-  // return (
-  //   <div className={styles.container}>
-  //     {loading
-  //       ? Array(8)
-  //           .fill(0)
-  //           .map((item, index) => <TabItem skeleton={true} key={index}></TabItem>)
-  //       : categories.map((item) => (
-  //           <TabItem
-  //             onClick={() => selectCategory(item.url)}
-  //             selected={selectedCategories.includes(item.url)}
-  //             key={item.url}
-  //           >
-  //             {item.data.texts.find((item) => item.language.toLocaleLowerCase() === 'ru')?.value}
-  //           </TabItem>
-  //         ))}
-  //   </div>
-  // );
+  return (
+    <div className={styles.container}>
+      {loader || loading ? (
+        <div className={styles.loader_container}>
+          <Loader />
+        </div>
+      ) : (
+        categories?.map((item) => (
+          <TabItem
+            onClick={() => selectCategory(item.url)}
+            selected={selectedCategories.includes(item.url)}
+            key={item.url}
+          >
+            {item.data.texts.find((item) => item.language.toLocaleLowerCase() === 'ru')?.value}
+          </TabItem>
+        ))
+      )}
+    </div>
+  );
 };
 
 export default CategoriesList;

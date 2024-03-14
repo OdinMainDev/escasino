@@ -2,7 +2,6 @@ import { usePathname, useQuery, useRouter } from '@/shared/helpers/navigation';
 import styles from './Filter.module.scss';
 import { useCallback, useEffect, useState } from 'react';
 import { IFilter } from '@/app/api/games/getSearchGames';
-import { countActiveKeys } from '../helpers/countActiveKeys';
 import CategoriesList from './CategoriesList';
 import ProviderList from './ProviderList';
 import Button from '@/shared/components/Button';
@@ -15,7 +14,6 @@ const Filter = () => {
     categories: searchParams.getAll('categories[]') ?? [],
     providers: searchParams.getAll('providers[]') ?? [],
     is_game_avail_for_bonus: searchParams.get('is_game_avail_for_bonus') == 'true' ?? false,
-    distinct_filters: true,
     query: searchParams.get('query') ?? '',
   });
   const router = useRouter();
@@ -74,7 +72,6 @@ const Filter = () => {
         'categories[]': filter.categories,
         'providers[]': filter.providers,
         is_game_avail_for_bonus: filter.is_game_avail_for_bonus,
-        distinct_filters: filter.distinct_filters,
       },
     });
   };

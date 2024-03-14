@@ -8,8 +8,8 @@ interface IProps {
 
 interface IGamesFiltersContext {
   filters: IFilter | null;
-  setFilters: (filters: IFilter[]) => void;
-  getFilters: () => IFilter[];
+  setFilters: (filters: IFilter) => void;
+  getFilters: () => IFilter;
   setFiltersQuantity: (quantity: number) => void;
   getFiltersQuantity: () => number;
   clearFilters: () => void;
@@ -19,7 +19,7 @@ const GamesFiltersContext = createContext<IGamesFiltersContext>({
   filters: null,
   setFilters: () => {},
   getFilters: () => {
-    return [];
+    return simpleIFilter;
   },
   setFiltersQuantity: () => {},
   getFiltersQuantity: () => {
@@ -36,13 +36,25 @@ export const useGamesFilters = () => {
   return context;
 };
 
+export const simpleIFilter = {
+  categories: [],
+  providers: [],
+  is_game_avail_for_bonus: false,
+  query: '',
+};
+
 const GamesFilterProvider = ({ children }: IProps) => {
-  const [filters, setFiltersState] = useState<IFilter>(null);
+  const [filters, setFiltersState] = useState<IFilter>(simpleIFilter);
   const [filtersQuantity, setFiltersQuantityState] = useState<number>(0);
 
   const setFilters = (newFilters: IFilter) => {
     setFiltersState(newFilters);
-    setFiltersQuantityState(newFilters.length);
+    setFiltersQuantityState(
+      newFilters.categories.length +
+        newFilters.providers.length +
+        (newFilters.is_game_avail_for_bonus ? 1 : 0) +
+        (newFilters.query.length > 0 ? 1 : 0),
+    );
   };
 
   const getFilters = () => filters;
@@ -54,7 +66,7 @@ const GamesFilterProvider = ({ children }: IProps) => {
   const getFiltersQuantity = () => filtersQuantity;
 
   const clearFilters = () => {
-    setFiltersState([]);
+    setFiltersState(simpleIFilter);
     setFiltersQuantityState(0);
   };
 
