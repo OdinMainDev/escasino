@@ -4,10 +4,8 @@ import { themeHasTopGames } from '@/app/config/appearance';
 import { usePreloader } from '@/app/providers/PreloaderProvider';
 import { useAppSelector } from '@/store/hooks/redux';
 import { IGame } from '@/entities/game';
-import { Header } from '@/widgets/Header';
 import { TopGames } from '@/widgets/Games/ui/TopGames';
 import { GamesGrid } from '@/widgets/Games/ui/Grid';
-import { Footer } from '@/widgets/Footer';
 
 export default function Home() {
   const { games } = useAppSelector((state) => state.homeGamesReducer);
@@ -21,10 +19,7 @@ export default function Home() {
 
   hidePreloader();
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <Header />
-      </div>
+    <div>
       {themeHasTopGames ? (
         <div className={styles.top_games}>
           <TopGames games={topGamesGrid} />
@@ -35,7 +30,6 @@ export default function Home() {
       <div className={styles.games_table}>
         <GamesGrid games={gamesGrid} />
       </div>
-      <Footer />
     </div>
   );
 }

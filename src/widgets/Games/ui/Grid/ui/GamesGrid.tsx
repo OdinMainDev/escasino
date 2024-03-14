@@ -1,4 +1,4 @@
-import { IGame } from '@/entities/Game';
+import { IGame } from '@/entities/game';
 import styles from './GamesGrid.module.scss';
 import { GridItem } from '@/widgets/Games/ui/GridItem';
 
@@ -9,7 +9,6 @@ interface IProps {
 const GamesGrid = ({ games }: IProps) => {
   return (
     <div className={styles.container}>
-      {/* <div className={classNames('title', styles.title)}>Games</div> */}
       <div className={styles.table}>
         {games.map((item) => (
           <div className={styles.game} key={item.id}>

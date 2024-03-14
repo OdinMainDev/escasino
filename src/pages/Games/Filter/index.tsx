@@ -12,7 +12,7 @@ import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 import { useNavigate } from 'react-router-dom';
 
 const Filter = () => {
-  const { setFilters, getFilters, countActiveKeys, setFiltersQuantity } = useGamesFilters();
+  const { setFilters, getFilters } = useGamesFilters();
   const router = useRouter();
   const { hidePreloader } = usePreloader();
   const [withBonuses, setWithBonuses] = useState<boolean>(getFilters().is_game_avail_for_bonus);
@@ -52,7 +52,6 @@ const Filter = () => {
   }, []);
 
   const applyFilters = () => {
-    setFiltersQuantity(countActiveKeys(getFilters()));
     router.push({
       pathname: '/games/search',
     });

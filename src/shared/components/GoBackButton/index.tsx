@@ -5,17 +5,22 @@ import Icons from '@/shared/components/Icons';
 
 interface IProps {
   className?: string;
+  customPath?: string | undefined;
 }
 
-const GoBackButton = ({ className }: IProps) => {
+const GoBackButton = ({ className, customPath }: IProps) => {
   const navigate = useNavigate();
   const pathname = usePathname();
 
   const goBack = () => {
+    if (customPath) {
+      navigate(customPath);
+      return;
+    }
     navigate(-1);
   };
 
-  if (pathname == '/' || pathname == '') {
+  if (pathname == '/') {
     return null;
   }
 

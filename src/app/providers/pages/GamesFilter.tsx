@@ -11,8 +11,6 @@ interface IGamesFiltersContext {
   setFilters: (updates: Partial<IFilter>) => void;
   getFilters: () => IFilter;
   countActiveKeys: (obj: IFilter) => number;
-  setFiltersQuantity: (quantity: number) => void;
-  getFiltersQuantity: () => number;
   clearFilters: () => void;
 }
 
@@ -23,10 +21,6 @@ const GamesFiltersContext = createContext<IGamesFiltersContext>({
     return simpleIFilter;
   },
   countActiveKeys: () => 0,
-  setFiltersQuantity: () => {},
-  getFiltersQuantity: () => {
-    return 0;
-  },
   clearFilters: () => {},
 });
 
@@ -47,18 +41,6 @@ export const simpleIFilter = {
 
 const GamesFilterProvider = ({ children }: IProps) => {
   const [filters, setFiltersState] = useState<IFilter>(simpleIFilter);
-  const [filtersQuantity, setFiltersQuantityState] = useState<number>(0);
-
-  // OLD
-  // const setFilters = (newFilters: IFilter) => {
-  //   setFiltersState(newFilters);
-  //   setFiltersQuantityState(
-  //     newFilters.categories.length +
-  //       newFilters.providers.length +
-  //       (newFilters.is_game_avail_for_bonus ? 1 : 0) +
-  //       (newFilters.query.length > 0 ? 1 : 0),
-  //   );
-  // };
 
   const setFilters = (updates: Partial<IFilter>) => {
     setFiltersState((prevFilters: IFilter) => {
@@ -66,31 +48,19 @@ const GamesFilterProvider = ({ children }: IProps) => {
         ...prevFilters,
         ...updates,
       };
-      setFiltersQuantityState(countActiveKeys(newFilters));
       return newFilters;
     });
   };
 
   const countActiveKeys = (newFilters: IFilter): number => {
-    const quantity =
-      (newFilters.categories ? newFilters.categories.length : 0) +
-      (newFilters.providers ? newFilters.providers.length : 0) +
-      (newFilters.is_game_avail_for_bonus ? 1 : 0) +
-      (newFilters.query && newFilters.query.length > 0 ? 1 : 0);
+    const quantity = newFilters.categories.length + 5;
     return quantity;
   };
 
   const getFilters = () => filters;
 
-  const setFiltersQuantity = (quantity: number) => {
-    setFiltersQuantityState(quantity);
-  };
-
-  const getFiltersQuantity = () => filtersQuantity;
-
   const clearFilters = () => {
     setFiltersState(simpleIFilter);
-    setFiltersQuantityState(0);
   };
 
   return (
@@ -100,8 +70,6 @@ const GamesFilterProvider = ({ children }: IProps) => {
         setFilters,
         getFilters,
         countActiveKeys,
-        setFiltersQuantity,
-        getFiltersQuantity,
         clearFilters,
       }}
     >

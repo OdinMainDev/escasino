@@ -4,7 +4,7 @@ import { HTMLAttributes } from 'react';
 
 import styles from './GridItem.module.scss';
 
-import { IGame } from '@/entities/Game';
+import { IGame } from '@/entities/game';
 import { useRouter } from '@/shared/helpers/navigation';
 import { PlaceholderGame } from '@/app/assets/images/Placeholder';
 
@@ -18,7 +18,7 @@ const GridItem = ({ game, ...otherProps }: IProps) => {
     <div
       {...otherProps}
       className={styles.container}
-      onClick={() => router.push(`games/${game.id}`)}
+      onClick={() => router.push(`/games/${game.id}`)}
     >
       {game.image ? (
         <img src={game.image} alt={game.name} className={styles.image} />

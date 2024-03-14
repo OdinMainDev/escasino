@@ -38,7 +38,7 @@ export function usePathname(): string {
     if (langPrefixPattern.test(pathname)) {
       return pathname.replace(langPrefixPattern, '/');
     }
-    return pathname;
+    return pathname == '' ? '/' : pathname;
   }, [pathname]);
 
   return normalizedPathname;

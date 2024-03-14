@@ -12,23 +12,31 @@ import { HomeGames } from './providers/pages';
 import { ErrorCountry, ErrorUnavailable, Error404 } from '@/pages/Error';
 import GameCategoriesProvider from './providers/pages/GameCategories';
 import GameProvidersProvider from './providers/pages/GameProviders';
+import IndexLayout from '@/shared/ui/home';
+import GamesSearch from '@/pages/Games/Search';
 
 const availRoutes: RouteObject[] = [
   {
     path: '',
     element: (
       <HomeGames>
-        <Home />
+        <IndexLayout>
+          <Home />
+        </IndexLayout>
       </HomeGames>
     ),
   },
   {
     path: 'games',
     children: [
-      // {
-      //   path: 'search',
-      //   element: <GamesSearch />,
-      // },
+      {
+        path: 'search',
+        element: (
+          <IndexLayout>
+            <GamesSearch />
+          </IndexLayout>
+        ),
+      },
       {
         path: 'filter',
         element: (
