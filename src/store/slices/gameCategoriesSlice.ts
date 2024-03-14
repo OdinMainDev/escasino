@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ISlice, ParentFilled, ParentPending, ParentRejected } from './slices';
-import { IResponseGameCagerories, getGameCageroriesApi } from '@/app/api/games/getGameCategories';
+import { IResponseGameCategories, getGameCategoriesApi } from '@/app/api/games/getGameCategories';
 import { ICategory } from '@/entities/categories';
 
-export interface IInitialGameCagerories extends ISlice {
+export interface IInitialGameCategories extends ISlice {
   categories: ICategory[] | null;
   status: number;
 }
 
-const initialState: IInitialGameCagerories = {
+const initialState: IInitialGameCategories = {
   isFinished: false,
   loading: false,
   hasError: false,
@@ -16,31 +16,31 @@ const initialState: IInitialGameCagerories = {
   status: 0,
 };
 
-export const getGameCagerories = createAsyncThunk<
-  IResponseGameCagerories,
+export const getGameCategories = createAsyncThunk<
+  IResponseGameCategories,
   void,
-  { rejectValue: IResponseGameCagerories }
->('getGameCageroriesApi', async (_gameCagerories, { rejectWithValue }) => {
-  const data = await getGameCageroriesApi();
+  { rejectValue: IResponseGameCategories }
+>('getGameCategoriesApi', async (_gameCategories, { rejectWithValue }) => {
+  const data = await getGameCategoriesApi();
   if (data.status != 200) {
     return rejectWithValue(data);
   }
   return data;
 });
 
-export const gameCageroriesSlice = createSlice({
-  name: 'gameCagerories',
+export const gameCategoriesSlice = createSlice({
+  name: 'gameCategories',
   initialState: initialState,
   extraReducers: (builder) => {
-    builder.addCase(getGameCagerories.pending, (state) => {
+    builder.addCase(getGameCategories.pending, (state) => {
       ParentPending(state);
     });
-    builder.addCase(getGameCagerories.fulfilled, (state, action) => {
+    builder.addCase(getGameCategories.fulfilled, (state, action) => {
       ParentFilled(state);
       state.status = action.payload?.status ?? 200;
       state.categories = action.payload?.categories ?? null;
     });
-    builder.addCase(getGameCagerories.rejected, (state, action) => {
+    builder.addCase(getGameCategories.rejected, (state, action) => {
       ParentRejected(state);
       state.status = action?.payload?.status ?? 500;
       state.categories = action?.payload?.categories ?? null;
@@ -49,4 +49,4 @@ export const gameCageroriesSlice = createSlice({
   reducers: {},
 });
 
-export default gameCageroriesSlice.reducer;
+export default gameCategoriesSlice.reducer;

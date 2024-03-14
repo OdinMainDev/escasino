@@ -1,52 +1,52 @@
 import { memo, useEffect, useState } from 'react';
-// import { getProvidersApi } from '../api/providersApi';
 
-// import styles from './ProviderList.module.scss';
-// import { IProvider } from '@/entities/interfaces/providers';
-// import { TabBlock } from '@/entities/TabBlock';
+import styles from './ProviderList.module.scss';
+import { useAppSelector } from '@/store/hooks/redux';
+import { TabBlock } from '@/shared/components/TabBlock';
+import Loader from '@/shared/components/Loader';
+import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 
 interface IProps {
-  selectedProviders: string[];
   selectProvider: (selectedCategory: string) => void;
 }
 
-const ProviderList = memo(({ selectedProviders, selectProvider }: IProps) => {
-  return '';
-  // const [providersList, setProvidersList] = useState<IProvider[]>([]);
-  // const [loading, setLoading] = useState<boolean>(true);
+const ProviderList = memo(({ selectProvider }: IProps) => {
+  const { providers, loading } = useAppSelector((state) => state.gameProvidersReducer);
+  const { getFilters } = useGamesFilters();
+  const [loader, setLoader] = useState<boolean>(true);
+  const [selectedProviders, setSelectedProviders] = useState<string[]>(getFilters().providers);
 
-  // useEffect(() => {
-  //   const getProviders = async () => {
-  //     setLoading(true);
-  //     const providers = await getProvidersApi();
-  //     setLoading(false);
-  //     setProvidersList(providers);
-  //   };
+  useEffect(() => {
+    if (!loading) {
+      setLoader(false);
+    }
+  }, [loading, selectedProviders]);
 
-  //   void getProviders();
-  // }, []);
-
-  // return (
-  //   <div className={styles.container}>
-  //     {loading
-  //       ? Array(6)
-  //           .fill(0)
-  //           .map((item, index) => <TabBlock skeleton={true} key={index}></TabBlock>)
-  //       : providersList.map((item) => (
-  //           <TabBlock
-  //             selected={selectedProviders.includes(item.url)}
-  //             onClick={() => selectProvider(item.url)}
-  //             key={item.url}
-  //           >
-  //             <div className={styles.provider}>
-  //               <img src={item.data.image || ''} alt={item.url} className={styles.image} />
-  //               <div className={styles.text}>{item.url}</div>
-  //             </div>
-  //             {/* TODO: надо сделать чтобы картинка была больше и над текстом */}
-  //           </TabBlock>
-  //         ))}
-  //   </div>
-  // );
+  return (
+    <div className={styles.container}>
+      {loader || loading ? (
+        <div className={styles.loader_container}>
+          <Loader />
+        </div>
+      ) : (
+        providers?.map((item) => (
+          <TabBlock
+            selected={selectedProviders.includes(item.url)}
+            onClick={() => {
+              selectProvider(item.url);
+              setSelectedProviders(getFilters().providers);
+            }}
+            key={item.url}
+          >
+            <div className={styles.provider}>
+              <img src={item.data.image || ''} alt={item.url} className={styles.image} />
+              <div className={styles.text}>{item.url}</div>
+            </div>
+          </TabBlock>
+        ))
+      )}
+    </div>
+  );
 });
 
 export default ProviderList;

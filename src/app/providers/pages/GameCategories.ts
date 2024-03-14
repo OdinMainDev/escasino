@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
-import { getGameCagerories } from '@/store/slices/gameCategoriesSlice';
+import { getGameCategories } from '@/store/slices/gameCategoriesSlice';
 import { useEffect, useState, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,14 +8,14 @@ interface IProps {
   children: ReactNode;
 }
 
-const GameCageroriesProvider = ({ children }: IProps) => {
+const GameCategoriesProvider = ({ children }: IProps) => {
   const { isFinished, loading, hasError } = useAppSelector((state) => state.gameCategoriesReducer);
   const [availability, setAvailability] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   useEffect(() => {
     if (!isFinished && !loading) {
-      void dispatch(getGameCagerories());
+      void dispatch(getGameCategories());
     }
     if (isFinished && !hasError) {
       setAvailability(true);
@@ -31,4 +31,4 @@ const GameCageroriesProvider = ({ children }: IProps) => {
   return children;
 };
 
-export default GameCageroriesProvider;
+export default GameCategoriesProvider;

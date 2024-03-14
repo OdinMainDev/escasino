@@ -8,8 +8,9 @@ interface IProps {
 
 interface IGamesFiltersContext {
   filters: IFilter | null;
-  setFilters: (filters: IFilter) => void;
+  setFilters: (updates: Partial<IFilter>) => void;
   getFilters: () => IFilter;
+  countActiveKeys: (obj: IFilter) => number;
   setFiltersQuantity: (quantity: number) => void;
   getFiltersQuantity: () => number;
   clearFilters: () => void;
@@ -21,6 +22,7 @@ const GamesFiltersContext = createContext<IGamesFiltersContext>({
   getFilters: () => {
     return simpleIFilter;
   },
+  countActiveKeys: () => 0,
   setFiltersQuantity: () => {},
   getFiltersQuantity: () => {
     return 0;
@@ -47,14 +49,35 @@ const GamesFilterProvider = ({ children }: IProps) => {
   const [filters, setFiltersState] = useState<IFilter>(simpleIFilter);
   const [filtersQuantity, setFiltersQuantityState] = useState<number>(0);
 
-  const setFilters = (newFilters: IFilter) => {
-    setFiltersState(newFilters);
-    setFiltersQuantityState(
-      newFilters.categories.length +
-        newFilters.providers.length +
-        (newFilters.is_game_avail_for_bonus ? 1 : 0) +
-        (newFilters.query.length > 0 ? 1 : 0),
-    );
+  // OLD
+  // const setFilters = (newFilters: IFilter) => {
+  //   setFiltersState(newFilters);
+  //   setFiltersQuantityState(
+  //     newFilters.categories.length +
+  //       newFilters.providers.length +
+  //       (newFilters.is_game_avail_for_bonus ? 1 : 0) +
+  //       (newFilters.query.length > 0 ? 1 : 0),
+  //   );
+  // };
+
+  const setFilters = (updates: Partial<IFilter>) => {
+    setFiltersState((prevFilters: IFilter) => {
+      const newFilters = {
+        ...prevFilters,
+        ...updates,
+      };
+      setFiltersQuantityState(countActiveKeys(newFilters));
+      return newFilters;
+    });
+  };
+
+  const countActiveKeys = (newFilters: IFilter): number => {
+    const quantity =
+      (newFilters.categories ? newFilters.categories.length : 0) +
+      (newFilters.providers ? newFilters.providers.length : 0) +
+      (newFilters.is_game_avail_for_bonus ? 1 : 0) +
+      (newFilters.query && newFilters.query.length > 0 ? 1 : 0);
+    return quantity;
   };
 
   const getFilters = () => filters;
@@ -76,6 +99,7 @@ const GamesFilterProvider = ({ children }: IProps) => {
         filters,
         setFilters,
         getFilters,
+        countActiveKeys,
         setFiltersQuantity,
         getFiltersQuantity,
         clearFilters,

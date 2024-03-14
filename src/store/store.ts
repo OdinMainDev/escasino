@@ -4,26 +4,30 @@ import homeGamesReducer from './slices/homeGamesSlice';
 import countriesReducer from './slices/countriesSlice';
 import userReducer from './slices/userSlice';
 import gameCategoriesReducer from './slices/gameCategoriesSlice';
+import gameProvidersReducer from './slices/gameProvidersSlice';
 import { IInitialSettings } from '@/store/slices/settingsSlice';
 import { IInitialHomeGames } from '@/store/slices/homeGamesSlice';
 import { IInitialCountries } from '@/store/slices/countriesSlice';
 import { IInitialUser } from './slices/userSlice';
-import { IInitialGameCagerories } from './slices/gameCategoriesSlice';
+import { IInitialGameCategories } from './slices/gameCategoriesSlice';
+import { IInitialGameProviders } from './slices/gameProvidersSlice';
 
 interface IReducers {
   settingsReducer: IInitialSettings;
   homeGamesReducer: IInitialHomeGames;
   countriesReducer: IInitialCountries;
   userReducer: IInitialUser;
-  gameCategoriesReducer: IInitialGameCagerories;
+  gameCategoriesReducer: IInitialGameCategories;
+  gameProvidersReducer: IInitialGameProviders;
 }
 
 const reducers: ReducersMapObject<IReducers> = {
   settingsReducer: settingsReducer,
   homeGamesReducer: homeGamesReducer,
   countriesReducer: countriesReducer,
-  gameCategoriesReducer: gameCategoriesReducer,
   userReducer: userReducer,
+  gameCategoriesReducer: gameCategoriesReducer,
+  gameProvidersReducer: gameProvidersReducer,
 };
 
 const rootReducers = combineReducers(reducers);
