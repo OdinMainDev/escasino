@@ -14,6 +14,7 @@ import GameCategoriesProvider from './providers/pages/GameCategories';
 import GameProvidersProvider from './providers/pages/GameProviders';
 import IndexLayout from '@/shared/ui/home';
 import GamesSearch from '@/pages/Games/Search';
+import Details from '@/pages/Games/Details';
 
 const availRoutes: RouteObject[] = [
   {
@@ -29,6 +30,10 @@ const availRoutes: RouteObject[] = [
   {
     path: 'games',
     children: [
+      {
+        path: 'details/:id',
+        element: <Details />,
+      },
       {
         path: 'search',
         element: (
