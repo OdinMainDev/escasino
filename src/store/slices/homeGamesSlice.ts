@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ISlice, ParentFilled, ParentPending, ParentRejected } from './slices';
 import { IGame } from '@/entities/game';
 import { IResponseHomeGames, getHomeGamesApi } from '@/app/api/games/getHomeGames';
+import { isAppDebug } from '@/app/config/app';
 
 export interface IInitialHomeGames extends ISlice {
   games: IGame[] | null;
@@ -22,6 +23,10 @@ export const getHomeGames = createAsyncThunk<
   { rejectValue: IResponseHomeGames }
 >('getHomeGamesApi', async (_homeGames, { rejectWithValue }) => {
   const data = await getHomeGamesApi();
+  if (isAppDebug) {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    await sleep(5000);
+  }
   if (data.status != 200) {
     return rejectWithValue(data);
   }

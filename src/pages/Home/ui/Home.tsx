@@ -6,9 +6,10 @@ import { IGame } from '@/entities/game';
 import { TopGames } from '@/widgets/Games/ui/TopGames';
 import { GamesGrid } from '@/widgets/Games/ui/Grid';
 import IndexLayout from '@/shared/ui/home';
+import Loader from '@/shared/components/Loader';
 
 export default function Home() {
-  const { games } = useAppSelector((state) => state.homeGamesReducer);
+  const { games, loading } = useAppSelector((state) => state.homeGamesReducer);
   let gamesGrid: IGame[] = games ? games : [];
   let topGamesGrid: IGame[] = gamesGrid;
   if (themeHasTopGames) {
@@ -18,16 +19,22 @@ export default function Home() {
 
   return (
     <IndexLayout>
-      {themeHasTopGames ? (
+      {!loading && themeHasTopGames ? (
         <div className={styles.top_games}>
           <TopGames games={topGamesGrid} />
         </div>
       ) : (
         ''
       )}
-      <div className={styles.games_table}>
-        <GamesGrid games={gamesGrid} />
-      </div>
+      {loading ? (
+        <div>
+          <Loader />
+        </div>
+      ) : (
+        <div className={styles.games_table}>
+          <GamesGrid games={gamesGrid} />
+        </div>
+      )}
     </IndexLayout>
   );
 }

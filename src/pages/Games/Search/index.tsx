@@ -1,17 +1,19 @@
-import { IFilter, getSearchGamesApi } from '@/app/api/games/getSearchGames';
-import styles from './Search.module.scss';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-// import { useAppSelector } from '@/store/hooks/redux';
+import styles from './styles.module.scss';
 import { IGame } from '@/entities/game';
+import { IFilter, getSearchGamesApi } from '@/app/api/games/getSearchGames';
 import { GamesGrid } from '@/widgets/Games/ui/Grid';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 import { useQuery } from '@/shared/helpers/navigation';
-import { useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import IndexLayout from '@/shared/ui/home';
+import { isAppDebug } from '@/app/config/app';
+import Loader from '@/shared/components/Loader';
 
 export default function Search() {
-  const [games, setGames] = useState<IGame[]>([]);
+  const [games, setGames] = useState<IGame[] | null>(null);
   const { setFilters, getFilters } = useGamesFilters();
 
   const searchParams = useQuery();
@@ -25,6 +27,7 @@ export default function Search() {
     }
 
     const getGames = async () => {
+      setGames(null);
       const filter: IFilter = {
         query: getFilters().query,
         providers: getFilters().providers,
@@ -32,6 +35,10 @@ export default function Search() {
         is_game_avail_for_bonus: getFilters().is_game_avail_for_bonus,
       };
       const data = await getSearchGamesApi(filter);
+      if (isAppDebug) {
+        const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+        await sleep(5000);
+      }
       setGames(data);
     };
 
@@ -42,10 +49,12 @@ export default function Search() {
   return (
     <IndexLayout>
       <div className={styles.games_table}>
-        {games?.length > 0 ? (
+        {games && games?.length > 0 ? (
           <GamesGrid games={games} />
         ) : (
-          <div className={styles.not_found}>По вашему запросу ничего не найдено</div>
+          <div className={styles.not_found}>
+            {games ? <div>По вашему запросу ничего не найдено</div> : <Loader />}
+          </div>
         )}
       </div>
     </IndexLayout>

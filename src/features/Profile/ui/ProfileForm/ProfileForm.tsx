@@ -20,7 +20,7 @@ import { doVerifyPhoneSendApi } from '@/app/api/auth/verification/phoneSend';
 import { getCountries } from '@/store/slices/countriesSlice';
 
 const ProfileForm = () => {
-  const { user } = useAppSelector((state) => state.userReducer);
+  const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const { doSetVerifyHash, doSetChangeHash, doOpenModal } = useModal();
   const [loader, setLoader] = useState(false);
@@ -166,10 +166,12 @@ const ProfileForm = () => {
 
   return (
     <form className={styles.container}>
-      {loader && (
+      {loadingUser || loader ? (
         <div className={styles.loading}>
           <Loader />
         </div>
+      ) : (
+        <div></div>
       )}
 
       <div className={styles.user_names}>

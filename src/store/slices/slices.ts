@@ -5,9 +5,7 @@ export interface ISlice {
 }
 
 export const ParentPending = (state: ISlice) => {
-  if (!state.isFinished) {
-    state.loading = true;
-  }
+  state.loading = true;
 };
 
 export const ParentFilled = (state: ISlice) => {

@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ISlice, ParentFilled, ParentPending, ParentRejected } from './slices';
 import { IResponseGameCategories, getGameCategoriesApi } from '@/app/api/games/getGameCategories';
 import { ICategory } from '@/entities/categories';
+import { isAppDebug } from '@/app/config/app';
 
 export interface IInitialGameCategories extends ISlice {
   categories: ICategory[] | null;
@@ -22,6 +23,10 @@ export const getGameCategories = createAsyncThunk<
   { rejectValue: IResponseGameCategories }
 >('getGameCategoriesApi', async (_gameCategories, { rejectWithValue }) => {
   const data = await getGameCategoriesApi();
+  if (isAppDebug) {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    await sleep(5000);
+  }
   if (data.status != 200) {
     return rejectWithValue(data);
   }

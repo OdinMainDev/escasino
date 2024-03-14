@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ParentPending, ParentFilled, ParentRejected, ISlice } from './slices';
 import { ISettings } from '@/entities/settings';
 import { IResponseSettings, getSettingsApi } from '@/app/api/core/getSettings';
+import { isAppDebug } from '@/app/config/app';
 
 export interface IInitialSettings extends ISlice {
   settings: ISettings | null;
@@ -23,6 +24,10 @@ export const getSettings = createAsyncThunk<
   { rejectValue: IResponseSettings }
 >('getSettingsApi', async (_settings, { rejectWithValue }) => {
   const data = await getSettingsApi();
+  if (isAppDebug) {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    await sleep(5000);
+  }
   if (data.status != 200) {
     return rejectWithValue(data);
   }

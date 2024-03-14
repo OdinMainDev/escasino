@@ -9,7 +9,7 @@ const Wallet = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <GoBackButton />
+        <GoBackButton customPath="/" />
         <div className="title">Кошелек</div>
         <Icons icon="chat" />
       </div>
