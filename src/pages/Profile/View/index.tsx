@@ -39,7 +39,7 @@ const Profile = () => {
         <div className={styles.block_header}>
           <div className={styles.title}>Баланс</div>
           {settings && settings?.currencies?.length > 1 ? (
-            <div onClick={() => router.push('/profile/edit')} className={styles.side_url}>
+            <div onClick={() => router.push('/wallet/currencies')} className={styles.side_url}>
               {user?.balance.currency}: сменить
             </div>
           ) : (

@@ -18,6 +18,7 @@ import AuthGuardProvider from './providers/pages/AuthGuard';
 import Demo from '@/pages/Play/Demo';
 import Real from '@/pages/Play/Real';
 import Wallet from '@/pages/Wallet';
+import Currencies from '@/pages/Wallet/Currencies';
 
 const availRoutes: RouteObject[] = [
   {
@@ -95,6 +96,10 @@ const availRoutes: RouteObject[] = [
       {
         path: 'deposit',
         element: <Wallet />,
+      },
+      {
+        path: 'currencies',
+        element: <Currencies />,
       },
     ],
   },

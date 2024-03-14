@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // import React, { ReactNode, useEffect } from 'react';
 import React, { ReactNode, useEffect } from 'react';
 import { useAuthProvider } from './AuthProvider';

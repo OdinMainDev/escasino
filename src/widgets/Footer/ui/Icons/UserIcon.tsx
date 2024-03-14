@@ -7,7 +7,7 @@ const UserIcon = () => {
   const router = useRouter();
 
   const openProfile = () => {
-    router.push('profile');
+    router.push('/profile');
   };
 
   return (
