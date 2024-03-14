@@ -7,13 +7,11 @@ import CategoriesList from './ui/CategoriesList';
 import ProviderList from './ui/ProviderList';
 import Button from '@/shared/components/Button';
 import Switch from '@/shared/components/Switch';
-import { usePreloader } from '@/app/providers/PreloaderProvider';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 
 const Filter = () => {
   const { setFilters, getFilters } = useGamesFilters();
   const router = useRouter();
-  const { hidePreloader } = usePreloader();
   const [withBonuses, setWithBonuses] = useState<boolean>(getFilters().is_game_avail_for_bonus);
   const [isReseted, setIsReseted] = useState<boolean>(false);
 
@@ -68,8 +66,6 @@ const Filter = () => {
     }, 1);
     // setIsReseted(false);
   };
-
-  hidePreloader();
 
   // TODO: добавить крестик ( go back button)
   const template = (

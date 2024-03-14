@@ -2,24 +2,17 @@ import classNames from 'classnames';
 
 import styles from './styles.module.scss';
 import { useAppSelector } from '@/store/hooks/redux';
-import { usePreloader } from '@/app/providers/PreloaderProvider';
 import { useRouter } from '@/shared/helpers/navigation';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
 import GoBackButton from '@/shared/components/GoBackButton';
 import Button from '@/shared/components/Button';
 
 const Profile = () => {
-  const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
-  const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
-  const { hidePreloader } = usePreloader();
+  const { user } = useAppSelector((state) => state.userReducer);
+  const { settings } = useAppSelector((state) => state.settingsReducer);
   const router = useRouter();
   const { unsetAuthenticated } = useAuthProvider();
 
-  if (loadingUser || loadingSettings) {
-    return;
-  }
-
-  hidePreloader();
   const logoutHandler = () => {
     unsetAuthenticated();
     router.push('/');
@@ -45,12 +38,12 @@ const Profile = () => {
       <div className={styles.block}>
         <div className={styles.block_header}>
           <div className={styles.title}>Баланс</div>
-          {settings && settings?.currencies?.length <= 1 ? (
-            <div></div>
-          ) : (
+          {settings && settings?.currencies?.length > 1 ? (
             <div onClick={() => router.push('/profile/edit')} className={styles.side_url}>
               {user?.balance.currency}: сменить
             </div>
+          ) : (
+            <div></div>
           )}
         </div>
         <div className={styles.balance}>
@@ -69,7 +62,14 @@ const Profile = () => {
           <Button elType="outlined" className={styles.button}>
             Вывести
           </Button>
-          <Button className={styles.button}>Пополнить</Button>
+          <Button
+            className={styles.button}
+            onClick={() => {
+              router.push('/wallet/deposit');
+            }}
+          >
+            Пополнить
+          </Button>
         </div>
       </div>
       <div className={styles.block}>

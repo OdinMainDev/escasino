@@ -2,17 +2,14 @@ import classNames from 'classnames';
 import { useState } from 'react';
 
 import styles from './FooterSelect.module.scss';
-import { usePreloader } from '@/app/providers/PreloaderProvider';
 import { useAppSelector } from '@/store/hooks/redux';
 
 const FooterSelect = () => {
   const { user, loading } = useAppSelector((state) => state.userReducer);
-  const { hidePreloader } = usePreloader();
   const [openBalance, setIsOpenBalance] = useState<boolean>(false);
   if (!user || loading) {
     return null;
   }
-  hidePreloader();
   return (
     <div
       className={classNames(styles.container, {

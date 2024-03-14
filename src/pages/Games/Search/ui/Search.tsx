@@ -1,7 +1,6 @@
 import { IFilter, getSearchGamesApi } from '@/app/api/games/getSearchGames';
 import styles from './Search.module.scss';
 
-import { usePreloader } from '@/app/providers/PreloaderProvider';
 // import { useAppSelector } from '@/store/hooks/redux';
 import { IGame } from '@/entities/game';
 import { GamesGrid } from '@/widgets/Games/ui/Grid';
@@ -13,7 +12,6 @@ import IndexLayout from '@/shared/ui/home';
 
 export default function Search() {
   const [games, setGames] = useState<IGame[]>([]);
-  const { hidePreloader } = usePreloader();
   const { setFilters, getFilters } = useGamesFilters();
 
   const searchParams = useQuery();
@@ -35,7 +33,6 @@ export default function Search() {
       };
       const data = await getSearchGamesApi(filter);
       setGames(data);
-      hidePreloader();
     };
 
     void getGames();

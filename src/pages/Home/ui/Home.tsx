@@ -1,7 +1,6 @@
 import styles from './Home.module.scss';
 
 import { themeHasTopGames } from '@/app/config/appearance';
-import { usePreloader } from '@/app/providers/PreloaderProvider';
 import { useAppSelector } from '@/store/hooks/redux';
 import { IGame } from '@/entities/game';
 import { TopGames } from '@/widgets/Games/ui/TopGames';
@@ -10,7 +9,6 @@ import IndexLayout from '@/shared/ui/home';
 
 export default function Home() {
   const { games } = useAppSelector((state) => state.homeGamesReducer);
-  const { hidePreloader } = usePreloader();
   let gamesGrid: IGame[] = games ? games : [];
   let topGamesGrid: IGame[] = gamesGrid;
   if (themeHasTopGames) {
@@ -18,7 +16,6 @@ export default function Home() {
     gamesGrid = gamesGrid.slice(20);
   }
 
-  hidePreloader();
   return (
     <IndexLayout>
       {themeHasTopGames ? (

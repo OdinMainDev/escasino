@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 
 import styles from './styles.module.scss';
 
-import { usePreloader } from '@/app/providers/PreloaderProvider';
 // import { GamesGrid } from '@/widgets/Games/ui/Grid';
 import GameLayout from '@/shared/ui/game';
 import { getDemoApi } from '@/app/api/play/getDemo';
@@ -17,7 +16,6 @@ export default function Demo() {
   const [demoUrl, setDemoUrl] = useState<string>('');
   const [headerTitle, setHeaderTitle] = useState<string>('');
   const { id } = useParams();
-  const { hidePreloader } = usePreloader();
   const { isAuth } = useAuthProvider();
   const router = useRouter();
 
@@ -30,13 +28,11 @@ export default function Demo() {
         return;
       }
       setDemoUrl(data.url);
-      hidePreloader();
     };
 
     const getHeader = async () => {
       const data = await getGameApi(Number(id));
       setHeaderTitle(data.game?.name ?? '');
-      hidePreloader();
     };
 
     void getDemo();

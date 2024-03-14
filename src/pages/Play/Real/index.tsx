@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 
 import styles from './styles.module.scss';
 
-import { usePreloader } from '@/app/providers/PreloaderProvider';
 // import { GamesGrid } from '@/widgets/Games/ui/Grid';
 import GameLayout from '@/shared/ui/game';
 import { getRealApi } from '@/app/api/play/getReal';
@@ -17,7 +16,6 @@ export default function Real() {
   const [realUrl, setRealUrl] = useState<string>('');
   const [headerTitle, setHeaderTitle] = useState<string>('');
   const { id } = useParams();
-  const { hidePreloader } = usePreloader();
   const router = useRouter();
 
   useEffect(() => {
@@ -29,13 +27,11 @@ export default function Real() {
         return;
       }
       setRealUrl(data.url);
-      hidePreloader();
     };
 
     const getHeader = async () => {
       const data = await getGameApi(Number(id));
       setHeaderTitle(data.game?.name ?? '');
-      hidePreloader();
     };
 
     void getReal();

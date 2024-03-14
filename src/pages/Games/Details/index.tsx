@@ -5,7 +5,6 @@ import classNames from 'classnames';
 
 import styles from './styles.module.scss';
 import { IGame } from '@/entities/game';
-import { usePreloader } from '@/app/providers/PreloaderProvider';
 import { getGameApi } from '@/app/api/games/getGameById';
 import GoBackButton from '@/shared/components/GoBackButton';
 import Icons from '@/shared/components/Icons';
@@ -22,7 +21,6 @@ import ModalZeroBalance from './ui/ModalZeroBalance';
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
   const { id } = useParams();
-  const { hidePreloader } = usePreloader();
   const { isAuth } = useAuthProvider();
   const router = useRouter();
   const { doOpenModal, doCloseModals } = useModal();
@@ -32,7 +30,6 @@ const Details = () => {
     const getGameById = async () => {
       const data = await getGameApi(Number(id));
       setGame(data?.game);
-      hidePreloader();
     };
 
     void getGameById();
