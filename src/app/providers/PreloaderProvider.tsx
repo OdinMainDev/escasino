@@ -1,3 +1,4 @@
+import Preloader from '@/shared/components/Preloader';
 import React, { createContext, useContext, useState, ReactNode, FunctionComponent } from 'react';
 
 interface PreloaderContextType {
@@ -28,6 +29,7 @@ export const PreloaderProvider: FunctionComponent<PreloaderProviderProps> = ({ c
 
   return (
     <PreloaderContext.Provider value={{ isLoading, showPreloader, hidePreloader }}>
+      <Preloader isLoading={isLoading} />
       {children}
     </PreloaderContext.Provider>
   );

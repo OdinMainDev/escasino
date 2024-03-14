@@ -17,6 +17,7 @@ import Details from '@/pages/Games/Details';
 import AuthGuardProvider from './providers/pages/AuthGuard';
 import Demo from '@/pages/Play/Demo';
 import Real from '@/pages/Play/Real';
+import Wallet from '@/pages/Wallet';
 
 const availRoutes: RouteObject[] = [
   {
@@ -83,6 +84,17 @@ const availRoutes: RouteObject[] = [
       {
         path: 'edit',
         element: <ProfileEdit />,
+      },
+    ],
+  },
+
+  {
+    path: 'wallet',
+    element: <AuthGuardProvider />,
+    children: [
+      {
+        path: 'deposit',
+        element: <Wallet />,
       },
     ],
   },

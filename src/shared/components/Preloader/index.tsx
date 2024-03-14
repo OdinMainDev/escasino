@@ -1,8 +1,16 @@
-import React from 'react';
-import { usePreloader } from '@/app/providers/PreloaderProvider';
+import React, { useEffect, useState } from 'react';
 
-const Preloader: React.FC = () => {
-  const { isLoading } = usePreloader();
+interface PreloaderProps {
+  isLoading: boolean;
+}
+
+const Preloader: React.FC<PreloaderProps> = ({ isLoading }) => {
+  const [text, setText] = useState<string>('');
+  useEffect(() => {
+    if (isLoading) {
+      setText('Loading');
+    }
+  }, [isLoading]);
 
   if (!isLoading) return null;
 
@@ -23,7 +31,7 @@ const Preloader: React.FC = () => {
         fontSize: '32px',
       }}
     >
-      <div>Loading...</div>
+      <div>{text}...</div>
     </div>
   );
 };
