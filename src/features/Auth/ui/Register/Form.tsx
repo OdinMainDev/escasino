@@ -141,7 +141,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           <Loader />
         </div>
       )}
-      <div className={styles.title}>Регистрация нового игрока</div>
+      <div className={styles.title}>Регистрация</div>
       {formType == 'full' && (
         <div className="row">
           <div className="tab" style={{ display: 'flex' }}>

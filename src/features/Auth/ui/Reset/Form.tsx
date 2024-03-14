@@ -72,7 +72,7 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
         </div>
       )}
       <div>
-        <div className={styles.title}>Забыли пароль?</div>
+        <div className={styles.title}>Восстановление пароля</div>
         {formType == 'full' && (
           <div className="row">
             <div className="tab" style={{ display: 'flex' }}>

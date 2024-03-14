@@ -42,7 +42,7 @@
   letter-spacing: 0.14px;
   text-decoration-line: underline;
   color: var(--Text-primary, #F2F2F2);
-  margin-bottom: 58px;
+  margin-bottom: 15px;
   cursor: pointer;
 }
 
@@ -75,4 +75,9 @@
   right: 0;
   top: 0;
   bottom: 0;
+}
+
+.linehr {
+  margin-bottom: 15px;
+  // TODO: сделать может чуть поярче что ли или получше
 }

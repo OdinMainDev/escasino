@@ -14,7 +14,7 @@ const AuthResetSetPasswordComplete = () => {
       <div>
         <div className={styles.title}>Новый пароль отправлен на электронную почту!</div>
         <Button className={styles.button} onClick={sendData}>
-          Войти в личный кабинет
+          Войти в аккаунт
         </Button>
       </div>
     </form>

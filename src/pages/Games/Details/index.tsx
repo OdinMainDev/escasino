@@ -10,16 +10,20 @@ import { getGameApi } from '@/app/api/games/getGameById';
 import GoBackButton from '@/shared/components/GoBackButton';
 import Icons from '@/shared/components/Icons';
 import Button from '@/shared/components/Button';
-import { Footer } from '@/widgets/Footer';
+import { Footer, FooterHidden } from '@/widgets/Footer';
 import { WinningsList } from '@/widgets/WinningsList';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
+import { useRouter } from '@/shared/helpers/navigation';
+import { useModal } from '@/app/providers/ModalProvider';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
   const { id } = useParams();
   const { hidePreloader } = usePreloader();
   const { isAuth } = useAuthProvider();
+  const router = useRouter();
+  const { doOpenModal } = useModal();
 
   useEffect(() => {
     const getGameById = async () => {
@@ -30,6 +34,19 @@ const Details = () => {
 
     void getGameById();
   }, []);
+
+  const openDemoPlay = () => {
+    router.push('/play/demo/' + id);
+  };
+
+  const openRealPlay = () => {
+    if (isAuth) {
+      router.push('/play/real/' + id);
+      return;
+    }
+
+    doOpenModal('login');
+  };
 
   // TODO: виннер лист слайдер
   // TODO: исправить изображение ( размер не тот, сделать железобетонно чтобы размер контейнера не зависил от размера изображения )
@@ -57,10 +74,10 @@ const Details = () => {
       </div>
 
       <div className={styles.buttons}>
-        <Button elType="outlined" className={styles.button}>
+        <Button elType="outlined" className={styles.button} onClick={openDemoPlay}>
           Демо-игра
         </Button>
-        <Button elType="contained" className={styles.button}>
+        <Button elType="contained" className={styles.button} onClick={openRealPlay}>
           Играть на деньги
         </Button>
         {!game?.has_freerounds ? (
@@ -83,7 +100,7 @@ const Details = () => {
           biggest ones.
         </div>
       </div>
-      {isAuth && <Footer />}
+      {isAuth ? <Footer /> : <FooterHidden />}
     </div>
   );
 };

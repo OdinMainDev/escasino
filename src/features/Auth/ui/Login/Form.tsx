@@ -86,7 +86,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
         </div>
       )}
       <div>
-        <div className={styles.title}>Войти в личный кабинет</div>
+        <div className={styles.title}>Авторизация</div>
 
         {/* На будущее */}
         {/* TODO: СДЕЛАТЬ ТУТ НОРМ ВЕРСТКУ В ФУЛЛ ( ЕСЛИ ИЗ АДМИНКИ ВКЛЮЧЕНО ЧТО И ПОЧТА И ТЕЛЕФОН ЕСТЬ ) */}
@@ -156,17 +156,18 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
               style={{ float: 'right', textAlign: 'right', width: '70%' }}
               onClick={openResetModal}
             >
-              Я забыл пароль
+              Забыли пароль?
             </div>
           </div>
         ) : (
           <div className={styles.forgot} onClick={openResetModal}>
-            Я забыл пароль
+            Забыли пароль?
           </div>
         )}
         {hasSocials ? (
           <div>
-            <div className={styles.subtitle}>C помощью социальных сетей</div>
+            <hr className={styles.linehr} />
+            <div className={styles.subtitle}>Или с помощью социальных сетей</div>
             <div className={styles.social}>
               <VK />
               <Telegram />
@@ -196,7 +197,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
           Войти
         </Button>
         <div className={styles.label}>
-          Нет личного кабинета? <span onClick={openRegistration}>Зарегистрироваться</span>
+          Все еще нет аккаунта? <span onClick={openRegistration}>Зарегистрироваться</span>
         </div>
       </div>
     </form>
