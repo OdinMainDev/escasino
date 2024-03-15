@@ -1,5 +1,5 @@
 import styles from './Placeholder.module.scss';
-import { IGame } from '@/entities/Game';
+import { IGame } from '@/entities/game';
 
 const PlaceholderGame = (game: IGame) => {
   return (

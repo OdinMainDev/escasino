@@ -33,7 +33,7 @@ const ModalOpenReal = ({ close, gameId }: IProps) => {
                 Вернутся
               </Button>
               <Button className={styles.button} onClick={openGame}>
-                Уйти в реал
+                В реал
               </Button>
             </div>
           </div>

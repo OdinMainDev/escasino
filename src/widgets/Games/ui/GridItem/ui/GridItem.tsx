@@ -4,9 +4,9 @@ import { HTMLAttributes } from 'react';
 
 import styles from './GridItem.module.scss';
 
-import { IGame } from '@/entities/game';
 import { useRouter } from '@/shared/helpers/navigation';
 import { PlaceholderGame } from '@/app/assets/images/Placeholder';
+import { IGame } from '@/entities/game';
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   game: IGame;

@@ -1,7 +1,7 @@
 import Slider, { Settings } from 'react-slick';
 import './GamesSlider.scss';
 import { settingsResponsive } from '../constants';
-import { IGame } from '@/entities/Game';
+import { IGame } from '@/entities/game';
 import { GridItem } from '@/widgets/Games/ui/GridItem';
 
 interface IProps {
@@ -48,8 +48,7 @@ const GamesSlider = ({ games }: IProps) => {
     infinite: true,
     speed: 300,
     rows: 1,
-    slidesToShow: 2,
-    slidesToScroll: 1,
+    slidesToShow: 3.5,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
     responsive: settingsResponsive,
