@@ -1,6 +1,8 @@
 .container {
   display: flex;
+  overflow-y: auto;
   flex-direction: column;
+  height: 70vh;
 }
 
 .title {

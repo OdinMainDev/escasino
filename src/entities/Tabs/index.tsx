@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 
 interface IProps {
   tabs: ITab[];
-  value?: ITab;
+  value?: string;
   onChange?: (tab: ITab) => void;
+  className?: string;
 }
 
 export interface ITab {
@@ -13,28 +14,28 @@ export interface ITab {
   label: string;
 }
 
-const Tabs = ({ tabs, onChange, value }: IProps) => {
-  const [activeTab, setActiveTab] = useState<ITab | null>(value ?? null);
+const Tabs = ({ tabs, onChange, value, className }: IProps) => {
+  const [activeTab, setActiveTab] = useState<string | null>(value ?? null);
 
   useEffect(() => {
     setActiveTab(value ?? null);
   }, [value]);
 
   const selectTab = (tab: ITab) => {
-    setActiveTab(tab);
+    setActiveTab(tab.value);
     if (onChange) {
       onChange(tab);
     }
   };
 
   return (
-    <div className={styles.container}>
+    <div className={classNames(styles.container, className)}>
       {tabs.map((item, index) => (
         <div
           key={index}
           onClick={() => selectTab(item)}
           className={classNames(styles.tab, {
-            [styles.active]: activeTab?.value === item.value,
+            [styles.active]: activeTab === item.value,
           })}
         >
           {item.label}

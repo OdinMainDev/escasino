@@ -11,12 +11,13 @@ export interface ISelectOption {
 interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
   optionList?: ISelectOption[];
   isError?: boolean;
+  containerClassName?: string;
 }
 
-const Select = ({ optionList, isError, ...otherProps }: IProps) => {
+const Select = ({ optionList, isError, containerClassName, ...otherProps }: IProps) => {
   return (
     <label
-      className={classNames(styles.container, {
+      className={classNames(styles.container, containerClassName, {
         [styles.error]: isError,
       })}
     >

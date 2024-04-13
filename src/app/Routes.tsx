@@ -104,7 +104,6 @@ const availRoutes: RouteObject[] = [
     ],
   },
 
-  // TODO: сделать внешку ошибкам
   {
     path: 'error',
     children: [

@@ -1,10 +1,12 @@
+@import 'slick-carousel/slick/slick.css';
+@import 'slick-carousel/slick/slick-theme.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 @import './variables';
-@import 'slick-carousel/slick/slick.css';
-@import 'slick-carousel/slick/slick-theme.css';
+
+
 
 * {
   font-family: "Montserrat", sans-serif;
@@ -30,4 +32,9 @@ body {
 
 .container {
   padding: 12px 0;
+}
+
+.tab {
+  display: flex;
+  gap: 10px;
 }

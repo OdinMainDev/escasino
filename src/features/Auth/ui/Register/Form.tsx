@@ -48,37 +48,37 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
   if (!loadingCountries && !isFinishedCountries) {
     void dispatch(getCountries());
   }
-  const formType =
-    settings?.auth.register.phone && settings?.auth.register.email
-      ? 'full'
-      : settings?.auth.register.phone
-        ? 'phone'
-        : 'email';
-  const hasSocials =
-    settings?.auth.social_vk ||
-    settings?.auth.social_ok ||
-    settings?.auth.social_fb ||
-    settings?.auth.social_tg ||
-    settings?.auth.social_tw;
-  const hasUsername = settings?.auth.register.username;
-  const hasFullName = settings?.auth.register.full_name;
-  const hasCity = settings?.auth.register.city;
-  const hasDob = settings?.auth.register.dob;
-  const hasAddress = settings?.auth.register.address;
-  const hasGender = settings?.auth.register.gender;
-  const hasPromo = settings?.auth.register.promo;
+  // const formType =
+  //   settings?.auth.register.phone && settings?.auth.register.email
+  //     ? 'full'
+  //     : settings?.auth.register.phone
+  //       ? 'phone'
+  //       : 'email';
+  // const hasSocials =
+  //   settings?.auth.social_vk ||
+  //   settings?.auth.social_ok ||
+  //   settings?.auth.social_fb ||
+  //   settings?.auth.social_tg ||
+  //   settings?.auth.social_tw;
+  // const hasUsername = settings?.auth.register.username;
+  // const hasFullName = settings?.auth.register.full_name;
+  // const hasCity = settings?.auth.register.city;
+  // const hasDob = settings?.auth.register.dob;
+  // const hasAddress = settings?.auth.register.address;
+  // const hasGender = settings?.auth.register.gender;
+  // const hasPromo = settings?.auth.register.promo;
 
   // OVERRIDE FOR TESTS
   // TODO: проверить с этими параметрами включенными и поправить верстку
-  // const formType = 'full';
-  // const hasSocials = false;
-  // const hasUsername = true;
-  // const hasFullName = true;
-  // const hasCity = true;
-  // const hasDob = true;
-  // const hasAddress = true;
-  // const hasGender = true;
-  // const hasPromo = true;
+  const formType = 'full';
+  const hasSocials = false;
+  const hasUsername = true;
+  const hasFullName = true;
+  const hasCity = true;
+  const hasDob = true;
+  const hasAddress = true;
+  const hasGender = true;
+  const hasPromo = true;
 
   let currenciesList: ISelectOption[] = [{ value: 'PLN', label: 'PLN', disabled: false }];
 
@@ -142,9 +142,9 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
         </div>
       )}
       <div className={styles.title}>Регистрация</div>
-      {formType == 'full' && (
-        <div className="row">
-          <div className="tab" style={{ display: 'flex' }}>
+      <div className="row">
+        <div className="tab">
+          {formType === 'full' || formType === 'email' ? (
             <Input
               placeholder="Электронная почта"
               type="email"
@@ -159,6 +159,8 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
               isError={!!errorData?.errors['email']}
               message={ErrorResponseAsString('email', 'Введите корректный e-mail', errorData)}
             />
+          ) : null}
+          {formType === 'full' || formType === 'phone' ? (
             <Input
               placeholder="Номер телефона"
               type="text"
@@ -173,9 +175,9 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
               isError={!!errorData?.errors['phone']}
               message={ErrorResponseAsString('phone', 'Введите корректный телефон', errorData)}
             />
-          </div>
+          ) : null}
         </div>
-      )}
+      </div>
 
       <Input
         placeholder="Пароль"
@@ -201,7 +203,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           isError={!!errorData?.errors['currency']}
           optionList={currenciesList}
           value={registerData.currency}
-          // containerClassName={styles.input} // TODO
+          containerClassName={styles.input}
           // message={ErrorResponseAsString('currency', 'Введите корректный пароль', errorData)} // TODO
           onChange={(e) => setRegisterData((prev) => ({ ...prev, currency: e.target.value }))}
         />
@@ -221,7 +223,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
 
       {/* Тут красиво группировать */}
       {hasFullName && (
-        <div className="row" style={{ display: 'flex' }}>
+        <div className="tab">
           <Input
             placeholder={'Фамилия'}
             type={'text'}
@@ -249,15 +251,14 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
         </div>
       )}
 
-      {/* TODO: *ВЕЗДЕ* Тут красиво группировать */}
       {/* TODO: когда загружаются страны может как то обыграть и глянуть как реализованы  countriesList ( то что отсюда подгружаются и таким образом )*/}
       {hasCity && (
-        <div className="row" style={{ display: 'flex' }}>
+        <div className="tab">
           <Select
             isError={!!errorData?.errors['country']}
             optionList={countriesList}
             value={registerData.country}
-            // containerClassName={styles.input} // TODO
+            containerClassName={styles.input}
             // message={ErrorResponseAsString('second_name', 'Укажите страну из списка', errorData)} // TODO
             onChange={(e) => setRegisterData((prev) => ({ ...prev, country: e.target.value }))}
           />
@@ -289,7 +290,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
 
       {/* Тут красиво группировать */}
       {hasAddress && (
-        <div className="row" style={{ display: 'flex' }}>
+        <div className="tab">
           <Input
             placeholder={'Адрес'}
             type={'text'}
@@ -314,7 +315,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           isError={!!errorData?.errors['gender']}
           optionList={genderSelect}
           value={registerData.gender}
-          // containerClassName={styles.input} // TODO
+          containerClassName={styles.input}
           // message={ErrorResponseAsString('zip', 'Укажите гендер корректно', errorData)}
           onChange={(e) => setRegisterData((prev) => ({ ...prev, gender: e.target.value }))}
         />

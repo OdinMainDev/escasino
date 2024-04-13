@@ -7,10 +7,14 @@ import {
   useEffect,
   ReactNode,
 } from 'react';
+import 'react-phone-input-2/lib/style.css';
+
 import classNames from 'classnames';
 import styles from './styles.module.scss';
 import Icons from '../Icons';
 import InputMask from 'react-input-mask';
+import PhoneInput from 'react-phone-input-2';
+import { defaultLanguage } from '@/app/config/locales';
 
 export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   elType?: 'input' | 'search';
@@ -23,6 +27,7 @@ export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   validationFunction?: (value: string) => boolean;
   disabledOpacityOff?: boolean;
   mask?: string;
+  onChangePhone?: (value: string) => void;
 }
 
 const Input = forwardRef<HTMLInputElement, IInputProps>(
@@ -43,6 +48,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
       disabledOpacityOff,
       mask,
       icon,
+      onChangePhone,
       ...otherProps
     },
     ref,
@@ -122,6 +128,29 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
       }
     };
 
+    const onChangePhoneHandler = (phone: string) => {
+      if (onChangePhone) {
+        onChangePhone(phone);
+      }
+      const value = phone;
+      setIsValid(true);
+      if (time.current) {
+        clearTimeout(time.current);
+      }
+
+      if (validationFunction) {
+        if (value.length > 0) {
+          setErrorMessage(null);
+        } else {
+          setErrorMessage(messageRef.current);
+        }
+        time.current = setInterval(() => {
+          setIsValid(validationFunction(value));
+          setErrorMessage(messageRef.current);
+        }, validationTimeout);
+      }
+    };
+
     if (mask) {
       return (
         <div
@@ -146,6 +175,26 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
             <span className={styles.placeholder}>{placeholder}</span>
             {renderIcon()}
           </label>
+          {errorMessage && <div className={styles.message}>{errorMessage}</div>}
+        </div>
+      );
+    }
+
+    if (type === 'phone') {
+      return (
+        <div
+          className={classNames(styles.container, containerClassName, {
+            [styles.error]: isError || !isValid,
+          })}
+        >
+          <PhoneInput
+            value={value as string}
+            onChange={onChangePhoneHandler}
+            country={defaultLanguage}
+            inputClass={styles.phone_input}
+            containerClass={styles.phone_input_continer}
+            buttonClass={styles.input_button}
+          />
           {errorMessage && <div className={styles.message}>{errorMessage}</div>}
         </div>
       );

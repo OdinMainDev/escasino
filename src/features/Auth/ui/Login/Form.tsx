@@ -23,6 +23,8 @@ import { useAppSelector } from '@/store/hooks/redux';
 import { isAppDebug } from '@/app/config/app';
 import { IResponseError } from '@/shared/models/interfaces/misc';
 import { ErrorResponseAsString } from '@/app/api/helpers';
+import { formTypeTypes } from '../../models/types';
+import Tabs from '@/entities/Tabs';
 
 interface IProps {
   openRegistration: () => void;
@@ -36,8 +38,9 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
   const [loader, setLoader] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IResponseError>();
   const [loginData, setLoginData] = useState<ILoginData>(sampleILoginData);
+  const [selectedType, setSelectedType] = useState('email');
 
-  const formType =
+  const formType: formTypeTypes =
     settings?.auth.login.phone && settings?.auth.login.email
       ? 'full'
       : settings?.auth.login.phone
@@ -52,10 +55,9 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
     settings?.auth.social_tw;
 
   // OVERRIDE FOR TESTS
-  // TODO: проверить с этими параметрами включенными и поправить верстку
-  // const formType = 'full';
+  // const formType: formTypeTypes = 'full';
   // const hasRemember = true;
-  // const hasSocials = false;
+  // const hasSocials = true;
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
@@ -88,14 +90,27 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
       <div>
         <div className={styles.title}>Авторизация</div>
 
-        {/* На будущее */}
-        {/* TODO: СДЕЛАТЬ ТУТ НОРМ ВЕРСТКУ В ФУЛЛ ( ЕСЛИ ИЗ АДМИНКИ ВКЛЮЧЕНО ЧТО И ПОЧТА И ТЕЛЕФОН ЕСТЬ ) */}
-        {/* TODO: НУЖНО ВСТАВИТЬ ВСЕГО ЛИШЬ 2 ИНУТА ПРОВЕРИТЬ ИХ:  formType == 'full' || formType == 'phone' */}
-        {/* TODO: а таб сам по себе все сделает*/}
-        {/* TODO: СДЕЛАТЬ ИНПУТ ТЕЛЕФОНА ( НОРМАЛЬНЫЙ А НЕ КАК ЭТО СДЕЛАНО КОНЕЧНО (КРАСИВЕНЬКО)) ) */}
-        {formType == 'full' && (
-          <div className="row">
-            <div className="tab" style={{ display: 'flex' }}>
+        <div className="row">
+          {formType === 'full' && (
+            <Tabs
+              className="mb-[36px]"
+              value={selectedType}
+              onChange={(value) => setSelectedType(value.value)}
+              tabs={[
+                {
+                  value: 'email',
+                  label: 'Электронная почта',
+                },
+                {
+                  value: 'phone',
+                  label: 'Телефон',
+                },
+              ]}
+            />
+          )}
+
+          <div className="tab">
+            {(formType === 'full' && selectedType === 'email') || formType === 'email' ? (
               <Input
                 placeholder="Электронная почта"
                 type="email"
@@ -105,30 +120,34 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
                     setLoginData((prev) => ({ ...prev, phone: '' }));
                   }
                 }}
+                value={loginData.email}
                 containerClassName={styles.input}
                 validationFunction={validateEmail}
                 autoComplete={autoCompleteHandler('email')}
                 isError={!!errorData?.errors['email']}
                 message={ErrorResponseAsString('email', 'Введите корректный e-mail', errorData)}
               />
+            ) : null}
+            {(formType === 'full' && selectedType === 'phone') || formType === 'phone' ? (
               <Input
                 placeholder={'Телефон'}
-                type={'text'}
+                type="phone"
+                value={loginData.phone}
                 containerClassName={styles.input}
                 isError={!!errorData?.errors['phone']}
                 validationFunction={validatePhone}
                 autoComplete={autoCompleteHandler('phone')}
-                onChange={(e) => {
-                  setLoginData((prev) => ({ ...prev, phone: e.target.value }));
+                onChangePhone={(value) => {
+                  setLoginData((prev) => ({ ...prev, phone: value }));
                   if (!isAppDebug) {
                     setLoginData((prev) => ({ ...prev, email: '' }));
                   }
                 }}
                 message={ErrorResponseAsString('phone', 'Введите корректный телефон', errorData)}
               />
-            </div>
+            ) : null}
           </div>
-        )}
+        </div>
 
         <Input
           placeholder="Пароль"
@@ -141,29 +160,18 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
           message={ErrorResponseAsString('password', 'Введите корректный пароль', errorData)}
           onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
         />
-
-        {/* TODO: ИСПРАВИТЬ ВЕРСТКУ ЕСЛИ ЕСТЬ ЗАПОМНИТЬ МЕНЯ */}
-        {hasRemember ? (
-          <div className={styles.forgot} style={{ display: 'flex' }}>
+        <div className={styles.forgot}>
+          {hasRemember && (
             <Checkbox
               value={false}
+              label="Запомнить меня"
               onChange={(value) => setLoginData((prev) => ({ ...prev, remember: value }))}
             />
-            <div style={{ margin: '0px 0px 0px 5px' }}>Запомнить меня</div>
-            <div
-              className={styles.forgot}
-              // onClick={() => dispatch(openResetPasswordModal())}
-              style={{ float: 'right', textAlign: 'right', width: '70%' }}
-              onClick={openResetModal}
-            >
-              Забыли пароль?
-            </div>
-          </div>
-        ) : (
-          <div className={styles.forgot} onClick={openResetModal}>
+          )}
+          <div className={styles.forgot_text} onClick={openResetModal}>
             Забыли пароль?
           </div>
-        )}
+        </div>
         {hasSocials ? (
           <div>
             <hr className={styles.linehr} />
@@ -176,9 +184,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
               <FB />
             </div>
           </div>
-        ) : (
-          ''
-        )}
+        ) : null}
 
         {settings?.auth.login.captcha && (
           <ReCAPTCHA

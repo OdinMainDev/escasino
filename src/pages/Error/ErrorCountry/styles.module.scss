@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px 20px 0 20px;
+  height: 100vh;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 17px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.lock {
+  margin-top: 50px;
+  width: 100px;
+}
