@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ISlice, ParentFilled, ParentPending, ParentRejected } from './slices';
 import { isAppDebug } from '@/app/config/app';
-import { IUser } from '@/entities/user';
+import { IUser } from '@/shared/models/interfaces/user';
 import { IResponseUser, getUserApi } from '@/app/api/user/getUser';
 
 export interface IInitialUser extends ISlice {

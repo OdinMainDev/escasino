@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, isAxiosError } from 'axios';
 import { IAuthHashRes } from '../entity';
-import { IResponseError } from '@/entities/misc';
+import { IResponseError } from '@/shared/models/interfaces/misc';
 import Cookies from 'js-cookie';
 
 export const verifyEmailConfirmApi = () => {

@@ -2,8 +2,8 @@
 import { WalletTabs } from '@/features/Wallet';
 import styles from './styles.module.scss';
 
-import GoBackButton from '@/shared/components/GoBackButton';
-import Icons from '@/shared/components/Icons';
+import GoBackButton from '@/shared/ui/GoBackButton';
+import Icons from '@/shared/ui/Icons';
 
 const Wallet = () => {
   return (

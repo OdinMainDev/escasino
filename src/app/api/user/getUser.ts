@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IUser } from '@/entities/user';
+import { IUser } from '@/shared/models/interfaces/user';
 import Cookies from 'js-cookie';
 
 export const userApi = () => {

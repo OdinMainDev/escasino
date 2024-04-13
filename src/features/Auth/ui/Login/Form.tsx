@@ -11,17 +11,17 @@ import {
 } from '@/features/Auth/helpers/validators';
 import { autoCompleteHandler } from '@/features/Auth/helpers/autoCompleteHandler';
 
-import Loader from '@/shared/components/Loader';
-import Input from '@/shared/components/Input';
+import Loader from '@/shared/ui/Loader';
+import Input from '@/shared/ui/Input';
 import { ILoginData, doLoginApi, sampleILoginData } from '@/app/api/auth/doLogin';
-import Button from '@/shared/components/Button';
+import Button from '@/shared/ui/Button';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { useModal } from '@/app/providers/ModalProvider';
-import Checkbox from '@/shared/components/Checkbox';
+import Checkbox from '@/shared/ui/Checkbox';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { useAppSelector } from '@/store/hooks/redux';
 import { isAppDebug } from '@/app/config/app';
-import { IResponseError } from '@/entities/misc';
+import { IResponseError } from '@/shared/models/interfaces/misc';
 import { ErrorResponseAsString } from '@/app/api/helpers';
 
 interface IProps {

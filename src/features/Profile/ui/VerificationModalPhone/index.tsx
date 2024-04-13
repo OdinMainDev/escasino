@@ -1,7 +1,7 @@
-import { IModal } from '@/entities/modal';
+import { IModal } from '@/shared/models/interfaces/modal';
 import styles from '../Modals.module.scss';
 import { useModal } from '@/app/providers/ModalProvider';
-import Modal from '@/shared/components/Modal';
+import Modal from '@/shared/ui/Modal';
 import Form from './Form';
 
 const ProfileVerificationPhoneModal = ({ close }: IModal) => {

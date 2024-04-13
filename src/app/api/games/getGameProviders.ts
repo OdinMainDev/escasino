@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IProvider } from '@/entities/providers';
+import { IProvider } from '@/shared/models/interfaces/providers';
 
 export const gameProvidersApi = () => {
   return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/public/get/game-providers`;

@@ -5,8 +5,8 @@ import { useCallback, useState } from 'react';
 // import { IFilter } from '@/app/api/games/getSearchGames';
 import CategoriesList from './ui/CategoriesList';
 import ProviderList from './ui/ProviderList';
-import Button from '@/shared/components/Button';
-import Switch from '@/shared/components/Switch';
+import Button from '@/shared/ui/Button';
+import Switch from '@/shared/ui/Switch';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 
 const Filter = () => {

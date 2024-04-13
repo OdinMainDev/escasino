@@ -1,7 +1,7 @@
-import { IModal } from '@/entities/modal';
+import { IModal } from '@/shared/models/interfaces/modal';
 import styles from '../AuthForm.module.scss';
 import { useModal } from '@/app/providers/ModalProvider';
-import Modal from '@/shared/components/Modal';
+import Modal from '@/shared/ui/Modal';
 import AuthResetSetPasswordForm from './Form';
 
 const AuthResetSetPasswordModal = ({ close }: IModal) => {

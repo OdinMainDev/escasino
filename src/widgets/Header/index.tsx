@@ -6,8 +6,8 @@ import FilterIcon from './ui/FilterIcon';
 import ChatIcon from './ui/ChatIcon';
 
 import { usePathname, useRouter } from '@/shared/helpers/navigation';
-import GoBackButton from '@/shared/components/GoBackButton';
-import Input from '@/shared/components/Input';
+import GoBackButton from '@/shared/ui/GoBackButton';
+import Input from '@/shared/ui/Input';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 
 type HeaderProps = {

@@ -2,8 +2,8 @@ import { memo, useEffect, useState } from 'react';
 
 import styles from './ProviderList.module.scss';
 import { useAppSelector } from '@/store/hooks/redux';
-import { TabBlock } from '@/shared/components/TabBlock';
-import Loader from '@/shared/components/Loader';
+import { TabBlock } from '@/entities/TabBlock';
+import Loader from '@/shared/ui/Loader';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 
 interface IProps {

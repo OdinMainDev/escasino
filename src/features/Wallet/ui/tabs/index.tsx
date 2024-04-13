@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import styles from './styles.module.scss';
 import { tabs } from '../constants/tabs';
-import Tabs, { ITab } from '@/shared/components/Tabs';
+import Tabs, { ITab } from '@/entities/Tabs';
 import WalletTopUp from './Deposit/WalletTopUp';
 import WalletWithdraw from './Withdraw/WalletWithdraw';
 import WalletHistory from './History/WalletHistory';

@@ -6,7 +6,7 @@ import styles from './GridItem.module.scss';
 
 import { useRouter } from '@/shared/helpers/navigation';
 import { PlaceholderGame } from '@/app/assets/images/Placeholder';
-import { IGame } from '@/entities/game';
+import { IGame } from '@/shared/models/interfaces/game';
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   game: IGame;

@@ -2,8 +2,8 @@ import { useAppSelector } from '@/store/hooks/redux';
 import { useEffect, useState } from 'react';
 
 import styles from './CategoriesList.module.scss';
-import { TabItem } from '@/shared/components/TabItem';
-import Loader from '@/shared/components/Loader';
+import { TabItem } from '@/entities/TabItem';
+import Loader from '@/shared/ui/Loader';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 
 interface IProps {

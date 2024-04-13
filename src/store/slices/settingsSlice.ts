@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // import Cookies from 'js-cookie';
 import { ParentPending, ParentFilled, ParentRejected, ISlice } from './slices';
-import { ISettings } from '@/entities/settings';
+import { ISettings } from '@/shared/models/interfaces/settings';
 import { IResponseSettings, getSettingsApi } from '@/app/api/core/getSettings';
 import { isAppDebug } from '@/app/config/app';
 

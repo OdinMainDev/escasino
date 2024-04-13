@@ -1,4 +1,4 @@
-import { IGame } from '@/entities/game';
+import { IGame } from '@/shared/models/interfaces/game';
 import styles from './GamesGrid.module.scss';
 import { GridItem } from '@/widgets/Games/ui/GridItem';
 

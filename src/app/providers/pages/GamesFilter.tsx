@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, ReactNode, createContext, useContext } from 'react';
 import { IFilter } from '@/app/api/games/getSearchGames';
 

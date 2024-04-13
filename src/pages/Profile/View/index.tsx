@@ -4,9 +4,9 @@ import styles from './styles.module.scss';
 import { useAppSelector } from '@/store/hooks/redux';
 import { useRouter } from '@/shared/helpers/navigation';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
-import GoBackButton from '@/shared/components/GoBackButton';
-import Button from '@/shared/components/Button';
-import Loader from '@/shared/components/Loader';
+import GoBackButton from '@/shared/ui/GoBackButton';
+import Button from '@/shared/ui/Button';
+import Loader from '@/shared/ui/Loader';
 
 const Profile = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);

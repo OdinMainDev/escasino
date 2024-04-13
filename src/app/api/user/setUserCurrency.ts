@@ -1,4 +1,4 @@
-import { IBasicErrors, IResponseError } from '@/entities/misc';
+import { IBasicErrors, IResponseError } from '@/shared/models/interfaces/misc';
 import axios, { AxiosResponse, isAxiosError } from 'axios';
 import Cookies from 'js-cookie';
 

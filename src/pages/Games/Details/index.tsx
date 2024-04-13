@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 import styles from './styles.module.scss';
-import { IGame } from '@/entities/game';
+import { IGame } from '@/shared/models/interfaces/game';
 import { getGameApi } from '@/app/api/games/getGameById';
-import GoBackButton from '@/shared/components/GoBackButton';
-import Icons from '@/shared/components/Icons';
-import Button from '@/shared/components/Button';
+import GoBackButton from '@/shared/ui/GoBackButton';
+import Icons from '@/shared/ui/Icons';
+import Button from '@/shared/ui/Button';
 import { WinningsList } from '@/widgets/WinningsList';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import { useAuthProvider } from '@/app/providers/AuthProvider';

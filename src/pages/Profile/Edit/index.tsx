@@ -1,6 +1,6 @@
 import ProfileForm from '@/features/Profile/ui/ProfileForm/ProfileForm';
 import styles from './styles.module.scss';
-import GoBackButton from '@/shared/components/GoBackButton';
+import GoBackButton from '@/shared/ui/GoBackButton';
 import ProfileModals from './modals';
 
 const ProfileEdit = () => {

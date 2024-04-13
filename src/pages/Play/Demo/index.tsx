@@ -5,13 +5,13 @@ import { useParams } from 'react-router-dom';
 import styles from './styles.module.scss';
 
 // import { GamesGrid } from '@/widgets/Games/ui/Grid';
-import GameLayout from '@/shared/ui/game';
+import GameLayout from '@/shared/layouts/game';
 import { getDemoApi } from '@/app/api/play/getDemo';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { getGameApi } from '@/app/api/games/getGameById';
 import { useRouter } from '@/shared/helpers/navigation';
 import { isAppDebug } from '@/app/config/app';
-import Loader from '@/shared/components/Loader';
+import Loader from '@/shared/ui/Loader';
 import ModalOpenReal from './ui/ModalOpenReal';
 import { useModal } from '@/app/providers/ModalProvider';
 

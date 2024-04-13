@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, isAxiosError } from 'axios';
 import { IAuthHashRes } from './entity';
-import { IResponseError } from '@/entities/misc';
+import { IResponseError } from '@/shared/models/interfaces/misc';
 
 export const resetPasswordApi = () => {
   return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/reset-password`;

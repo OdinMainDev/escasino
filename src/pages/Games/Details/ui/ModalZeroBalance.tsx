@@ -1,8 +1,8 @@
-import { IModal } from '@/entities/modal';
+import { IModal } from '@/shared/models/interfaces/modal';
 import styles from './ModalZerobalance.module.scss';
 import { useModal } from '@/app/providers/ModalProvider';
-import Modal from '@/shared/components/Modal';
-import Button from '@/shared/components/Button';
+import Modal from '@/shared/ui/Modal';
+import Button from '@/shared/ui/Button';
 import { useRouter } from '@/shared/helpers/navigation';
 
 interface IProps extends IModal {

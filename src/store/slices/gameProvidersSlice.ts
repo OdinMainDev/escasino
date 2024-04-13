@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ISlice, ParentFilled, ParentPending, ParentRejected } from './slices';
 import { IResponseGameProviders, getGameProvidersApi } from '@/app/api/games/getGameProviders';
-import { IProvider } from '@/entities/providers';
+import { IProvider } from '@/shared/models/interfaces/providers';
 import { isAppDebug } from '@/app/config/app';
 
 export interface IInitialGameProviders extends ISlice {

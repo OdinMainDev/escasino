@@ -1,4 +1,4 @@
-import Preloader from '@/shared/components/Preloader';
+import Preloader from '@/shared/ui/Preloader';
 import React, { createContext, useContext, useState, ReactNode, FunctionComponent } from 'react';
 
 interface PreloaderContextType {

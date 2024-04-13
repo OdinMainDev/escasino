@@ -1,11 +1,11 @@
 import styles from './Form.module.scss';
-import Button from '@/shared/components/Button';
+import Button from '@/shared/ui/Button';
 import { useModal } from '@/app/providers/ModalProvider';
-import Input from '@/shared/components/Input';
-import Loader from '@/shared/components/Loader';
+import Input from '@/shared/ui/Input';
+import Loader from '@/shared/ui/Loader';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { useState } from 'react';
-import { IResponseError } from '@/entities/misc';
+import { IResponseError } from '@/shared/models/interfaces/misc';
 
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { ErrorResponseAsString } from '@/app/api/helpers';

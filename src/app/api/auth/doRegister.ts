@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, isAxiosError } from 'axios';
 import { IAuthRes } from './entity';
-import { IResponseError } from '@/entities/misc';
+import { IResponseError } from '@/shared/models/interfaces/misc';
 
 export const registerApi = () => {
   return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/register`;

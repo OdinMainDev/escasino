@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes, ReactElement } from 'react';
 import classNames from 'classnames';
 
 import styles from './styles.module.scss';
-import Loader from '@/shared/components/Loader';
+import Loader from '@/shared/ui/Loader';
 
 interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   childred?: ReactElement;

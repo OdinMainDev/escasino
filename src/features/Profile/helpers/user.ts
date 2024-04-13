@@ -1,5 +1,5 @@
 import { IUserData } from '@/app/api/user/setUserData';
-import { IUser } from '@/entities/user';
+import { IUser } from '@/shared/models/interfaces/user';
 
 export const userDataMapper = (user: IUser): IUserData => {
   return {

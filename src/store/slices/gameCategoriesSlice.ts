@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ISlice, ParentFilled, ParentPending, ParentRejected } from './slices';
 import { IResponseGameCategories, getGameCategoriesApi } from '@/app/api/games/getGameCategories';
-import { ICategory } from '@/entities/categories';
+import { ICategory } from '@/shared/models/interfaces/categories';
 import { isAppDebug } from '@/app/config/app';
 
 export interface IInitialGameCategories extends ISlice {

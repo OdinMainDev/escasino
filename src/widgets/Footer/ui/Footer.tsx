@@ -3,7 +3,7 @@ import styles from './Footer.module.scss';
 import FooterSelect from './FooterSelect';
 import { UserIcon, Wallet } from './Icons';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
-import Loader from '@/shared/components/Loader';
+import Loader from '@/shared/ui/Loader';
 
 type FooterProps = {
   isHidden?: boolean;

@@ -1,4 +1,4 @@
-import { IPlayReal } from '@/entities/play';
+import { IPlayReal } from '@/shared/models/interfaces/play';
 import axios, { isAxiosError } from 'axios';
 import Cookies from 'js-cookie';
 

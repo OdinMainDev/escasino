@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import styles from './styles.module.scss';
-import { IGame } from '@/entities/game';
+import { IGame } from '@/shared/models/interfaces/game';
 import { IFilter, getSearchGamesApi } from '@/app/api/games/getSearchGames';
 import { GamesGrid } from '@/widgets/Games/ui/Grid';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 import { useQuery } from '@/shared/helpers/navigation';
-import IndexLayout from '@/shared/ui/home';
+import IndexLayout from '@/shared/layouts/home';
 import { isAppDebug } from '@/app/config/app';
-import Loader from '@/shared/components/Loader';
+import Loader from '@/shared/ui/Loader';
 
 export default function Search() {
   const [games, setGames] = useState<IGame[] | null>(null);

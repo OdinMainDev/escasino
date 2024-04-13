@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import styles from './TopGames.module.scss';
-import { IGame } from '@/entities/game';
+import { IGame } from '@/shared/models/interfaces/game';
 import { GamesSlider } from '@/widgets/Games/ui/Slider';
 
 interface IProps {

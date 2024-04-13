@@ -1,4 +1,4 @@
-import { IResponseError } from '@/entities/misc';
+import { IResponseError } from '@/shared/models/interfaces/misc';
 
 export const ErrorResponseAsString = (
   key: string,

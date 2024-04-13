@@ -1,6 +1,6 @@
 import styles from './style.module.scss';
 import { useModal } from '@/app/providers/ModalProvider';
-import Button from '@/shared/components/Button';
+import Button from '@/shared/ui/Button';
 
 const FooterAuthButtons = () => {
   const { doOpenModal } = useModal();

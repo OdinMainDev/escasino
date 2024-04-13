@@ -1,4 +1,4 @@
-import Icons from '@/shared/components/Icons';
+import Icons from '@/shared/ui/Icons';
 import styles from '../styles.module.scss';
 
 interface IProps {

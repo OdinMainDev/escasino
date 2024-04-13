@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ISlice, ParentFilled, ParentPending, ParentRejected } from './slices';
-import { IGame } from '@/entities/game';
+import { IGame } from '@/shared/models/interfaces/game';
 import { IResponseHomeGames, getHomeGamesApi } from '@/app/api/games/getHomeGames';
 import { isAppDebug } from '@/app/config/app';
 

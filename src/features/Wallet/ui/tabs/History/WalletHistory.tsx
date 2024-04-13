@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from './WalletHisory.module.scss';
-import { TabItem } from '@/shared/components/TabItem';
+import { TabItem } from '@/entities/TabItem';
 import { WalletHistoryItem } from './WalletHistoryItem';
 
 const WalletHistory = () => {

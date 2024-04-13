@@ -1,4 +1,4 @@
-import { ISettings } from '@/entities/settings';
+import { ISettings } from '@/shared/models/interfaces/settings';
 import axios from 'axios';
 
 export const settingsApi = () => {

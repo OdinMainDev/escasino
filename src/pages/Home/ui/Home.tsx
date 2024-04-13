@@ -2,11 +2,11 @@ import styles from './Home.module.scss';
 
 import { themeHasTopGames } from '@/app/config/appearance';
 import { useAppSelector } from '@/store/hooks/redux';
-import { IGame } from '@/entities/game';
+import { IGame } from '@/shared/models/interfaces/game';
 import { TopGames } from '@/widgets/Games/ui/TopGames';
 import { GamesGrid } from '@/widgets/Games/ui/Grid';
-import IndexLayout from '@/shared/ui/home';
-import Loader from '@/shared/components/Loader';
+import IndexLayout from '@/shared/layouts/home';
+import Loader from '@/shared/ui/Loader';
 
 export default function Home() {
   const { games, loading } = useAppSelector((state) => state.homeGamesReducer);
@@ -27,7 +27,7 @@ export default function Home() {
         ''
       )}
       {loading ? (
-        <div>
+        <div className={styles.loader}>
           <Loader />
         </div>
       ) : (

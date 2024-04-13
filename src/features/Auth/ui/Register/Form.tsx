@@ -10,22 +10,22 @@ import {
   validateRegister,
 } from '@/features/Auth/helpers/validators';
 
-import Loader from '@/shared/components/Loader';
-import Input from '@/shared/components/Input';
-import Button from '@/shared/components/Button';
+import Loader from '@/shared/ui/Loader';
+import Input from '@/shared/ui/Input';
+import Button from '@/shared/ui/Button';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { useModal } from '@/app/providers/ModalProvider';
-import Checkbox from '@/shared/components/Checkbox';
+import Checkbox from '@/shared/ui/Checkbox';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { IRegisterData, doRegisterApi, sampleIRegisterData } from '@/app/api/auth/doRegister';
 import { Link } from 'react-router-dom';
-import Select, { ISelectOption } from '@/shared/components/Select';
+import Select, { ISelectOption } from '@/shared/ui/Select';
 import { isAppDebug } from '@/app/config/app';
 import classNames from 'classnames';
 import { getCountries } from '@/store/slices/countriesSlice';
 import { genderSelect } from '@/app/constants/genders';
-import { IResponseError } from '@/entities/misc';
+import { IResponseError } from '@/shared/models/interfaces/misc';
 import { ErrorResponseAsString } from '@/app/api/helpers';
 
 interface IProps {

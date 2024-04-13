@@ -1,8 +1,8 @@
-import Input from '@/shared/components/Input';
+import Input from '@/shared/ui/Input';
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
-import Button from '@/shared/components/Button';
-import { TabBlock } from '@/shared/components/TabBlock';
+import Button from '@/shared/ui/Button';
+import { TabBlock } from '@/entities/TabBlock';
 import { WalletItem } from './WalletItem';
 
 const WalletWithdraw = () => {

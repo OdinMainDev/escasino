@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 import { usePathname } from '@/shared/helpers/navigation';
-import Icons from '@/shared/components/Icons';
+import Icons from '@/shared/ui/Icons';
 
 interface IProps {
   className?: string;

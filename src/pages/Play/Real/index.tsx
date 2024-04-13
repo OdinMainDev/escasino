@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import styles from './styles.module.scss';
 
 // import { GamesGrid } from '@/widgets/Games/ui/Grid';
-import GameLayout from '@/shared/ui/game';
+import GameLayout from '@/shared/layouts/game';
 import { getRealApi } from '@/app/api/play/getReal';
 // import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { getGameApi } from '@/app/api/games/getGameById';

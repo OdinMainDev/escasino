@@ -1,7 +1,7 @@
 import Slider, { Settings } from 'react-slick';
 import './GamesSlider.scss';
 import { settingsResponsive } from '../constants';
-import { IGame } from '@/entities/game';
+import { IGame } from '@/shared/models/interfaces/game';
 import { GridItem } from '@/widgets/Games/ui/GridItem';
 
 interface IProps {

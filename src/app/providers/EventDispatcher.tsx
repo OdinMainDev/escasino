@@ -37,5 +37,5 @@ export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = (
     doCloseModals();
   }, [pathname, isAuth]);
 
-  return <>{children}</>;
+  return children;
 };

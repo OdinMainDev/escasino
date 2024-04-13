@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
-import GoBackButton from '@/shared/components/GoBackButton';
-import Loader from '@/shared/components/Loader';
+import GoBackButton from '@/shared/ui/GoBackButton';
+import Loader from '@/shared/ui/Loader';
 import { useAppSelector } from '@/store/hooks/redux';
 import BalanceItem from '@/features/Wallet/ui/BalanceItem';
 

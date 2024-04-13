@@ -1,4 +1,4 @@
-import { ITab } from '@/shared/components/Tabs';
+import { ITab } from '@/entities/Tabs';
 
 export const tabs: ITab[] = [
   {

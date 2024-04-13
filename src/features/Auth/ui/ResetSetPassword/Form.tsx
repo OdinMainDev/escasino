@@ -7,9 +7,9 @@ import {
   validateResetSetPassword,
 } from '@/features/Auth/helpers/validators';
 
-import Loader from '@/shared/components/Loader';
-import Input from '@/shared/components/Input';
-import Button from '@/shared/components/Button';
+import Loader from '@/shared/ui/Loader';
+import Input from '@/shared/ui/Input';
+import Button from '@/shared/ui/Button';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { useModal } from '@/app/providers/ModalProvider';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
@@ -19,7 +19,7 @@ import {
   doResetSetPasswordApi,
   sampleIResetSetPasswordData,
 } from '@/app/api/auth/doResetSetPassword';
-import { IResponseError } from '@/entities/misc';
+import { IResponseError } from '@/shared/models/interfaces/misc';
 import { ErrorResponseAsString } from '@/app/api/helpers';
 
 interface IProps {

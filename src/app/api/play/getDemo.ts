@@ -1,4 +1,4 @@
-import { IPlayDemo } from '@/entities/play';
+import { IPlayDemo } from '@/shared/models/interfaces/play';
 import axios, { isAxiosError } from 'axios';
 import Cookies from 'js-cookie';
 

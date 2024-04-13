@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICategory } from '@/entities/categories';
+import { ICategory } from '@/shared/models/interfaces/categories';
 
 export const gameCategoriesApi = () => {
   return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/public/get/game-categories`;

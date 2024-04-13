@@ -1,4 +1,4 @@
-import { ISelectOption } from '@/shared/components/Select';
+import { ISelectOption } from '@/shared/ui/Select';
 
 export const genderSelect: ISelectOption[] = [
   {

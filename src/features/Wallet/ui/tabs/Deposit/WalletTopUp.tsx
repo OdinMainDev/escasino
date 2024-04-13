@@ -1,10 +1,10 @@
-import Button from '@/shared/components/Button';
+import Button from '@/shared/ui/Button';
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useState } from 'react';
-import { TabItem } from '@/shared/components/TabItem';
-import { TabBlock } from '@/shared/components/TabBlock';
-import Input from '@/shared/components/Input';
+import { TabItem } from '@/entities/TabItem';
+import { TabBlock } from '@/entities/TabBlock';
+import Input from '@/shared/ui/Input';
 
 const WalletTopUp = () => {
   const [paymentMethod, setPaymentMethod] = useState([

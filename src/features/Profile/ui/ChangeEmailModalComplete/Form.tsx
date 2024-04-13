@@ -1,5 +1,5 @@
 import styles from './Form.module.scss';
-import Button from '@/shared/components/Button';
+import Button from '@/shared/ui/Button';
 import { useModal } from '@/app/providers/ModalProvider';
 
 const ProfileChangeEmailCompleteForm = () => {

@@ -1,4 +1,4 @@
-import { IGame } from '@/entities/game';
+import { IGame } from '@/shared/models/interfaces/game';
 import axios from 'axios';
 
 export const gameApi = (id: number) => {
