@@ -2,14 +2,14 @@
   display: flex;
   overflow-y: auto;
   flex-direction: column;
-  height: 70vh;
+  max-height: 70vh;
 }
 
 .title {
   font-size: 20px;
   font-weight: 500;
   color: var(--secondary);;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 
@@ -6,7 +6,7 @@ interface IProps {
   value?: boolean;
   onChange?: (value: boolean) => void;
   isError?: boolean;
-  label?: string;
+  label?: string | ReactNode;
 }
 
 const Checkbox = ({ value, onChange, isError, label }: IProps) => {

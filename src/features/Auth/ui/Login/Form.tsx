@@ -47,17 +47,17 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
         ? 'phone'
         : 'email';
   const hasRemember = settings?.auth.login.remember;
-  const hasSocials =
-    settings?.auth.social_vk ||
-    settings?.auth.social_ok ||
-    settings?.auth.social_fb ||
-    settings?.auth.social_tg ||
-    settings?.auth.social_tw;
+  // const hasSocials =
+  //   settings?.auth.social_vk ||
+  //   settings?.auth.social_ok ||
+  //   settings?.auth.social_fb ||
+  //   settings?.auth.social_tg ||
+  //   settings?.auth.social_tw;
 
   // OVERRIDE FOR TESTS
   // const formType: formTypeTypes = 'full';
   // const hasRemember = true;
-  // const hasSocials = true;
+  const hasSocials = true;
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {

@@ -1,12 +1,11 @@
 .container {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 12px;
 
   &.error {
     .checkbox {
       border: 2px solid  var(--Aditional-error, #CF6679);
-
     }
   }
 
@@ -16,6 +15,7 @@
     justify-content: center;
     width: 18px;
     height: 18px;
+    position: relative;
   }
 
   input {

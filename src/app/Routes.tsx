@@ -19,6 +19,7 @@ import Demo from '@/pages/Play/Demo';
 import Real from '@/pages/Play/Real';
 import Wallet from '@/pages/Wallet';
 import Currencies from '@/pages/Wallet/Currencies';
+import LanguageGuard from './providers/LanguageGuard';
 
 const availRoutes: RouteObject[] = [
   {
@@ -103,16 +104,15 @@ const availRoutes: RouteObject[] = [
       },
     ],
   },
-
   {
     path: 'error',
     children: [
       {
-        path: 'unavailable', // казино недоступно ( ремонтные работы )
+        path: 'unavailable',
         element: <ErrorUnavailable />,
       },
       {
-        path: 'country', // блок по стране
+        path: 'country',
         element: <ErrorCountry />,
       },
     ],
@@ -127,8 +127,8 @@ const routes: RouteObject[] = [
         element: <Layout />,
         children: [
           {
-            // TODO: переделать на значение из конфига
             path: '/:lang',
+            element: <LanguageGuard />,
             children: availRoutes,
           },
           {
