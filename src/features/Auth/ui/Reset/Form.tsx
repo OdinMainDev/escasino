@@ -20,6 +20,7 @@ import { isAppDebug } from '@/app/config/app';
 import { IResetData, doResetApi, sampleIResetData } from '@/app/api/auth/doReset';
 import { IResponseError } from '@/shared/models/interfaces/misc';
 import { ErrorResponseAsString } from '@/app/api/helpers';
+import Tabs from '@/entities/Tabs';
 
 interface IProps {
   openLoginModal: () => void;
@@ -32,6 +33,7 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
   const [loader, setLoader] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IResponseError>();
   const [resetData, setResetData] = useState<IResetData>(sampleIResetData);
+  const [selectedType, setSelectedType] = useState('email');
 
   const formType =
     settings?.auth.login.phone && settings?.auth.login.email
@@ -73,9 +75,26 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
       )}
       <div>
         <div className={styles.title}>Восстановление пароля</div>
-        {formType == 'full' && (
-          <div className="row">
-            <div className="tab" style={{ display: 'flex' }}>
+        <div className="row">
+          {formType === 'full' && (
+            <Tabs
+              className="mb-[36px]"
+              value={selectedType}
+              onChange={(value) => setSelectedType(value.value)}
+              tabs={[
+                {
+                  value: 'email',
+                  label: 'Электронная почта',
+                },
+                {
+                  value: 'phone',
+                  label: 'Телефон',
+                },
+              ]}
+            />
+          )}
+          <div className="tab">
+            {(formType === 'full' && selectedType === 'email') || formType === 'email' ? (
               <Input
                 placeholder="Электронная почта"
                 type="email"
@@ -91,13 +110,15 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
                 isError={!!errorData?.errors['email']}
                 message={ErrorResponseAsString('email', 'Введите корректный e-mail', errorData)}
               />
+            ) : null}
+            {(formType === 'full' && selectedType === 'phone') || formType === 'phone' ? (
               <Input
                 placeholder={'Телефон'}
                 type={'text'}
                 containerClassName={styles.input}
                 isError={!!errorData?.errors['phone']}
                 validationFunction={validatePhone}
-                autoComplete={autoCompleteHandler('phone')}
+                // autoComplete={autoCompleteHandler('phone')}
                 onChange={(e) => {
                   setResetData((prev) => ({ ...prev, phone: e.target.value }));
                   if (!isAppDebug) {
@@ -106,9 +127,9 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
                 }}
                 message={ErrorResponseAsString('phone', 'Введите корректный телефон', errorData)}
               />
-            </div>
+            ) : null}
           </div>
-        )}
+        </div>
         {settings?.auth.reset.captcha && (
           <ReCAPTCHA
             className={styles.captcha}

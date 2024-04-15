@@ -17,6 +17,7 @@ import { useModal } from '@/app/providers/ModalProvider';
 import Footer from '@/widgets/Footer';
 import { useAppSelector } from '@/store/hooks/redux';
 import ModalZeroBalance from './ui/ModalZeroBalance';
+import { gamesHeaderTypeCover } from '@/app/config/app';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
@@ -54,31 +55,40 @@ const Details = () => {
 
   // TODOSELF: *для себя* сделать лоадер и дописать потом когда будет админка игры
 
-  // TODO: виннер лист слайдер
   // TODO: исправить изображение ( размер не тот, сделать железобетонно чтобы размер контейнера не зависил от размера изображения )
-  // TODO: а само изображение background-size: cover;
-  // TODO: исправить как текст показывается ( заголовок и описание игры ( у дизайна отступы больше, да и как будто бы шрифты не подтянулись ) )
-  // TODO: сделать в общем все красиво как по дизайну для блека изначально а дальше уже то что ниже пишу
-  // так же тут на футер идет педдинг или что это
 
-  // TODO: сделать второй вариант шапки, где картинка задний фон на 100% ширины и адекватно высоту подобрать, шапка на нее накладывается
-  // и в том же месте находится, но как она будет подсвечиваться хз ( то есть она без бг )
-  // низ картинки должен уходить в затемнение или засветление ( в белый если белая тема в темный если темная ) она должна тоже из конфига переключаться
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <GoBackButton />
-        <div className={styles.provider_name}>{game?.game_provider}</div>
-        <Icons icon="chat" />
+      <div className={styles.header_container}>
+        <div
+          className={classNames(styles.header, {
+            [styles.header_cover]: gamesHeaderTypeCover,
+          })}
+        >
+          <GoBackButton />
+          <div className={styles.provider_name}>{game?.game_provider}</div>
+          <Icons icon="chat" />
+        </div>
+        <div className={styles.image_container}>
+          {game?.image ? (
+            <img
+              src={game.image}
+              alt={game.name}
+              className={classNames(styles.image, {
+                [styles.cover]: gamesHeaderTypeCover,
+              })}
+            />
+          ) : (
+            <img
+              src={PlaceholderImage}
+              alt={game?.name}
+              className={classNames(styles.image, {
+                [styles.cover]: gamesHeaderTypeCover,
+              })}
+            />
+          )}
+        </div>
       </div>
-      <div className={styles.image_container}>
-        {game?.image ? (
-          <img src={game.image} alt={game.name} className={styles.image} />
-        ) : (
-          <img src={PlaceholderImage} alt={game?.name} className={styles.image} />
-        )}
-      </div>
-
       <div className={styles.buttons}>
         <Button elType="outlined" className={styles.button} onClick={openDemoPlay}>
           Демо-игра

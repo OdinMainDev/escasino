@@ -7,8 +7,18 @@
 .header {
   display: flex;
   align-items: center;
+  position: relative;
+  z-index: 1;
   justify-content: space-between;
   padding: 40px 16px 16px 16px;
+  &.header_cover {
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+.header_container {
+  position: relative;
+  margin-bottom: 24px;
 }
 
 .provider {
@@ -26,11 +36,18 @@
 .image {
   width: 100%;
   height: 100%;
+  &.cover {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 100%;
+    object-fit: cover;
+  }
   &_container {
-    position: relative;
     width: 420px;
     height: 420px;
-    margin: 24px auto 24px auto;
+    margin: 24px auto 0 auto;
     @media (max-width: 425px) {
       width: 350px;
       height: 350px;
@@ -82,14 +99,15 @@
     font-size: 24px;
     font-style: normal;
     font-weight: 600;
-    line-height: 32px
+    line-height: 32px;
+    margin-bottom: 12px;
   }
 
   &_info {
     color: rgba(0, 0, 0, 0.87);
     font-size: 14px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 20px
   }
 }

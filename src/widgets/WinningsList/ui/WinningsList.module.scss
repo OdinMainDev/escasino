@@ -1,10 +1,16 @@
 .title {
+  padding: 0 16px;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
   line-height: 24px;
-  color: rgba(255, 255, 255, 0.87);
+  color: var(--Text-primary);
   margin-bottom: 12px;
+}
+
+.item {
+  padding: 0 5px;
+  width: 100%;
 }
 
 .list {

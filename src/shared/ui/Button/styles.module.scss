@@ -27,9 +27,13 @@
   background-color: transparent;
   color: var(--secondary);
   &:hover {
-    opacity: 0.4;
     background-color: var(--main-button-color);
     color: var(--primary);
+    svg {
+      path {
+        stroke: #FFF;
+      }
+    }
   }  
   &.disabled {
     &:hover {

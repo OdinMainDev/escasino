@@ -1,17 +1,21 @@
 import { getWinningsList } from '../api/winnningsApi';
+import { settings } from '../settings';
 import WinningsItem from './WinningsItem';
 import styles from './WinningsList.module.scss';
+import Slider from 'react-slick';
 
 const WinningsList = () => {
   const winnings = getWinningsList();
   return (
     <div className={styles.container}>
       <div className={styles.title}>Последние выигрыши</div>
-      <div className={styles.list}>
+      <Slider className={styles.list} {...settings}>
         {winnings.map((item, index) => (
-          <WinningsItem {...item} key={index} />
+          <div className={styles.item} key={index}>
+            <WinningsItem {...item} />
+          </div>
         ))}
-      </div>
+      </Slider>
     </div>
   );
 };
