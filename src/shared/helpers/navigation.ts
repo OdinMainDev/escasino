@@ -57,6 +57,10 @@ export function useRouter() {
   const { lang } = useParams();
   const supportedLangs = defaultLanguages;
 
+  const goBack = () => {
+    navigate(-1);
+  };
+
   const push = useCallback(
     (pathOrObj: string | IPushData) => {
       let url = '';
@@ -81,5 +85,5 @@ export function useRouter() {
     },
     [navigate],
   );
-  return { push };
+  return { push, goBack };
 }

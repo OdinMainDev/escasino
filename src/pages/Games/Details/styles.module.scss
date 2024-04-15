@@ -1,7 +1,8 @@
 .container {
-  min-height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-bottom: 40px;
 }
 
 .header {
@@ -42,12 +43,14 @@
     top: 0;
     left: 0;
     height: 100%;
-    object-fit: cover;
+    img {
+      object-fit: contain;
+    }
   }
   &_container {
-    width: 420px;
     height: 420px;
     margin: 24px auto 0 auto;
+
     @media (max-width: 425px) {
       width: 350px;
       height: 350px;

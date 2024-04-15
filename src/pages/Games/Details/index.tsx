@@ -55,8 +55,6 @@ const Details = () => {
 
   // TODOSELF: *для себя* сделать лоадер и дописать потом когда будет админка игры
 
-  // TODO: исправить изображение ( размер не тот, сделать железобетонно чтобы размер контейнера не зависил от размера изображения )
-
   return (
     <div className={styles.container}>
       <div className={styles.header_container}>
@@ -69,7 +67,11 @@ const Details = () => {
           <div className={styles.provider_name}>{game?.game_provider}</div>
           <Icons icon="chat" />
         </div>
-        <div className={styles.image_container}>
+        <div
+          className={classNames(styles.image_container, {
+            [styles.cover]: gamesHeaderTypeCover,
+          })}
+        >
           {game?.image ? (
             <img
               src={game.image}
