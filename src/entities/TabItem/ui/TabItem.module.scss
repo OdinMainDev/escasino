@@ -7,6 +7,8 @@
   border-radius: 2px;
   font-weight: 300;
   line-height: 143%;
+  min-width: 80px;
+  min-height: 28px;
   cursor: pointer;
   &.selected {
     color:  var(--Tabs-main, #333);

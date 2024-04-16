@@ -7,5 +7,18 @@
 }
 
 .icon {
+  height: 45px;
+  width: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
+  border-radius: 4px;
+  &.outline {
+    border: 2px solid var(--Text-primary);
+  }
+
+  &.contain {
+    background-color: var(--Text-primary);
+  }
 }

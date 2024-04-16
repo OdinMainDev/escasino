@@ -72,7 +72,6 @@ const ProfileForm = () => {
         dob: userData.dob, // почему то та что отправляется != той что устанавливается
         fid,
       });
-      // TODO поправить отображение ошибок и тут ( обводиться но не пишется ошибка )
       if (data.hasErrors) {
         setErrorData({
           errors: data.errors,

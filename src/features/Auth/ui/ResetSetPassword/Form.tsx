@@ -53,8 +53,6 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
       setLoader(false);
     }
   };
-
-  // TODO: сделать красивую модалку с визардом ( пошаговое заполнение ) как из дизайна
   return (
     <form className={styles.container}>
       {(loader || loadingSettings || isAuth || !settings) && (

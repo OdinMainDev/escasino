@@ -1,5 +1,5 @@
 'use client';
-import React, { KeyboardEvent, useState } from 'react';
+import React, { KeyboardEvent, useEffect, useState } from 'react';
 
 import styles from './styles.module.scss';
 import FilterIcon from './ui/FilterIcon';
@@ -9,6 +9,7 @@ import { usePathname, useRouter } from '@/shared/helpers/navigation';
 import GoBackButton from '@/shared/ui/GoBackButton';
 import Input from '@/shared/ui/Input';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
+import Icons from '@/shared/ui/Icons';
 
 type HeaderProps = {
   hasNotSearch?: boolean;
@@ -21,13 +22,16 @@ const Header = ({ hasNotSearch, hasTitle }: HeaderProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
+  useEffect(() => {
+    setFilterVal(getFilters().query);
+  }, [getFilters().query]);
+
   const clickFilter = () => {
     router.push({
       pathname: '/games/filter',
     });
   };
 
-  // TODO: сделать кнопку поиска ( иконку лупу ) нажимаемой
   const searchGames = (event: KeyboardEvent<HTMLInputElement>) => {
     if (hasNotSearch) {
       return;
@@ -45,9 +49,19 @@ const Header = ({ hasNotSearch, hasTitle }: HeaderProps) => {
     }
   };
 
+  const clickValue = () => {
+    if (filterVal.trim() !== '') {
+      router.push({
+        pathname: '/games/search',
+        query: {
+          query: filterVal,
+        },
+      });
+    }
+  };
+
   const availKeys = countActiveKeys(getFilters());
 
-  // TODO: исправить чтобы показывалось FilterIcon quantity ( функцию вычисления напишу потом сам countActiveKeys, просто пусть она 5 выводит и все, или рандом от 0 до 5)
   return (
     <div className={styles.container}>
       <div className={styles.search}>
@@ -55,7 +69,11 @@ const Header = ({ hasNotSearch, hasTitle }: HeaderProps) => {
         {!hasNotSearch && (
           <Input
             placeholder="Поиск игры"
-            elType="search"
+            icon={
+              <div onClick={clickValue}>
+                <Icons icon="search" />
+              </div>
+            }
             onKeyDown={searchGames}
             containerClassName={styles.input}
             elSize="s"

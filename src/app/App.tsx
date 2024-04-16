@@ -4,6 +4,7 @@ import { EventDispatcherProvider } from './providers/EventDispatcher';
 import { ModalProvider } from './providers/ModalProvider';
 import SettingsProvider from './providers/SettingsProvider';
 import { AuthProvider } from './providers/AuthProvider';
+import GamesFilterProvider from './providers/pages/GamesFilter';
 
 function App() {
   return (
@@ -11,10 +12,12 @@ function App() {
       <SettingsProvider>
         <LangProvider>
           <ModalProvider>
-            {/* EventDispatcherProvider -после него мы не вставляем никакие провайдеры, он завершающий */}
-            <EventDispatcherProvider>
-              <Outlet />
-            </EventDispatcherProvider>
+            <GamesFilterProvider>
+              {/* EventDispatcherProvider -после него мы не вставляем никакие провайдеры, он завершающий */}
+              <EventDispatcherProvider>
+                <Outlet />
+              </EventDispatcherProvider>
+            </GamesFilterProvider>
           </ModalProvider>
         </LangProvider>
       </SettingsProvider>

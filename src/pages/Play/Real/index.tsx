@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -13,15 +12,17 @@ import { useRouter } from '@/shared/helpers/navigation';
 // import { isAppDebug } from '@/app/config/app';
 
 export default function Real() {
+  const [loading, setLoading] = useState(false);
   const [realUrl, setRealUrl] = useState<string>('');
   const [headerTitle, setHeaderTitle] = useState<string>('');
   const { id } = useParams();
   const router = useRouter();
-
   useEffect(() => {
     const getReal = async () => {
       const isMobile = true;
+      setLoading(true);
       const data = await getRealApi(Number(id), isMobile);
+      setLoading(false);
       if (data.status > 200) {
         router.push('/');
         return;
@@ -41,14 +42,12 @@ export default function Real() {
   return (
     <GameLayout gameTitle={headerTitle}>
       <div className={styles.games_table}>
-        {!realUrl || realUrl == '' ? (
+        {loading ? (
           <div className={styles.not_found}>
             TODO: Идет загрузка игры тут прелоадер или что то такое
           </div>
         ) : (
-          <div className={styles.game_frame}>
-            <iframe src={realUrl} />
-          </div>
+          <div className={styles.game_frame}>{realUrl && <iframe src={realUrl} />}</div>
         )}
       </div>
     </GameLayout>

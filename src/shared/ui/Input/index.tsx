@@ -84,7 +84,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
 
     const renderIcon = () => {
       if (icon) {
-        return icon;
+        return <div className={styles.icon}>{icon}</div>;
       }
       if (type === 'password') {
         return (
