@@ -138,14 +138,16 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
         clearTimeout(time.current);
       }
 
-      if (validationFunction) {
+      if (validationFunction || isError) {
         if (value.length > 0) {
           setErrorMessage(null);
         } else {
           setErrorMessage(messageRef.current);
         }
         time.current = setInterval(() => {
-          setIsValid(validationFunction(value));
+          if (validationFunction) {
+            setIsValid(validationFunction(value));
+          }
           setErrorMessage(messageRef.current);
         }, validationTimeout);
       }

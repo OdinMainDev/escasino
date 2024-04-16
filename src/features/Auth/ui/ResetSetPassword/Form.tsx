@@ -31,7 +31,7 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
   const { isAuth } = useAuthProvider();
   const { resetHash, doSetResetHash, doOpenModal } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
-  const [errorData, setErrorData] = useState<IResponseError>();
+  const [errorData, setErrorData] = useState<IResponseError | null>(null);
   const [resetData, setResetData] = useState<IResetSetPasswordData>(sampleIResetSetPasswordData);
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -48,7 +48,6 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
       if (!Array.isArray(errorList)) {
         return;
       }
-      console.log(errorList);
       setErrorData(resetError);
     } finally {
       setLoader(false);
@@ -56,7 +55,6 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
   };
 
   // TODO: сделать красивую модалку с визардом ( пошаговое заполнение ) как из дизайна
-  // TODO: исправить отображение ошибок из запроса ( ErrorResponseAsString) ошибка при введенном не верном коде не показывается
   return (
     <form className={styles.container}>
       {(loader || loadingSettings || isAuth || !settings) && (
@@ -68,11 +66,11 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
         <div className={styles.title}>Код подтверждения</div>
         <Input
           placeholder={isPhone ? 'Введите код из смс' : 'Введите код отправленный на почту'}
-          type="text"
-          isError={!!errorData?.errors['code']}
+          isError={!!errorData?.errors['сode']}
           containerClassName={styles.input}
+          validationFunction={() => true}
           value={resetData.code}
-          message={ErrorResponseAsString('code', 'Проверочный код указан не верно', errorData)}
+          message={ErrorResponseAsString('сode', 'Проверочный код указан не верно', errorData)}
           onChange={(e) => setResetData((prev) => ({ ...prev, code: e.target.value }))}
         />
         <Input
