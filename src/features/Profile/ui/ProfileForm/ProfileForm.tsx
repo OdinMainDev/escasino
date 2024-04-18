@@ -23,26 +23,26 @@ import { AlertModal, IAlert } from '@/entities/AlertModal';
 
 const ProfileForm = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
-  // const { settings } = useAppSelector((state) => state.settingsReducer);
-  const settings = {
-    profile: {
-      user_can_change_data: true,
-      has_email: true,
-      has_phone: true,
-      has_username: true,
-      has_first_name: true,
-      has_second_name: true,
-      has_last_name: true,
-      has_country: true,
-      has_city: true,
-      has_address: true,
-      has_zip: true,
-      has_dob: true,
-      has_gender: true,
-      has_avatar: true,
-      has_promo: true,
-    },
-  };
+  const { settings } = useAppSelector((state) => state.settingsReducer);
+  // const settings = {
+  //   profile: {
+  //     user_can_change_data: true,
+  //     has_email: true,
+  //     has_phone: true,
+  //     has_username: true,
+  //     has_first_name: true,
+  //     has_second_name: true,
+  //     has_last_name: true,
+  //     has_country: true,
+  //     has_city: true,
+  //     has_address: true,
+  //     has_zip: true,
+  //     has_dob: true,
+  //     has_gender: true,
+  //     has_avatar: true,
+  //     has_promo: true,
+  //   },
+  // };
   const { doSetVerifyHash, doSetChangeHash, doOpenModal, doCloseModals } = useModal();
   const [loader, setLoader] = useState(false);
   const [userData, setUserData] = useState<IUserData>(sampleIUserData);
