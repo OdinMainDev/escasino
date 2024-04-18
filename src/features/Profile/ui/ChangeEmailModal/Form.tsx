@@ -32,9 +32,6 @@ const ProfileChangeEmailForm = () => {
       await doChangeEmailSendApi({ ...changeData, hash: changeHash, fid });
       doSetChangeHash('');
       doOpenModal('change-email-complete');
-      // TODO: исправить, не обновляет страницу личного кабинета после ( а должно, по логике работы )
-      // типа заменил почту ( если она была верифицирована то нужно подтвердить смену через старую почту)
-      // а она не поменялась в лк, после ввода кода нужно обновлять (запрос есть, но контент не меняется почему то:( )
       void dispatch(getUser());
     } catch (e: unknown) {
       const errors = e as IResponseError;

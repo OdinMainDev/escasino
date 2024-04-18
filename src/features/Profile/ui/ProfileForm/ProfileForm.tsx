@@ -91,10 +91,9 @@ const ProfileForm = () => {
       const fid = await getVisitorId();
       const data = await doSetUserData({
         ...userData,
-        dob: new Date(userData.dob).getTime(),
+        dob: Math.floor(new Date(userData.dob).getTime() / 1000),
         fid,
       });
-      void sendVerifyEmail(e);
       if (data.hasErrors) {
         setErrorData({
           errors: data.errors,

@@ -3,7 +3,7 @@ import Button from '@/shared/ui/Button';
 import { useModal } from '@/app/providers/ModalProvider';
 import Input from '@/shared/ui/Input';
 import Loader from '@/shared/ui/Loader';
-import { useAppSelector } from '@/store/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { useState } from 'react';
 import { IResponseError } from '@/shared/models/interfaces/misc';
 
@@ -14,12 +14,14 @@ import {
   doVerifyEmailConfirmApi,
   sampleIVerifyEmailConfirmData,
 } from '@/app/api/auth/verification/emailVerify';
+import { getUser } from '@/store/slices/userSlice';
 
 const ProfileVerificationEmailForm = () => {
   const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
   const { verifyHash, doSetVerifyHash, doOpenModal } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IResponseError>();
+  const dispatch = useAppDispatch();
   const [verifyData, setVerifyData] = useState<IVerifyEmailConfirmData>(
     sampleIVerifyEmailConfirmData,
   );
@@ -32,6 +34,7 @@ const ProfileVerificationEmailForm = () => {
       await doVerifyEmailConfirmApi({ ...verifyData, hash: verifyHash, fid });
       doSetVerifyHash('');
       doOpenModal('verification-email-complete');
+      void dispatch(getUser());
     } catch (e: unknown) {
       const errors = e as IResponseError;
       const errorList = Object.keys(errors.errors);
