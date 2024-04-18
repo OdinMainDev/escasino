@@ -3,7 +3,7 @@
   min-height: 176px;
   padding: 16px;
   border-radius: 2px;
-  background-color: rgba($color: var(--secondary), $alpha: 0.05);
+  background-color: var(--Text-primary);
 }
 
 .status {
@@ -25,7 +25,7 @@
   line-height: 20px;
   letter-spacing: 0.01em;
   text-align: left;
-  color: rgba($color: var(--secondary), $alpha: 0.8);
+  color: var(--primary);
   cursor: pointer;
 }
 
@@ -38,7 +38,7 @@
   font-weight: 400;
   line-height: 16px;
   letter-spacing: 0.01em;
-  color: var(--secondary);
+  color: var(--primary);
   opacity: 0.6;
   margin-bottom: 4px;
 }
@@ -48,6 +48,6 @@
   font-weight: 400;
   line-height: 20px;
   letter-spacing: 0.01em;
-  color: var(--secondary);
+  color: var(--primary);
   opacity: 0.8;
 }

@@ -12,7 +12,7 @@ const WalletTabs = () => {
   const [contentType, setContentType] = useState<ITab>(tabs[0]);
   return (
     <div className={styles.container}>
-      <Tabs tabs={tabs} value={contentType} onChange={(value) => setContentType(value)} />
+      <Tabs tabs={tabs} value={contentType.value} onChange={(value) => setContentType(value)} />
       {contentType.value === 'top-up' && <WalletTopUp />}
       {contentType.value === 'withdraw' && <WalletWithdraw />}
       {contentType.value === 'history' && <WalletHistory />}

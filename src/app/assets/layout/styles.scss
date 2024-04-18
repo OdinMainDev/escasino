@@ -28,7 +28,7 @@ body {
   max-width: var(--desktop-max-width);
   height: 100vh;
   z-index: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin: 0 auto;
   position: relative;
   background-color: var(--background);

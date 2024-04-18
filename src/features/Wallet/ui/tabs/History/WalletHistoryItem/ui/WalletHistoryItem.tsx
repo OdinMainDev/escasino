@@ -15,7 +15,7 @@ const WalletHistoryItem = () => {
           >
             <path
               d="M17 7L7 17M7 7L17 17"
-              stroke="white"
+              stroke="var(--primary)"
               strokeOpacity="0.87"
               strokeWidth="2"
               strokeLinecap="round"

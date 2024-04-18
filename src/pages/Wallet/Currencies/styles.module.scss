@@ -8,9 +8,14 @@
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 40px 0 16px 0;
   position: relative;
+}
+
+.back {
+  position: absolute;
+  left: 16px;
 }
 
 .block {

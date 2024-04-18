@@ -12,7 +12,6 @@ interface EventDispatcherProviderProps {
   children: ReactNode;
 }
 
-// TODO исправить прелоадер, чтобы не было ошибок с ним
 export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = ({ children }) => {
   const pathname = usePathname();
   const { isAuth } = useAuthProvider();

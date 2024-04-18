@@ -1,9 +1,15 @@
 .container {
   width: 100%;
-  min-height: 176px;
   padding: 16px;
   border-radius: 2px;
-  background-color: rgba($color: var(--secondary), $alpha: 0.05);
+  background-color: var(--Select-bg);
+  table {
+    width: 100%;
+    border-collapse: none;
+    td {
+      text-align: center;
+    }
+  }
 }
 
 .status {
@@ -17,15 +23,22 @@
   background-color: #F9B166;
 }
 
+.button {
+  padding: 5px 10px;
+  font-size: 13px;
+  width: 150px;
+}
+
 .cancel {
   display: flex;
   align-items: center;
   font-size: 14px;
   font-weight: 400;
+  text-decoration: underline;
   line-height: 20px;
   letter-spacing: 0.01em;
   text-align: left;
-  color: rgba($color: var(--secondary), $alpha: 0.8);
+  color: rgba($color: var(--Text-primary), $alpha: 1);
   cursor: pointer;
 }
 
@@ -34,20 +47,20 @@
 }
 
 .label {
-  font-size: 12px;
-  font-weight: 400;
+  font-size: 13px;
+  font-weight: 500;
   line-height: 16px;
   letter-spacing: 0.01em;
-  color: var(--secondary);
+  color: var(--Text-primary);
   opacity: 0.6;
-  margin-bottom: 4px;
+  margin-bottom: 10px;
 }
 
 .value {
-  font-size: 14px;
-  font-weight: 400;
+  font-size: 15px;
+  font-weight: 500;
   line-height: 20px;
   letter-spacing: 0.01em;
-  color: var(--secondary);
+  color: var(--Text-primary);
   opacity: 0.8;
 }

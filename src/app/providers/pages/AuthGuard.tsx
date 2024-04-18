@@ -3,7 +3,6 @@ import { useAuthProvider } from '../AuthProvider';
 import { useRouter } from '@/shared/helpers/navigation';
 import { Outlet } from 'react-router-dom';
 
-// TODO исправить прелоадер, чтобы не было ошибок с ним
 const AuthGuardProvider = () => {
   const { isAuth } = useAuthProvider();
   const router = useRouter();
