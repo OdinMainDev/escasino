@@ -1,3 +1,4 @@
+import { handleErrorStatus } from '@/shared/helpers/error';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -19,8 +20,9 @@ export const getIsAuthApi = async (): Promise<null | boolean> => {
     if (res.status === 200) {
       return true;
     }
+    const error = { response: res };
     handleHttpError(res.status);
-    return false;
+    throw handleErrorStatus(error);
   } catch (e) {
     return false;
   }
@@ -28,15 +30,13 @@ export const getIsAuthApi = async (): Promise<null | boolean> => {
 
 function handleHttpError(status: number) {
   Cookies.remove('token');
-  // TODO: 403 статус - страна заблокирована
-  // TODO: остальные статусы ( кроме 200ого ) просто кидаем ошибку ( ну пользователя на страницу редиректим с ошибкой )
-  // TODO: а так же блокируем всё приложение после
   switch (status) {
     // DEPRECATED - потому что 401 статус - не авторизован ( то есть кривая авторизация )
     // case 401:
     //   console.error('Casino error (401).');
     //   break;
     case 403:
+      window.location.href = '/error/unavailable';
       console.error('Country is blocked (403).');
       break;
     default:
