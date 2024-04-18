@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  min-height: 250px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  button {
+    flex:1;
+  }
+}
+
+.title {
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 45px;
+  margin-bottom: 15px;
+  color: var(--Text-primary);
+}
+
+.text {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 25px;
+  color: var(--Text-primary);
+  flex: 1;
+}
+

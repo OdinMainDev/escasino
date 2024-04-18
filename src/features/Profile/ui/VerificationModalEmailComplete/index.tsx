@@ -3,10 +3,15 @@ import styles from '../Modals.module.scss';
 import { useModal } from '@/app/providers/ModalProvider';
 import Modal from '@/shared/ui/Modal';
 import Form from './Form';
+import { useEffect, useState } from 'react';
 
 const ProfileVerificationEmailCompleteModal = ({ close }: IModal) => {
   const { modalName, isModalOpen } = useModal();
-  const isOpen = !isModalOpen ? false : modalName == 'verification-email-complete';
+  const [isOpen, setIsOpen] = useState(isModalOpen && modalName == 'verification-email-complete');
+  useEffect(() => {
+    setIsOpen(isModalOpen && modalName == 'verification-email-complete');
+  }, [isModalOpen, modalName]);
+
   return (
     <Modal isOpen={isOpen} close={close}>
       <div className={styles.container}>

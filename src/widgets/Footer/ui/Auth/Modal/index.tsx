@@ -9,16 +9,19 @@ const FooterAuthModals = () => {
   const { doOpenModal, doCloseModals } = useModal();
   const openLogin = () => {
     document.body.classList.add('overflow-hidden');
+    doCloseModals();
     doOpenModal('login');
   };
 
   const openRegistration = () => {
     document.body.classList.add('overflow-hidden');
+    doCloseModals();
     doOpenModal('register');
   };
 
   const openReset = () => {
     document.body.classList.add('overflow-hidden');
+    doCloseModals();
     doOpenModal('reset');
   };
 

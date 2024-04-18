@@ -20,6 +20,7 @@ import Real from '@/pages/Play/Real';
 import Wallet from '@/pages/Wallet';
 import Currencies from '@/pages/Wallet/Currencies';
 import LanguageGuard from './providers/LanguageGuard';
+import GlobalModals from './providers/GlobalModals';
 
 const availRoutes: RouteObject[] = [
   {
@@ -127,16 +128,21 @@ const routes: RouteObject[] = [
         element: <Layout />,
         children: [
           {
-            path: '/:lang',
-            element: <LanguageGuard />,
-            children: availRoutes,
-          },
-          {
-            children: availRoutes,
-          },
-          {
-            path: '*',
-            element: <Error404 />,
+            element: <GlobalModals />,
+            children: [
+              {
+                path: '/:lang',
+                element: <LanguageGuard />,
+                children: availRoutes,
+              },
+              {
+                children: availRoutes,
+              },
+              {
+                path: '*',
+                element: <Error404 />,
+              },
+            ],
           },
         ],
       },

@@ -19,6 +19,7 @@ import { getUser } from '@/store/slices/userSlice';
 import { doVerifyPhoneSendApi } from '@/app/api/auth/verification/phoneSend';
 import { getCountries } from '@/store/slices/countriesSlice';
 import DatePicker from '@/shared/ui/DatePicker';
+import { AlertModal, IAlert } from '@/entities/AlertModal';
 
 const ProfileForm = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
@@ -46,6 +47,12 @@ const ProfileForm = () => {
   const [loader, setLoader] = useState(false);
   const [userData, setUserData] = useState<IUserData>(sampleIUserData);
   const [errorData, setErrorData] = useState<IResponseError>();
+  const [alertData, setAlertData] = useState<IAlert>({
+    title: '',
+    text: '',
+    buttons: [],
+    close: doCloseModals,
+  });
   const {
     isFinished: isFinishedCountries,
     loading: loadingCountries,
@@ -78,12 +85,16 @@ const ProfileForm = () => {
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
+      console.log(new Date(userData.dob).getTime(), new Date(new Date(userData.dob).getTime()));
+
       setLoader(true);
       const fid = await getVisitorId();
       const data = await doSetUserData({
         ...userData,
+        dob: new Date(userData.dob).getTime(),
         fid,
       });
+      void sendVerifyEmail(e);
       if (data.hasErrors) {
         setErrorData({
           errors: data.errors,
@@ -110,25 +121,54 @@ const ProfileForm = () => {
       }
       setErrorData(loginError);
     } finally {
+      doCloseModals();
       setLoader(false);
     }
   };
 
-  const verifyEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    // TODO: сделать красивую модалку под проверку, или алерт
+  const verifyEmail = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (userData.email === '') {
-      alert('Сначала надо сохранить данные, а потом уже их верифицировать!');
+      doOpenModal('alert');
+      setAlertData((prev) => ({
+        ...prev,
+        text: 'Сначала надо сохранить данные, а потом уже их верифицировать!',
+        title: 'Предупреждение',
+        buttons: [
+          {
+            text: 'Ок',
+            type: 'contained',
+            onClick: doCloseModals,
+          },
+        ],
+      }));
       return;
     }
-    e.preventDefault();
     if (userData.email !== user?.email) {
-      // TODO: сделать сюда красивую модалку
-      if (confirm('Вы изменили email, сохранить новый? Или вы хотите подтвердить старый?')) {
-        // TODO: так же сделать проверку на то что в ответе нет ошибок,
-        // ( если почта занята то будет 200ый ответ но в нем внутри ошибки, так как остальные данные заменяются )
-        void sendData(e);
-      }
+      doOpenModal('alert');
+      setAlertData((prev) => ({
+        ...prev,
+        text: 'Вы изменили email, сохранить новый? Или вы хотите подтвердить старый?',
+        title: 'Предупреждение',
+        buttons: [
+          {
+            text: 'Сохранить',
+            type: 'contained',
+            onClick: () => void sendData(e),
+          },
+          {
+            text: 'Подтвердить',
+            type: 'outlined',
+            onClick: () => void sendVerifyEmail(e),
+          },
+        ],
+      }));
+    } else {
+      void sendVerifyEmail(e);
     }
+  };
+
+  const sendVerifyEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
       setLoader(true);
@@ -143,21 +183,7 @@ const ProfileForm = () => {
     }
   };
 
-  const verifyPhone = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    // TODO: сделать красивую модалку под проверку, или алерт
-    if (userData.phone == '') {
-      alert('Сначала надо сохранить данные, а потом уже их верифицировать!');
-      return;
-    }
-    e.preventDefault();
-    if (userData.phone != user?.phone) {
-      // TODO: сделать сюда красивую модалку
-      if (confirm('Вы изменили телефон, сохранить новый? Или вы хотите подтвердить старый?')) {
-        // TODO: так же сделать проверку на то что в ответе нет ошибок,
-        // ( если почта занята то будет 200ый ответ но в нем внутри ошибки, так как остальные данные заменяются )
-        void sendData(e);
-      }
-    }
+  const sendVerifyPhone = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
       setLoader(true);
@@ -172,7 +198,47 @@ const ProfileForm = () => {
     }
   };
 
-  console.log(new Date(userData.dob));
+  const verifyPhone = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (userData.phone == '') {
+      doOpenModal('alert');
+      setAlertData((prev) => ({
+        ...prev,
+        text: 'Сначала надо сохранить данные, а потом уже их верифицировать!',
+        title: 'Предупреждение',
+        buttons: [
+          {
+            text: 'Ок',
+            type: 'contained',
+            onClick: doCloseModals,
+          },
+        ],
+      }));
+      return;
+    }
+    e.preventDefault();
+    if (userData.phone !== user?.phone) {
+      doOpenModal('alert');
+      setAlertData((prev) => ({
+        ...prev,
+        text: 'Вы изменили телефон, сохранить новый? Или вы хотите подтвердить старый?',
+        title: 'Предупреждение',
+        buttons: [
+          {
+            text: 'Сохранить',
+            type: 'contained',
+            onClick: () => void sendData(e),
+          },
+          {
+            text: 'Подтвердить',
+            type: 'outlined',
+            onClick: () => void sendVerifyPhone(e),
+          },
+        ],
+      }));
+    } else {
+      void sendVerifyPhone(e);
+    }
+  };
 
   return (
     <form className={styles.container}>
@@ -405,7 +471,7 @@ const ProfileForm = () => {
           />
         </div>
       )}
-
+      <AlertModal {...alertData} />
       <Button className={styles.save_button} onClick={(e) => void sendData(e)}>
         Сохранить
       </Button>

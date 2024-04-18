@@ -12,10 +12,12 @@ interface IProps extends IModal {
 
 const AuthLoginModal = ({ close, openRegistrationModal, openResetModal }: IProps) => {
   const { modalName, isModalOpen } = useModal();
-  const [isOpen, setIsOpen] = useState(!isModalOpen || modalName === 'login');
+  const [isOpen, setIsOpen] = useState(isModalOpen && modalName === 'login');
+
   useEffect(() => {
-    setIsOpen(!isModalOpen || modalName === 'login');
-  }, [isModalOpen]);
+    setIsOpen(isModalOpen && modalName === 'login');
+  }, [isModalOpen, modalName]);
+
   return (
     <Modal isOpen={isOpen} close={close}>
       <div className={styles.container}>

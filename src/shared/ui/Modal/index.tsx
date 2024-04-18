@@ -9,7 +9,6 @@ interface IProps extends IModal {
 
 const Modal = ({ isOpen, close, children, reRendering = true }: IProps) => {
   const [shouldRenderChildren, setShouldRenderChildren] = useState(isOpen);
-
   useEffect(() => {
     if (isOpen) {
       setShouldRenderChildren(true);
