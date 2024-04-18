@@ -48,7 +48,6 @@ const ProfileChangeEmailForm = () => {
     }
   };
 
-  // TODO: исправить отображение ошибок
   return (
     <form className={styles.container}>
       {(loader || loadingSettings || !settings) && (

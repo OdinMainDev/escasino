@@ -28,6 +28,7 @@ export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   disabledOpacityOff?: boolean;
   mask?: string;
   onChangePhone?: (value: string) => void;
+  onClear?: () => void;
 }
 
 const Input = forwardRef<HTMLInputElement, IInputProps>(
@@ -49,6 +50,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
       mask,
       icon,
       onChangePhone,
+      onClear,
       ...otherProps
     },
     ref,
@@ -62,6 +64,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
 
     useEffect(() => {
       messageRef.current = message;
+      setErrorMessage(message);
       setIsActive(!!value);
     }, [message, value]);
 
@@ -115,14 +118,16 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
         clearTimeout(time.current);
       }
 
-      if (validationFunction) {
+      if (validationFunction || isError) {
         if (value.length > 0) {
           setErrorMessage(null);
         } else {
           setErrorMessage(messageRef.current);
         }
         time.current = setInterval(() => {
-          setIsValid(validationFunction(value));
+          if (validationFunction) {
+            setIsValid(validationFunction(value));
+          }
           setErrorMessage(messageRef.current);
         }, validationTimeout);
       }
@@ -221,6 +226,25 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
             type={type === 'password' ? (isPassword ? 'password' : 'text') : type}
           />
           <span className={styles.placeholder}>{placeholder}</span>
+          {value && onClear && (
+            <div className={styles.clear_button} onClick={onClear}>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M13 1L1 13M1 1L13 13"
+                  stroke="#000"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          )}
           {renderIcon()}
         </label>
         {errorMessage && <div className={styles.message}>{errorMessage}</div>}

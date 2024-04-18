@@ -3,6 +3,7 @@ import styles from '../AuthForm.module.scss';
 import { useModal } from '@/app/providers/ModalProvider';
 import Modal from '@/shared/ui/Modal';
 import AuthLoginForm from './Form';
+import { useEffect, useState } from 'react';
 
 interface IProps extends IModal {
   openRegistrationModal: () => void;
@@ -11,7 +12,10 @@ interface IProps extends IModal {
 
 const AuthLoginModal = ({ close, openRegistrationModal, openResetModal }: IProps) => {
   const { modalName, isModalOpen } = useModal();
-  const isOpen = !isModalOpen ? false : modalName == 'login';
+  const [isOpen, setIsOpen] = useState(!isModalOpen || modalName === 'login');
+  useEffect(() => {
+    setIsOpen(!isModalOpen || modalName === 'login');
+  }, [isModalOpen]);
   return (
     <Modal isOpen={isOpen} close={close}>
       <div className={styles.container}>

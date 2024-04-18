@@ -9,6 +9,7 @@ import { getRealApi } from '@/app/api/play/getReal';
 // import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { getGameApi } from '@/app/api/games/getGameById';
 import { useRouter } from '@/shared/helpers/navigation';
+import Loader from '@/shared/ui/Loader';
 // import { isAppDebug } from '@/app/config/app';
 
 export default function Real() {
@@ -44,7 +45,7 @@ export default function Real() {
       <div className={styles.games_table}>
         {loading ? (
           <div className={styles.not_found}>
-            TODO: Идет загрузка игры тут прелоадер или что то такое
+            <Loader />
           </div>
         ) : (
           <div className={styles.game_frame}>{realUrl && <iframe src={realUrl} />}</div>

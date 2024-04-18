@@ -24,8 +24,6 @@
 }
 
 .email_container {
-  padding:  0 0 24px 0;
-  margin: 24px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
@@ -37,14 +35,10 @@
 
 .email_title {
   margin-bottom: 24px;
-  margin-top: 24px;
 }
 
 .input {
-  margin-bottom: 15px;
-  &:last-child {
-    margin-bottom: 0;
-  }
+  margin-bottom: 24px;
 }
 
 .email {
@@ -78,8 +72,6 @@
   margin-bottom: 24px;
 }
 
-.textarea {
-  flex: 1;
-  width: 100%;
-  margin-bottom: 20px;
+.checkbox {
+  margin-bottom: 24px;
 }

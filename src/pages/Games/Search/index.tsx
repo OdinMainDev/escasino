@@ -45,7 +45,6 @@ export default function Search() {
     void getGames();
   }, [location]);
 
-  // TODO: сделать в хидере или где то кнопку дополнительную, что сбросить поиск по тексту или фильтры ( тут надо тебе подумать надо ли )
   return (
     <IndexLayout>
       <div className={styles.games_table}>

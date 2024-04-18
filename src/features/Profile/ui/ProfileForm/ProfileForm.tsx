@@ -18,11 +18,31 @@ import { useModal } from '@/app/providers/ModalProvider';
 import { getUser } from '@/store/slices/userSlice';
 import { doVerifyPhoneSendApi } from '@/app/api/auth/verification/phoneSend';
 import { getCountries } from '@/store/slices/countriesSlice';
+import DatePicker from '@/shared/ui/DatePicker';
 
 const ProfileForm = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
-  const { settings } = useAppSelector((state) => state.settingsReducer);
-  const { doSetVerifyHash, doSetChangeHash, doOpenModal } = useModal();
+  // const { settings } = useAppSelector((state) => state.settingsReducer);
+  const settings = {
+    profile: {
+      user_can_change_data: true,
+      has_email: true,
+      has_phone: true,
+      has_username: true,
+      has_first_name: true,
+      has_second_name: true,
+      has_last_name: true,
+      has_country: true,
+      has_city: true,
+      has_address: true,
+      has_zip: true,
+      has_dob: true,
+      has_gender: true,
+      has_avatar: true,
+      has_promo: true,
+    },
+  };
+  const { doSetVerifyHash, doSetChangeHash, doOpenModal, doCloseModals } = useModal();
   const [loader, setLoader] = useState(false);
   const [userData, setUserData] = useState<IUserData>(sampleIUserData);
   const [errorData, setErrorData] = useState<IResponseError>();
@@ -55,21 +75,13 @@ const ProfileForm = () => {
     }
   }, [user]);
 
-  // TODO поправить отображение ошибок тут
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
       setLoader(true);
       const fid = await getVisitorId();
-      // const formattedDate = formatDateType(typeof userData.dob === 'number' ? userData.dob : 0);
-      if (typeof userData.dob !== 'number') {
-        const inputDate = new Date(userData.dob);
-        const timestamp = Math.floor(inputDate.getTime() / 1000);
-        userData.dob = timestamp;
-      }
       const data = await doSetUserData({
         ...userData,
-        dob: userData.dob, // почему то та что отправляется != той что устанавливается
         fid,
       });
       if (data.hasErrors) {
@@ -79,11 +91,12 @@ const ProfileForm = () => {
         });
       }
 
-      // Делаем так чтобы 2 модалки не открылось одновременно
       if (data.email_change_hash) {
+        doCloseModals();
         doSetChangeHash(data.email_change_hash);
         doOpenModal('change-email');
       } else if (data.phone_change_hash) {
+        doCloseModals();
         doSetChangeHash(data.phone_change_hash);
         doOpenModal('change-phone');
       }
@@ -103,16 +116,14 @@ const ProfileForm = () => {
 
   const verifyEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
     // TODO: сделать красивую модалку под проверку, или алерт
-    if (userData.email == '') {
+    if (userData.email === '') {
       alert('Сначала надо сохранить данные, а потом уже их верифицировать!');
       return;
     }
     e.preventDefault();
-    if (userData.email != user?.email) {
+    if (userData.email !== user?.email) {
       // TODO: сделать сюда красивую модалку
       if (confirm('Вы изменили email, сохранить новый? Или вы хотите подтвердить старый?')) {
-        // TODO: наверное сюда не очень хорошо отправлять этот 'e' но может и похуй, проверить стоит
-
         // TODO: так же сделать проверку на то что в ответе нет ошибок,
         // ( если почта занята то будет 200ый ответ но в нем внутри ошибки, так как остальные данные заменяются )
         void sendData(e);
@@ -142,8 +153,6 @@ const ProfileForm = () => {
     if (userData.phone != user?.phone) {
       // TODO: сделать сюда красивую модалку
       if (confirm('Вы изменили телефон, сохранить новый? Или вы хотите подтвердить старый?')) {
-        // TODO: наверное сюда не очень хорошо отправлять этот 'e' но может и похуй, проверить стоит
-
         // TODO: так же сделать проверку на то что в ответе нет ошибок,
         // ( если почта занята то будет 200ый ответ но в нем внутри ошибки, так как остальные данные заменяются )
         void sendData(e);
@@ -162,6 +171,8 @@ const ProfileForm = () => {
       setLoader(false);
     }
   };
+
+  console.log(new Date(userData.dob));
 
   return (
     <form className={styles.container}>
@@ -305,92 +316,93 @@ const ProfileForm = () => {
       )}
 
       {settings?.profile.has_dob && (
-        <Input
-          placeholder="Дата рождения"
-          type="datetime-local"
+        <DatePicker
           containerClassName={styles.input}
-          value={userData.dob}
-          disabled={!settings?.profile.user_can_change_data && !!user?.data.dob}
-          readOnly={!settings?.profile.user_can_change_data && !!user?.data.dob}
-          onChange={(e) => {
-            setUserData((prev) => ({ ...prev, dob: e.target.value }));
+          value={new Date(userData.dob)}
+          onChange={(date) => {
+            setUserData((prev) => ({ ...prev, dob: date.getTime() }));
           }}
           isError={!!errorData?.errors['dob']}
           message={ErrorResponseAsString('dob', 'Введите корректный dob', errorData)}
+          placeholder="Дата рождения"
         />
+        // <Input
+        //   placeholder="Дата рождения"
+        //   type="datepicker"
+        //   containerClassName={styles.input}
+        //   value={userData.dob}
+        //   disabled={!settings?.profile.user_can_change_data && !!user?.data.dob}
+        //   readOnly={!settings?.profile.user_can_change_data && !!user?.data.dob}
+        //   onChange={(e) => {
+        //     setUserData((prev) => ({ ...prev, dob: e.target.value }));
+        //   }}
+        //   isError={!!errorData?.errors['dob']}
+        //   message={ErrorResponseAsString('dob', 'Введите корректный dob', errorData)}
+        // />
       )}
       {settings?.profile.has_gender && (
-        <div>
-          <Select
-            optionList={genderSelect}
-            value={userData.gender}
-            disabled={!settings?.profile.user_can_change_data && !!user?.data.gender}
-            onChange={(e) => setUserData((prev) => ({ ...prev, gender: e.target.value }))}
-            isError={!!errorData?.errors['gender']}
-          />
-        </div>
+        <Select
+          containerClassName={styles.input}
+          optionList={genderSelect}
+          value={userData.gender}
+          disabled={!settings?.profile.user_can_change_data && !!user?.data.gender}
+          onChange={(e) => setUserData((prev) => ({ ...prev, gender: e.target.value }))}
+          isError={!!errorData?.errors['gender']}
+        />
       )}
       {settings?.profile.has_country && (
-        <div className={styles.textarea}>
-          <Select
-            isError={!!errorData?.errors['country']}
-            optionList={countriesList}
-            value={userData.country}
-            // containerClassName={styles.input} // TODO
-            // message={ErrorResponseAsString('second_name', 'Укажите страну из списка', errorData)} // TODO
-            onChange={(e) => setUserData((prev) => ({ ...prev, country: e.target.value }))}
-          />
-        </div>
+        <Select
+          isError={!!errorData?.errors['country']}
+          optionList={countriesList}
+          value={userData.country}
+          containerClassName={styles.input}
+          message={ErrorResponseAsString('second_name', 'Укажите страну из списка', errorData)}
+          onChange={(e) => setUserData((prev) => ({ ...prev, country: e.target.value }))}
+        />
       )}
       {settings?.profile.has_city && (
-        <div className={styles.textarea}>
-          <Input
-            placeholder="Город"
-            containerClassName={styles.input}
-            value={userData.city}
-            disabled={!settings?.profile.user_can_change_data && !!user?.data.city}
-            readOnly={!settings?.profile.user_can_change_data && !!user?.data.city}
-            onChange={(e) => setUserData((prev) => ({ ...prev, city: e.target.value }))}
-            isError={!!errorData?.errors['city']}
-            message={ErrorResponseAsString('city', 'Введите корректный city', errorData)}
-          />
-        </div>
+        <Input
+          placeholder="Город"
+          containerClassName={styles.input}
+          value={userData.city}
+          disabled={!settings?.profile.user_can_change_data && !!user?.data.city}
+          readOnly={!settings?.profile.user_can_change_data && !!user?.data.city}
+          onChange={(e) => setUserData((prev) => ({ ...prev, city: e.target.value }))}
+          isError={!!errorData?.errors['city']}
+          message={ErrorResponseAsString('city', 'Введите корректный city', errorData)}
+        />
       )}
       {settings?.profile.has_address && (
-        <div className={styles.textarea}>
-          <Input
-            placeholder="Адрес"
-            containerClassName={styles.input}
-            value={userData.address}
-            disabled={!settings?.profile.user_can_change_data && !!user?.data.address}
-            readOnly={!settings?.profile.user_can_change_data && !!user?.data.address}
-            onChange={(e) => setUserData((prev) => ({ ...prev, address: e.target.value }))}
-            isError={!!errorData?.errors['address']}
-            message={ErrorResponseAsString('address', 'Введите корректный address', errorData)}
-          />
-        </div>
+        <Input
+          placeholder="Адрес"
+          containerClassName={styles.input}
+          value={userData.address}
+          disabled={!settings?.profile.user_can_change_data && !!user?.data.address}
+          readOnly={!settings?.profile.user_can_change_data && !!user?.data.address}
+          onChange={(e) => setUserData((prev) => ({ ...prev, address: e.target.value }))}
+          isError={!!errorData?.errors['address']}
+          message={ErrorResponseAsString('address', 'Введите корректный address', errorData)}
+        />
       )}
       {settings?.profile.has_zip && (
-        <div className={styles.textarea}>
-          <Input
-            placeholder="Почтовый индекс"
-            containerClassName={styles.input}
-            value={userData.zip}
-            disabled={!settings?.profile.user_can_change_data && !!user?.data.zip}
-            readOnly={!settings?.profile.user_can_change_data && !!user?.data.zip}
-            onChange={(e) => setUserData((prev) => ({ ...prev, zip: e.target.value }))}
-            isError={!!errorData?.errors['zip']}
-            message={ErrorResponseAsString('zip', 'Введите корректный zip', errorData)}
-          />
-        </div>
+        <Input
+          placeholder="Почтовый индекс"
+          containerClassName={styles.input}
+          value={userData.zip}
+          disabled={!settings?.profile.user_can_change_data && !!user?.data.zip}
+          readOnly={!settings?.profile.user_can_change_data && !!user?.data.zip}
+          onChange={(e) => setUserData((prev) => ({ ...prev, zip: e.target.value }))}
+          isError={!!errorData?.errors['zip']}
+          message={ErrorResponseAsString('zip', 'Введите корректный zip', errorData)}
+        />
       )}
       {settings?.profile.has_promo && (
-        <div className={styles.textarea}>
+        <div className={styles.checkbox}>
           <Checkbox
             value={userData.promo}
+            label="Разрешить присылать промоакции"
             onChange={(val) => setUserData((prev) => ({ ...prev, promo: val }))}
           />
-          <div>Разрешить присылать промоакции</div>
         </div>
       )}
 

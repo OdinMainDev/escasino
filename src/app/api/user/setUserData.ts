@@ -31,7 +31,7 @@ export const sampleIUserData: IUserData = {
   second_name: '',
   last_name: '',
   gender: '',
-  dob: 0,
+  dob: new Date().getTime(),
   country: '',
   city: '',
   address: '',

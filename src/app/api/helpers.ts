@@ -17,5 +17,6 @@ export const ErrorResponseAsString = (
   if (!data.errors[key]) {
     return '';
   }
+
   return prefix + '(Ошибка: ' + data.errors[key].join(', ') + ' )';
 };
