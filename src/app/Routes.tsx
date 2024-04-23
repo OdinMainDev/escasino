@@ -3,7 +3,7 @@ import App from './App';
 import Layout from './assets/layout';
 
 import Home from '@/pages/Home';
-import { Profile, ProfileEdit } from '@/pages/Profile';
+import { Profile, ProfileDocument, ProfileEdit } from '@/pages/Profile';
 import GamesFilter from '@/pages/Games/Filter';
 // import TermsPage from '@/pages/Terms';
 // import Game from '@/pages/Games/Game';
@@ -87,6 +87,10 @@ const availRoutes: RouteObject[] = [
       {
         path: 'edit',
         element: <ProfileEdit />,
+      },
+      {
+        path: 'document',
+        element: <ProfileDocument />,
       },
     ],
   },

@@ -1,0 +1,68 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 16px 20px 16px;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0 16px 0;
+  position: relative;
+}
+
+.back {
+  position: absolute;
+  left: 16px;
+}
+
+.title {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  &:hover {
+    svg {
+      path {
+        fill: var(--Icon-primary)
+      }
+    }
+  }
+}
+
+.subtitle {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 50px;
+}
+
+.buttons {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+
+.body {
+  flex: 1;
+}
+
+.progress {
+  width: 200px;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

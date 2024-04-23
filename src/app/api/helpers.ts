@@ -14,6 +14,12 @@ export const ErrorResponseAsString = (
   if (!data.errors) {
     return '#undefined2';
   }
+
+  if ((data.errors as unknown as string) === key) {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string
+    return prefix + '(Ошибка: ' + data.errors + ' )';
+  }
+
   if (!data.errors[key]) {
     return '';
   }

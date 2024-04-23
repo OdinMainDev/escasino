@@ -1,4 +1,5 @@
 import Profile from './View';
 import ProfileEdit from './Edit';
+import ProfileDocument from './Document';
 
-export { Profile, ProfileEdit };
+export { Profile, ProfileEdit, ProfileDocument };

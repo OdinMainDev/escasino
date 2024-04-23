@@ -96,7 +96,25 @@ const Profile = () => {
           </Button>
         </div>
       </div>
-
+      <div className={styles.block}>
+        <div className={styles.title}>Документы</div>
+        <div
+          className={classNames(styles.profile_verification, {
+            [styles.is_verificated]: !IsUserVerified,
+          })}
+        >
+          {IsUserVerified ? 'Документы верифицирован' : 'Документы не верифицирован'}
+        </div>
+        <div className={styles.buttons}>
+          <Button
+            elType="outlined"
+            className={styles.button}
+            onClick={() => router.push('/profile/document')}
+          >
+            Посмотреть документ
+          </Button>
+        </div>
+      </div>
       {!loadingUser ? (
         <div className={styles.block}>
           <div className={styles.block_header}>
