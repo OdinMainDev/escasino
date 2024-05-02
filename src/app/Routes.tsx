@@ -8,13 +8,16 @@ import GamesFilter from '@/pages/Games/Filter';
 // import TermsPage from '@/pages/Terms';
 // import Game from '@/pages/Games/Game';
 // import Search from '@/pages/Search/Results/ui/Search';
-import { HomeGames } from './providers/pages';
+import {
+  HomeGamesProvider,
+  AuthGuardProvider,
+  GameCategoriesProvider,
+  GameProvidersProvider,
+  BillingGroupsProvider,
+} from './providers/pages';
 import { ErrorCountry, ErrorUnavailable, Error404 } from '@/pages/Error';
-import GameCategoriesProvider from './providers/pages/GameCategories';
-import GameProvidersProvider from './providers/pages/GameProviders';
 import GamesSearch from '@/pages/Games/Search';
 import Details from '@/pages/Games/Details';
-import AuthGuardProvider from './providers/pages/AuthGuard';
 import Demo from '@/pages/Play/Demo';
 import Real from '@/pages/Play/Real';
 import Wallet from '@/pages/Wallet';
@@ -26,9 +29,9 @@ const availRoutes: RouteObject[] = [
   {
     path: '',
     element: (
-      <HomeGames>
+      <HomeGamesProvider>
         <Home />
-      </HomeGames>
+      </HomeGamesProvider>
     ),
   },
   {
@@ -52,6 +55,7 @@ const availRoutes: RouteObject[] = [
           </GameCategoriesProvider>
         ),
       },
+      // TODO: удалить позже по концу разработки
       {
         path: 'bugpage',
         element: <GamesFilter />,
@@ -101,7 +105,11 @@ const availRoutes: RouteObject[] = [
     children: [
       {
         path: 'deposit',
-        element: <Wallet />,
+        element: (
+          <BillingGroupsProvider>
+            <Wallet />
+          </BillingGroupsProvider>
+        ),
       },
       {
         path: 'currencies',

@@ -1,3 +1,13 @@
-import HomeGames from './HomeGames';
+import HomeGamesProvider from './HomeGames';
+import AuthGuardProvider from './AuthGuard';
+import GameCategoriesProvider from './GameCategories';
+import GameProvidersProvider from './GameProviders';
+import BillingGroupsProvider from './BillingGroups';
 
-export { HomeGames };
+export {
+  HomeGamesProvider,
+  AuthGuardProvider,
+  GameCategoriesProvider,
+  GameProvidersProvider,
+  BillingGroupsProvider,
+};
