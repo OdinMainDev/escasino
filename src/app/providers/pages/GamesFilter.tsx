@@ -52,7 +52,11 @@ const GamesFilterProvider = ({ children }: IProps) => {
   };
 
   const countActiveKeys = (newFilters: IFilter): number => {
-    const quantity = newFilters.categories.length + 5;
+    const quantity =
+      newFilters.categories.length +
+      newFilters.providers.length +
+      (newFilters.is_game_avail_for_bonus ? 1 : 0) +
+      (newFilters.query.length > 0 ? 1 : 0);
     return quantity;
   };
 
