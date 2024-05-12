@@ -39,6 +39,7 @@ export const gameProvidersSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getGameProviders.pending, (state) => {
       ParentPending(state);
+      console.log('text');
     });
     builder.addCase(getGameProviders.fulfilled, (state, action) => {
       ParentFilled(state);

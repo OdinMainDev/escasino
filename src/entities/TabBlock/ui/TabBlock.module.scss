@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  min-height: 64px;
+  min-height: 70px;
   position: relative;
   padding: 22px 30px;
   box-sizing: border-box;
@@ -23,9 +23,10 @@
 }
 
 .skeleton {
+  flex-shrink: 0;
   border-radius: 2px;
-
-  height: 64px;
+  width: 150px;
+  height: 70px;
   background-image: linear-gradient(-45deg, var(--Input-bg, #333), #585858, var(--Input-bg, #333));
   background-size: 400% 400%;
   animation: gradient 2s ease infinite;

@@ -10,11 +10,7 @@ import { useState } from 'react';
 
 const ProfileDocument = () => {
   const { user } = useAppSelector((state) => state.userReducer);
-  // const [verificationStatus, setVerificationStatus] = useState({
-  //   card: false,
-  //   passport: false,
-  //   something: false,
-  // });
+
   const [openModal, setOpenModal] = useState<{ isOpen: boolean; modalType: documentType }>({
     isOpen: false,
     modalType: 'passport',

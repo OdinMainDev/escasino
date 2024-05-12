@@ -9,12 +9,10 @@ export interface IPaymentProvider {
   billing_groups: number[];
 }
 
-// TODO: проверить правильно ли сделал ( может быть такое ( как для коинремиттер по дефолту) что нет полей для заполнения)
-// сейчас для коинремиттер добавил ради теста
 export interface IPaymentProviderLayout {
-  key: string | null;
+  name: string | null;
   type: string | null;
-  value: string | null;
+  className: string | null;
 }
 
 export interface IPaymentProviderConditions {
@@ -23,7 +21,7 @@ export interface IPaymentProviderConditions {
 }
 
 export interface IPaymentProviderMeta {
-  texts: Text[];
+  texts: IPaymentProviderText[];
   image: string;
 }
 

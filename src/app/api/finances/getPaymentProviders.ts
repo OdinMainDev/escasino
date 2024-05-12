@@ -12,15 +12,23 @@ export interface IResponsePaymentProviders {
 }
 
 export const getPaymentProvidersApi = async (): Promise<IResponsePaymentProviders> => {
-  const { data, status } = await axios.get<{ data: IPaymentProvider[] }>(paymentProvidersApi(), {
-    headers: {
-      Authorization: `Bearer: ${Cookies.get('token')}`,
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-    },
-  });
-  const resp: IResponsePaymentProviders = {
-    paymentProviders: data.data,
-    status: status,
-  };
-  return resp;
+  try {
+    const { data, status } = await axios.get<{ data: IPaymentProvider[] }>(paymentProvidersApi(), {
+      headers: {
+        Authorization: `Bearer: ${Cookies.get('token')}`,
+        'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
+      },
+    });
+    const resp = {
+      paymentProviders: data.data,
+      status: status,
+    };
+    return resp;
+  } catch (e) {
+    const resp = {
+      paymentProviders: null,
+      status: 500,
+    };
+    return resp;
+  }
 };
