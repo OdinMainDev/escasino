@@ -94,7 +94,10 @@ const WalletTopUp = () => {
                 ))
               : null}
         </div>
-        <div className={styles.title}>Провайдеры</div>
+        {paymentProvidersReducer.paymentProviders &&
+        paymentProvidersReducer.paymentProviders.length > 0 ? (
+          <div className={styles.title}>Провайдеры</div>
+        ) : null}
         <div className={styles.slider}>
           {paymentProvidersReducer.loading
             ? Array(3)
@@ -123,20 +126,31 @@ const WalletTopUp = () => {
               : null}
         </div>
       </div>
-      <div className={styles.scroll}></div>
-      <div className={classNames(styles.block_grid, styles.block_line)}>
-        {selectedProvider
-          ? selectedProvider.layout.map((item, index) => (
-              <div className={item.className?.toString()} key={index}>
-                <div className={styles.title}>{item.name}</div>
-                <Input placeholder={item.name?.toString()} type={item.type?.toString()} />
-              </div>
-            ))
-          : null}
-      </div>
+      {selectedProvider && selectedProvider.layout ? (
+        <div
+          className={classNames(styles.block_grid, {
+            [styles.block_line]: selectedProvider?.layout,
+          })}
+        >
+          {selectedProvider.layout.map((item, index) => (
+            <div className={item.className?.toString()} key={index}>
+              <div className={styles.title}>{item.name}</div>
+              <Input placeholder={item.name?.toString()} type={item.type?.toString()} />
+            </div>
+          ))}
+        </div>
+      ) : null}
       <div className={styles.block}>
         <div className={styles.title}>Сумма депозита</div>
-        <Input placeholder="Сумма" type="number" />
+        <Input
+          placeholder="Сумма"
+          type="number"
+          message={
+            selectedProvider
+              ? `Максимум: ${selectedProvider?.conditions.limit_maximum}${selectedProvider?.currency}`
+              : null
+          }
+        />
       </div>
       <Button className={styles.button}>Пополнить счет</Button>
     </div>
