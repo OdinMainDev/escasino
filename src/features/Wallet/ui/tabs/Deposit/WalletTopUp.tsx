@@ -84,12 +84,14 @@ const WalletTopUp = () => {
                     key={index}
                     className={styles.billing}
                   >
+                    {item.data.image && (
+                      <img src={item.data.image} className={styles.billing_img} />
+                    )}
                     {
                       item.data.texts.find(
                         (item) => item.language.toLowerCase() === defaultLanguage,
                       )?.value
                     }
-                    <img src={item.data.image} className={styles.billing_img} />
                   </TabBlock>
                 ))
               : null}
