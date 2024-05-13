@@ -7,12 +7,18 @@ import Input from '@/shared/ui/Input';
 import { useAppSelector } from '@/store/hooks/redux';
 import { defaultLanguage } from '@/app/config/locales';
 import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
+import { TabItem } from '@/entities/TabItem';
+import { createPayment } from '@/features/Wallet/api/paymentApi';
+import { getVisitorId } from '@/shared/helpers/getVisitorId';
+import { ICreatePaymentData, IProviderLayout } from '@/features/Wallet/models/interfaces';
 
 const WalletTopUp = () => {
   const paymentProvidersReducer = useAppSelector((store) => store.paymentProvidersReducer);
   const billingGroupsReducer = useAppSelector((store) => store.billingGroupsReducer);
   const [selectedBillingGroups, setSelectedBillingGroups] = useState<number>(-1);
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
+  const [layout, setLayout] = useState<IProviderLayout>({});
+  const [amount, setAmount] = useState<string>('');
 
   useEffect(() => {
     if (billingGroupsReducer.billingGroups && billingGroupsReducer.billingGroups.length > 0) {
@@ -49,6 +55,21 @@ const WalletTopUp = () => {
     setSelectedProvider(provider);
   };
 
+  const paymentHandler = async () => {
+    try {
+      const fid = await getVisitorId();
+      const data: ICreatePaymentData = {
+        provider: Number(selectedProvider?.id),
+        fid,
+        amount: Number(amount),
+        ...layout,
+      };
+      await createPayment(data);
+    } catch (e) {
+      /* empty */
+    }
+  };
+
   return (
     <div className={styles.content}>
       <Button className={styles.button}>
@@ -75,10 +96,10 @@ const WalletTopUp = () => {
           {billingGroupsReducer.loading
             ? Array(3)
                 .fill(0)
-                .map((_, index) => <TabBlock key={index} skeleton />)
+                .map((_, index) => <TabItem key={index} skeleton />)
             : billingGroupsReducer.billingGroups
               ? billingGroupsReducer.billingGroups.map((item, index) => (
-                  <TabBlock
+                  <TabItem
                     onClick={() => selectGroup(item.id)}
                     selected={item.id === selectedBillingGroups}
                     key={index}
@@ -92,7 +113,7 @@ const WalletTopUp = () => {
                         (item) => item.language.toLowerCase() === defaultLanguage,
                       )?.value
                     }
-                  </TabBlock>
+                  </TabItem>
                 ))
               : null}
         </div>
@@ -100,7 +121,7 @@ const WalletTopUp = () => {
         paymentProvidersReducer.paymentProviders.length > 0 ? (
           <div className={styles.title}>Провайдеры</div>
         ) : null}
-        <div className={styles.slider}>
+        <div className={styles.provider}>
           {paymentProvidersReducer.loading
             ? Array(3)
                 .fill(0)
@@ -117,44 +138,63 @@ const WalletTopUp = () => {
                       className={styles.billing}
                       selected={selectedProvider ? item.id === selectedProvider.id : false}
                     >
-                      {
-                        item.meta.texts.find(
-                          (item) => item.language.toLowerCase() === defaultLanguage,
-                        )?.value
-                      }
-                      <img src={item.meta.image} className={styles.billing_img} />
+                      <img src={item.meta.image} className={styles.provider_img} />
                     </TabBlock>
                   ))
               : null}
         </div>
       </div>
       {selectedProvider && selectedProvider.layout ? (
-        <div
-          className={classNames(styles.block_grid, {
-            [styles.block_line]: selectedProvider?.layout,
-          })}
-        >
-          {selectedProvider.layout.map((item, index) => (
-            <div className={item.className?.toString()} key={index}>
-              <div className={styles.title}>{item.name}</div>
-              <Input placeholder={item.name?.toString()} type={item.type?.toString()} />
-            </div>
-          ))}
-        </div>
+        <>
+          <div className={styles.provider_title}>
+            {
+              selectedProvider.meta.texts.find(
+                (item) => item.language.toLowerCase() === defaultLanguage,
+              )?.value
+            }
+          </div>
+          <div
+            className={classNames(styles.block_grid, {
+              [styles.block_line]: selectedProvider?.layout.length > 0,
+            })}
+          >
+            {selectedProvider.layout.map((item, index) => (
+              <div className={item.className?.toString()} key={index}>
+                <div className={styles.title}>{item.name}</div>
+                <Input
+                  placeholder={item.name?.toString()}
+                  type={item.type?.toString()}
+                  onChange={(e) =>
+                    setLayout((prev) => ({
+                      ...prev,
+                      [item.name as string]: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+            ))}
+          </div>
+        </>
       ) : null}
       <div className={styles.block}>
         <div className={styles.title}>Сумма депозита</div>
         <Input
           placeholder="Сумма"
           type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
           message={
             selectedProvider
-              ? `Максимум: ${selectedProvider?.conditions.limit_maximum}${selectedProvider?.currency}`
+              ? selectedProvider.conditions.limit_minimum > 0
+                ? `Mинимум: ${selectedProvider?.conditions.limit_minimum}${selectedProvider?.currency} Максимум: ${selectedProvider?.conditions.limit_maximum}${selectedProvider?.currency}`
+                : `Максимум: ${selectedProvider?.conditions.limit_maximum}${selectedProvider?.currency}`
               : null
           }
         />
       </div>
-      <Button className={styles.button}>Пополнить счет</Button>
+      <Button onClick={() => void paymentHandler()} className={styles.button}>
+        Пополнить счет
+      </Button>
     </div>
   );
 };

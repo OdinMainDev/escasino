@@ -17,8 +17,27 @@
   text-wrap: nowrap;
   align-items: center;
   &_img {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.provider {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  &_img {
     width: 30px;
     height: 30px;
+  }
+
+  &_title {
+    color: var(--Text-primary);
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-align: center;
   }
 }
 
