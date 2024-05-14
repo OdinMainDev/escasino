@@ -8,12 +8,17 @@ import { defaultLanguage } from '@/app/config/locales';
 import { createPayment, paymentTransaction } from '@/features/Wallet/api/paymentApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
-import { ICreatePaymentData, IProviderLayout } from '@/features/Wallet/models/interfaces';
+import {
+  ICreatePaymentData,
+  IPaymentTransaction,
+  IProviderLayout,
+} from '@/features/Wallet/models/interfaces';
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/deposit';
 import Loader from '@/shared/ui/Loader';
+import SuccessPaymentModal from './SuccessPaymentModal';
 
 interface IValidateData {
   amount: number;
@@ -35,6 +40,8 @@ const WalletTopUp = () => {
   const [layout, setLayout] = useState<IProviderLayout>({});
   const [amount, setAmount] = useState<string>('');
   const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [payment, setPayment] = useState<IPaymentTransaction | null>(null);
   const intervalIdRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -83,8 +90,6 @@ const WalletTopUp = () => {
       startFetching(data.hash);
     } catch (e) {
       console.error('Payment failed:', e);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -93,6 +98,8 @@ const WalletTopUp = () => {
       const { data } = await paymentTransaction(hash);
       if (data.data.status === 'success') {
         setLoading(false);
+        setOpenModal(true);
+        setPayment(data.data);
         if (intervalIdRef.current !== null) {
           clearInterval(intervalIdRef.current);
           intervalIdRef.current = null;
@@ -301,6 +308,7 @@ const WalletTopUp = () => {
           </div>
         </div>
       )}
+      <SuccessPaymentModal payment={payment} isOpen={openModal} close={() => setOpenModal(false)} />
     </div>
   );
 };
