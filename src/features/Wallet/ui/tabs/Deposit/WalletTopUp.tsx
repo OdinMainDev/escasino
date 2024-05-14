@@ -1,61 +1,53 @@
-import Button from '@/shared/ui/Button';
-import styles from '../styles.module.scss';
-import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { TabBlock } from '@/entities/TabBlock';
+import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
+import { TabBlock } from '@/entities/TabBlock';
+import { TabItem } from '@/entities/TabItem';
 import { useAppSelector } from '@/store/hooks/redux';
 import { defaultLanguage } from '@/app/config/locales';
-import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
-import { TabItem } from '@/entities/TabItem';
 import { createPayment } from '@/features/Wallet/api/paymentApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
+import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
 import { ICreatePaymentData, IProviderLayout } from '@/features/Wallet/models/interfaces';
+import styles from '../styles.module.scss';
+import classNames from 'classnames';
 
 const WalletTopUp = () => {
-  const paymentProvidersReducer = useAppSelector((store) => store.paymentProvidersReducer);
-  const billingGroupsReducer = useAppSelector((store) => store.billingGroupsReducer);
-  const [selectedBillingGroups, setSelectedBillingGroups] = useState<number>(-1);
+  const { billingGroups, loading: billingLoading } = useAppSelector(
+    (store) => store.billingGroupsReducer,
+  );
+  const { paymentProviders, loading: providersLoading } = useAppSelector(
+    (store) => store.paymentProvidersReducer,
+  );
+
+  const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
   const [layout, setLayout] = useState<IProviderLayout>({});
   const [amount, setAmount] = useState<string>('');
 
   useEffect(() => {
-    if (billingGroupsReducer.billingGroups && billingGroupsReducer.billingGroups.length > 0) {
-      setSelectedBillingGroups(billingGroupsReducer.billingGroups[0].id);
-      if (
-        paymentProvidersReducer.paymentProviders &&
-        paymentProvidersReducer.paymentProviders.length > 0
-      ) {
-        setSelectedProvider(
-          paymentProvidersReducer.paymentProviders.find((item) =>
-            item.billing_groups.includes(
-              billingGroupsReducer.billingGroups ? billingGroupsReducer.billingGroups[0].id : -1,
-            ),
-          ) ?? null,
-        );
-      }
-    }
-  }, [billingGroupsReducer.billingGroups, paymentProvidersReducer.paymentProviders]);
+    if (billingGroups && billingGroups.length > 0) {
+      const firstBillingGroup = billingGroups[0].id;
+      setSelectedBillingGroup(firstBillingGroup);
 
-  const selectGroup = (id: number) => {
-    setSelectedBillingGroups(id);
-    if (
-      paymentProvidersReducer.paymentProviders &&
-      paymentProvidersReducer.paymentProviders.length > 0
-    ) {
-      setSelectedProvider(
-        paymentProvidersReducer.paymentProviders.find((item) => item.billing_groups.includes(id)) ??
-          null,
+      const initialProvider = paymentProviders?.find((provider) =>
+        provider.billing_groups.includes(firstBillingGroup),
       );
+      setSelectedProvider(initialProvider ?? null);
     }
+  }, [billingGroups, paymentProviders]);
+
+  const handleGroupSelection = (id: number) => {
+    setSelectedBillingGroup(id);
+    const provider = paymentProviders?.find((provider) => provider.billing_groups.includes(id));
+    setSelectedProvider(provider ?? null);
   };
 
-  const selectProvider = (provider: IPaymentProvider) => {
+  const handleProviderSelection = (provider: IPaymentProvider) => {
     setSelectedProvider(provider);
   };
 
-  const paymentHandler = async () => {
+  const handlePayment = async () => {
     try {
       const fid = await getVisitorId();
       const data: ICreatePaymentData = {
@@ -66,7 +58,7 @@ const WalletTopUp = () => {
       };
       await createPayment(data);
     } catch (e) {
-      /* empty */
+      console.error('Payment failed:', e);
     }
   };
 
@@ -93,69 +85,59 @@ const WalletTopUp = () => {
       <div className={styles.block}>
         <div className={styles.title}>Способ оплаты</div>
         <div className={styles.slider}>
-          {billingGroupsReducer.loading
+          {billingLoading
             ? Array(3)
                 .fill(0)
                 .map((_, index) => <TabItem key={index} skeleton />)
-            : billingGroupsReducer.billingGroups
-              ? billingGroupsReducer.billingGroups.map((item, index) => (
-                  <TabItem
-                    onClick={() => selectGroup(item.id)}
-                    selected={item.id === selectedBillingGroups}
-                    key={index}
-                    className={styles.billing}
-                  >
-                    {item.data.image && (
-                      <img src={item.data.image} className={styles.billing_img} />
-                    )}
-                    {
-                      item.data.texts.find(
-                        (item) => item.language.toLowerCase() === defaultLanguage,
-                      )?.value
-                    }
-                  </TabItem>
-                ))
-              : null}
+            : billingGroups?.map((item, index) => (
+                <TabItem
+                  key={index}
+                  className={styles.billing}
+                  selected={item.id === selectedBillingGroup}
+                  onClick={() => handleGroupSelection(item.id)}
+                >
+                  {item.data.image && <img src={item.data.image} className={styles.billing_img} />}
+                  {
+                    item.data.texts.find((text) => text.language.toLowerCase() === defaultLanguage)
+                      ?.value
+                  }
+                </TabItem>
+              ))}
         </div>
-        {paymentProvidersReducer.paymentProviders &&
-        paymentProvidersReducer.paymentProviders.length > 0 ? (
+        {paymentProviders && paymentProviders?.length > 0 ? (
           <div className={styles.title}>Провайдеры</div>
         ) : null}
         <div className={styles.provider}>
-          {paymentProvidersReducer.loading
+          {providersLoading
             ? Array(3)
                 .fill(0)
                 .map((_, index) => <TabBlock key={index} skeleton />)
-            : paymentProvidersReducer.paymentProviders
-              ? paymentProvidersReducer.paymentProviders
-                  .filter((item) =>
-                    item.billing_groups.find((find) => find === selectedBillingGroups),
-                  )
-                  .map((item) => (
-                    <TabBlock
-                      key={item.id}
-                      onClick={() => selectProvider(item)}
-                      className={styles.billing}
-                      selected={selectedProvider ? item.id === selectedProvider.id : false}
-                    >
-                      <img src={item.meta.image} className={styles.provider_img} />
-                    </TabBlock>
-                  ))
-              : null}
+            : paymentProviders
+                ?.filter((provider) => provider.billing_groups.includes(selectedBillingGroup))
+                .map((provider) => (
+                  <TabBlock
+                    key={provider.id}
+                    className={styles.billing}
+                    selected={selectedProvider?.id === provider.id}
+                    onClick={() => handleProviderSelection(provider)}
+                  >
+                    <img src={provider.meta.image} className={styles.provider_img} />
+                  </TabBlock>
+                ))}
         </div>
       </div>
-      {selectedProvider && selectedProvider.layout ? (
+      {selectedProvider?.layout && (
         <>
           <div className={styles.provider_title}>
             {
               selectedProvider.meta.texts.find(
-                (item) => item.language.toLowerCase() === defaultLanguage,
+                (text) => text.language.toLowerCase() === defaultLanguage,
               )?.value
             }
           </div>
           <div
             className={classNames(styles.block_grid, {
-              [styles.block_line]: selectedProvider?.layout.length > 0,
+              [styles.block_line]: selectedProvider.layout.length > 0,
             })}
           >
             {selectedProvider.layout.map((item, index) => (
@@ -175,7 +157,7 @@ const WalletTopUp = () => {
             ))}
           </div>
         </>
-      ) : null}
+      )}
       <div className={styles.block}>
         <div className={styles.title}>Сумма депозита</div>
         <Input
@@ -186,13 +168,13 @@ const WalletTopUp = () => {
           message={
             selectedProvider
               ? selectedProvider.conditions.limit_minimum > 0
-                ? `Mинимум: ${selectedProvider?.conditions.limit_minimum}${selectedProvider?.currency} Максимум: ${selectedProvider?.conditions.limit_maximum}${selectedProvider?.currency}`
-                : `Максимум: ${selectedProvider?.conditions.limit_maximum}${selectedProvider?.currency}`
+                ? `Mинимум: ${selectedProvider.conditions.limit_minimum}${selectedProvider.currency} Максимум: ${selectedProvider.conditions.limit_maximum}${selectedProvider.currency}`
+                : `Максимум: ${selectedProvider.conditions.limit_maximum}${selectedProvider.currency}`
               : null
           }
         />
       </div>
-      <Button onClick={() => void paymentHandler()} className={styles.button}>
+      <Button onClick={() => void handlePayment()} className={styles.button}>
         Пополнить счет
       </Button>
     </div>

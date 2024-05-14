@@ -10,6 +10,7 @@ export const createPayment = async (data: ICreatePaymentData) => {
   return axios.post(createPaymentApi(), data, {
     headers: {
       Authorization: `Bearer: ${Cookies.get('token')}`,
+      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
     },
   });
 };
