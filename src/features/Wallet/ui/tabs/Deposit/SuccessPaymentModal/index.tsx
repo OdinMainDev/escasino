@@ -28,24 +28,6 @@ const SuccessPaymentModal = ({ isOpen, close, payment }: IProps) => {
     }
   };
 
-  const downloadQRCode = () => {
-    close();
-    const svg = svgRef.current;
-    if (svg) {
-      const serializer = new XMLSerializer();
-      const svgString = serializer.serializeToString(svg);
-      const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'qrcode.svg';
-      link.click();
-
-      URL.revokeObjectURL(url);
-    }
-  };
-
   if (!payment) {
     return null;
   }
@@ -53,7 +35,7 @@ const SuccessPaymentModal = ({ isOpen, close, payment }: IProps) => {
   return (
     <Modal isOpen={isOpen} close={close}>
       <div className={styles.container}>
-        <div className={styles.title}>Вывод {payment.currency}</div>
+        <div className={styles.title}>Данные платежа</div>
         <div className={styles.qr} ref={svgRef}>
           <QRCode size={130} value={payment.address} />
         </div>
@@ -107,7 +89,8 @@ const SuccessPaymentModal = ({ isOpen, close, payment }: IProps) => {
             </svg>
           </div>
         </div>
-        <Button onClick={downloadQRCode}>Сохранить</Button>
+        <Button onClick={close}>Закрыть</Button>
+        <div className={styles.footer}>Когда средства поступят вы получите уведомление</div>
       </div>
     </Modal>
   );
