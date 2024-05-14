@@ -116,27 +116,7 @@ const WalletTopUp = () => {
         {paymentProviders && paymentProviders?.length > 0 ? (
           <div className={styles.title}>Провайдеры</div>
         ) : null}
-        <div className={styles.provider}>
-          {providersLoading
-            ? Array(3)
-                .fill(0)
-                .map((_, index) => <TabBlock key={index} skeleton />)
-            : paymentProviders
-                ?.filter((provider) => provider.billing_groups.includes(selectedBillingGroup))
-                .map((provider) => (
-                  <TabBlock
-                    key={provider.id}
-                    className={styles.billing}
-                    selected={selectedProvider?.id === provider.id}
-                    onClick={() => handleProviderSelection(provider)}
-                  >
-                    <img src={provider.meta.image} className={styles.provider_img} />
-                  </TabBlock>
-                ))}
-        </div>
-      </div>
-      {selectedProvider?.layout && (
-        <>
+        {selectedProvider?.layout && (
           <div className={styles.selected_provider}>
             <div className="flex items-center justify-between mb-[10px]">
               <div className="flex items-center gap-[10px]">
@@ -164,6 +144,28 @@ const WalletTopUp = () => {
               )}
             </div>
           </div>
+        )}
+        <div className={styles.provider}>
+          {providersLoading
+            ? Array(3)
+                .fill(0)
+                .map((_, index) => <TabBlock key={index} skeleton />)
+            : paymentProviders
+                ?.filter((provider) => provider.billing_groups.includes(selectedBillingGroup))
+                .map((provider) => (
+                  <TabBlock
+                    key={provider.id}
+                    className={styles.billing}
+                    selected={selectedProvider?.id === provider.id}
+                    onClick={() => handleProviderSelection(provider)}
+                  >
+                    <img src={provider.meta.image} className={styles.provider_img} />
+                  </TabBlock>
+                ))}
+        </div>
+      </div>
+      <div className={styles.block}>
+        {selectedProvider && selectedProvider?.layout.length > 0 ? (
           <div
             className={classNames(styles.block_grid, {
               [styles.block_line]: selectedProvider.layout.length > 0,
@@ -185,9 +187,8 @@ const WalletTopUp = () => {
               </div>
             ))}
           </div>
-        </>
-      )}
-      <div className={styles.block}>
+        ) : null}
+
         <div className={styles.title}>Сумма депозита</div>
         <Input
           placeholder="Сумма"
