@@ -11,6 +11,7 @@ import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
 import { ICreatePaymentData, IProviderLayout } from '@/features/Wallet/models/interfaces';
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 const WalletTopUp = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
@@ -19,6 +20,8 @@ const WalletTopUp = () => {
   const { paymentProviders, loading: providersLoading } = useAppSelector(
     (store) => store.paymentProvidersReducer,
   );
+
+  const { t } = useTranslation();
 
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
@@ -60,6 +63,12 @@ const WalletTopUp = () => {
     } catch (e) {
       console.error('Payment failed:', e);
     }
+  };
+
+  const generateLimitText = (min: number, max: number, currency: string) => {
+    const minimum = min > 0 ? `Mинимум: ${min} ${currency}` : '';
+    const maximum = max > 0 ? `Максимум: ${max} ${currency}` : '';
+    return `${minimum} ${maximum}`;
   };
 
   return (
@@ -128,12 +137,32 @@ const WalletTopUp = () => {
       </div>
       {selectedProvider?.layout && (
         <>
-          <div className={styles.provider_title}>
-            {
-              selectedProvider.meta.texts.find(
-                (text) => text.language.toLowerCase() === defaultLanguage,
-              )?.value
-            }
+          <div className={styles.selected_provider}>
+            <div className="flex items-center justify-between mb-[10px]">
+              <div className="flex items-center gap-[10px]">
+                <img src={selectedProvider.meta.image} className={styles.selected_provider_img} />
+                <div className={styles.selected_provider_title}>
+                  {
+                    selectedProvider.meta.texts.find(
+                      (text) => text.language.toLowerCase() === defaultLanguage,
+                    )?.value
+                  }
+                </div>
+              </div>
+              <div className={styles.selected_provider_currency}>{selectedProvider.currency}</div>
+            </div>
+            <div className="flex items-center justify-between">
+              {selectedProvider.conditions.limit_minimum > 0 && (
+                <div className={styles.selected_provider_conditions}>
+                  Минимум: <strong>{selectedProvider.conditions.limit_minimum}</strong>
+                </div>
+              )}
+              {selectedProvider.conditions.limit_maximum > 0 && (
+                <div className={styles.selected_provider_conditions}>
+                  Максимум: <strong>{selectedProvider.conditions.limit_maximum}</strong>
+                </div>
+              )}
+            </div>
           </div>
           <div
             className={classNames(styles.block_grid, {
@@ -142,9 +171,9 @@ const WalletTopUp = () => {
           >
             {selectedProvider.layout.map((item, index) => (
               <div className={item.className?.toString()} key={index}>
-                <div className={styles.title}>{item.name}</div>
+                <div className={styles.title}>{t(item.name ?? '')}</div>
                 <Input
-                  placeholder={item.name?.toString()}
+                  placeholder={t(item.name || '')}
                   type={item.type?.toString()}
                   onChange={(e) =>
                     setLayout((prev) => ({
@@ -167,9 +196,11 @@ const WalletTopUp = () => {
           onChange={(e) => setAmount(e.target.value)}
           message={
             selectedProvider
-              ? selectedProvider.conditions.limit_minimum > 0
-                ? `Mинимум: ${selectedProvider.conditions.limit_minimum}${selectedProvider.currency} Максимум: ${selectedProvider.conditions.limit_maximum}${selectedProvider.currency}`
-                : `Максимум: ${selectedProvider.conditions.limit_maximum}${selectedProvider.currency}`
+              ? generateLimitText(
+                  selectedProvider.conditions.limit_minimum,
+                  selectedProvider.conditions.limit_maximum,
+                  selectedProvider.currency,
+                )
               : null
           }
         />
