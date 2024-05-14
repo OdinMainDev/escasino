@@ -11,6 +11,22 @@
    }
 }
 
+.loader {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 100%;
+  background-color: rgba($color: #000000, $alpha: 0.7);
+  &_title {
+    text-transform: uppercase;
+    color:#FFF;
+    font-size: 17px;
+    font-weight: 500;
+  }
+}
+
 .billing {
   display: flex;
   gap: 10px;
@@ -41,6 +57,12 @@
   }
 }
 
+.error {
+  font-size: 13px;
+  text-align: center;
+  color: var(--Aditional-error, #CF6679);
+
+}
 .selected_provider {
   padding: 10px;
   border: 1px solid var(--secondary);

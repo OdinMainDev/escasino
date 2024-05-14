@@ -20,7 +20,7 @@ export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   elType?: 'input' | 'search';
   elSize?: 'm' | 's';
   isError?: boolean;
-  message?: string | null;
+  message?: ReactNode | string | null;
   containerClassName?: string;
   validationTimeout?: number;
   icon?: ReactNode;

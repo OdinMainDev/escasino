@@ -1,17 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
 import { TabBlock } from '@/entities/TabBlock';
 import { TabItem } from '@/entities/TabItem';
 import { useAppSelector } from '@/store/hooks/redux';
 import { defaultLanguage } from '@/app/config/locales';
-import { createPayment } from '@/features/Wallet/api/paymentApi';
+import { createPayment, paymentTransaction } from '@/features/Wallet/api/paymentApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
 import { ICreatePaymentData, IProviderLayout } from '@/features/Wallet/models/interfaces';
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/deposit';
+import Loader from '@/shared/ui/Loader';
+
+interface IValidateData {
+  amount: number;
+  max: number;
+  min: number;
+  layout: IProviderLayout;
+}
 
 const WalletTopUp = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
@@ -20,13 +29,13 @@ const WalletTopUp = () => {
   const { paymentProviders, loading: providersLoading } = useAppSelector(
     (store) => store.paymentProvidersReducer,
   );
-
   const { t } = useTranslation();
-
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
   const [layout, setLayout] = useState<IProviderLayout>({});
   const [amount, setAmount] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+  const intervalIdRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (billingGroups && billingGroups.length > 0) {
@@ -43,32 +52,79 @@ const WalletTopUp = () => {
   const handleGroupSelection = (id: number) => {
     setSelectedBillingGroup(id);
     const provider = paymentProviders?.find((provider) => provider.billing_groups.includes(id));
-    setSelectedProvider(provider ?? null);
+    if (provider) {
+      handleProviderSelection(provider);
+    }
   };
 
   const handleProviderSelection = (provider: IPaymentProvider) => {
+    const data = provider.layout.reduce(
+      (accumulator, currentValue) => ({
+        ...accumulator,
+        [currentValue.name as string]: '',
+      }),
+      {},
+    );
+    setLayout(data);
     setSelectedProvider(provider);
   };
 
   const handlePayment = async () => {
     try {
+      setLoading(true);
       const fid = await getVisitorId();
-      const data: ICreatePaymentData = {
+      const payment: ICreatePaymentData = {
         provider: Number(selectedProvider?.id),
         fid,
         amount: Number(amount),
         ...layout,
       };
-      await createPayment(data);
+      const { data } = await createPayment(payment);
+      startFetching(data.hash);
     } catch (e) {
       console.error('Payment failed:', e);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const generateLimitText = (min: number, max: number, currency: string) => {
-    const minimum = min > 0 ? `Mинимум: ${min} ${currency}` : '';
-    const maximum = max > 0 ? `Максимум: ${max} ${currency}` : '';
-    return `${minimum} ${maximum}`;
+  const paymentTransactionHandler = async (hash: string) => {
+    try {
+      const { data } = await paymentTransaction(hash);
+      if (data.data.status === 'success') {
+        setLoading(false);
+        if (intervalIdRef.current !== null) {
+          clearInterval(intervalIdRef.current);
+          intervalIdRef.current = null;
+        }
+      }
+    } catch (e) {
+      console.error('Payment failed:', e);
+      if (intervalIdRef.current !== null) {
+        clearInterval(intervalIdRef.current);
+        intervalIdRef.current = null;
+      }
+      setLoading(false);
+    }
+  };
+
+  const startFetching = (hash: string) => {
+    if (intervalIdRef.current === null) {
+      intervalIdRef.current = window.setInterval(() => void paymentTransactionHandler(hash), 2000);
+    }
+  };
+
+  const validateData = ({ amount, max, min, layout }: IValidateData) => {
+    if (checkAmount(Number(amount), max, min)) {
+      return false;
+    }
+    for (const key in layout) {
+      if (!layout[key]) {
+        return false;
+      }
+    }
+
+    return true;
   };
 
   return (
@@ -175,8 +231,10 @@ const WalletTopUp = () => {
               <div className={item.className?.toString()} key={index}>
                 <div className={styles.title}>{t(item.name ?? '')}</div>
                 <Input
+                  value={layout[item.name as string]}
                   placeholder={t(item.name || '')}
                   type={item.type?.toString()}
+                  isError={!layout[item.name as string]}
                   onChange={(e) =>
                     setLayout((prev) => ({
                       ...prev,
@@ -194,6 +252,11 @@ const WalletTopUp = () => {
           placeholder="Сумма"
           type="number"
           value={amount}
+          isError={checkAmount(
+            Number(amount),
+            Number(selectedProvider?.conditions.limit_maximum),
+            Number(selectedProvider?.conditions.limit_minimum),
+          )}
           onChange={(e) => setAmount(e.target.value)}
           message={
             selectedProvider
@@ -201,14 +264,43 @@ const WalletTopUp = () => {
                   selectedProvider.conditions.limit_minimum,
                   selectedProvider.conditions.limit_maximum,
                   selectedProvider.currency,
+                  selectedProvider.rules,
+                  selectedProvider.fees,
                 )
               : null
           }
         />
       </div>
-      <Button onClick={() => void handlePayment()} className={styles.button}>
+      <Button
+        disabled={
+          !validateData({
+            amount: Number(amount),
+            max: Number(selectedProvider?.conditions.limit_maximum),
+            min: Number(selectedProvider?.conditions.limit_minimum),
+            layout,
+          }) || loading
+        }
+        onClick={() => void handlePayment()}
+        className={styles.button}
+      >
         Пополнить счет
       </Button>
+      {!validateData({
+        amount: Number(amount),
+        max: Number(selectedProvider?.conditions.limit_maximum),
+        min: Number(selectedProvider?.conditions.limit_minimum),
+        layout,
+      }) && <div className={styles.error}>Заполните все поля</div>}
+      {loading && (
+        <div className={styles.loader}>
+          <div className="w-[100%] h-[100%] flex flex-col items-center justify-center gap-[10px]">
+            <div className="w-[55px] h-[55px]">
+              <Loader />
+            </div>
+            <div className={styles.loader_title}>Обработка платежа...</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

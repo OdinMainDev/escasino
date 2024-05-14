@@ -13,3 +13,11 @@ export interface ICreatePaymentData {
   fid: string;
   amount: number;
 }
+
+export interface IPaymentTransaction {
+  address: string;
+  amount: string;
+  convert_rate: string;
+  currency: string;
+  status: string;
+}
