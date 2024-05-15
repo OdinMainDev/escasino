@@ -16,11 +16,7 @@ import {
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import {
-  checkAmount,
-  generateComissionText,
-  generateLimitText,
-} from '@/features/Wallet/helpers/payment';
+import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
 import Loader from '@/shared/ui/Loader';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 
@@ -282,11 +278,6 @@ const WalletWithdraw = () => {
           )}
           onChange={(e) => setAmount(e.target.value)}
         />
-        {selectedProvider && (
-          <div className={styles.subtitle}>
-            {generateComissionText(selectedProvider.rules, selectedProvider.fees)}
-          </div>
-        )}
       </div>
       <Button
         disabled={

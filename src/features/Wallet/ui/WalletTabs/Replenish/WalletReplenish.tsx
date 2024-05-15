@@ -16,7 +16,7 @@ import {
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { checkAmount } from '@/features/Wallet/helpers/payment';
+import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
 import Loader from '@/shared/ui/Loader';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 
@@ -306,6 +306,16 @@ const WalletReplenish = () => {
           )}
           onChange={(e) => setAmount(e.target.value)}
         />
+        {selectedProvider && (
+          <div className={classNames(styles.subtitle, 'mb-[12px]')}>
+            {generateLimitText(
+              selectedProvider.conditions.limit_minimum,
+              selectedProvider.conditions.limit_maximum,
+              selectedProvider.currency,
+              Number(amount),
+            )}
+          </div>
+        )}
       </div>
       <Button
         disabled={
