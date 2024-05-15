@@ -1,4 +1,4 @@
-import { RouteObject, createBrowserRouter } from 'react-router-dom';
+import { Navigate, RouteObject, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import Layout from './assets/layout';
 
@@ -106,6 +106,10 @@ const availRoutes: RouteObject[] = [
     children: [
       {
         path: 'deposit',
+        element: <Navigate to="replenish" replace />,
+      },
+      {
+        path: 'deposit/:tab',
         element: (
           <BillingGroupsProvider>
             <PaymentProvidersProvider>

@@ -3,7 +3,7 @@ import { ITab } from '@/entities/Tabs';
 export const tabs: ITab[] = [
   {
     label: 'Пополнить',
-    value: 'top-up',
+    value: 'replenish',
   },
   {
     label: 'Вывести',

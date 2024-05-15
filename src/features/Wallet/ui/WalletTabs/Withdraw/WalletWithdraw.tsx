@@ -5,7 +5,7 @@ import { TabBlock } from '@/entities/TabBlock';
 import { TabItem } from '@/entities/TabItem';
 import { useAppSelector } from '@/store/hooks/redux';
 import { defaultLanguage } from '@/app/config/locales';
-import { createPayment, paymentTransaction } from '@/features/Wallet/api/paymentApi';
+import { createPayment, paymentTransaction } from '@/features/Wallet/api/replenishApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
 import {
@@ -16,9 +16,13 @@ import {
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/deposit';
+import {
+  checkAmount,
+  generateComissionText,
+  generateLimitText,
+} from '@/features/Wallet/helpers/payment';
 import Loader from '@/shared/ui/Loader';
-import SuccessPaymentModal from './SuccessPaymentModal';
+import SuccessPaymentModal from '../../SuccessPaymentModal';
 
 interface IValidateData {
   amount: number;
@@ -27,7 +31,7 @@ interface IValidateData {
   layout: IProviderLayout;
 }
 
-const WalletTopUp = () => {
+const WalletWithdraw = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
     (store) => store.billingGroupsReducer,
   );
@@ -255,9 +259,21 @@ const WalletTopUp = () => {
         ) : null}
 
         <div className={styles.title}>Сумма депозита</div>
+        {selectedProvider && (
+          <div className={classNames(styles.subtitle, 'mb-[12px]')}>
+            {generateLimitText(
+              selectedProvider.conditions.limit_minimum,
+              selectedProvider.conditions.limit_maximum,
+              selectedProvider.currency,
+              Number(amount),
+            )}
+          </div>
+        )}
+
         <Input
           placeholder="Сумма"
           type="number"
+          className="mb-[12px]"
           value={amount}
           isError={checkAmount(
             Number(amount),
@@ -265,18 +281,12 @@ const WalletTopUp = () => {
             Number(selectedProvider?.conditions.limit_minimum),
           )}
           onChange={(e) => setAmount(e.target.value)}
-          message={
-            selectedProvider
-              ? generateLimitText(
-                  selectedProvider.conditions.limit_minimum,
-                  selectedProvider.conditions.limit_maximum,
-                  selectedProvider.currency,
-                  selectedProvider.rules,
-                  selectedProvider.fees,
-                )
-              : null
-          }
         />
+        {selectedProvider && (
+          <div className={styles.subtitle}>
+            {generateComissionText(selectedProvider.rules, selectedProvider.fees)}
+          </div>
+        )}
       </div>
       <Button
         disabled={
@@ -288,9 +298,9 @@ const WalletTopUp = () => {
           }) || loading
         }
         onClick={() => void handlePayment()}
-        className={styles.button}
+        className={classNames(styles.button, 'uppercase')}
       >
-        Пополнить счет
+        Вывести
       </Button>
       {!validateData({
         amount: Number(amount),
@@ -313,4 +323,4 @@ const WalletTopUp = () => {
   );
 };
 
-export default WalletTopUp;
+export default WalletWithdraw;
