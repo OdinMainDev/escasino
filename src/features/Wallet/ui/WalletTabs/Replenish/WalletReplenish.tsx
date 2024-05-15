@@ -16,11 +16,7 @@ import {
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import {
-  checkAmount,
-  generateComissionText,
-  generateLimitText,
-} from '@/features/Wallet/helpers/payment';
+import { checkAmount } from '@/features/Wallet/helpers/payment';
 import Loader from '@/shared/ui/Loader';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 
@@ -201,14 +197,52 @@ const WalletReplenish = () => {
             <div className="flex items-center justify-between">
               {selectedProvider.conditions.limit_minimum > 0 && (
                 <div className={styles.selected_provider_conditions}>
-                  Минимум: <strong>{selectedProvider.conditions.limit_minimum}</strong>
+                  Минимум:{' '}
+                  <strong>
+                    {selectedProvider.conditions.limit_minimum} {selectedProvider.currency}
+                  </strong>
                 </div>
               )}
+            </div>
+            <div className="flex items-center justify-between">
               {selectedProvider.conditions.limit_maximum > 0 && (
                 <div className={styles.selected_provider_conditions}>
-                  Максимум: <strong>{selectedProvider.conditions.limit_maximum}</strong>
+                  Максимум:{' '}
+                  <strong>
+                    {selectedProvider.conditions.limit_maximum} {selectedProvider.currency}
+                  </strong>
                 </div>
               )}
+            </div>
+            <div className="flex items-center justify-between">
+              {selectedProvider.fees.fixed > 0 && (
+                <div className={styles.selected_provider_conditions}>
+                  Фиксированная комиссия:{' '}
+                  <strong>
+                    {selectedProvider.fees.fixed} {selectedProvider.currency}
+                  </strong>
+                </div>
+              )}
+            </div>
+            <div className="flex items-center justify-between">
+              {selectedProvider.fees.percent > 0 && (
+                <div className={styles.selected_provider_conditions}>
+                  Комиссия: <strong>{selectedProvider.fees.percent}%</strong>
+                </div>
+              )}
+            </div>
+            <div className="flex items-center justify-between">
+              {selectedProvider.rules.compensate_commission && (
+                <div className={styles.selected_provider_conditions}>
+                  <strong>Мы компенсируем комиссию платежного шлюза</strong>
+                </div>
+              )}
+            </div>
+            <div className="flex items-center justify-between">
+              <div className={styles.selected_provider_conditions}>
+                Вейджер при депозите без бонуса:{' '}
+                <strong>{selectedProvider.rules.without_bonus_wager}%</strong>
+              </div>
             </div>
           </div>
         )}
@@ -259,16 +293,6 @@ const WalletReplenish = () => {
         ) : null}
 
         <div className={styles.title}>Сумма депозита</div>
-        {selectedProvider && (
-          <div className={classNames(styles.subtitle, 'mb-[12px]')}>
-            {generateLimitText(
-              selectedProvider.conditions.limit_minimum,
-              selectedProvider.conditions.limit_maximum,
-              selectedProvider.currency,
-              Number(amount),
-            )}
-          </div>
-        )}
 
         <Input
           placeholder="Сумма"
@@ -282,11 +306,6 @@ const WalletReplenish = () => {
           )}
           onChange={(e) => setAmount(e.target.value)}
         />
-        {selectedProvider && (
-          <div className={styles.subtitle}>
-            {generateComissionText(selectedProvider.rules, selectedProvider.fees)}
-          </div>
-        )}
       </div>
       <Button
         disabled={
