@@ -25,7 +25,6 @@ import {
   generateComissionText,
   generateLimitText,
 } from '@/features/Wallet/helpers/payment';
-import Loader from '@/shared/ui/Loader';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 
 interface IValidateData {
@@ -46,6 +45,7 @@ const WalletReplenish = () => {
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
   const [layout, setLayout] = useState<IProviderLayout>({});
   const [amount, setAmount] = useState<string>('');
+  const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [payment, setPayment] = useState<IPaymentTransaction | null>(null);
@@ -104,6 +104,7 @@ const WalletReplenish = () => {
   const handlePayment = async () => {
     try {
       setLoading(true);
+      setOpenModal(true);
       const fid = await getVisitorId();
       const payment: ICreatePaymentData = {
         provider: Number(selectedProvider?.id),
@@ -116,6 +117,7 @@ const WalletReplenish = () => {
     } catch (e) {
       console.error('Payment failed:', e);
       setLoading(false);
+      setIsError(true);
     }
   };
 
@@ -124,7 +126,6 @@ const WalletReplenish = () => {
       const { data } = await paymentTransaction(hash);
       if (data.data.status === 'success') {
         setLoading(false);
-        setOpenModal(true);
         setPayment(data.data);
         if (intervalIdRef.current !== null) {
           clearInterval(intervalIdRef.current);
@@ -138,6 +139,7 @@ const WalletReplenish = () => {
         intervalIdRef.current = null;
       }
       setLoading(false);
+      setIsError(true);
     }
   };
 
@@ -158,6 +160,12 @@ const WalletReplenish = () => {
     }
 
     return true;
+  };
+
+  const closeModal = () => {
+    setIsError(false);
+    setOpenModal(false);
+    setPayment(null);
   };
 
   return (
@@ -368,17 +376,14 @@ const WalletReplenish = () => {
         min: Number(selectedProvider?.conditions.limit_minimum),
         layout,
       }) && <div className={styles.error}>Заполните все поля</div>}
-      {loading && (
-        <div className={styles.loader}>
-          <div className="w-[100%] h-[100%] flex flex-col items-center justify-center gap-[10px]">
-            <div className="w-[55px] h-[55px]">
-              <Loader />
-            </div>
-            <div className={styles.loader_title}>Обработка платежа...</div>
-          </div>
-        </div>
-      )}
-      <SuccessPaymentModal payment={payment} isOpen={openModal} close={() => setOpenModal(false)} />
+      <SuccessPaymentModal
+        payment={payment}
+        message={isError ? 'ошибка платежа, попробуйте позжe ' : ''}
+        type={isError ? 'bad' : 'payment'}
+        isOpen={openModal}
+        close={closeModal}
+        loading={loading}
+      />
     </div>
   );
 };

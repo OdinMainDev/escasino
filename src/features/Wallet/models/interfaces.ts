@@ -26,4 +26,5 @@ export interface ICreateWithdrawtData {
   provider: number;
   fid: string;
   amount: number;
+  to_address: string;
 }

@@ -1,22 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
 import { TabBlock } from '@/entities/TabBlock';
 import { TabItem } from '@/entities/TabItem';
 import { useAppSelector } from '@/store/hooks/redux';
 import { defaultLanguage } from '@/app/config/locales';
-import {
-  createWithdraw,
-  getWithdrawProvidersApi,
-  withdrawTransaction,
-} from '@/features/Wallet/api/withdrawApi';
+import { createWithdraw, getWithdrawProvidersApi } from '@/features/Wallet/api/withdrawApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
-import {
-  ICreateWithdrawtData,
-  IPaymentTransaction,
-  IProviderLayout,
-} from '@/features/Wallet/models/interfaces';
+import { ICreateWithdrawtData, IProviderLayout } from '@/features/Wallet/models/interfaces';
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +17,6 @@ import {
   generateComissionText,
   generateLimitText,
 } from '@/features/Wallet/helpers/payment';
-import Loader from '@/shared/ui/Loader';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 
 interface IValidateData {
@@ -45,14 +36,13 @@ const WalletWithdraw = () => {
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
   const [layout, setLayout] = useState<IProviderLayout>({});
+  const [isError, setIsError] = useState(false);
   const [withdrawData, setWithdrawData] = useState({
     amount: '',
     to_address: '',
   });
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [payment, setPayment] = useState<IPaymentTransaction | null>(null);
-  const intervalIdRef = useRef<number | null>(null);
 
   useEffect(() => {
     const getWithdrawProvidersHandler = async () => {
@@ -109,6 +99,7 @@ const WalletWithdraw = () => {
   const handlePayment = async () => {
     try {
       setLoading(true);
+      setOpenModal(true);
       const fid = await getVisitorId();
       const payment: ICreateWithdrawtData = {
         provider: Number(selectedProvider?.id),
@@ -117,39 +108,12 @@ const WalletWithdraw = () => {
         amount: Number(withdrawData.amount),
         ...layout,
       };
-      const { data } = await createWithdraw(payment);
-      startFetching(data.hash);
+      await createWithdraw(payment);
     } catch (e) {
       console.error('Payment failed:', e);
+      setIsError(true);
+    } finally {
       setLoading(false);
-    }
-  };
-
-  const paymentTransactionHandler = async (hash: string) => {
-    try {
-      const { data } = await withdrawTransaction(hash);
-      if (data.data.status === 'success') {
-        setLoading(false);
-        setOpenModal(true);
-        setPayment(data.data);
-        if (intervalIdRef.current !== null) {
-          clearInterval(intervalIdRef.current);
-          intervalIdRef.current = null;
-        }
-      }
-    } catch (e) {
-      console.error('Payment failed:', e);
-      if (intervalIdRef.current !== null) {
-        clearInterval(intervalIdRef.current);
-        intervalIdRef.current = null;
-      }
-      setLoading(false);
-    }
-  };
-
-  const startFetching = (hash: string) => {
-    if (intervalIdRef.current === null) {
-      intervalIdRef.current = window.setInterval(() => void paymentTransactionHandler(hash), 2000);
     }
   };
 
@@ -166,26 +130,13 @@ const WalletWithdraw = () => {
     return true;
   };
 
+  const closeModal = () => {
+    setIsError(false);
+    setOpenModal(false);
+  };
+
   return (
     <div className={styles.content}>
-      <Button className={styles.button}>
-        <svg
-          width="23"
-          height="22"
-          viewBox="0 0 23 22"
-          fill="#000"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M11.5 5V21M11.5 5H7.96429C7.44332 5 6.9437 4.78929 6.57533 4.41421C6.20695 4.03914 6 3.53043 6 3C6 2.46957 6.20695 1.96086 6.57533 1.58579C6.9437 1.21071 7.44332 1 7.96429 1C10.7143 1 11.5 5 11.5 5ZM11.5 5H15.0357C15.5567 5 16.0563 4.78929 16.4247 4.41421C16.793 4.03914 17 3.53043 17 3C17 2.46957 16.793 1.96086 16.4247 1.58579C16.0563 1.21071 15.5567 1 15.0357 1C12.2857 1 11.5 5 11.5 5ZM19.5 10V17.8C19.5 18.9201 19.5 19.4802 19.282 19.908C19.0903 20.2843 18.7843 20.5903 18.408 20.782C17.9802 21 17.4201 21 16.3 21H6.7C5.57989 21 5.01984 21 4.59202 20.782C4.21569 20.5903 3.90973 20.2843 3.71799 19.908C3.5 19.4802 3.5 18.9201 3.5 17.8V10M1.5 6.6V8.4C1.5 8.96005 1.5 9.24008 1.60899 9.45399C1.70487 9.64215 1.85785 9.79513 2.04601 9.89101C2.25992 10 2.53995 10 3.1 10H19.9C20.4601 10 20.7401 10 20.954 9.89101C21.1422 9.79513 21.2951 9.64215 21.391 9.45399C21.5 9.24008 21.5 8.96005 21.5 8.4V6.6C21.5 6.03995 21.5 5.75992 21.391 5.54601C21.2951 5.35785 21.1422 5.20487 20.954 5.10899C20.7401 5 20.4601 5 19.9 5H3.1C2.53995 5 2.25992 5 2.04601 5.10899C1.85785 5.20487 1.70487 5.35785 1.60899 5.54601C1.5 5.75992 1.5 6.03995 1.5 6.6Z"
-            stroke="var(--primary)"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        Играть с бонусом
-      </Button>
       <div className={styles.block}>
         <div className={styles.title}>Способ оплаты</div>
         <div className={styles.slider}>
@@ -347,17 +298,13 @@ const WalletWithdraw = () => {
         min: Number(selectedProvider?.conditions.limit_minimum),
         layout,
       }) && <div className={styles.error}>Заполните все поля</div>}
-      {loading && (
-        <div className={styles.loader}>
-          <div className="w-[100%] h-[100%] flex flex-col items-center justify-center gap-[10px]">
-            <div className="w-[55px] h-[55px]">
-              <Loader />
-            </div>
-            <div className={styles.loader_title}>Обработка платежа...</div>
-          </div>
-        </div>
-      )}
-      <SuccessPaymentModal payment={payment} isOpen={openModal} close={() => setOpenModal(false)} />
+      <SuccessPaymentModal
+        message={isError ? 'ошибка платежа, попробуйте позжe ' : 'заявка на вывод успешно подана'}
+        type={isError ? 'bad' : !loading ? 'good' : 'payment'}
+        isOpen={openModal}
+        close={closeModal}
+        loading={loading}
+      />
     </div>
   );
 };
