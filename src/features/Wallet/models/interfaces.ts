@@ -21,3 +21,9 @@ export interface IPaymentTransaction {
   currency: string;
   status: string;
 }
+
+export interface ICreateWithdrawtData {
+  provider: number;
+  fid: string;
+  amount: number;
+}

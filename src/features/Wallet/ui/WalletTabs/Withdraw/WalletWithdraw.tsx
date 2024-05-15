@@ -5,18 +5,26 @@ import { TabBlock } from '@/entities/TabBlock';
 import { TabItem } from '@/entities/TabItem';
 import { useAppSelector } from '@/store/hooks/redux';
 import { defaultLanguage } from '@/app/config/locales';
-import { createPayment, paymentTransaction } from '@/features/Wallet/api/replenishApi';
+import {
+  createWithdraw,
+  getWithdrawProvidersApi,
+  withdrawTransaction,
+} from '@/features/Wallet/api/withdrawApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
 import {
-  ICreatePaymentData,
+  ICreateWithdrawtData,
   IPaymentTransaction,
   IProviderLayout,
 } from '@/features/Wallet/models/interfaces';
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
+import {
+  checkAmount,
+  generateComissionText,
+  generateLimitText,
+} from '@/features/Wallet/helpers/payment';
 import Loader from '@/shared/ui/Loader';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 
@@ -31,34 +39,56 @@ const WalletWithdraw = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
     (store) => store.billingGroupsReducer,
   );
-  const { paymentProviders, loading: providersLoading } = useAppSelector(
-    (store) => store.paymentProvidersReducer,
-  );
+  const [withdrawProviders, setWithdrawProviders] = useState<IPaymentProvider[]>([]);
+  const [providersLoading, setProvidersLoading] = useState(false);
   const { t } = useTranslation();
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
   const [layout, setLayout] = useState<IProviderLayout>({});
-  const [amount, setAmount] = useState<string>('');
+  const [withdrawData, setWithdrawData] = useState({
+    amount: '',
+    to_address: '',
+  });
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [payment, setPayment] = useState<IPaymentTransaction | null>(null);
   const intervalIdRef = useRef<number | null>(null);
 
   useEffect(() => {
+    const getWithdrawProvidersHandler = async () => {
+      try {
+        setProvidersLoading(true);
+        const data = await getWithdrawProvidersApi();
+        if (data.withdrawProviders) {
+          setWithdrawProviders(
+            data.withdrawProviders.map((item) => ({ ...item, billing_groups: [4] })),
+          );
+        }
+      } catch (e) {
+        /* empty */
+      } finally {
+        setProvidersLoading(false);
+      }
+    };
+
+    void getWithdrawProvidersHandler();
+  }, []);
+
+  useEffect(() => {
     if (billingGroups && billingGroups.length > 0) {
       const firstBillingGroup = billingGroups[0].id;
       setSelectedBillingGroup(firstBillingGroup);
 
-      const initialProvider = paymentProviders?.find((provider) =>
+      const initialProvider = withdrawProviders.find((provider) =>
         provider.billing_groups.includes(firstBillingGroup),
       );
       setSelectedProvider(initialProvider ?? null);
     }
-  }, [billingGroups, paymentProviders]);
+  }, [billingGroups, withdrawProviders]);
 
   const handleGroupSelection = (id: number) => {
     setSelectedBillingGroup(id);
-    const provider = paymentProviders?.find((provider) => provider.billing_groups.includes(id));
+    const provider = withdrawProviders?.find((provider) => provider.billing_groups.includes(id));
     if (provider) {
       handleProviderSelection(provider);
     }
@@ -80,22 +110,24 @@ const WalletWithdraw = () => {
     try {
       setLoading(true);
       const fid = await getVisitorId();
-      const payment: ICreatePaymentData = {
+      const payment: ICreateWithdrawtData = {
         provider: Number(selectedProvider?.id),
         fid,
-        amount: Number(amount),
+        ...withdrawData,
+        amount: Number(withdrawData.amount),
         ...layout,
       };
-      const { data } = await createPayment(payment);
+      const { data } = await createWithdraw(payment);
       startFetching(data.hash);
     } catch (e) {
       console.error('Payment failed:', e);
+      setLoading(false);
     }
   };
 
   const paymentTransactionHandler = async (hash: string) => {
     try {
-      const { data } = await paymentTransaction(hash);
+      const { data } = await withdrawTransaction(hash);
       if (data.data.status === 'success') {
         setLoading(false);
         setOpenModal(true);
@@ -176,7 +208,7 @@ const WalletWithdraw = () => {
                 </TabItem>
               ))}
         </div>
-        {paymentProviders && paymentProviders?.length > 0 ? (
+        {withdrawProviders && withdrawProviders?.length > 0 ? (
           <div className={styles.title}>Провайдеры</div>
         ) : null}
         {selectedProvider?.layout && (
@@ -213,8 +245,8 @@ const WalletWithdraw = () => {
             ? Array(3)
                 .fill(0)
                 .map((_, index) => <TabBlock key={index} skeleton />)
-            : paymentProviders
-                ?.filter((provider) => provider.billing_groups.includes(selectedBillingGroup))
+            : withdrawProviders
+                ?.filter((provider) => provider?.billing_groups.includes(selectedBillingGroup))
                 .map((provider) => (
                   <TabBlock
                     key={provider.id}
@@ -254,35 +286,51 @@ const WalletWithdraw = () => {
           </div>
         ) : null}
 
+        <div className={styles.title}>Адрес получателя</div>
+        <Input
+          placeholder="Адрес получателя"
+          type="number"
+          className="mb-[12px]"
+          value={withdrawData.to_address}
+          isError={!withdrawData.to_address}
+          onChange={(e) => setWithdrawData((prev) => ({ ...prev, to_address: e.target.value }))}
+        />
         <div className={styles.title}>Сумма депозита</div>
-        {selectedProvider && (
-          <div className={classNames(styles.subtitle, 'mb-[12px]')}>
-            {generateLimitText(
-              selectedProvider.conditions.limit_minimum,
-              selectedProvider.conditions.limit_maximum,
-              selectedProvider.currency,
-              Number(amount),
-            )}
-          </div>
-        )}
+        {selectedProvider &&
+          selectedProvider.conditions.limit_minimum !== 0 &&
+          selectedProvider.conditions.limit_maximum !== 0 && (
+            <div className={classNames(styles.subtitle, 'mb-[12px]')}>
+              {generateLimitText(
+                selectedProvider.conditions.limit_minimum,
+                selectedProvider.conditions.limit_maximum,
+                selectedProvider.currency,
+                Number(withdrawData.amount),
+              )}
+            </div>
+          )}
 
         <Input
           placeholder="Сумма"
           type="number"
           className="mb-[12px]"
-          value={amount}
+          value={withdrawData.amount}
           isError={checkAmount(
-            Number(amount),
+            Number(withdrawData.amount),
             Number(selectedProvider?.conditions.limit_maximum),
             Number(selectedProvider?.conditions.limit_minimum),
           )}
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={(e) => setWithdrawData((prev) => ({ ...prev, amount: e.target.value }))}
         />
+        {selectedProvider && (
+          <div className={styles.subtitle}>
+            {generateComissionText(selectedProvider.rules, selectedProvider.fees)}
+          </div>
+        )}
       </div>
       <Button
         disabled={
           !validateData({
-            amount: Number(amount),
+            amount: Number(withdrawData.amount),
             max: Number(selectedProvider?.conditions.limit_maximum),
             min: Number(selectedProvider?.conditions.limit_minimum),
             layout,
@@ -294,7 +342,7 @@ const WalletWithdraw = () => {
         Вывести
       </Button>
       {!validateData({
-        amount: Number(amount),
+        amount: Number(withdrawData.amount),
         max: Number(selectedProvider?.conditions.limit_maximum),
         min: Number(selectedProvider?.conditions.limit_minimum),
         layout,

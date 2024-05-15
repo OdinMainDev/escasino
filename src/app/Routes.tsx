@@ -14,7 +14,6 @@ import {
   GameCategoriesProvider,
   GameProvidersProvider,
   BillingGroupsProvider,
-  PaymentProvidersProvider,
 } from './providers/pages';
 import { ErrorCountry, ErrorUnavailable, Error404 } from '@/pages/Error';
 import GamesSearch from '@/pages/Games/Search';
@@ -112,9 +111,7 @@ const availRoutes: RouteObject[] = [
         path: 'deposit/:tab',
         element: (
           <BillingGroupsProvider>
-            <PaymentProvidersProvider>
-              <Wallet />
-            </PaymentProvidersProvider>
+            <Wallet />
           </BillingGroupsProvider>
         ),
       },

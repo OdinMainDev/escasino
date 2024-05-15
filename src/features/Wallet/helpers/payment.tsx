@@ -19,11 +19,23 @@ export const generateLimitText = (min: number, max: number, currency: string, am
       </div>
     ) : null;
   return (
-    <div>
-      <div className="flex items-center justify-between">
-        {minimum}
-        {maximum}
-      </div>
+    <div className="flex items-center justify-between">
+      {minimum}
+      {maximum}
+    </div>
+  );
+};
+
+export const generateComissionText = (
+  compensate?: IPaymentProviderRules,
+  fees?: IPaymentProviderFees,
+) => {
+  return (
+    <div className="flex items-center justify-between mb-[10px]">
+      {fees && fees?.percent > 0 ? <div>Комиссия {fees?.percent}%</div> : ''}
+      {compensate?.compensate_commission && (
+        <div>Компенсируем комиссию платежной системы {compensate.without_bonus_wager}%</div>
+      )}
     </div>
   );
 };

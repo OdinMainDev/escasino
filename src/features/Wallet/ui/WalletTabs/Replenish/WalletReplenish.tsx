@@ -5,7 +5,11 @@ import { TabBlock } from '@/entities/TabBlock';
 import { TabItem } from '@/entities/TabItem';
 import { useAppSelector } from '@/store/hooks/redux';
 import { defaultLanguage } from '@/app/config/locales';
-import { createPayment, paymentTransaction } from '@/features/Wallet/api/replenishApi';
+import {
+  createPayment,
+  getPaymentProvidersApi,
+  paymentTransaction,
+} from '@/features/Wallet/api/replenishApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
 import {
@@ -16,7 +20,11 @@ import {
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
+import {
+  checkAmount,
+  generateComissionText,
+  generateLimitText,
+} from '@/features/Wallet/helpers/payment';
 import Loader from '@/shared/ui/Loader';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 
@@ -31,9 +39,8 @@ const WalletReplenish = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
     (store) => store.billingGroupsReducer,
   );
-  const { paymentProviders, loading: providersLoading } = useAppSelector(
-    (store) => store.paymentProvidersReducer,
-  );
+  const [paymentProviders, setPaymentProviders] = useState<IPaymentProvider[]>([]);
+  const [providersLoading, setProvidersLoading] = useState(false);
   const { t } = useTranslation();
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
@@ -43,6 +50,24 @@ const WalletReplenish = () => {
   const [openModal, setOpenModal] = useState(false);
   const [payment, setPayment] = useState<IPaymentTransaction | null>(null);
   const intervalIdRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const getWithdrawProvidersHandler = async () => {
+      try {
+        setProvidersLoading(true);
+        const data = await getPaymentProvidersApi();
+        if (data.paymentProviders) {
+          setPaymentProviders(data.paymentProviders);
+        }
+      } catch (e) {
+        /* empty */
+      } finally {
+        setProvidersLoading(false);
+      }
+    };
+
+    void getWithdrawProvidersHandler();
+  }, []);
 
   useEffect(() => {
     if (billingGroups && billingGroups.length > 0) {
@@ -90,6 +115,7 @@ const WalletReplenish = () => {
       startFetching(data.hash);
     } catch (e) {
       console.error('Payment failed:', e);
+      setLoading(false);
     }
   };
 
@@ -291,9 +317,19 @@ const WalletReplenish = () => {
             ))}
           </div>
         ) : null}
-
         <div className={styles.title}>Сумма депозита</div>
-
+        {selectedProvider &&
+          (selectedProvider.conditions.limit_minimum !== 0 ||
+            selectedProvider.conditions.limit_maximum !== 0) && (
+            <div className={classNames(styles.subtitle, 'mb-[12px]')}>
+              {generateLimitText(
+                selectedProvider.conditions.limit_minimum,
+                selectedProvider.conditions.limit_maximum,
+                selectedProvider.currency,
+                Number(amount),
+              )}
+            </div>
+          )}
         <Input
           placeholder="Сумма"
           type="number"
@@ -307,13 +343,8 @@ const WalletReplenish = () => {
           onChange={(e) => setAmount(e.target.value)}
         />
         {selectedProvider && (
-          <div className={classNames(styles.subtitle, 'mb-[12px]')}>
-            {generateLimitText(
-              selectedProvider.conditions.limit_minimum,
-              selectedProvider.conditions.limit_maximum,
-              selectedProvider.currency,
-              Number(amount),
-            )}
+          <div className={styles.subtitle}>
+            {generateComissionText(selectedProvider.rules, selectedProvider.fees)}
           </div>
         )}
       </div>
