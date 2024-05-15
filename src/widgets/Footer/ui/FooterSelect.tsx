@@ -5,11 +5,8 @@ import styles from './FooterSelect.module.scss';
 import { useAppSelector } from '@/store/hooks/redux';
 
 const FooterSelect = () => {
-  const { user, loading } = useAppSelector((state) => state.userReducer);
+  const { user } = useAppSelector((state) => state.userReducer);
   const [openBalance, setIsOpenBalance] = useState<boolean>(false);
-  if (!user || loading) {
-    return null;
-  }
   return (
     <div
       className={classNames(styles.container, {
@@ -21,26 +18,26 @@ const FooterSelect = () => {
         <div className={styles.menu_item}>
           <div className={styles.label}>Реальный счет</div>
           <div className={styles.menu_balace}>
-            {user.balance.balance_real} {user.balance.currency}
+            {user?.balance.balance_real} {user?.balance.currency}
           </div>
         </div>
         <div className={styles.menu_item}>
           <div className={styles.label}>Бонусный счет</div>
           <div className={styles.menu_balace}>
-            {user.balance.balance_bonus} {user.balance.currency}
+            {user?.balance.balance_bonus} {user?.balance.currency}
           </div>
         </div>
         <div className={styles.menu_item}>
           <div className={styles.label}>Вейджер</div>
           <div className={styles.menu_balace}>
-            {user.balance.wager} {user.balance.currency}
+            {user?.balance.wager} {user?.balance.currency}
           </div>
         </div>
       </div>
 
       <div className={styles.label}>Баланс</div>
       <div className={styles.balance}>
-        {user.balance.wager} {user.balance.currency}
+        {user?.balance.wager} {user?.balance.currency}
       </div>
       <div className={styles.arrow}>
         <svg
