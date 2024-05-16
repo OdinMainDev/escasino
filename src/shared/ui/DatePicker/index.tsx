@@ -5,11 +5,12 @@ import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { ru } from 'date-fns/locale/ru';
+import './styles.scss';
 
 registerLocale('ru', ru);
 
 interface IProps {
-  value?: Date;
+  selected?: Date;
   onChange?: (value: Date) => void;
   elSize?: 'm' | 's';
   placeholder?: string;
@@ -18,10 +19,14 @@ interface IProps {
   containerClassName?: string;
   validationFunction?: (value: Date) => boolean;
   isError?: boolean;
+  selectsStart?: boolean;
+  selectsEnd?: boolean;
+  startDate?: Date;
+  endDate?: Date;
 }
 
 const DatePicker = ({
-  value,
+  selected,
   onChange = () => {},
   elSize = 'm',
   placeholder,
@@ -30,6 +35,10 @@ const DatePicker = ({
   containerClassName,
   validationFunction,
   isError,
+  selectsEnd,
+  selectsStart,
+  startDate,
+  endDate,
 }: IProps) => {
   const [isActive, setIsActive] = useState(true);
   const [errorMessage, setErrorMessage] = useState(message);
@@ -40,7 +49,7 @@ const DatePicker = ({
   useEffect(() => {
     messageRef.current = message;
     setErrorMessage(message);
-  }, [message, value]);
+  }, [message, selected]);
 
   const changeDateHandler = (data: Date) => {
     if (onChange) {
@@ -87,9 +96,9 @@ const DatePicker = ({
         <ReactDatePicker
           dateFormat="dd-MM-yyyy"
           wrapperClassName={classNames(styles.wrapper, styles[elSize])}
-          selected={value}
+          selected={selected}
           dayClassName={(date) => {
-            return date.getTime() === value?.getTime() ? styles.selected_day : styles.day;
+            return date.getTime() === selected?.getTime() ? styles.selected_day : styles.day;
           }}
           onChange={changeDateHandler}
           onFocus={handleFocus}
@@ -97,8 +106,12 @@ const DatePicker = ({
           maxDate={new Date()}
           showMonthDropdown
           showYearDropdown
+          selectsStart={selectsStart}
+          selectsEnd={selectsEnd}
           dropdownMode="select"
           locale="ru"
+          startDate={startDate}
+          endDate={endDate}
           className={styles.input}
         />
       </div>

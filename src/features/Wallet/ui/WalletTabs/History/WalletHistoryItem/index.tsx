@@ -1,18 +1,30 @@
-import { IHistoryItem } from '@/features/Wallet/models/interfaces';
+import { IHistoryItem, IPaymentTransaction } from '@/features/Wallet/models/interfaces';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { padNumber } from '@/shared/helpers/padNumber';
 import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
 import { defaultLanguage } from '@/app/config/locales';
+import { paymentTransaction } from '@/features/Wallet/api/replenishApi';
 
 interface IProps {
   transaction: IHistoryItem;
   type: 'payment' | 'withdraw';
   providers: IPaymentProvider[];
+  setTransactionLoading: (value: boolean) => void;
+  openModal: (value: boolean) => void;
+  setSelectedPayment: (value: IPaymentTransaction | null) => void;
 }
 
-const WalletHistoryItem = ({ transaction, type, providers }: IProps) => {
+const WalletHistoryItem = ({
+  transaction,
+  type,
+  providers,
+  setTransactionLoading,
+  openModal,
+  setSelectedPayment,
+}: IProps) => {
   const provider = providers.find((item) => item.id === transaction.provider_id);
+
   const getStatus = (status: number) => {
     if (status === 1) {
       return 'Создан';
@@ -37,8 +49,28 @@ const WalletHistoryItem = ({ transaction, type, providers }: IProps) => {
     return `${padNumber(convertedDate.getDate())}.${padNumber(convertedDate.getMonth() + 1)}.${padNumber(convertedDate.getFullYear())}, ${padNumber(convertedDate.getHours())}:${padNumber(convertedDate.getMinutes())}`;
   };
 
+  const paymentTransactionHandler = async (hash: string) => {
+    try {
+      setTransactionLoading(true);
+      const { data } = await paymentTransaction(hash);
+      if (data.data.status === 'success') {
+        setTransactionLoading(false);
+        setSelectedPayment(data.data);
+      }
+    } catch (e) {
+      setTransactionLoading(false);
+    }
+  };
+
+  const openProviderInfo = () => {
+    if (transaction.status === 2) {
+      openModal(true);
+      void paymentTransactionHandler(transaction.hash);
+    }
+  };
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onClick={openProviderInfo}>
       <div className="flex justify-between mb-[16px]">
         <div
           className={classNames(styles.status, {
@@ -48,25 +80,6 @@ const WalletHistoryItem = ({ transaction, type, providers }: IProps) => {
           })}
         >
           {getStatus(transaction.status)}
-        </div>
-        <div className={styles.cancel}>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="#000"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M17 7L7 17M7 7L17 17"
-              stroke="var(--primary)"
-              strokeOpacity="0.87"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <span>Отменить</span>
         </div>
       </div>
       <div className="flex justify-between mb-[10px]">

@@ -383,7 +383,7 @@ const ProfileForm = () => {
       {settings?.profile.has_dob && (
         <DatePicker
           containerClassName={styles.input}
-          value={new Date(userData.dob)}
+          selected={new Date(userData.dob)}
           onChange={(date) => {
             setUserData((prev) => ({ ...prev, dob: date.getTime() }));
           }}

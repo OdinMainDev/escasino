@@ -1,5 +1,6 @@
 .container {
   padding: 24px 16px 16px 16px;
+  height: 100%;
 }
 
 .tabs {
@@ -12,5 +13,9 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-bottom: 30px;
 }
 
+.loader {
+  margin-top: 50%;
+}

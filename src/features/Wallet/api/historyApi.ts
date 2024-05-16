@@ -10,7 +10,7 @@ export const withdrawTransactionsApi = () => {
   return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/get/my/withdraw/transactions`;
 };
 
-export const getPaymentTransactions = async (): Promise<IHistoryItem[]> => {
+export const getPaymentTransactions = async (page?: number): Promise<IHistoryItem[]> => {
   try {
     const { data } = await axios.get<{ status: string; data: IHistoryItem[] }>(
       paymentTransactionsApi(),
@@ -18,6 +18,9 @@ export const getPaymentTransactions = async (): Promise<IHistoryItem[]> => {
         headers: {
           Authorization: `Bearer: ${Cookies.get('token')}`,
           'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
+        },
+        params: {
+          page: page || 1,
         },
       },
     );
@@ -27,7 +30,7 @@ export const getPaymentTransactions = async (): Promise<IHistoryItem[]> => {
   }
 };
 
-export const getWithdrawTransactions = async () => {
+export const getWithdrawTransactions = async (page?: number) => {
   try {
     const { data } = await axios.get<{ status: string; data: IHistoryItem[] }>(
       withdrawTransactionsApi(),
@@ -35,6 +38,9 @@ export const getWithdrawTransactions = async () => {
         headers: {
           Authorization: `Bearer: ${Cookies.get('token')}`,
           'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
+        },
+        params: {
+          page: page || 1,
         },
       },
     );
