@@ -52,7 +52,7 @@ const WalletReplenish = () => {
   const intervalIdRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const getWithdrawProvidersHandler = async () => {
+    const getPaymentProvidersHandler = async () => {
       try {
         setProvidersLoading(true);
         const data = await getPaymentProvidersApi();
@@ -66,7 +66,7 @@ const WalletReplenish = () => {
       }
     };
 
-    void getWithdrawProvidersHandler();
+    void getPaymentProvidersHandler();
   }, []);
 
   useEffect(() => {

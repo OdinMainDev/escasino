@@ -14,3 +14,14 @@ export const tabs: ITab[] = [
     value: 'history',
   },
 ];
+
+export const filterHistory = [
+  {
+    label: 'Пополнение',
+    value: 'replenish',
+  },
+  {
+    label: 'Выводы',
+    value: 'withdrawal',
+  },
+];
