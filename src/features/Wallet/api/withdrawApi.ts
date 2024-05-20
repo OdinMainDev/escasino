@@ -13,7 +13,7 @@ export const withdrawTransactionApi = (hash: string) => {
 export const createWithdraw = async (data: ICreateWithdrawtData) => {
   return axios.post<{ hash: string }>(createWithdrawApi(), data, {
     headers: {
-      Authorization: `Bearer: ${Cookies.get('token')}`,
+      Authorization: `Bearer: ${Cookies.get('atoken')}`,
       'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
     },
   });
@@ -22,7 +22,7 @@ export const createWithdraw = async (data: ICreateWithdrawtData) => {
 export const withdrawTransaction = (hash: string) => {
   return axios.get<{ data: IPaymentTransaction }>(withdrawTransactionApi(hash), {
     headers: {
-      Authorization: `Bearer: ${Cookies.get('token')}`,
+      Authorization: `Bearer: ${Cookies.get('atoken')}`,
       'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
     },
   });
@@ -41,7 +41,7 @@ export const getWithdrawProvidersApi = async (): Promise<IResponseWithdrawProvid
   try {
     const { data, status } = await axios.get<{ data: IPaymentProvider[] }>(withdrawProvidersApi(), {
       headers: {
-        Authorization: `Bearer: ${Cookies.get('token')}`,
+        Authorization: `Bearer: ${Cookies.get('atoken')}`,
         'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
       },
     });

@@ -16,7 +16,7 @@ export const getPaymentTransactions = async (page?: number): Promise<IHistoryIte
       paymentTransactionsApi(),
       {
         headers: {
-          Authorization: `Bearer: ${Cookies.get('token')}`,
+          Authorization: `Bearer: ${Cookies.get('atoken')}`,
           'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
         },
         params: {
@@ -36,7 +36,7 @@ export const getWithdrawTransactions = async (page?: number) => {
       withdrawTransactionsApi(),
       {
         headers: {
-          Authorization: `Bearer: ${Cookies.get('token')}`,
+          Authorization: `Bearer: ${Cookies.get('atoken')}`,
           'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
         },
         params: {

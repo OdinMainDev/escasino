@@ -25,7 +25,7 @@ export const doVerifyEmailConfirmApi = async (
   try {
     const res: AxiosResponse<IAuthHashRes> = await axios.post(verifyEmailConfirmApi(), resetData, {
       headers: {
-        Authorization: `Bearer: ${Cookies.get('token')}`,
+        Authorization: `Bearer: ${Cookies.get('atoken')}`,
         'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
       },
     });

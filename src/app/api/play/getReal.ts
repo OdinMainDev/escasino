@@ -19,7 +19,7 @@ export const getRealApi = async (id: number, isMobile: boolean): Promise<IRespon
       {
         headers: {
           'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-          Authorization: `Bearer: ${Cookies.get('token')}`,
+          Authorization: `Bearer: ${Cookies.get('atoken')}`,
         },
       },
     );

@@ -8,12 +8,12 @@ export const isAuthApi = () => {
 
 export const getIsAuthApi = async (): Promise<null | boolean> => {
   try {
-    if (!Cookies.get('token')) {
+    if (!Cookies.get('atoken')) {
       return false;
     }
     const res = await axios.get(isAuthApi(), {
       headers: {
-        Authorization: `Bearer: ${Cookies.get('token')}`,
+        Authorization: `Bearer: ${Cookies.get('atoken')}`,
         'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
       },
     });
@@ -29,7 +29,7 @@ export const getIsAuthApi = async (): Promise<null | boolean> => {
 };
 
 function handleHttpError(status: number) {
-  Cookies.remove('token');
+  Cookies.remove('atoken');
   switch (status) {
     // DEPRECATED - потому что 401 статус - не авторизован ( то есть кривая авторизация )
     // case 401:

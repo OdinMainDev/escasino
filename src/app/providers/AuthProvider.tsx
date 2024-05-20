@@ -51,11 +51,11 @@ export const AuthProvider: FunctionComponent<AuthProviderProps> = ({ children })
   }, []);
 
   const setAuthenticated = (jwt: string) => {
-    Cookies.set('token', jwt);
+    Cookies.set('atoken', jwt);
     setIsAuth(true);
   };
   const unsetAuthenticated = () => {
-    Cookies.remove('token');
+    Cookies.remove('atoken');
     setIsAuth(false);
   };
 

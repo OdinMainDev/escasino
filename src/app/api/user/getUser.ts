@@ -14,7 +14,7 @@ export interface IResponseUser {
 export const getUserApi = async (): Promise<IResponseUser> => {
   const { data, status } = await axios.get<{ data: IUser }>(userApi(), {
     headers: {
-      Authorization: `Bearer: ${Cookies.get('token')}`,
+      Authorization: `Bearer: ${Cookies.get('atoken')}`,
       'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
     },
   });

@@ -10,7 +10,7 @@ export const sendDocument = async (formData: FormData): Promise<void> => {
   try {
     await axios.post(documentApi(), formData, {
       headers: {
-        Authorization: `Bearer: ${Cookies.get('token')}`,
+        Authorization: `Bearer: ${Cookies.get('atoken')}`,
         'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
       },
     });
