@@ -44,7 +44,7 @@ const WalletHistoryItem = ({
   };
 
   const getDate = (date: number): string => {
-    if (date === 0) {
+    if (date !== 0) {
       const timestampInMilliseconds = date * 1000;
       const convertedDate = new Date(timestampInMilliseconds);
       return `${padNumber(convertedDate.getDate())}.${padNumber(convertedDate.getMonth() + 1)}.${padNumber(convertedDate.getFullYear())}, ${padNumber(convertedDate.getHours())}:${padNumber(convertedDate.getMinutes())}`;
