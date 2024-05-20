@@ -18,26 +18,27 @@ const FooterSelect = () => {
         <div className={styles.menu_item}>
           <div className={styles.label}>Реальный счет</div>
           <div className={styles.menu_balace}>
-            {user?.balance.balance_real} {user?.balance.currency}
+            {user?.balance.formatted_balance_real || 0} {user?.balance.currency}
           </div>
         </div>
         <div className={styles.menu_item}>
           <div className={styles.label}>Бонусный счет</div>
           <div className={styles.menu_balace}>
-            {user?.balance.balance_bonus} {user?.balance.currency}
+            {user?.balance.formatted_balance_bonus || 0} {user?.balance.currency}
           </div>
         </div>
         <div className={styles.menu_item}>
           <div className={styles.label}>Вейджер</div>
           <div className={styles.menu_balace}>
-            {user?.balance.wager} {user?.balance.currency}
+            {user?.balance.formatted_wager || 0} {user?.balance.currency}
           </div>
         </div>
       </div>
 
       <div className={styles.label}>Баланс</div>
       <div className={styles.balance}>
-        {user?.balance.wager} {user?.balance.currency}
+        {(user?.balance.formatted_balance_real || 0) + (user?.balance.formatted_balance_bonus || 0)}{' '}
+        {user?.balance.currency}
       </div>
       <div className={styles.arrow}>
         <svg

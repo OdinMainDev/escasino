@@ -55,13 +55,13 @@ const Profile = () => {
         <div className={styles.balance}>
           <div className={styles.balance_title}>Реальный счет</div>
           <div className={styles.balance_value}>
-            {Number(user?.balance.balance_real) / 100 || 0} {user?.balance.currency}
+            {user?.balance.formatted_balance_real || 0} {user?.balance.currency}
           </div>
         </div>
         <div className={styles.balance}>
           <div className={styles.balance_title}>Бонусный счет</div>
           <div className={styles.balance_bonus}>
-            {user?.balance.balance_bonus || 0} {user?.balance.currency}
+            {user?.balance.formatted_balance_bonus || 0} {user?.balance.currency}
           </div>
         </div>
         <div className={styles.buttons}>
