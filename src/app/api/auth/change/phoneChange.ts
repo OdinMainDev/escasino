@@ -25,7 +25,7 @@ export const doChangePhoneSendApi = async (
   try {
     const res: AxiosResponse<IAuthHashRes> = await axios.post(changePhoneSendApi(), resetData, {
       headers: {
-        Authorization: `Bearer: ${Cookies.get('token')}`,
+        Authorization: `Bearer: ${Cookies.get('atoken')}`,
         'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
       },
     });

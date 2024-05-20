@@ -12,11 +12,7 @@ import { ICreateWithdrawtData, IProviderLayout } from '@/features/Wallet/models/
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import {
-  checkAmount,
-  generateComissionText,
-  generateLimitText,
-} from '@/features/Wallet/helpers/payment';
+import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 
 interface IValidateData {
@@ -247,19 +243,6 @@ const WalletWithdraw = () => {
           onChange={(e) => setWithdrawData((prev) => ({ ...prev, to_address: e.target.value }))}
         />
         <div className={styles.title}>Сумма депозита</div>
-        {selectedProvider &&
-          selectedProvider.conditions.limit_minimum !== 0 &&
-          selectedProvider.conditions.limit_maximum !== 0 && (
-            <div className={classNames(styles.subtitle, 'mb-[12px]')}>
-              {generateLimitText(
-                selectedProvider.conditions.limit_minimum,
-                selectedProvider.conditions.limit_maximum,
-                selectedProvider.currency,
-                Number(withdrawData.amount),
-              )}
-            </div>
-          )}
-
         <Input
           placeholder="Сумма"
           type="number"
@@ -274,7 +257,12 @@ const WalletWithdraw = () => {
         />
         {selectedProvider && (
           <div className={styles.subtitle}>
-            {generateComissionText(selectedProvider.rules, selectedProvider.fees)}
+            {generateLimitText(
+              selectedProvider.conditions.limit_minimum,
+              selectedProvider.conditions.limit_maximum,
+              selectedProvider.currency,
+              Number(withdrawData.amount),
+            )}
           </div>
         )}
       </div>

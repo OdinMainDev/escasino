@@ -52,7 +52,7 @@ export const doSetUserData = async (form: IUserData): Promise<IResponseSetUserDa
   try {
     const res: AxiosResponse<IResponseSetUserData> = await axios.post(setUserDataApi(), form, {
       headers: {
-        Authorization: `Bearer: ${Cookies.get('token')}`,
+        Authorization: `Bearer: ${Cookies.get('atoken')}`,
         'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
       },
     });
