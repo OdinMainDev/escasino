@@ -7,6 +7,7 @@ import Loader from '@/shared/ui/Loader';
 interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   childred?: ReactElement;
   loading?: boolean;
+  size?: 'm' | 's';
   elType?: 'outlined' | 'contained';
   disabledOpacityOff?: boolean;
 }
@@ -17,6 +18,7 @@ const Button = ({
   loading,
   disabled,
   disabledOpacityOff,
+  size = 'm',
   ...otherProps
 }: IProps) => {
   return (
@@ -29,6 +31,8 @@ const Button = ({
           [styles.contained]: elType === 'contained',
           [styles.outlined]: elType === 'outlined',
           [styles.disabled]: disabled && !disabledOpacityOff,
+          [styles.size_m]: size === 'm',
+          [styles.size_s]: size === 's',
         },
         otherProps.className,
       )}

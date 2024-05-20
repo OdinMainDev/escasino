@@ -5,6 +5,7 @@ import { padNumber } from '@/shared/helpers/padNumber';
 import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
 import { defaultLanguage } from '@/app/config/locales';
 import { paymentTransaction } from '@/features/Wallet/api/replenishApi';
+import Button from '@/shared/ui/Button';
 
 interface IProps {
   transaction: IHistoryItem;
@@ -17,7 +18,6 @@ interface IProps {
 
 const WalletHistoryItem = ({
   transaction,
-  type,
   providers,
   setTransactionLoading,
   openModal,
@@ -44,9 +44,12 @@ const WalletHistoryItem = ({
   };
 
   const getDate = (date: number): string => {
-    const timestampInMilliseconds = date * 1000;
-    const convertedDate = new Date(timestampInMilliseconds);
-    return `${padNumber(convertedDate.getDate())}.${padNumber(convertedDate.getMonth() + 1)}.${padNumber(convertedDate.getFullYear())}, ${padNumber(convertedDate.getHours())}:${padNumber(convertedDate.getMinutes())}`;
+    if (date === 0) {
+      const timestampInMilliseconds = date * 1000;
+      const convertedDate = new Date(timestampInMilliseconds);
+      return `${padNumber(convertedDate.getDate())}.${padNumber(convertedDate.getMonth() + 1)}.${padNumber(convertedDate.getFullYear())}, ${padNumber(convertedDate.getHours())}:${padNumber(convertedDate.getMinutes())}`;
+    }
+    return '--.--.----, --:--';
   };
 
   const paymentTransactionHandler = async (hash: string) => {
@@ -63,7 +66,7 @@ const WalletHistoryItem = ({
   };
 
   const openProviderInfo = () => {
-    if (transaction.status === 2) {
+    if (transaction.status === 1) {
       openModal(true);
       void paymentTransactionHandler(transaction.hash);
     }
@@ -84,7 +87,7 @@ const WalletHistoryItem = ({
       </div>
       <div className="flex justify-between mb-[10px]">
         <div className={styles.data}>
-          <div className={styles.label}>Дата</div>
+          <div className={styles.label}>Дата создания</div>
           <div className={styles.value}>{getDate(transaction.created_at)}</div>
         </div>
         <div className={styles.data}>
@@ -108,10 +111,6 @@ const WalletHistoryItem = ({
       </div>
       <div className="flex justify-between">
         <div className={styles.data}>
-          <div className={styles.label}>Тип</div>
-          <div className={styles.value}>{type === 'payment' ? 'Пополнение' : 'Вывод средств'}</div>
-        </div>
-        <div className={styles.data}>
           <div className={styles.label}>Платежная система</div>
           <div className={styles.value}>
             {provider &&
@@ -119,6 +118,13 @@ const WalletHistoryItem = ({
                 ?.value}
           </div>
         </div>
+        {transaction.status === 1 && (
+          <div className={styles.data}>
+            <Button size="s" className="uppercase w-[100%]" elType="outlined">
+              перейти к платежу
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
