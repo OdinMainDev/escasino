@@ -2,6 +2,14 @@
   "login": "Вход",
   "GetAccess": "Получите доступ к своей учетной записи",
   "loginError": "Ошибка входа",
-  "bank": "Банк",
-  "address": "Адрес"
+  "paymentForm": {
+    "undefined": "Имя поля не найдено",
+    "bank": "Банк",
+    "address": "Адрес"
+  },
+  "withdrawForm": {
+    "undefined": "Имя поля не найдено",
+    "bank": "Банк",
+    "address": "Адрес"
+  }
 }

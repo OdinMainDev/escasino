@@ -308,10 +308,10 @@ const WalletReplenish = () => {
           >
             {selectedProvider.layout.map((item, index) => (
               <div className={item.className?.toString()} key={index}>
-                <div className={styles.title}>{t(item.name ?? '')}</div>
+                <div className={styles.title}>{t('paymentForm.' + (item.name || 'undefined'))}</div>
                 <Input
                   value={layout[item.name as string]}
-                  placeholder={t(item.name || '')}
+                  placeholder={t('paymentForm.' + (item.name || 'undefined'))}
                   type={item.type?.toString()}
                   isError={!layout[item.name as string]}
                   onChange={(e) =>
