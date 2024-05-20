@@ -50,9 +50,7 @@ const WalletWithdraw = () => {
         setProvidersLoading(true);
         const data = await getWithdrawProvidersApi();
         if (data.withdrawProviders) {
-          setWithdrawProviders(
-            data.withdrawProviders.map((item) => ({ ...item, billing_groups: [4] })),
-          );
+          setWithdrawProviders(data.withdrawProviders);
         }
       } catch (e) {
         /* empty */

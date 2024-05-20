@@ -61,9 +61,9 @@ const SuccessPaymentModal = ({
             <div className={styles.info}>
               <div
                 className={styles.info_block}
-                onClick={() => void copyTextToClipboard(payment.address)}
+                onClick={() => void copyTextToClipboard(payment.amount)}
               >
-                <div>
+                <div className="w-[100%] flex-1">
                   <div className={styles.subtitle}>Сумма</div>
                   <div className={styles.value}>{payment.amount}</div>
                 </div>
@@ -87,7 +87,7 @@ const SuccessPaymentModal = ({
                 className={styles.info_block}
                 onClick={() => void copyTextToClipboard(payment.address)}
               >
-                <div>
+                <div className="w-[100%] flex-1">
                   <div className={styles.subtitle}>Адрес для пополнения</div>
                   <div className={styles.value}>{payment.address}</div>
                 </div>
