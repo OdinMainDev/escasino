@@ -6,6 +6,7 @@ import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
 import { defaultLanguage } from '@/app/config/locales';
 import { paymentTransaction } from '@/features/Wallet/api/replenishApi';
 import Button from '@/shared/ui/Button';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   transaction: IHistoryItem;
@@ -19,28 +20,37 @@ interface IProps {
 const WalletHistoryItem = ({
   transaction,
   providers,
+  type,
   setTransactionLoading,
   openModal,
   setSelectedPayment,
 }: IProps) => {
   const provider = providers.find((item) => item.id === transaction.provider_id);
+  const { t } = useTranslation();
 
-  const getStatus = (status: number) => {
-    if (status === 1) {
-      return 'Создан';
+  const getStatus = (status: number, type: string) => {
+    if (type == 'payment') {
+      switch (status) {
+        case 2:
+          return 'Success';
+        case 3:
+          return 'Error';
+        case 4:
+          return 'Delete';
+      }
     }
-    if (status === 2) {
-      return 'В обработке';
+    switch (status) {
+      case 2:
+        return 'Await';
+      case 3:
+        return 'Success';
+      case 4:
+        return 'Error';
+      case 5:
+        return 'Delete';
     }
-    if (status === 3) {
-      return 'Успешно';
-    }
-    if (status === 4) {
-      return 'Ошибка';
-    }
-    if (status === 5) {
-      return 'Удален';
-    }
+
+    return 'Created';
   };
 
   const getDate = (date: number): string => {
@@ -77,12 +87,14 @@ const WalletHistoryItem = ({
       <div className="flex justify-between mb-[16px]">
         <div
           className={classNames(styles.status, {
-            [styles.good]: transaction.status === 1 || transaction.status === 3,
-            [styles.middle]: transaction.status === 2,
-            [styles.bad]: transaction.status === 4 || transaction.status === 5,
+            [styles.good]: getStatus(transaction.status, type) === 'Success',
+            [styles.middle]: getStatus(transaction.status, type) == 'Await',
+            [styles.bad]:
+              getStatus(transaction.status, type) === 'Delete' ||
+              getStatus(transaction.status, type) == 'Error',
           })}
         >
-          {getStatus(transaction.status)}
+          {t('historyWalletStatuses.' + getStatus(transaction.status, type))}
         </div>
       </div>
       <div className="flex justify-between mb-[10px]">

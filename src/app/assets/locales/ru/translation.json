@@ -5,11 +5,22 @@
   "paymentForm": {
     "undefined": "Имя поля не найдено",
     "bank": "Банк",
-    "address": "Адрес"
+    "address": "Адрес",
+    "number": "Номер карты",
+    "exp_month": "Месяц",
+    "exp_year": "Год",
+    "cvc": "Код безопасности"
   },
   "withdrawForm": {
     "undefined": "Имя поля не найдено",
     "bank": "Банк",
     "address": "Адрес"
+  },
+  "historyWalletStatuses": {
+    "Created": "Создано",
+    "Await": "В ожидании",
+    "Success": "Успешно",
+    "Error": "Ошибка",
+    "Delete": "Удалено"
   }
 }
