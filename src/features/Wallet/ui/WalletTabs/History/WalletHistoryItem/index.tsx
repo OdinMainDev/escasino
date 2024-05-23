@@ -41,12 +41,13 @@ const WalletHistoryItem = ({
     }
     switch (status) {
       case 2:
-        return 'Await';
       case 3:
-        return 'Success';
+        return 'Await';
       case 4:
-        return 'Error';
+        return 'Success';
       case 5:
+        return 'Error';
+      case 6:
         return 'Delete';
     }
 
