@@ -8,6 +8,11 @@
   @media (min-width: 375px) {
     padding: 12px 32px;
   }
+
+  &.light {
+    border: 1px solid #F9F9F9;
+    color: #FFF;
+  }
 }
 
 .size_m {
@@ -35,15 +40,29 @@
 .outlined {
   background-color: transparent;
   color: var(--secondary);
-  &:hover {
-    background-color: var(--main-button-color);
-    color: var(--primary);
-    svg {
-      path {
-        stroke: #FFF;
+  &.light {
+    &:hover {
+      background-color: var(--primary);
+      color: var(--secondary);
+      svg {
+        path {
+          stroke: var(--secondary);
+        }
       }
-    }
-  }  
+    } 
+  }
+  &.dark {
+    &:hover {
+      background-color: var(--main-button-color);
+      color: var(--primary);
+      svg {
+        path {
+          stroke: #FFF;
+        }
+      }
+    } 
+  }
+ 
   &.disabled {
     &:hover {
       opacity: 0.7;

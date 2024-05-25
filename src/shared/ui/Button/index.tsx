@@ -10,6 +10,7 @@ interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'm' | 's';
   elType?: 'outlined' | 'contained';
   disabledOpacityOff?: boolean;
+  theme?: 'light' | 'dark';
 }
 
 const Button = ({
@@ -19,6 +20,7 @@ const Button = ({
   disabled,
   disabledOpacityOff,
   size = 'm',
+  theme = 'dark',
   ...otherProps
 }: IProps) => {
   return (
@@ -33,6 +35,8 @@ const Button = ({
           [styles.disabled]: disabled && !disabledOpacityOff,
           [styles.size_m]: size === 'm',
           [styles.size_s]: size === 's',
+          [styles.dark]: theme === 'dark',
+          [styles.light]: theme === 'light',
         },
         otherProps.className,
       )}
