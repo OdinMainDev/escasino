@@ -1,5 +1,10 @@
 import { IResponseError } from '@/shared/models/interfaces/misc';
 import { AxiosError, isAxiosError } from 'axios';
+import {
+  IErrorResponse,
+  IErrorResponseObject,
+  IErrorResponseString,
+} from '../models/interfaces/error';
 
 export const handleErrorStatus = (error: unknown): never => {
   if (isAxiosError(error)) {
@@ -16,3 +21,10 @@ export const handleErrorStatus = (error: unknown): never => {
   }
   throw { errors: 'Network or unknown error', success: false };
 };
+
+export function isErrorResponseString(response: IErrorResponse): response is IErrorResponseString {
+  return typeof response.errors === 'string';
+}
+export function isErrorResponseObject(response: IErrorResponse): response is IErrorResponseObject {
+  return typeof response.errors === 'object' && !Array.isArray(response.errors);
+}

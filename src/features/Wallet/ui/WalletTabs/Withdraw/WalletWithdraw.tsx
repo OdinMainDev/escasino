@@ -14,6 +14,9 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
+import { IErrorResponse } from '@/shared/models/interfaces/error';
+import { errorValidator } from '@/features/Wallet/helpers/errorValidator';
+import { AxiosError } from 'axios';
 
 interface IValidateData {
   amount: number;
@@ -33,6 +36,7 @@ const WalletWithdraw = () => {
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
   const [layout, setLayout] = useState<IProviderLayout>({});
   const [isError, setIsError] = useState(false);
+  const [error, setError] = useState<IErrorResponse>();
   const [withdrawData, setWithdrawData] = useState({
     amount: '',
     to_address: '',
@@ -104,6 +108,8 @@ const WalletWithdraw = () => {
       };
       await createWithdraw(payment);
     } catch (e) {
+      const axiosError = e as AxiosError;
+      setError(axiosError?.response?.data as IErrorResponse);
       console.error('Payment failed:', e);
       setIsError(true);
     } finally {
@@ -126,7 +132,9 @@ const WalletWithdraw = () => {
 
   const closeModal = () => {
     setIsError(false);
+    setError(undefined);
     setOpenModal(false);
+    setLoading(false);
   };
 
   return (
@@ -232,16 +240,6 @@ const WalletWithdraw = () => {
             ))}
           </div>
         ) : null}
-
-        <div className={styles.title}>Адрес получателя</div>
-        <Input
-          placeholder="Адрес получателя"
-          type="number"
-          className="mb-[12px]"
-          value={withdrawData.to_address}
-          isError={!withdrawData.to_address}
-          onChange={(e) => setWithdrawData((prev) => ({ ...prev, to_address: e.target.value }))}
-        />
         <div className={styles.title}>Сумма депозита</div>
         <Input
           placeholder="Сумма"
@@ -287,7 +285,7 @@ const WalletWithdraw = () => {
         layout,
       }) && <div className={styles.error}>Заполните все поля</div>}
       <SuccessPaymentModal
-        message={isError ? 'ошибка платежа, попробуйте позжe ' : 'заявка на вывод успешно подана'}
+        message={isError ? errorValidator(error) : 'заявка на вывод успешно подана'}
         type={isError ? 'bad' : !loading ? 'good' : 'payment'}
         isOpen={openModal}
         close={closeModal}

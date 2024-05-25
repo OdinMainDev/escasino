@@ -22,6 +22,9 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
+import { errorValidator } from '@/features/Wallet/helpers/errorValidator';
+import { IErrorResponse } from '@/shared/models/interfaces/error';
+import { AxiosError } from 'axios';
 
 interface IValidateData {
   amount: number;
@@ -44,6 +47,7 @@ const WalletReplenish = () => {
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [error, setError] = useState<IErrorResponse>();
   const [payment, setPayment] = useState<IPaymentTransaction | null>(null);
   const intervalIdRef = useRef<number | null>(null);
 
@@ -111,6 +115,8 @@ const WalletReplenish = () => {
       const { data } = await createPayment(payment);
       startFetching(data.hash);
     } catch (e) {
+      const axiosError = e as AxiosError;
+      setError(axiosError?.response?.data as IErrorResponse);
       console.error('Payment failed:', e);
       setLoading(false);
       setIsError(true);
@@ -130,6 +136,8 @@ const WalletReplenish = () => {
       }
     } catch (e) {
       console.error('Payment failed:', e);
+      const axiosError = e as AxiosError;
+      setError(axiosError?.response?.data as IErrorResponse);
       if (intervalIdRef.current !== null) {
         clearInterval(intervalIdRef.current);
         intervalIdRef.current = null;
@@ -160,8 +168,10 @@ const WalletReplenish = () => {
 
   const closeModal = () => {
     setIsError(false);
+    setError(undefined);
     setOpenModal(false);
     setPayment(null);
+    setLoading(false);
   };
 
   return (
@@ -367,7 +377,7 @@ const WalletReplenish = () => {
       }) && <div className={styles.error}>Заполните все поля</div>}
       <SuccessPaymentModal
         payment={payment}
-        message={isError ? 'ошибка платежа, попробуйте позжe ' : ''}
+        message={isError ? errorValidator(error) : ''}
         type={isError ? 'bad' : 'payment'}
         isOpen={openModal}
         close={closeModal}
