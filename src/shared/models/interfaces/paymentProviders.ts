@@ -10,7 +10,7 @@ export interface IPaymentProvider {
 }
 
 export interface IPaymentProviderLayout {
-  name: string | null;
+  name: string;
   type: string | null;
   className: string | null;
 }

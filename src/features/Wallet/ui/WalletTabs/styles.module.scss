@@ -113,7 +113,12 @@
 .block_grid {
   display: grid;
   margin-bottom: 24px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 16px;
+}
+
+.grid_item {
+  grid-column: span 6 / span 6;
 }
 
 .input_icon {

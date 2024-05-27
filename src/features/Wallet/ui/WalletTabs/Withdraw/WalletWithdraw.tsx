@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 import { IErrorResponse } from '@/shared/models/interfaces/error';
-import { errorValidator } from '@/features/Wallet/helpers/errorValidator';
+import { errorValidator } from '@/features/Wallet/helpers/validators';
 import { AxiosError } from 'axios';
 
 interface IValidateData {
@@ -86,7 +86,7 @@ const WalletWithdraw = () => {
     const data = provider.layout.reduce(
       (accumulator, currentValue) => ({
         ...accumulator,
-        [currentValue.name as string]: '',
+        [currentValue.name]: '',
       }),
       {},
     );
@@ -220,19 +220,19 @@ const WalletWithdraw = () => {
             })}
           >
             {selectedProvider.layout.map((item, index) => (
-              <div className={item.className?.toString()} key={index}>
+              <div className={classNames(item.className?.toString(), 'col-span-6')} key={index}>
                 <div className={styles.title}>
                   {t('withdrawForm.' + (item.name || 'undefined'))}
                 </div>
                 <Input
-                  value={layout[item.name as string]}
+                  value={layout[item.name]}
                   placeholder={t('withdrawForm.' + (item.name || 'undefined'))}
                   type={item.type?.toString()}
-                  isError={!layout[item.name as string]}
+                  isError={!layout[item.name]}
                   onChange={(e) =>
                     setLayout((prev) => ({
                       ...prev,
-                      [item.name as string]: e.target.value,
+                      [item.name]: e.target.value,
                     }))
                   }
                 />

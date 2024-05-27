@@ -11,7 +11,10 @@ import {
   paymentTransaction,
 } from '@/features/Wallet/api/replenishApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
-import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
+import {
+  IPaymentProvider,
+  IPaymentProviderLayout,
+} from '@/shared/models/interfaces/paymentProviders';
 import {
   ICreatePaymentData,
   IPaymentTransaction,
@@ -22,16 +25,15 @@ import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
-import { errorValidator } from '@/features/Wallet/helpers/errorValidator';
+import {
+  errorValidator,
+  validateByInputName,
+  validateData,
+} from '@/features/Wallet/helpers/validators';
 import { IErrorResponse } from '@/shared/models/interfaces/error';
 import { AxiosError } from 'axios';
-
-interface IValidateData {
-  amount: number;
-  max: number;
-  min: number;
-  layout: IProviderLayout;
-}
+import { generateMask } from '@/features/Wallet/helpers/generateMask';
+import { generateErrorMessages } from '@/features/Wallet/helpers/generateMessages';
 
 const WalletReplenish = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
@@ -93,7 +95,7 @@ const WalletReplenish = () => {
     const data = provider.layout.reduce(
       (accumulator, currentValue) => ({
         ...accumulator,
-        [currentValue.name as string]: '',
+        [currentValue.name]: '',
       }),
       {},
     );
@@ -153,25 +155,42 @@ const WalletReplenish = () => {
     }
   };
 
-  const validateData = ({ amount, max, min, layout }: IValidateData) => {
-    if (checkAmount(Number(amount), max, min)) {
-      return false;
-    }
-    for (const key in layout) {
-      if (!layout[key]) {
-        return false;
-      }
-    }
-
-    return true;
-  };
-
   const closeModal = () => {
     setIsError(false);
     setError(undefined);
     setOpenModal(false);
     setPayment(null);
     setLoading(false);
+  };
+
+  const generateLayout = (selectedLayout: IPaymentProviderLayout[]) => {
+    const cardLayouts = ['number', 'exp_year', 'exp_month', 'cvc'];
+
+    const found = selectedLayout.every((field) => cardLayouts.includes(field.name ?? ''));
+    return selectedLayout.map((item, index) => (
+      <div className={classNames(item.className?.toString(), 'col-span-6')} key={index}>
+        <div className={styles.title}>{t('paymentForm.' + item.name)}</div>
+        <Input
+          mask={found ? generateMask(item.name) : null}
+          value={layout[item.name]}
+          placeholder={t('paymentForm.' + item.name)}
+          message={
+            !validateByInputName(item.name, layout[item.name])
+              ? generateErrorMessages(item.name)
+              : null
+          }
+          validationFunction={(value) => validateByInputName(item.name, value)}
+          type={item.type?.toString()}
+          isError={!layout[item.name]}
+          onChange={(e) =>
+            setLayout((prev) => ({
+              ...prev,
+              [item.name]: e.target.value,
+            }))
+          }
+        />
+      </div>
+    ));
   };
 
   return (
@@ -312,23 +331,7 @@ const WalletReplenish = () => {
               [styles.block_line]: selectedProvider.layout.length > 0,
             })}
           >
-            {selectedProvider.layout.map((item, index) => (
-              <div className={item.className?.toString()} key={index}>
-                <div className={styles.title}>{t('paymentForm.' + (item.name || 'undefined'))}</div>
-                <Input
-                  value={layout[item.name as string]}
-                  placeholder={t('paymentForm.' + (item.name || 'undefined'))}
-                  type={item.type?.toString()}
-                  isError={!layout[item.name as string]}
-                  onChange={(e) =>
-                    setLayout((prev) => ({
-                      ...prev,
-                      [item.name as string]: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-            ))}
+            {generateLayout(selectedProvider.layout)}
           </div>
         ) : null}
         <div className={styles.title}>Сумма депозита</div>

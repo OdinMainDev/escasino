@@ -47,3 +47,10 @@ export interface IFilterHistory {
   label: string;
   value: string;
 }
+
+export interface IValidateData {
+  amount: number;
+  max: number;
+  min: number;
+  layout: IProviderLayout;
+}

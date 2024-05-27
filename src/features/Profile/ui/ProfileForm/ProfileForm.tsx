@@ -357,7 +357,7 @@ const ProfileForm = () => {
             </div>
           )}
           <Input
-            type="text"
+            type="phone"
             containerClassName={styles.input}
             placeholder="Номер телефона"
             disabled={!settings?.profile.user_can_change_data && !!user?.phone}
