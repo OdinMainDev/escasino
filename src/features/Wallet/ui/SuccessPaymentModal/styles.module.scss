@@ -69,6 +69,10 @@
   color: var(--secondary)
 }
 
+.success_image {
+  margin-bottom: 32px;
+}
+
 .good {
   &_container {
     display: flex;
@@ -81,7 +85,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 8px;
     flex:1;
   }
 

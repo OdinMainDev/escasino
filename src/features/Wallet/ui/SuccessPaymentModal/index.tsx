@@ -7,13 +7,14 @@ import Button from '@/shared/ui/Button';
 import { useRef } from 'react';
 import Loader from '@/shared/ui/Loader';
 
+import successIcon from '../../images/success.svg';
 interface IProps {
   close: () => void;
   isOpen: boolean;
   payment?: IPaymentTransaction | null;
   loading: boolean;
   message?: string;
-  type?: 'payment' | 'good' | 'bad';
+  type?: 'payment' | 'good' | 'bad' | 'card';
 }
 
 const SuccessPaymentModal = ({
@@ -40,6 +41,9 @@ const SuccessPaymentModal = ({
   };
 
   const generateModal = () => {
+    if (type === 'card') {
+      return <div className={styles.payment_conatiner}></div>;
+    }
     if (type === 'bad') {
       return (
         <div className={styles.error_container}>
@@ -119,24 +123,11 @@ const SuccessPaymentModal = ({
       return (
         <div className={styles.good_container}>
           <div className={styles.good_info}>
-            <svg
-              width="55"
-              height="55"
-              viewBox="0 0 44 44"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M41.999 20.1713V22.0113C41.9966 26.3242 40.6 30.5207 38.0177 33.975C35.4354 37.4293 31.8056 39.9563 27.6697 41.1791C23.5339 42.402 19.1135 42.2551 15.068 40.7605C11.0224 39.2659 7.56833 36.5035 5.22094 32.8855C2.87356 29.2674 1.75861 24.9875 2.04238 20.684C2.32615 16.3805 3.99344 12.284 6.79558 9.00547C9.59773 5.72696 13.3846 3.44209 17.5914 2.49162C21.7982 1.54114 26.1996 1.976 30.139 3.73133M41.999 5.99988L21.999 26.0199L15.999 20.0199"
-                stroke="var(--secondary)"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <img alt="success" src={successIcon} className={styles.success_image} />
             <span className={styles.good_message}>{message}</span>
+            <span className={styles.good_message_sub}>Желаем вам приятной игры!</span>
           </div>
-          <Button onClick={close}>Закрыть</Button>
+          <Button onClick={close}>Вернуться к игре</Button>
         </div>
       );
     }

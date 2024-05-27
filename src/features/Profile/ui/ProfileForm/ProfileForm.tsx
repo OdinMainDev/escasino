@@ -363,7 +363,7 @@ const ProfileForm = () => {
             disabled={!settings?.profile.user_can_change_data && !!user?.phone}
             readOnly={!settings?.profile.user_can_change_data && !!user?.phone}
             value={userData.phone}
-            onChange={(e) => setUserData((prev) => ({ ...prev, phone: e.target.value }))}
+            onChangePhone={(phone) => setUserData((prev) => ({ ...prev, phone: phone }))}
             isError={!!errorData?.errors['phone']}
             message={ErrorResponseAsString('phone', 'Введите корректный phone', errorData)}
           />

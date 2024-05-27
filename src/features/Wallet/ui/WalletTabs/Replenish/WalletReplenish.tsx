@@ -157,6 +157,9 @@ const WalletReplenish = () => {
 
   const closeModal = () => {
     setIsError(false);
+    if (intervalIdRef.current) {
+      clearInterval(intervalIdRef.current);
+    }
     setError(undefined);
     setOpenModal(false);
     setPayment(null);
