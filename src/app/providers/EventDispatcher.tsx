@@ -25,7 +25,22 @@ export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = (
     if (isAuth) {
       void dispatch(getUser());
     }
-    if (pathname != '/games/filter' && pathname != '/games/search') {
+    function checkPathname(pathname: string) {
+      const pathParts = pathname.split('/');
+      if (pathname == '/games/filter') {
+        return true;
+      }
+      if (pathname == '/games/search') {
+        return true;
+      }
+      if (pathParts.length === 4 && pathParts[1] === 'games' && pathParts[2] === 'details') {
+        return true;
+      }
+
+      return false;
+    }
+
+    if (!checkPathname(pathname)) {
       const newFilters = getFilters();
       newFilters.categories = [];
       newFilters.providers = [];

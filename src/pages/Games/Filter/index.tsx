@@ -10,7 +10,7 @@ import Switch from '@/shared/ui/Switch';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 
 const Filter = () => {
-  const { setFilters, getFilters } = useGamesFilters();
+  const { setFilters, getFilters, countActiveKeys } = useGamesFilters();
   const router = useRouter();
   const [withBonuses, setWithBonuses] = useState<boolean>(getFilters().is_game_avail_for_bonus);
 
@@ -60,6 +60,8 @@ const Filter = () => {
     setFilters(newFilters);
     setWithBonuses(false);
   };
+
+  const activeKeys = countActiveKeys(getFilters());
   return (
     <>
       <div className={styles.loader_container}>{/* <Loader /> */}</div>
@@ -110,7 +112,9 @@ const Filter = () => {
           <Button elType="outlined" onClick={resetFilter}>
             Сбросить
           </Button>
-          <Button onClick={applyFilters}>Применить</Button>
+          <Button onClick={applyFilters} disabled={activeKeys === 0}>
+            Применить
+          </Button>
         </div>
       </div>
     </>
