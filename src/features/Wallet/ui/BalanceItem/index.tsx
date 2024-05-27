@@ -3,6 +3,8 @@ import styles from './styles.module.scss';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { doSetUserCurrency } from '@/app/api/user/setUserCurrency';
 import Button from '@/shared/ui/Button';
+import { resetPaymentProviders } from '@/store/slices/paymentProvidersSlice';
+import { useAppDispatch } from '@/store/hooks/redux';
 
 interface IProps {
   currency?: string;
@@ -13,12 +15,14 @@ interface IProps {
 
 const BalanceItem = ({ currency, isChoosen, balanceReal, balanceBonus }: IProps) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const activateBalance = async () => {
     if (!currency) {
       return;
     }
     const fid = await getVisitorId();
     await doSetUserCurrency({ currency, fid });
+    dispatch(resetPaymentProviders());
     router.push('/profile');
   };
   return (

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useEffect, useRef, useState } from 'react';
 import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
@@ -5,11 +7,7 @@ import { TabBlock } from '@/entities/TabBlock';
 import { TabItem } from '@/entities/TabItem';
 import { useAppSelector } from '@/store/hooks/redux';
 import { defaultLanguage } from '@/app/config/locales';
-import {
-  createPayment,
-  getPaymentProvidersApi,
-  paymentTransaction,
-} from '@/features/Wallet/api/replenishApi';
+import { createPayment, paymentTransaction } from '@/features/Wallet/api/replenishApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import {
   IPaymentProvider,
@@ -39,8 +37,12 @@ const WalletReplenish = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
     (store) => store.billingGroupsReducer,
   );
-  const [paymentProviders, setPaymentProviders] = useState<IPaymentProvider[]>([]);
-  const [providersLoading, setProvidersLoading] = useState(false);
+  const { paymentProviders, loading: providersLoading } = useAppSelector(
+    (state) => state.paymentProvidersReducer,
+  );
+  const { paymentAllProviders, loading: providersAllLoading } = useAppSelector(
+    (state) => state.paymentAllProvidersSlice,
+  );
   const { t } = useTranslation();
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
@@ -52,24 +54,6 @@ const WalletReplenish = () => {
   const [error, setError] = useState<IErrorResponse>();
   const [payment, setPayment] = useState<IPaymentTransaction | null>(null);
   const intervalIdRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    const getPaymentProvidersHandler = async () => {
-      try {
-        setProvidersLoading(true);
-        const data = await getPaymentProvidersApi();
-        if (data.paymentProviders) {
-          setPaymentProviders(data.paymentProviders);
-        }
-      } catch (e) {
-        /* empty */
-      } finally {
-        setProvidersLoading(false);
-      }
-    };
-
-    void getPaymentProvidersHandler();
-  }, []);
 
   useEffect(() => {
     if (billingGroups && billingGroups.length > 0) {
@@ -119,7 +103,6 @@ const WalletReplenish = () => {
     } catch (e) {
       const axiosError = e as AxiosError;
       setError(axiosError?.response?.data as IErrorResponse);
-      console.error('Payment failed:', e);
       setLoading(false);
       setIsError(true);
     }
@@ -322,6 +305,20 @@ const WalletReplenish = () => {
                     selected={selectedProvider?.id === provider.id}
                     onClick={() => handleProviderSelection(provider)}
                   >
+                    <img src={provider.meta.image} className={styles.provider_img} />
+                  </TabBlock>
+                ))}
+
+          {providersLoading || providersAllLoading
+            ? Array(3)
+                .fill(0)
+                .map((_, index) => <TabBlock key={index} skeleton />)
+            : paymentAllProviders
+                ?.filter((provider) => provider.billing_groups.includes(selectedBillingGroup))
+                ?.filter((provider) => !paymentProviders?.some((p) => p.id === provider.id))
+                .map((provider) => (
+                  // TODO: тут типа закрытые провайдеры
+                  <TabBlock key={provider.id} className={styles.billing}>
                     <img src={provider.meta.image} className={styles.provider_img} />
                   </TabBlock>
                 ))}

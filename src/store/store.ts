@@ -6,6 +6,8 @@ import userReducer from './slices/userSlice';
 import gameCategoriesReducer from './slices/gameCategoriesSlice';
 import gameProvidersReducer from './slices/gameProvidersSlice';
 import billingGroupsReducer from './slices/billingGroupsSlice';
+import paymentProvidersReducer from './slices/paymentProvidersSlice';
+import paymentAllProvidersSlice from './slices/paymentAllProvidersSlice';
 import { IInitialSettings } from '@/store/slices/settingsSlice';
 import { IInitialHomeGames } from '@/store/slices/homeGamesSlice';
 import { IInitialCountries } from '@/store/slices/countriesSlice';
@@ -13,6 +15,8 @@ import { IInitialUser } from './slices/userSlice';
 import { IInitialGameCategories } from './slices/gameCategoriesSlice';
 import { IInitialGameProviders } from './slices/gameProvidersSlice';
 import { IInitialBillingGroups } from './slices/billingGroupsSlice';
+import { IInitialPaymentProviders } from './slices/paymentProvidersSlice';
+import { IInitialPaymentAllProviders } from './slices/paymentAllProvidersSlice';
 
 interface IReducers {
   settingsReducer: IInitialSettings;
@@ -22,6 +26,8 @@ interface IReducers {
   gameCategoriesReducer: IInitialGameCategories;
   gameProvidersReducer: IInitialGameProviders;
   billingGroupsReducer: IInitialBillingGroups;
+  paymentProvidersReducer: IInitialPaymentProviders;
+  paymentAllProvidersSlice: IInitialPaymentAllProviders;
 }
 
 const reducers: ReducersMapObject<IReducers> = {
@@ -32,6 +38,8 @@ const reducers: ReducersMapObject<IReducers> = {
   gameCategoriesReducer: gameCategoriesReducer,
   gameProvidersReducer: gameProvidersReducer,
   billingGroupsReducer: billingGroupsReducer,
+  paymentProvidersReducer: paymentProvidersReducer,
+  paymentAllProvidersSlice: paymentAllProvidersSlice,
 };
 
 const rootReducers = combineReducers(reducers);

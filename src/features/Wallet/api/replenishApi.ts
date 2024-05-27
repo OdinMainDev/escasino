@@ -28,8 +28,8 @@ export const paymentTransaction = (hash: string) => {
   });
 };
 
-export const paymentProvidersApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/get/payment/providers`;
+export const paymentProvidersApi = (showAll: boolean) => {
+  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/get/payment/providers?show_all=${showAll ? 'true' : 'false'}`;
 };
 
 export interface IResponsePaymentProviders {
@@ -37,14 +37,19 @@ export interface IResponsePaymentProviders {
   status: number | null;
 }
 
-export const getPaymentProvidersApi = async (): Promise<IResponsePaymentProviders> => {
+export const getPaymentProvidersApi = async (
+  showAll: boolean,
+): Promise<IResponsePaymentProviders> => {
   try {
-    const { data, status } = await axios.get<{ data: IPaymentProvider[] }>(paymentProvidersApi(), {
-      headers: {
-        Authorization: `Bearer: ${Cookies.get('atoken')}`,
-        'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
+    const { data, status } = await axios.get<{ data: IPaymentProvider[] }>(
+      paymentProvidersApi(showAll),
+      {
+        headers: {
+          Authorization: `Bearer: ${Cookies.get('atoken')}`,
+          'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
+        },
       },
-    });
+    );
     const resp = {
       paymentProviders: data.data,
       status: status,
