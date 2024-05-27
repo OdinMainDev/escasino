@@ -134,10 +134,11 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
     };
 
     const onChangePhoneHandler = (phone: string) => {
+      const value = phone.replace(/\+/g, '');
+
       if (onChangePhone) {
-        onChangePhone(phone);
+        onChangePhone(value);
       }
-      const value = phone;
       setIsValid(true);
       if (time.current) {
         clearTimeout(time.current);
