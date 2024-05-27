@@ -97,7 +97,7 @@ const Details = () => {
         <Button elType="contained" className={styles.button} onClick={openRealPlay}>
           Играть на деньги
         </Button>
-        {!game?.has_freerounds ? (
+        {!game?.has_bonus ? (
           ''
         ) : (
           <Button elType="outlined" className={classNames(styles.button, styles.button_big)}>

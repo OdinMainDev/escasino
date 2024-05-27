@@ -2,7 +2,7 @@ export interface IGame {
   id: number;
   name: string;
   game_provider: string;
-  has_freerounds: boolean;
+  has_bonus: boolean;
   desktop_enabled: boolean;
   mobile_enabled: boolean;
   image: string;
