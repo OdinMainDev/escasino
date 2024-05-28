@@ -6,6 +6,8 @@ import Button from '@/shared/ui/Button';
 import { resetPaymentProviders } from '@/store/slices/paymentProvidersSlice';
 import { useAppDispatch } from '@/store/hooks/redux';
 import { resetPaymentAllProviders } from '@/store/slices/paymentAllProvidersSlice';
+import { resetWithdrawProviders } from '@/store/slices/withdrawProvidersSlice';
+import { resetWithdrawAllProviders } from '@/store/slices/withdrawAllProvidersSlice';
 
 interface IProps {
   currency?: string;
@@ -25,6 +27,8 @@ const BalanceItem = ({ currency, isChoosen, balanceReal, balanceBonus }: IProps)
     await doSetUserCurrency({ currency, fid });
     dispatch(resetPaymentProviders());
     dispatch(resetPaymentAllProviders());
+    dispatch(resetWithdrawProviders());
+    dispatch(resetWithdrawAllProviders());
     router.push('/profile');
   };
   return (

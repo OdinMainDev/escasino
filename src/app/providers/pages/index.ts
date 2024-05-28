@@ -5,6 +5,8 @@ import GameProvidersProvider from './GameProviders';
 import BillingGroupsProvider from './BillingGroups';
 import PaymentProvidersProvider from './PaymentProviders';
 import PaymentAllProvidersProvider from './PaymentAllProviders';
+import WithdrawProvidersProvider from './WithdrawProviders';
+import WithdrawAllProvidersProvider from './WithdrawAllProviders';
 
 export {
   HomeGamesProvider,
@@ -14,4 +16,6 @@ export {
   BillingGroupsProvider,
   PaymentProvidersProvider,
   PaymentAllProvidersProvider,
+  WithdrawProvidersProvider,
+  WithdrawAllProvidersProvider,
 };

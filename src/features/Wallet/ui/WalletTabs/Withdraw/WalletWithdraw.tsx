@@ -5,9 +5,9 @@ import { TabBlock } from '@/entities/TabBlock';
 import { TabItem } from '@/entities/TabItem';
 import { useAppSelector } from '@/store/hooks/redux';
 import { defaultLanguage } from '@/app/config/locales';
-import { createWithdraw, getWithdrawProvidersApi } from '@/features/Wallet/api/withdrawApi';
+import { createWithdraw } from '@/features/Wallet/api/withdrawApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
-import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
+import { IWithdrawProvider } from '@/shared/models/interfaces/withdrawProviders';
 import { ICreateWithdrawtData, IProviderLayout } from '@/features/Wallet/models/interfaces';
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
@@ -29,11 +29,15 @@ const WalletWithdraw = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
     (store) => store.billingGroupsReducer,
   );
-  const [withdrawProviders, setWithdrawProviders] = useState<IPaymentProvider[]>([]);
-  const [providersLoading, setProvidersLoading] = useState(false);
+  const { withdrawProviders, loading: providersLoading } = useAppSelector(
+    (state) => state.withdrawProvidersReducer,
+  );
+  const { withdrawAllProviders, loading: providersAllLoading } = useAppSelector(
+    (state) => state.withdrawAllProvidersSlice,
+  );
   const { t } = useTranslation();
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
-  const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<IWithdrawProvider | null>(null);
   const [layout, setLayout] = useState<IProviderLayout>({});
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState<IErrorResponse>();
@@ -45,29 +49,11 @@ const WalletWithdraw = () => {
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-    const getWithdrawProvidersHandler = async () => {
-      try {
-        setProvidersLoading(true);
-        const data = await getWithdrawProvidersApi();
-        if (data.withdrawProviders) {
-          setWithdrawProviders(data.withdrawProviders);
-        }
-      } catch (e) {
-        /* empty */
-      } finally {
-        setProvidersLoading(false);
-      }
-    };
-
-    void getWithdrawProvidersHandler();
-  }, []);
-
-  useEffect(() => {
     if (billingGroups && billingGroups.length > 0) {
       const firstBillingGroup = billingGroups[0].id;
       setSelectedBillingGroup(firstBillingGroup);
 
-      const initialProvider = withdrawProviders.find((provider) =>
+      const initialProvider = withdrawProviders?.find((provider) =>
         provider.billing_groups.includes(firstBillingGroup),
       );
       setSelectedProvider(initialProvider ?? null);
@@ -82,7 +68,7 @@ const WalletWithdraw = () => {
     }
   };
 
-  const handleProviderSelection = (provider: IPaymentProvider) => {
+  const handleProviderSelection = (provider: IWithdrawProvider) => {
     const data = provider.layout.reduce(
       (accumulator, currentValue) => ({
         ...accumulator,
@@ -94,7 +80,7 @@ const WalletWithdraw = () => {
     setSelectedProvider(provider);
   };
 
-  const handlePayment = async () => {
+  const handleWithdraw = async () => {
     try {
       setLoading(true);
       setOpenModal(true);
@@ -110,7 +96,7 @@ const WalletWithdraw = () => {
     } catch (e) {
       const axiosError = e as AxiosError;
       setError(axiosError?.response?.data as IErrorResponse);
-      console.error('Payment failed:', e);
+      console.error('Withdraw failed:', e);
       setIsError(true);
     } finally {
       setLoading(false);
@@ -210,6 +196,20 @@ const WalletWithdraw = () => {
                     <img src={provider.meta.image} className={styles.provider_img} />
                   </TabBlock>
                 ))}
+
+          {providersLoading || providersAllLoading
+            ? Array(3)
+                .fill(0)
+                .map((_, index) => <TabBlock key={index} skeleton />)
+            : withdrawAllProviders
+                ?.filter((provider) => provider.billing_groups.includes(selectedBillingGroup))
+                ?.filter((provider) => !withdrawProviders?.some((p) => p.id === provider.id))
+                .map((provider) => (
+                  // TODO: тут типа закрытые провайдеры
+                  <TabBlock key={provider.id} className={styles.billing}>
+                    <img src={provider.meta.image} className={styles.provider_img} />
+                  </TabBlock>
+                ))}
         </div>
       </div>
       <div className={styles.block}>
@@ -273,7 +273,7 @@ const WalletWithdraw = () => {
             layout,
           }) || loading
         }
-        onClick={() => void handlePayment()}
+        onClick={() => void handleWithdraw()}
         className={classNames(styles.button, 'uppercase')}
       >
         Вывести
