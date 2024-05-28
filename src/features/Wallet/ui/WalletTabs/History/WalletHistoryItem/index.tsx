@@ -7,11 +7,12 @@ import { defaultLanguage } from '@/app/config/locales';
 import { paymentTransaction } from '@/features/Wallet/api/replenishApi';
 import Button from '@/shared/ui/Button';
 import { useTranslation } from 'react-i18next';
+import { IWithdrawProvider } from '@/shared/models/interfaces/withdrawProviders';
 
 interface IProps {
   transaction: IHistoryItem;
   type: 'payment' | 'withdraw';
-  providers: IPaymentProvider[];
+  providers: IPaymentProvider[] | IWithdrawProvider[];
   setTransactionLoading: (value: boolean) => void;
   openModal: (value: boolean) => void;
   setSelectedPayment: (value: IPaymentTransaction | null) => void;
