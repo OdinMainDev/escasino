@@ -39,6 +39,11 @@ export const getPaymentAllProviders = createAsyncThunk<
 export const paymentAllProvidersSlice = createSlice({
   name: 'paymentAllProviders',
   initialState: initialState,
+  reducers: {
+    resetPaymentAllProviders: (state: IInitialPaymentAllProviders) => {
+      Object.assign(state, initialState);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getPaymentAllProviders.pending, (state) => {
       ParentPending(state);
@@ -54,7 +59,8 @@ export const paymentAllProvidersSlice = createSlice({
       state.paymentAllProviders = action?.payload?.paymentProviders ?? null;
     });
   },
-  reducers: {},
 });
+
+export const { resetPaymentAllProviders } = paymentAllProvidersSlice.actions;
 
 export default paymentAllProvidersSlice.reducer;
