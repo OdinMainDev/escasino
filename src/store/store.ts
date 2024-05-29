@@ -8,6 +8,8 @@ import gameProvidersReducer from './slices/gameProvidersSlice';
 import billingGroupsReducer from './slices/billingGroupsSlice';
 import paymentProvidersReducer from './slices/paymentProvidersSlice';
 import paymentAllProvidersSlice from './slices/paymentAllProvidersSlice';
+import withdrawProvidersReducer from './slices/withdrawProvidersSlice';
+import withdrawAllProvidersSlice from './slices/withdrawAllProvidersSlice';
 import { IInitialSettings } from '@/store/slices/settingsSlice';
 import { IInitialHomeGames } from '@/store/slices/homeGamesSlice';
 import { IInitialCountries } from '@/store/slices/countriesSlice';
@@ -17,6 +19,8 @@ import { IInitialGameProviders } from './slices/gameProvidersSlice';
 import { IInitialBillingGroups } from './slices/billingGroupsSlice';
 import { IInitialPaymentProviders } from './slices/paymentProvidersSlice';
 import { IInitialPaymentAllProviders } from './slices/paymentAllProvidersSlice';
+import { IInitialWithdrawProviders } from './slices/withdrawProvidersSlice';
+import { IInitialWithdrawAllProviders } from './slices/withdrawAllProvidersSlice';
 
 interface IReducers {
   settingsReducer: IInitialSettings;
@@ -27,7 +31,9 @@ interface IReducers {
   gameProvidersReducer: IInitialGameProviders;
   billingGroupsReducer: IInitialBillingGroups;
   paymentProvidersReducer: IInitialPaymentProviders;
-  paymentAllProvidersReducer: IInitialPaymentAllProviders;
+  paymentAllProvidersSlice: IInitialPaymentAllProviders;
+  withdrawProvidersReducer: IInitialWithdrawProviders;
+  withdrawAllProvidersSlice: IInitialWithdrawAllProviders;
 }
 
 const reducers: ReducersMapObject<IReducers> = {
@@ -39,7 +45,9 @@ const reducers: ReducersMapObject<IReducers> = {
   gameProvidersReducer: gameProvidersReducer,
   billingGroupsReducer: billingGroupsReducer,
   paymentProvidersReducer: paymentProvidersReducer,
-  paymentAllProvidersReducer: paymentAllProvidersSlice,
+  paymentAllProvidersSlice: paymentAllProvidersSlice,
+  withdrawProvidersReducer: withdrawProvidersReducer,
+  withdrawAllProvidersSlice: withdrawAllProvidersSlice,
 };
 
 const rootReducers = combineReducers(reducers);

@@ -8,14 +8,12 @@ import {
   IHistoryItem,
   IPaymentTransaction,
 } from '@/features/Wallet/models/interfaces';
-import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
-import { getWithdrawProvidersApi } from '@/features/Wallet/api/withdrawApi';
-import { getPaymentProvidersApi } from '@/features/Wallet/api/replenishApi';
 import { filterHistory } from '@/features/Wallet/constants/tabs';
 import Loader from '@/shared/ui/Loader';
 import DatePicker from '@/shared/ui/DatePicker';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 import Button from '@/shared/ui/Button';
+import { useAppSelector } from '@/store/hooks/redux';
 
 const WalletHistory = () => {
   const [selectedTab, setSelectedTab] = useState(filterHistory[0]);
@@ -23,8 +21,8 @@ const WalletHistory = () => {
   const [transactionLoading, setTransactionLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [payments, setPayments] = useState<IHistoryItem[]>([]);
-  const [paymentProviders, setPaymentProviders] = useState<IPaymentProvider[]>([]);
-  const [withdrawProviders, setWithdrawProviders] = useState<IPaymentProvider[]>([]);
+  const { paymentProviders } = useAppSelector((state) => state.paymentProvidersReducer);
+  const { withdrawProviders } = useAppSelector((state) => state.withdrawProvidersReducer);
   const [withdraws, setWithdraws] = useState<IHistoryItem[]>([]);
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
@@ -42,35 +40,6 @@ const WalletHistory = () => {
       setSelectedTab(tab);
     }
   };
-
-  useEffect(() => {
-    const getWithdrawProvidersHandler = async () => {
-      try {
-        const data = await getWithdrawProvidersApi();
-        if (data.withdrawProviders) {
-          setWithdrawProviders(
-            data.withdrawProviders.map((item) => ({ ...item, billing_groups: [4] })),
-          );
-        }
-      } catch (e) {
-        /* empty */
-      }
-    };
-
-    const getPaymentProvidersHandler = async () => {
-      try {
-        const data = await getPaymentProvidersApi();
-        if (data.paymentProviders) {
-          setPaymentProviders(data.paymentProviders);
-        }
-      } catch (e) {
-        /* empty */
-      }
-    };
-
-    void getPaymentProvidersHandler();
-    void getWithdrawProvidersHandler();
-  }, []);
 
   useEffect(() => {
     const getPayments = async () => {
@@ -163,7 +132,7 @@ const WalletHistory = () => {
                 setSelectedPayment={setSelectedPayment}
                 setTransactionLoading={setTransactionLoading}
                 type="payment"
-                providers={paymentProviders}
+                providers={paymentProviders ? paymentProviders : []}
               />
             ))
           ) : (
@@ -176,7 +145,7 @@ const WalletHistory = () => {
                 type="withdraw"
                 setSelectedPayment={setSelectedPayment}
                 setTransactionLoading={setTransactionLoading}
-                providers={withdrawProviders}
+                providers={withdrawProviders ? withdrawProviders : []}
               />
             ))
           )

@@ -39,7 +39,7 @@ const WalletReplenish = () => {
     (state) => state.paymentProvidersReducer,
   );
   const { paymentAllProviders, loading: providersAllLoading } = useAppSelector(
-    (state) => state.paymentAllProvidersReducer,
+    (state) => state.paymentAllProvidersSlice,
   );
   const { t } = useTranslation();
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
