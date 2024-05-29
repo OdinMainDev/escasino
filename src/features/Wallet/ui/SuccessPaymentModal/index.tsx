@@ -29,6 +29,14 @@ interface IUrlPageProps {
   closeModal: () => void;
 }
 
+const Card = () => {
+  return (
+    <div >
+
+    </div>
+  );
+}
+
 const UrlPage = ({ url, closeModal }: IUrlPageProps) => {
   useEffect(() => {
     setTimeout(() => {
@@ -72,11 +80,12 @@ const AutoSubmitForm = ({
     selectedLayout.forEach((item) => {
       formData.append(item.name, layout[item.name]);
     });
+    formData.append('amount', amount.toString());
 
     axios.post(url, formData).catch((error) => {
       console.error('Error:', error);
     });
-  }, [url, layout, selectedLayout]);
+  }, [url, layout, selectedLayout, amount]);
 
   return (
     <>
