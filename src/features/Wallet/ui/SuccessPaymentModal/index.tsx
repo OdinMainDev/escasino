@@ -258,12 +258,12 @@ const SuccessPaymentModal = ({
               </div>
               <div
                 className={styles.card_item}
-                onClick={() => void copyTextToClipboard(item.requisities)}
+                onClick={() => void copyTextToClipboard(item.requisites)}
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className={styles.card_label}>Адрес</div>
-                    <div className={styles.card_value}>{item.requisities}</div>
+                    <div className={styles.card_label}>Номер карты</div>
+                    <div className={styles.card_value}>{item.requisites}</div>
                   </div>
                   <div>
                     <svg

@@ -34,7 +34,7 @@ export interface IPaymentTransactionRequisites {
   covert_rate: number;
   currency: string;
   image: string;
-  requisities: string;
+  requisites: string;
   status: string;
 }
 
