@@ -29,14 +29,6 @@ interface IUrlPageProps {
   closeModal: () => void;
 }
 
-const Card = () => {
-  return (
-    <div >
-
-    </div>
-  );
-}
-
 const UrlPage = ({ url, closeModal }: IUrlPageProps) => {
   useEffect(() => {
     setTimeout(() => {
@@ -61,43 +53,21 @@ interface IAutoSubmitFormProps {
   url: string;
   layout: IProviderLayout;
   selectedLayout: IPaymentProviderLayout[];
-  closeModal: () => void;
   amount: number;
 }
 
-const AutoSubmitForm = ({
-  url,
-  layout,
-  selectedLayout,
-  closeModal,
-  amount,
-}: IAutoSubmitFormProps) => {
+const AutoSubmitForm = ({ url, layout, selectedLayout, amount }: IAutoSubmitFormProps) => {
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    const formData = new FormData();
-
-    selectedLayout.forEach((item) => {
-      formData.append(item.name, layout[item.name]);
-    });
-    formData.append('amount', amount.toString());
-
-    axios.post(url, formData).catch((error) => {
-      console.error('Error:', error);
-    });
-  }, [url, layout, selectedLayout, amount]);
+    if (formRef.current) {
+      formRef.current.submit();
+    }
+  }, []);
 
   return (
     <>
-      <div className={styles.good_container}>
-        <div className={styles.good_info}>
-          <img alt="success" src={successIcon} className={styles.success_image} />
-          <span className={styles.good_message}>Данные отправлены</span>
-          <span className={styles.good_message_sub}>Желаем вам приятной игры!</span>
-        </div>
-        <Button onClick={closeModal}>Вернуться к игре</Button>
-      </div>
-      <form ref={formRef} style={{ display: 'none' }}>
+      <form method="POST" action={url} ref={formRef} style={{ display: 'none' }}>
         {selectedLayout.map((item, index) => (
           <input name={item.name} key={index} value={layout[item.name]} readOnly />
         ))}
@@ -224,7 +194,6 @@ const SuccessPaymentModal = ({
         return (
           <AutoSubmitForm
             amount={amount}
-            closeModal={close}
             url={transaction.acs_url}
             layout={layout}
             selectedLayout={selectedLayout}

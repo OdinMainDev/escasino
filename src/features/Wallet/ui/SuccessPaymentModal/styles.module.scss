@@ -123,3 +123,12 @@
   overflow: hidden;
   width: 100%;
 }
+.card {
+  display: flex;
+  flex-direction: column;
+  &_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+  }
+}
