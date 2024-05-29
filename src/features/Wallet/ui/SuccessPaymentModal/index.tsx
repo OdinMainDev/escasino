@@ -307,8 +307,8 @@ const SuccessPaymentModal = ({
                 className={styles.card_item}
                 onClick={() => void copyTextToClipboard(item.requisites)}
               >
-                <div className="flex items-center justify-between">
-                  <div className="w-[100%]">
+                <div className="flex items-center gap-[15px]">
+                  <div className="flex-1 w-[100%]">
                     <div className={styles.card_label}>Номер карты</div>
                     <div className={styles.card_value}>{item.requisites}</div>
                   </div>
@@ -335,8 +335,8 @@ const SuccessPaymentModal = ({
                 className={styles.card_item}
                 onClick={() => void copyTextToClipboard(item.amount.toString())}
               >
-                <div className="flex items-center justify-between">
-                  <div>
+                <div className="flex items-center gap-[15px]">
+                  <div className="flex-1">
                     <div className={styles.card_label}>Сумма</div>
                     <div className={styles.card_value}>
                       {item.amount} {item.currency}

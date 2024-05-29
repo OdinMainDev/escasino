@@ -205,8 +205,10 @@ const WalletWithdraw = () => {
                 ?.filter((provider) => provider.billing_groups.includes(selectedBillingGroup))
                 ?.filter((provider) => !withdrawProviders?.some((p) => p.id === provider.id))
                 .map((provider) => (
-                  // TODO: тут типа закрытые провайдеры
-                  <TabBlock key={provider.id} className={styles.billing}>
+                  <TabBlock
+                    key={provider.id}
+                    className={classNames(styles.billing, styles.billing_disabled)}
+                  >
                     <img src={provider.meta.image} className={styles.provider_img} />
                   </TabBlock>
                 ))}
