@@ -14,7 +14,7 @@ export interface ICreatePaymentData {
   amount: number;
 }
 
-export interface IPaymentTransaction {
+export interface IPaymentTransactionFirst {
   address: string;
   amount: string;
   convert_rate: string;
@@ -22,11 +22,34 @@ export interface IPaymentTransaction {
   status: string;
 }
 
+export interface IPaymentTransactionSecond {
+  amount: string;
+  currency: string;
+  status: string;
+  url: string;
+}
+
+export interface IPaymentTransactionAcl {
+  acs_url: string;
+  amount: string;
+  currency: string;
+  form_data: string;
+  status: string;
+}
+export type IPaymentTransaction =
+  | IPaymentTransactionFirst
+  | IPaymentTransactionSecond
+  | IPaymentTransactionAcl;
+
 export interface ICreateWithdrawtData {
   provider: number;
   fid: string;
   amount: number;
   to_address: string;
+}
+
+export interface IPaymentTransactionError {
+  success: boolean;
 }
 
 export interface IHistoryItem {

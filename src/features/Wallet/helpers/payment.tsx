@@ -4,6 +4,8 @@ import {
 } from '@/shared/models/interfaces/paymentProviders';
 import classNames from 'classnames';
 import styles from '../ui/WalletTabs/styles.module.scss';
+import { IPaymentTransaction } from '../models/interfaces';
+import { transactionTypes } from '../models/types';
 
 export const generateLimitText = (min: number, max: number, currency: string, amount: number) => {
   const minimum =
@@ -50,4 +52,24 @@ export const checkAmount = (amout: number, max: number, min: number): boolean =>
   }
 
   return false;
+};
+
+export const getTransactionType = (transaction: IPaymentTransaction): transactionTypes => {
+  if (transaction.status === 'success') {
+    if ('address' in transaction) {
+      return 'first';
+    }
+
+    if ('url' in transaction) {
+      return 'second';
+    }
+
+    if ('acs_url' in transaction) {
+      return 'acs_url';
+    }
+  }
+  if (transaction.status === 'paymentAccepted' || transaction.status === 'PaymentCompleted') {
+    return 'paymentAccepted';
+  }
+  return 'success';
 };

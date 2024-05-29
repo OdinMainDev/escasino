@@ -20,7 +20,7 @@ export const createPayment = async (data: ICreatePaymentData) => {
 };
 
 export const paymentTransaction = (hash: string) => {
-  return axios.get<{ data: IPaymentTransaction }>(paymentTransactionApi(hash), {
+  return axios.get<{ data: IPaymentTransaction; success: boolean }>(paymentTransactionApi(hash), {
     headers: {
       Authorization: `Bearer: ${Cookies.get('atoken')}`,
       'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
@@ -38,11 +38,11 @@ export interface IResponsePaymentProviders {
 }
 
 export const getPaymentProvidersApi = async (
-  showAll: boolean,
+  showAll?: boolean,
 ): Promise<IResponsePaymentProviders> => {
   try {
     const { data, status } = await axios.get<{ data: IPaymentProvider[] }>(
-      paymentProvidersApi(showAll),
+      paymentProvidersApi(!!showAll),
       {
         headers: {
           Authorization: `Bearer: ${Cookies.get('atoken')}`,

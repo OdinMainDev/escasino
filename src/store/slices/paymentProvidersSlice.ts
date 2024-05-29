@@ -38,7 +38,7 @@ export const getPaymentProviders = createAsyncThunk<
 
 export const paymentProvidersSlice = createSlice({
   name: 'paymentProviders',
-  initialState: initialState,
+  initialState,
   reducers: {
     resetPaymentProviders: (state: IInitialPaymentProviders) => {
       Object.assign(state, initialState);

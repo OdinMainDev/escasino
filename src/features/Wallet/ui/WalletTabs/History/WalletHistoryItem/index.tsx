@@ -14,6 +14,7 @@ interface IProps {
   providers: IPaymentProvider[];
   setTransactionLoading: (value: boolean) => void;
   openModal: (value: boolean) => void;
+  setIsError: (value: boolean) => void;
   setSelectedPayment: (value: IPaymentTransaction | null) => void;
 }
 
@@ -24,6 +25,7 @@ const WalletHistoryItem = ({
   setTransactionLoading,
   openModal,
   setSelectedPayment,
+  setIsError,
 }: IProps) => {
   const provider = providers.find((item) => item.id === transaction.provider_id);
   const { t } = useTranslation();
@@ -65,14 +67,18 @@ const WalletHistoryItem = ({
 
   const paymentTransactionHandler = async (hash: string) => {
     try {
+      setIsError(false);
       setTransactionLoading(true);
       const { data } = await paymentTransaction(hash);
-      if (data.data.status === 'success') {
+      if (data.success) {
         setTransactionLoading(false);
         setSelectedPayment(data.data);
+      } else {
+        setIsError(true);
       }
     } catch (e) {
       setTransactionLoading(false);
+      setIsError(true);
     }
   };
 

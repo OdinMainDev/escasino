@@ -1,29 +1,95 @@
 import Modal from '@/shared/ui/Modal';
 
 import styles from './styles.module.scss';
-import { IPaymentTransaction } from '@/features/Wallet/models/interfaces';
+import { IPaymentTransaction, IProviderLayout } from '@/features/Wallet/models/interfaces';
 import QRCode from 'react-qr-code';
 import Button from '@/shared/ui/Button';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Loader from '@/shared/ui/Loader';
 
 import successIcon from '../../images/success.svg';
+import { getTransactionType } from '../../helpers/payment';
+import classNames from 'classnames';
+import { IPaymentProviderLayout } from '@/shared/models/interfaces/paymentProviders';
 interface IProps {
   close: () => void;
   isOpen: boolean;
-  payment?: IPaymentTransaction | null;
+  transaction?: IPaymentTransaction | null;
   loading: boolean;
   message?: string;
-  type?: 'payment' | 'good' | 'bad' | 'card';
+  isError?: boolean;
+  layout?: IProviderLayout;
+  selectedLayout?: IPaymentProviderLayout[] | null;
 }
+
+interface IUrlPageProps {
+  url: string;
+  closeModal: () => void;
+}
+
+const UrlPage = ({ url, closeModal }: IUrlPageProps) => {
+  useEffect(() => {
+    setTimeout(() => {
+      window.open(url, '_blank');
+      closeModal();
+    }, 3000);
+  }, [closeModal, url]);
+
+  return (
+    <div className={styles.loader}>
+      <div className="w-[100%] h-[100%] flex flex-col items-center justify-center gap-[10px]">
+        <div className="w-[55px] h-[55px]">
+          <Loader />
+        </div>
+        <div className={styles.loader_title}>Идет переадресация...</div>
+      </div>
+    </div>
+  );
+};
+
+interface IAutoSubmitFormProps {
+  url: string;
+  layout: IProviderLayout;
+  selectedLayout: IPaymentProviderLayout[];
+}
+
+const AutoSubmitForm = ({ url, layout, selectedLayout }: IAutoSubmitFormProps) => {
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (formRef.current) {
+      formRef.current.submit();
+    }
+  }, []);
+
+  return (
+    <>
+      <div className={styles.good_container}>
+        <div className={styles.good_info}>
+          <img alt="success" src={successIcon} className={styles.success_image} />
+          <span className={styles.good_message}>Данные отправлены</span>
+          <span className={styles.good_message_sub}>Желаем вам приятной игры!</span>
+        </div>
+        <Button onClick={close}>Вернуться к игре</Button>
+      </div>
+      <form method="POST" action={url} ref={formRef}>
+        {selectedLayout.map((item, index) => (
+          <input name={item.name} key={index} value={layout[item.name]} />
+        ))}
+      </form>
+    </>
+  );
+};
 
 const SuccessPaymentModal = ({
   isOpen,
   close,
-  payment,
+  transaction,
   loading,
-  type = 'payment',
   message,
+  isError,
+  layout,
+  selectedLayout,
 }: IProps) => {
   const svgRef = useRef<HTMLDivElement>(null);
 
@@ -41,35 +107,22 @@ const SuccessPaymentModal = ({
   };
 
   const generateModal = () => {
-    if (type === 'card') {
-      return <div className={styles.payment_conatiner}></div>;
-    }
-    if (type === 'bad') {
-      return (
-        <div className={styles.error_container}>
-          <div className={styles.error}>{message}</div>
-          <Button className={styles.button} onClick={close}>
-            Закрыть
-          </Button>
-        </div>
-      );
-    }
-    if (type === 'payment') {
-      if (payment) {
+    if (transaction) {
+      if (getTransactionType(transaction) === 'first' && 'address' in transaction) {
         return (
           <>
             <div className={styles.title}>Данные платежа</div>
             <div className={styles.qr} ref={svgRef}>
-              <QRCode size={130} value={payment.address} />
+              <QRCode size={130} value={transaction.address} />
             </div>
             <div className={styles.info}>
               <div
                 className={styles.info_block}
-                onClick={() => void copyTextToClipboard(payment.amount)}
+                onClick={() => void copyTextToClipboard(transaction.amount)}
               >
                 <div className="w-[100%] flex-1">
                   <div className={styles.subtitle}>Сумма</div>
-                  <div className={styles.value}>{payment.amount}</div>
+                  <div className={styles.value}>{transaction.amount}</div>
                 </div>
                 <svg
                   width="20"
@@ -89,11 +142,11 @@ const SuccessPaymentModal = ({
               </div>
               <div
                 className={styles.info_block}
-                onClick={() => void copyTextToClipboard(payment.address)}
+                onClick={() => void copyTextToClipboard(transaction.address)}
               >
                 <div className="w-[100%] flex-1">
                   <div className={styles.subtitle}>Адрес для пополнения</div>
-                  <div className={styles.value}>{payment.address}</div>
+                  <div className={styles.value}>{transaction.address}</div>
                 </div>
                 <svg
                   width="20"
@@ -117,27 +170,96 @@ const SuccessPaymentModal = ({
           </>
         );
       }
+
+      if (getTransactionType(transaction) === 'second' && 'url' in transaction) {
+        return <UrlPage url={transaction.url} closeModal={close} />;
+      }
+
+      if (getTransactionType(transaction) === 'paymentAccepted') {
+        return (
+          <div className={styles.good_container}>
+            <div className={styles.good_info}>
+              <img alt="success" src={successIcon} className={styles.success_image} />
+              <span className={classNames(styles.good_message, 'text-center')}>
+                Оплата произведена, ожидаем ответа от мерчанта
+              </span>
+            </div>
+            <Button onClick={close}>Закрыть</Button>
+          </div>
+        );
+      }
+
+      if (
+        getTransactionType(transaction) === 'acs_url' &&
+        'acs_url' in transaction &&
+        layout &&
+        selectedLayout
+      ) {
+        return (
+          <AutoSubmitForm
+            url={transaction.acs_url}
+            layout={layout}
+            selectedLayout={selectedLayout}
+          />
+        );
+      }
+
+      if (getTransactionType(transaction) === 'success') {
+        return (
+          <div className={styles.good_container}>
+            <div className={styles.good_info}>
+              <img alt="success" src={successIcon} className={styles.success_image} />
+              <span className={styles.good_message}>{message}</span>
+              <span className={styles.good_message_sub}>Желаем вам приятной игры!</span>
+            </div>
+            <Button onClick={close}>Вернуться к игре</Button>
+          </div>
+        );
+      }
+
       return null;
     }
-    if (type === 'good') {
-      return (
-        <div className={styles.good_container}>
-          <div className={styles.good_info}>
-            <img alt="success" src={successIcon} className={styles.success_image} />
-            <span className={styles.good_message}>{message}</span>
-            <span className={styles.good_message_sub}>Желаем вам приятной игры!</span>
-          </div>
-          <Button onClick={close}>Вернуться к игре</Button>
+    return (
+      <div className={styles.good_container}>
+        <div className={styles.good_info}>
+          <img alt="success" src={successIcon} className={styles.success_image} />
+          <span className={styles.good_message}>{message}</span>
+          <span className={styles.good_message_sub}>Желаем вам приятной игры!</span>
         </div>
-      );
-    }
+        <Button onClick={close}>Вернуться к игре</Button>
+      </div>
+    );
   };
+
+  if (isError) {
+    return (
+      <Modal isOpen={isOpen} close={close}>
+        <div className={styles.container}>
+          <div className={styles.error_container}>
+            <div className={styles.error}>{message}</div>
+            <Button className={styles.button} onClick={close}>
+              Закрыть
+            </Button>
+          </div>
+          {loading && (
+            <div className={styles.loader}>
+              <div className="w-[100%] h-[100%] flex flex-col items-center justify-center gap-[10px]">
+                <div className="w-[55px] h-[55px]">
+                  <Loader />
+                </div>
+                <div className={styles.loader_title}>Обработка платежа...</div>
+              </div>
+            </div>
+          )}
+        </div>
+      </Modal>
+    );
+  }
 
   return (
     <Modal isOpen={isOpen} close={close}>
       <div className={styles.container}>
-        {generateModal()}
-        {loading && (
+        {loading ? (
           <div className={styles.loader}>
             <div className="w-[100%] h-[100%] flex flex-col items-center justify-center gap-[10px]">
               <div className="w-[55px] h-[55px]">
@@ -146,6 +268,8 @@ const SuccessPaymentModal = ({
               <div className={styles.loader_title}>Обработка платежа...</div>
             </div>
           </div>
+        ) : (
+          generateModal()
         )}
       </div>
     </Modal>

@@ -27,7 +27,7 @@ interface IReducers {
   gameProvidersReducer: IInitialGameProviders;
   billingGroupsReducer: IInitialBillingGroups;
   paymentProvidersReducer: IInitialPaymentProviders;
-  paymentAllProvidersSlice: IInitialPaymentAllProviders;
+  paymentAllProvidersReducer: IInitialPaymentAllProviders;
 }
 
 const reducers: ReducersMapObject<IReducers> = {
@@ -39,7 +39,7 @@ const reducers: ReducersMapObject<IReducers> = {
   gameProvidersReducer: gameProvidersReducer,
   billingGroupsReducer: billingGroupsReducer,
   paymentProvidersReducer: paymentProvidersReducer,
-  paymentAllProvidersSlice: paymentAllProvidersSlice,
+  paymentAllProvidersReducer: paymentAllProvidersSlice,
 };
 
 const rootReducers = combineReducers(reducers);

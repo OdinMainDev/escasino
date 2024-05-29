@@ -29,6 +29,7 @@ const WalletHistory = () => {
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [datePicker, setDatePicker] = useState({
     start: new Date(),
     end: new Date(),
@@ -84,7 +85,6 @@ const WalletHistory = () => {
       const newWithdraws = await getWithdrawTransactions();
       setWithdraws(await getWithdrawTransactions());
       setHasNextPage(newWithdraws.length === 25);
-
       setLoading(false);
     };
     if (selectedTab.value === 'replenish') {
@@ -158,6 +158,7 @@ const WalletHistory = () => {
               <WalletHistoryItem
                 key={index}
                 transaction={item}
+                setIsError={setIsError}
                 openModal={setOpenModal}
                 setSelectedPayment={setSelectedPayment}
                 setTransactionLoading={setTransactionLoading}
@@ -169,6 +170,7 @@ const WalletHistory = () => {
             withdraws.map((item, index) => (
               <WalletHistoryItem
                 key={index}
+                setIsError={setIsError}
                 transaction={item}
                 openModal={setOpenModal}
                 type="withdraw"
@@ -209,11 +211,11 @@ const WalletHistory = () => {
       ) : null}
 
       <SuccessPaymentModal
+        isError={isError}
         isOpen={openModal}
         loading={transactionLoading}
-        payment={selectedPayment}
+        transaction={selectedPayment}
         close={closeModal}
-        type="payment"
       />
     </div>
   );

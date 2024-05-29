@@ -10,7 +10,7 @@ interface IProps {
 
 const PaymentAllProvidersProvider = ({ children }: IProps) => {
   const { isFinished, loading, hasError } = useAppSelector(
-    (state) => state.paymentProvidersReducer,
+    (state) => state.paymentAllProvidersReducer,
   );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useEffect, useRef, useState } from 'react';
 import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
@@ -41,7 +39,7 @@ const WalletReplenish = () => {
     (state) => state.paymentProvidersReducer,
   );
   const { paymentAllProviders, loading: providersAllLoading } = useAppSelector(
-    (state) => state.paymentAllProvidersSlice,
+    (state) => state.paymentAllProvidersReducer,
   );
   const { t } = useTranslation();
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
@@ -52,7 +50,7 @@ const WalletReplenish = () => {
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [error, setError] = useState<IErrorResponse>();
-  const [payment, setPayment] = useState<IPaymentTransaction | null>(null);
+  const [transaction, setTransaction] = useState<IPaymentTransaction | null>(null);
   const intervalIdRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -111,9 +109,9 @@ const WalletReplenish = () => {
   const paymentTransactionHandler = async (hash: string) => {
     try {
       const { data } = await paymentTransaction(hash);
-      if (data.data.status === 'success') {
-        setLoading(false);
-        setPayment(data.data);
+      setLoading(false);
+      if (data.data.status) {
+        setTransaction(data.data);
         if (intervalIdRef.current !== null) {
           clearInterval(intervalIdRef.current);
           intervalIdRef.current = null;
@@ -139,14 +137,14 @@ const WalletReplenish = () => {
   };
 
   const closeModal = () => {
+    setOpenModal(false);
     setIsError(false);
+    setError(undefined);
+    setTransaction(null);
+    setLoading(false);
     if (intervalIdRef.current) {
       clearInterval(intervalIdRef.current);
     }
-    setError(undefined);
-    setOpenModal(false);
-    setPayment(null);
-    setLoading(false);
   };
 
   const generateLayout = (selectedLayout: IPaymentProviderLayout[]) => {
@@ -154,7 +152,7 @@ const WalletReplenish = () => {
 
     const found = selectedLayout.every((field) => cardLayouts.includes(field.name ?? ''));
     return selectedLayout.map((item, index) => (
-      <div className={classNames(item.className?.toString(), 'col-span-6')} key={index}>
+      <div className={classNames(item.className)} key={index}>
         <div className={styles.title}>{t('paymentForm.' + item.name)}</div>
         <Input
           mask={found ? generateMask(item.name) : null}
@@ -317,8 +315,10 @@ const WalletReplenish = () => {
                 ?.filter((provider) => provider.billing_groups.includes(selectedBillingGroup))
                 ?.filter((provider) => !paymentProviders?.some((p) => p.id === provider.id))
                 .map((provider) => (
-                  // TODO: тут типа закрытые провайдеры
-                  <TabBlock key={provider.id} className={styles.billing}>
+                  <TabBlock
+                    key={provider.id}
+                    className={classNames(styles.billing, styles.billing_disabled)}
+                  >
                     <img src={provider.meta.image} className={styles.provider_img} />
                   </TabBlock>
                 ))}
@@ -379,11 +379,13 @@ const WalletReplenish = () => {
         layout,
       }) && <div className={styles.error}>Заполните все поля</div>}
       <SuccessPaymentModal
-        payment={payment}
+        isError={isError}
+        transaction={transaction}
         message={isError ? errorValidator(error) : ''}
-        type={isError ? 'bad' : 'payment'}
         isOpen={openModal}
         close={closeModal}
+        selectedLayout={selectedProvider && selectedProvider.layout}
+        layout={layout}
         loading={loading}
       />
     </div>

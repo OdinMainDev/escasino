@@ -220,7 +220,7 @@ const WalletWithdraw = () => {
             })}
           >
             {selectedProvider.layout.map((item, index) => (
-              <div className={classNames(item.className?.toString(), 'col-span-6')} key={index}>
+              <div className={classNames(item.className?.toString())} key={index}>
                 <div className={styles.title}>
                   {t('withdrawForm.' + (item.name || 'undefined'))}
                 </div>
@@ -285,8 +285,8 @@ const WalletWithdraw = () => {
         layout,
       }) && <div className={styles.error}>Заполните все поля</div>}
       <SuccessPaymentModal
+        isError={isError}
         message={isError ? errorValidator(error) : 'заявка на вывод успешно подана'}
-        type={isError ? 'bad' : !loading ? 'good' : 'payment'}
         isOpen={openModal}
         close={closeModal}
         loading={loading}
