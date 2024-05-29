@@ -10,6 +10,15 @@ export interface ISettings {
   affiliate: Affiliate;
 }
 
+export interface IStaticSettings {
+  finances: {
+    payments_life_time: number;
+  };
+  basic: {
+    pagination_count: number;
+  };
+}
+
 export interface Public {
   logo: string;
   names: string[];

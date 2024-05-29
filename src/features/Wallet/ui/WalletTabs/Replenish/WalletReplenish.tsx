@@ -110,7 +110,7 @@ const WalletReplenish = () => {
     try {
       const { data } = await paymentTransaction(hash);
       setLoading(false);
-      if (data.data.status) {
+      if (data.data.status !== 'AwaitRequisites') {
         setTransaction(data.data);
         if (intervalIdRef.current !== null) {
           clearInterval(intervalIdRef.current);
@@ -385,6 +385,7 @@ const WalletReplenish = () => {
         isOpen={openModal}
         close={closeModal}
         amount={Number(amount)}
+        selectedProvider={selectedProvider}
         selectedLayout={selectedProvider && selectedProvider.layout}
         layout={layout}
         loading={loading}

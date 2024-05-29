@@ -60,6 +60,10 @@ export const getTransactionType = (transaction: IPaymentTransaction): transactio
       return 'first';
     }
 
+    if ('requisites' in transaction) {
+      return 'requisites';
+    }
+
     if ('url' in transaction) {
       return 'second';
     }

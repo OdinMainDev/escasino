@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ParentPending, ParentFilled, ParentRejected, ISlice } from './slices';
-import { ISettings } from '@/shared/models/interfaces/settings';
-import { IResponseSettings, getStaticSettingsApi } from '@/app/api/core/getSettings';
+import { IStaticSettings } from '@/shared/models/interfaces/settings';
+import { IResponseStaticSettings, getStaticSettingsApi } from '@/app/api/core/getSettings';
 import { isAppDebug } from '@/app/config/app';
 
 export interface IInitialStaticSettings extends ISlice {
-  staticSettings: ISettings | null;
+  staticSettings: IStaticSettings | null;
   status: number;
 }
 
@@ -18,9 +18,9 @@ const initialState: IInitialStaticSettings = {
 };
 
 export const getStaticSettings = createAsyncThunk<
-  IResponseSettings,
+  IResponseStaticSettings,
   void,
-  { rejectValue: IResponseSettings }
+  { rejectValue: IResponseStaticSettings }
 >('getStaticSettings', async (_settings, { rejectWithValue }) => {
   const data = await getStaticSettingsApi();
   if (isAppDebug) {

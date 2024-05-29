@@ -1,4 +1,4 @@
-import { ISettings } from '@/shared/models/interfaces/settings';
+import { ISettings, IStaticSettings } from '@/shared/models/interfaces/settings';
 import axios from 'axios';
 
 export const settingsApi = () => {
@@ -11,6 +11,11 @@ export const staticSettingsApi = () => {
 
 export interface IResponseSettings {
   settings: ISettings | null;
+  status: number | null;
+}
+
+export interface IResponseStaticSettings {
+  settings: IStaticSettings | null;
   status: number | null;
 }
 
@@ -27,13 +32,13 @@ export const getSettingsApi = async (): Promise<IResponseSettings> => {
   return resp;
 };
 
-export const getStaticSettingsApi = async (): Promise<IResponseSettings> => {
-  const { data, status } = await axios.get<{ data: ISettings }>(staticSettingsApi(), {
+export const getStaticSettingsApi = async (): Promise<IResponseStaticSettings> => {
+  const { data, status } = await axios.get<{ data: IStaticSettings }>(staticSettingsApi(), {
     headers: {
       'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
     },
   });
-  const resp: IResponseSettings = {
+  const resp: IResponseStaticSettings = {
     settings: data.data,
     status: status,
   };

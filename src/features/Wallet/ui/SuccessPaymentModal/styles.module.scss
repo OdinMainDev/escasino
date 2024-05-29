@@ -14,6 +14,61 @@
   margin-bottom: 20px;
 }
 
+.card {
+  &_title {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 133%;
+    letter-spacing: 0.01em;
+    color: var(--secondary);
+    margin-bottom: 8px;
+  }
+
+  &_logo {
+    height: 40px;
+  }
+
+  &_item {
+    margin-bottom: 16px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &_label {
+    color: var(--Divider-main);
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 133%;
+    letter-spacing: 0.01em;
+    margin-bottom: 4px;
+  }
+
+  &_value {
+    color: var(--secondary);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 125%;
+    letter-spacing: 0.01em;
+  }
+
+
+  &_subtitle {
+    font-size: 14px;
+    line-height: 143%;
+    letter-spacing: 0.01em;
+    color: var(--Divider-main);
+    margin-bottom: 24px;
+  }
+
+  &_block {
+    background-color: var(--Select-bg);
+    padding: 16px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+}
+
 .qr {
   display: flex;
   justify-content: center;
@@ -112,6 +167,7 @@
   text-align: center;
   font-size: 14px;
   margin-top: 20px;
+  text-decoration: underline;
 }
 
 .value {
@@ -122,13 +178,4 @@
   white-space: nowrap;
   overflow: hidden;
   width: 100%;
-}
-.card {
-  display: flex;
-  flex-direction: column;
-  &_header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center; 
-  }
 }

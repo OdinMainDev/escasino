@@ -15,7 +15,7 @@ export interface ICreatePaymentData {
 }
 
 export interface IPaymentTransactionFirst {
-  requisites: string;
+  address: string;
   amount: string;
   convert_rate: string;
   currency: string;
@@ -29,6 +29,15 @@ export interface IPaymentTransactionSecond {
   url: string;
 }
 
+export interface IPaymentTransactionRequisites {
+  amount: number;
+  covert_rate: number;
+  currency: string;
+  image: string;
+  requisities: string;
+  status: string;
+}
+
 export interface IPaymentTransactionAcl {
   acs_url: string;
   amount: string;
@@ -39,7 +48,8 @@ export interface IPaymentTransactionAcl {
 export type IPaymentTransaction =
   | IPaymentTransactionFirst
   | IPaymentTransactionSecond
-  | IPaymentTransactionAcl;
+  | IPaymentTransactionAcl
+  | IPaymentTransactionRequisites;
 
 export interface ICreateWithdrawtData {
   provider: number;
