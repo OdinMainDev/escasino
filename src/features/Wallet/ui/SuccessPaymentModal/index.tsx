@@ -11,6 +11,7 @@ import successIcon from '../../images/success.svg';
 import { getTransactionType } from '../../helpers/payment';
 import classNames from 'classnames';
 import { IPaymentProviderLayout } from '@/shared/models/interfaces/paymentProviders';
+import axios from 'axios';
 interface IProps {
   close: () => void;
   isOpen: boolean;
@@ -18,6 +19,7 @@ interface IProps {
   loading: boolean;
   message?: string;
   isError?: boolean;
+  amount?: number;
   layout?: IProviderLayout;
   selectedLayout?: IPaymentProviderLayout[] | null;
 }
@@ -51,16 +53,30 @@ interface IAutoSubmitFormProps {
   url: string;
   layout: IProviderLayout;
   selectedLayout: IPaymentProviderLayout[];
+  closeModal: () => void;
+  amount: number;
 }
 
-const AutoSubmitForm = ({ url, layout, selectedLayout }: IAutoSubmitFormProps) => {
+const AutoSubmitForm = ({
+  url,
+  layout,
+  selectedLayout,
+  closeModal,
+  amount,
+}: IAutoSubmitFormProps) => {
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (formRef.current) {
-      formRef.current.submit();
-    }
-  }, []);
+    const formData = new FormData();
+
+    selectedLayout.forEach((item) => {
+      formData.append(item.name, layout[item.name]);
+    });
+
+    axios.post(url, formData).catch((error) => {
+      console.error('Error:', error);
+    });
+  }, [url, layout, selectedLayout]);
 
   return (
     <>
@@ -70,17 +86,17 @@ const AutoSubmitForm = ({ url, layout, selectedLayout }: IAutoSubmitFormProps) =
           <span className={styles.good_message}>Данные отправлены</span>
           <span className={styles.good_message_sub}>Желаем вам приятной игры!</span>
         </div>
-        <Button onClick={close}>Вернуться к игре</Button>
+        <Button onClick={closeModal}>Вернуться к игре</Button>
       </div>
-      <form method="POST" action={url} ref={formRef}>
+      <form ref={formRef} style={{ display: 'none' }}>
         {selectedLayout.map((item, index) => (
-          <input name={item.name} key={index} value={layout[item.name]} />
+          <input name={item.name} key={index} value={layout[item.name]} readOnly />
         ))}
+        <input name="amount" value={amount} readOnly />
       </form>
     </>
   );
 };
-
 const SuccessPaymentModal = ({
   isOpen,
   close,
@@ -90,6 +106,7 @@ const SuccessPaymentModal = ({
   isError,
   layout,
   selectedLayout,
+  amount = 0,
 }: IProps) => {
   const svgRef = useRef<HTMLDivElement>(null);
 
@@ -108,12 +125,12 @@ const SuccessPaymentModal = ({
 
   const generateModal = () => {
     if (transaction) {
-      if (getTransactionType(transaction) === 'first' && 'address' in transaction) {
+      if (getTransactionType(transaction) === 'first' && 'requisites' in transaction) {
         return (
           <>
             <div className={styles.title}>Данные платежа</div>
             <div className={styles.qr} ref={svgRef}>
-              <QRCode size={130} value={transaction.address} />
+              <QRCode size={130} value={transaction.requisites} />
             </div>
             <div className={styles.info}>
               <div
@@ -142,11 +159,11 @@ const SuccessPaymentModal = ({
               </div>
               <div
                 className={styles.info_block}
-                onClick={() => void copyTextToClipboard(transaction.address)}
+                onClick={() => void copyTextToClipboard(transaction.requisites)}
               >
                 <div className="w-[100%] flex-1">
                   <div className={styles.subtitle}>Адрес для пополнения</div>
-                  <div className={styles.value}>{transaction.address}</div>
+                  <div className={styles.value}>{transaction.requisites}</div>
                 </div>
                 <svg
                   width="20"
@@ -197,6 +214,8 @@ const SuccessPaymentModal = ({
       ) {
         return (
           <AutoSubmitForm
+            amount={amount}
+            closeModal={close}
             url={transaction.acs_url}
             layout={layout}
             selectedLayout={selectedLayout}

@@ -384,6 +384,7 @@ const WalletReplenish = () => {
         message={isError ? errorValidator(error) : ''}
         isOpen={openModal}
         close={closeModal}
+        amount={Number(amount)}
         selectedLayout={selectedProvider && selectedProvider.layout}
         layout={layout}
         loading={loading}

@@ -5,22 +5,25 @@ import { ModalProvider } from './providers/ModalProvider';
 import SettingsProvider from './providers/SettingsProvider';
 import { AuthProvider } from './providers/AuthProvider';
 import GamesFilterProvider from './providers/pages/GamesFilter';
+import StaticSettingsProvider from './providers/StaticSettingsProvider';
 
 function App() {
   return (
     <AuthProvider>
-      <SettingsProvider>
-        <LangProvider>
-          <ModalProvider>
-            <GamesFilterProvider>
-              {/* EventDispatcherProvider -после него мы не вставляем никакие провайдеры, он завершающий */}
-              <EventDispatcherProvider>
-                <Outlet />
-              </EventDispatcherProvider>
-            </GamesFilterProvider>
-          </ModalProvider>
-        </LangProvider>
-      </SettingsProvider>
+      <StaticSettingsProvider>
+        <SettingsProvider>
+          <LangProvider>
+            <ModalProvider>
+              <GamesFilterProvider>
+                {/* EventDispatcherProvider -после него мы не вставляем никакие провайдеры, он завершающий */}
+                <EventDispatcherProvider>
+                  <Outlet />
+                </EventDispatcherProvider>
+              </GamesFilterProvider>
+            </ModalProvider>
+          </LangProvider>
+        </SettingsProvider>
+      </StaticSettingsProvider>
     </AuthProvider>
   );
 }

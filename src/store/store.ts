@@ -1,5 +1,6 @@
 import { combineReducers, configureStore, ReducersMapObject } from '@reduxjs/toolkit';
 import settingsReducer from './slices/settingsSlice';
+import staticSettingsReducer, { IInitialStaticSettings } from './slices/staticSettingsSlice';
 import homeGamesReducer from './slices/homeGamesSlice';
 import countriesReducer from './slices/countriesSlice';
 import userReducer from './slices/userSlice';
@@ -24,6 +25,7 @@ import { IInitialWithdrawAllProviders } from './slices/withdrawAllProvidersSlice
 
 interface IReducers {
   settingsReducer: IInitialSettings;
+  staticSettingsReducer: IInitialStaticSettings;
   homeGamesReducer: IInitialHomeGames;
   countriesReducer: IInitialCountries;
   userReducer: IInitialUser;
@@ -38,6 +40,7 @@ interface IReducers {
 
 const reducers: ReducersMapObject<IReducers> = {
   settingsReducer: settingsReducer,
+  staticSettingsReducer: staticSettingsReducer,
   homeGamesReducer: homeGamesReducer,
   countriesReducer: countriesReducer,
   userReducer: userReducer,

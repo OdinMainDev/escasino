@@ -15,7 +15,7 @@ export interface ICreatePaymentData {
 }
 
 export interface IPaymentTransactionFirst {
-  address: string;
+  requisites: string;
   amount: string;
   convert_rate: string;
   currency: string;
