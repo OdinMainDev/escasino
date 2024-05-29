@@ -6,6 +6,7 @@ import { getPaymentTransactions, getWithdrawTransactions } from '@/features/Wall
 import {
   IFilterHistory,
   IHistoryItem,
+  IPaymentData,
   IPaymentTransaction,
 } from '@/features/Wallet/models/interfaces';
 import { filterHistory } from '@/features/Wallet/constants/tabs';
@@ -27,6 +28,7 @@ const WalletHistory = () => {
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [paymentData, setPaymentData] = useState<IPaymentData | null>(null);
   const [isError, setIsError] = useState(false);
   const [datePicker, setDatePicker] = useState({
     start: new Date(),
@@ -86,6 +88,7 @@ const WalletHistory = () => {
   const closeModal = () => {
     setOpenModal(false);
     setSelectedPayment(null);
+    setPaymentData(null);
   };
 
   return (
@@ -126,6 +129,7 @@ const WalletHistory = () => {
             payments.map((item, index) => (
               <WalletHistoryItem
                 key={index}
+                setPaymentData={setPaymentData}
                 transaction={item}
                 setIsError={setIsError}
                 openModal={setOpenModal}
@@ -139,6 +143,7 @@ const WalletHistory = () => {
             withdraws.map((item, index) => (
               <WalletHistoryItem
                 key={index}
+                setPaymentData={setPaymentData}
                 setIsError={setIsError}
                 transaction={item}
                 openModal={setOpenModal}
@@ -180,6 +185,7 @@ const WalletHistory = () => {
       ) : null}
 
       <SuccessPaymentModal
+        paymentData={paymentData}
         isError={isError}
         isOpen={openModal}
         loading={transactionLoading}

@@ -76,6 +76,19 @@ export interface IHistoryItem {
   completed_at: number;
 }
 
+export interface IPaymentData {
+  provider_id: number;
+  currency: string;
+  hash: string;
+  status: number;
+  amount: number;
+  total_amount: number;
+  formatted_amount: number;
+  formatted_total_amount: number;
+  created_at: number;
+  updated_at: number;
+  completed_at: number;
+}
 export interface IFilterHistory {
   label: string;
   value: string;

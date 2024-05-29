@@ -2,6 +2,7 @@ import Modal from '@/shared/ui/Modal';
 
 import styles from './styles.module.scss';
 import {
+  IPaymentData,
   IPaymentTransaction,
   IPaymentTransactionFirst,
   IPaymentTransactionRequisites,
@@ -9,7 +10,7 @@ import {
 } from '@/features/Wallet/models/interfaces';
 import QRCode from 'react-qr-code';
 import Button from '@/shared/ui/Button';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Loader from '@/shared/ui/Loader';
 
 import successIcon from '../../images/success.svg';
@@ -19,6 +20,7 @@ import {
   IPaymentProvider,
   IPaymentProviderLayout,
 } from '@/shared/models/interfaces/paymentProviders';
+import { useAppSelector } from '@/store/hooks/redux';
 interface IProps {
   close: () => void;
   isOpen: boolean;
@@ -27,6 +29,7 @@ interface IProps {
   message?: string;
   selectedProvider?: IPaymentProvider | null;
   isError?: boolean;
+  paymentData?: IPaymentData | null;
   amount?: number;
   layout?: IProviderLayout;
   selectedLayout?: IPaymentProviderLayout[] | null;
@@ -66,7 +69,6 @@ interface IAutoSubmitFormProps {
 
 const AutoSubmitForm = ({ url, layout, selectedLayout, amount }: IAutoSubmitFormProps) => {
   const formRef = useRef<HTMLFormElement>(null);
-
   useEffect(() => {
     if (formRef.current) {
       formRef.current.submit();
@@ -95,9 +97,12 @@ const SuccessPaymentModal = ({
   selectedLayout,
   amount = 0,
   selectedProvider,
+  paymentData,
 }: IProps) => {
   const svgRef = useRef<HTMLDivElement>(null);
-
+  const { staticSettings } = useAppSelector((state) => state.staticSettingsReducer);
+  const [timer, setTimer] = useState<number>(0);
+  const intervalRef = useRef<number | null>(null);
   const copyTextToClipboard = async (text: string) => {
     if (navigator.clipboard) {
       try {
@@ -110,6 +115,31 @@ const SuccessPaymentModal = ({
       alert('Clipboard API не доступен в вашем браузере.');
     }
   };
+
+  useEffect(() => {
+    if (paymentData && staticSettings) {
+      intervalRef.current = window.setInterval(() => {
+        const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+        const expirationTime = paymentData.created_at + staticSettings.finances.payments_life_time;
+        const remainingTime = expirationTime - currentTimeInSeconds;
+
+        if (remainingTime <= 0) {
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+          }
+          setTimer(0);
+        } else {
+          setTimer(remainingTime);
+        }
+      }, 1000);
+
+      return () => {
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
+      };
+    }
+  }, [paymentData, staticSettings]);
 
   function formatSecondsToTime(seconds: number): string {
     const minutes = Math.floor(seconds / 60);
@@ -130,7 +160,7 @@ const SuccessPaymentModal = ({
           <div className={styles.card}>
             <div className={styles.card_title}>Оплата заказа</div>
             <div className={styles.card_subtitle}>
-              Переводите 300 RUB на номер карты из формы ниже
+              Переводите {item.amount} {item.currency} на номер карты из формы ниже
             </div>
             <div className={styles.qr} ref={svgRef}>
               <QRCode size={130} value={item.address} />
@@ -146,7 +176,7 @@ const SuccessPaymentModal = ({
                 onClick={() => void copyTextToClipboard(item.address)}
               >
                 <div className="flex items-center justify-between">
-                  <div>
+                  <div className="w-[100%]">
                     <div className={styles.card_label}>Адрес</div>
                     <div className={styles.card_value}>{item.address}</div>
                   </div>
@@ -200,6 +230,19 @@ const SuccessPaymentModal = ({
                 </div>
               </div>
             </div>
+            {staticSettings && (
+              <div className={styles.card_subtitle}>Время оплаты: {formatSecondsToTime(timer)}</div>
+            )}
+            {paymentData && (
+              <div
+                className={classNames(
+                  styles.card_subtitle,
+                  'inline-block w-[100%] text-ellipsis	overflow-hidden whitespace-nowrap',
+                )}
+              >
+                ID: {paymentData.hash}
+              </div>
+            )}
             <Button className="w-[100%] uppercase" onClick={close}>
               Я оплатил
             </Button>
@@ -218,7 +261,7 @@ const SuccessPaymentModal = ({
           <div className={styles.card}>
             <div className={styles.card_title}>Оплата заказа</div>
             <div className={styles.card_subtitle}>
-              Переводите 300 RUB на номер карты из формы ниже
+              Переводите {item.amount} {item.currency} на номер карты из формы ниже
             </div>
             <div className={styles.card_block}>
               <div className="flex items-center justify-between mb-[24px]">
@@ -247,7 +290,7 @@ const SuccessPaymentModal = ({
                 onClick={() => void copyTextToClipboard(item.requisites)}
               >
                 <div className="flex items-center justify-between">
-                  <div>
+                  <div className="w-[100%]">
                     <div className={styles.card_label}>Номер карты</div>
                     <div className={styles.card_value}>{item.requisites}</div>
                   </div>
@@ -301,9 +344,10 @@ const SuccessPaymentModal = ({
                 </div>
               </div>
             </div>
-            <div className={styles.subtitle}>
-              Время оплаты: {formatSecondsToTime(item.covert_rate)}
-            </div>
+            {staticSettings && (
+              <div className={styles.card_subtitle}>Время оплаты: {formatSecondsToTime(timer)}</div>
+            )}
+            {paymentData && <div className={styles.card_subtitle}>ID: {paymentData.hash}</div>}
             <Button className="w-[100%] uppercase" onClick={close}>
               Я оплатил
             </Button>

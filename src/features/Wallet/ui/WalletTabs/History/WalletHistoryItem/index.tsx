@@ -1,4 +1,8 @@
-import { IHistoryItem, IPaymentTransaction } from '@/features/Wallet/models/interfaces';
+import {
+  IHistoryItem,
+  IPaymentData,
+  IPaymentTransaction,
+} from '@/features/Wallet/models/interfaces';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { padNumber } from '@/shared/helpers/padNumber';
@@ -13,6 +17,7 @@ interface IProps {
   transaction: IHistoryItem;
   type: 'payment' | 'withdraw';
   providers: IPaymentProvider[] | IWithdrawProvider[];
+  setPaymentData: (data: IPaymentData) => void;
   setTransactionLoading: (value: boolean) => void;
   openModal: (value: boolean) => void;
   setIsError: (value: boolean) => void;
@@ -25,6 +30,7 @@ const WalletHistoryItem = ({
   type,
   setTransactionLoading,
   openModal,
+  setPaymentData,
   setSelectedPayment,
   setIsError,
 }: IProps) => {
@@ -74,6 +80,7 @@ const WalletHistoryItem = ({
       if (data.success) {
         setTransactionLoading(false);
         setSelectedPayment(data.data);
+        setPaymentData(data.payment_data);
       } else {
         setIsError(true);
       }

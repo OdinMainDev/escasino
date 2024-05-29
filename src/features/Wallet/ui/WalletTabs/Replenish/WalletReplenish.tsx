@@ -13,6 +13,7 @@ import {
 } from '@/shared/models/interfaces/paymentProviders';
 import {
   ICreatePaymentData,
+  IPaymentData,
   IPaymentTransaction,
   IProviderLayout,
 } from '@/features/Wallet/models/interfaces';
@@ -51,6 +52,7 @@ const WalletReplenish = () => {
   const [openModal, setOpenModal] = useState(false);
   const [error, setError] = useState<IErrorResponse>();
   const [transaction, setTransaction] = useState<IPaymentTransaction | null>(null);
+  const [paymentData, setPaymentData] = useState<IPaymentData | null>(null);
   const intervalIdRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -112,6 +114,7 @@ const WalletReplenish = () => {
       if (data.data.status !== 'AwaitRequisites') {
         setLoading(false);
         setTransaction(data.data);
+        setPaymentData(data.payment_data);
         if (intervalIdRef.current !== null) {
           clearInterval(intervalIdRef.current);
           intervalIdRef.current = null;
@@ -141,6 +144,7 @@ const WalletReplenish = () => {
     setIsError(false);
     setError(undefined);
     setTransaction(null);
+    setPaymentData(null);
     setLoading(false);
     if (intervalIdRef.current) {
       clearInterval(intervalIdRef.current);
@@ -384,6 +388,7 @@ const WalletReplenish = () => {
         message={isError ? errorValidator(error) : ''}
         isOpen={openModal}
         close={closeModal}
+        paymentData={paymentData}
         amount={Number(amount)}
         selectedProvider={selectedProvider}
         selectedLayout={selectedProvider && selectedProvider.layout}

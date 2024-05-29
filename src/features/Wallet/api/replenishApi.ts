@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { ICreatePaymentData, IPaymentTransaction } from '../models/interfaces';
+import { ICreatePaymentData, IPaymentData, IPaymentTransaction } from '../models/interfaces';
 import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
 
 export const createPaymentApi = () => {
@@ -20,12 +20,15 @@ export const createPayment = async (data: ICreatePaymentData) => {
 };
 
 export const paymentTransaction = (hash: string) => {
-  return axios.get<{ data: IPaymentTransaction; success: boolean }>(paymentTransactionApi(hash), {
-    headers: {
-      Authorization: `Bearer: ${Cookies.get('atoken')}`,
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
+  return axios.get<{ data: IPaymentTransaction; success: boolean; payment_data: IPaymentData }>(
+    paymentTransactionApi(hash),
+    {
+      headers: {
+        Authorization: `Bearer: ${Cookies.get('atoken')}`,
+        'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
+      },
     },
-  });
+  );
 };
 
 export const paymentProvidersApi = (showAll: boolean) => {
