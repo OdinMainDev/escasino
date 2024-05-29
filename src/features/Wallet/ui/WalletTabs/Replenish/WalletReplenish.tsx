@@ -109,8 +109,8 @@ const WalletReplenish = () => {
   const paymentTransactionHandler = async (hash: string) => {
     try {
       const { data } = await paymentTransaction(hash);
-      setLoading(false);
       if (data.data.status !== 'AwaitRequisites') {
+        setLoading(false);
         setTransaction(data.data);
         if (intervalIdRef.current !== null) {
           clearInterval(intervalIdRef.current);
