@@ -26,9 +26,9 @@ const Details = () => {
   const { isAuth } = useAuthProvider();
   const router = useRouter();
   const { doOpenModal, doCloseModals } = useModal();
-  const { user } = useAppSelector((state) => state.userReducer);
   const { bonuses } = useAppSelector((state) => state.bonusesSlice);
-  const route = useRouter();
+  const { settings } = useAppSelector((state) => state.settingsReducer);
+  const { user } = useAppSelector((state) => state.userReducer);
   const alertData: IAlert = {
     title: 'Внимание!',
     text: (
@@ -51,7 +51,6 @@ const Details = () => {
     ],
     close: doCloseModals,
   };
-  const { settings } = useAppSelector((state) => state.settingsReducer);
 
   useEffect(() => {
     const getGameById = async () => {
@@ -81,15 +80,15 @@ const Details = () => {
   };
 
   const openBonus = () => {
-    if (settings && user) {
+    if (settings) {
       if (settings.bonus.max_avail_bonuses !== 0 && bonuses) {
         if (bonuses.length >= settings.bonus.max_avail_bonuses) {
           doOpenModal('alert');
         } else {
-          route.push(`/bonus/${game?.id}`);
+          router.push(`/bonus/${game?.id}`);
         }
       } else {
-        route.push(`/bonus/${game?.id}`);
+        router.push(`/bonus/${game?.id}`);
       }
     }
   };
