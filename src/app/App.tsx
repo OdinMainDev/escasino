@@ -6,7 +6,7 @@ import SettingsProvider from './providers/SettingsProvider';
 import { AuthProvider } from './providers/AuthProvider';
 import GamesFilterProvider from './providers/pages/GamesFilter';
 import StaticSettingsProvider from './providers/StaticSettingsProvider';
-
+import 'swiper/css';
 function App() {
   return (
     <AuthProvider>

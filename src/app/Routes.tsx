@@ -28,6 +28,7 @@ import Wallet from '@/pages/Wallet';
 import Currencies from '@/pages/Wallet/Currencies';
 import LanguageGuard from './providers/LanguageGuard';
 import GlobalModals from './providers/GlobalModals';
+import { Bonus } from '@/pages/Bonus';
 
 const availRoutes: RouteObject[] = [
   {
@@ -37,6 +38,10 @@ const availRoutes: RouteObject[] = [
         <Home />
       </HomeGamesProvider>
     ),
+  },
+  {
+    path: 'bonus/:id',
+    element: <Bonus />,
   },
   {
     path: 'games',

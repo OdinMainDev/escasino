@@ -22,13 +22,17 @@ import { IInitialPaymentProviders } from './slices/paymentProvidersSlice';
 import { IInitialPaymentAllProviders } from './slices/paymentAllProvidersSlice';
 import { IInitialWithdrawProviders } from './slices/withdrawProvidersSlice';
 import { IInitialWithdrawAllProviders } from './slices/withdrawAllProvidersSlice';
+import bonusesSlices, { IInitialBonuses } from './slices/bonusesSlices';
+import gamesAllSlice, { IInitialGameAll } from './slices/gamesAll';
 
 interface IReducers {
   settingsReducer: IInitialSettings;
   staticSettingsReducer: IInitialStaticSettings;
+  bonusesSlice: IInitialBonuses;
   homeGamesReducer: IInitialHomeGames;
   countriesReducer: IInitialCountries;
   userReducer: IInitialUser;
+  gamesAllSlice: IInitialGameAll;
   gameCategoriesReducer: IInitialGameCategories;
   gameProvidersReducer: IInitialGameProviders;
   billingGroupsReducer: IInitialBillingGroups;
@@ -40,6 +44,8 @@ interface IReducers {
 
 const reducers: ReducersMapObject<IReducers> = {
   settingsReducer: settingsReducer,
+  bonusesSlice: bonusesSlices,
+  gamesAllSlice: gamesAllSlice,
   staticSettingsReducer: staticSettingsReducer,
   homeGamesReducer: homeGamesReducer,
   countriesReducer: countriesReducer,

@@ -17,6 +17,7 @@ import Footer from '@/widgets/Footer';
 import { useAppSelector } from '@/store/hooks/redux';
 import ModalZeroBalance from './ui/ModalZeroBalance';
 import { gamesHeaderTypeCover } from '@/app/config/app';
+import { getBonusTemplatesApi, getMyBonusesApi } from '@/app/api/bonuses/bonusesApi';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
@@ -25,6 +26,9 @@ const Details = () => {
   const router = useRouter();
   const { doOpenModal, doCloseModals } = useModal();
   const { user } = useAppSelector((state) => state.userReducer);
+  const route = useRouter();
+  const [bonusError, setBonusError] = useState(false);
+  const { settings } = useAppSelector((state) => state.settingsReducer);
 
   useEffect(() => {
     const getGameById = async () => {
@@ -32,8 +36,14 @@ const Details = () => {
       setGame(data?.game);
     };
 
+    const getMyBonuses = async () => {
+      await getMyBonusesApi();
+    };
+    void getBonusTemplatesApi();
+
+    void getMyBonuses();
     void getGameById();
-  }, []);
+  }, [id]);
 
   const openDemoPlay = () => {
     router.push('/play/demo/' + id);
@@ -50,6 +60,20 @@ const Details = () => {
     }
 
     doOpenModal('login');
+  };
+
+  const openBonus = () => {
+    if (settings && user) {
+      if (settings.bonus.max_avail_bonuses !== 0) {
+        if (user.balance.balance_bonus >= settings.bonus.max_avail_bonuses) {
+          setBonusError(true);
+        } else {
+          route.push(`/bonus/${game?.id}`);
+        }
+      } else {
+        route.push(`/bonus/${game?.id}`);
+      }
+    }
   };
 
   // TODOSELF: *для себя* сделать лоадер и дописать потом когда будет админка игры
@@ -100,7 +124,11 @@ const Details = () => {
         {!game?.has_bonus ? (
           ''
         ) : (
-          <Button elType="outlined" className={classNames(styles.button, styles.button_big)}>
+          <Button
+            elType="outlined"
+            className={classNames(styles.button, styles.button_big)}
+            onClick={openBonus}
+          >
             <Icons icon="settings" />
             <span>Сконфигурировать бонус</span>
           </Button>
