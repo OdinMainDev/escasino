@@ -17,7 +17,7 @@ import Footer from '@/widgets/Footer';
 import { useAppSelector } from '@/store/hooks/redux';
 import ModalZeroBalance from './ui/ModalZeroBalance';
 import { gamesHeaderTypeCover } from '@/app/config/app';
-import { getBonusTemplatesApi, getMyBonusesApi } from '@/app/api/bonuses/bonusesApi';
+import { getBonusTemplatesApi } from '@/app/api/bonuses/bonusesApi';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
@@ -36,12 +36,7 @@ const Details = () => {
       setGame(data?.game);
     };
 
-    const getMyBonuses = async () => {
-      await getMyBonusesApi();
-    };
     void getBonusTemplatesApi();
-
-    void getMyBonuses();
     void getGameById();
   }, [id]);
 
