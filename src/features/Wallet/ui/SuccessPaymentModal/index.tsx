@@ -107,12 +107,11 @@ const SuccessPaymentModal = ({
     if (navigator.clipboard) {
       try {
         await navigator.clipboard.writeText(text);
-        alert('Текст скопирован в буфер обмена!');
       } catch (err) {
-        alert('Не удалось скопировать текст');
+        console.error('ClipboardAPI', err);
       }
     } else {
-      alert('Clipboard API не доступен в вашем браузере.');
+      alert('ClipboardAPI is not available in your browser.');
     }
   };
 
