@@ -18,6 +18,7 @@ import { useAppSelector } from '@/store/hooks/redux';
 import ModalZeroBalance from './ui/ModalZeroBalance';
 import { gamesHeaderTypeCover } from '@/app/config/app';
 import { getBonusTemplatesApi } from '@/app/api/bonuses/bonusesApi';
+import { AlertModal, IAlert } from '@/entities/AlertModal';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
@@ -26,8 +27,30 @@ const Details = () => {
   const router = useRouter();
   const { doOpenModal, doCloseModals } = useModal();
   const { user } = useAppSelector((state) => state.userReducer);
+  const { bonuses } = useAppSelector((state) => state.bonusesSlice);
   const route = useRouter();
-  const [bonusError, setBonusError] = useState(false);
+  const alertData: IAlert = {
+    title: 'Внимание!',
+    text: (
+      <div>
+        <div className="mb-[5px]">У вас есть 209 Free Spins в игре Starburst XXXtreme.</div>
+        <div>Отыграйте их или откажитесь от бонуса.</div>
+      </div>
+    ),
+    buttons: [
+      {
+        type: 'outlined',
+        text: 'Отказаться',
+        onClick: doCloseModals,
+      },
+      {
+        type: 'contained',
+        text: 'Играть',
+        onClick: () => {},
+      },
+    ],
+    close: doCloseModals,
+  };
   const { settings } = useAppSelector((state) => state.settingsReducer);
 
   useEffect(() => {
@@ -59,9 +82,9 @@ const Details = () => {
 
   const openBonus = () => {
     if (settings && user) {
-      if (settings.bonus.max_avail_bonuses !== 0) {
-        if (user.balance.balance_bonus >= settings.bonus.max_avail_bonuses) {
-          setBonusError(true);
+      if (settings.bonus.max_avail_bonuses !== 0 && bonuses) {
+        if (bonuses.length >= settings.bonus.max_avail_bonuses) {
+          doOpenModal('alert');
         } else {
           route.push(`/bonus/${game?.id}`);
         }
@@ -141,6 +164,7 @@ const Details = () => {
         </div>
       </div>
       <Footer isHidden={!isAuth} />
+      <AlertModal {...alertData} />
       <ModalZeroBalance close={doCloseModals} gameId={game?.id} />
     </div>
   );

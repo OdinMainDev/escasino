@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   padding: 20px;
-  min-height: 250px;
+  min-height: 200px;
 }
 
 .buttons {
@@ -15,18 +15,21 @@
 }
 
 .title {
-  font-size: 25px;
-  font-weight: 500;
-  line-height: 45px;
-  margin-bottom: 15px;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 133%;
+  letter-spacing: 0.01em;
   color: var(--Text-primary);
+  margin-bottom: 16px;
 }
 
 .text {
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 25px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.01em;
   color: var(--Text-primary);
   flex: 1;
+  margin-bottom: 24px;
 }
 

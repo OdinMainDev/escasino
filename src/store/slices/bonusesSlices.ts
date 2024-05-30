@@ -5,7 +5,7 @@ import { IBonus } from '@/shared/models/interfaces/bonuses';
 import { getMyBonusesApi, IResponseBonuses } from '@/app/api/bonuses/bonusesApi';
 
 export interface IInitialBonuses extends ISlice {
-  bonuses: IBonus | null;
+  bonuses: IBonus[] | null;
   status: number;
 }
 

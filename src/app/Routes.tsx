@@ -29,6 +29,7 @@ import Currencies from '@/pages/Wallet/Currencies';
 import LanguageGuard from './providers/LanguageGuard';
 import GlobalModals from './providers/GlobalModals';
 import { Bonus } from '@/pages/Bonus';
+import BonusesProvider from './providers/pages/BonusesProvider';
 
 const availRoutes: RouteObject[] = [
   {
@@ -48,7 +49,11 @@ const availRoutes: RouteObject[] = [
     children: [
       {
         path: 'details/:id',
-        element: <Details />,
+        element: (
+          <BonusesProvider>
+            <Details />
+          </BonusesProvider>
+        ),
       },
       {
         path: 'search',

@@ -21,7 +21,13 @@ const AlertModal = ({ close, title, text, buttons = [] }: IAlert) => {
         <div className={styles.text}>{text}</div>
         <div className={styles.buttons}>
           {buttons.map((item, index) => (
-            <Button type="button" elType={item.type} onClick={item.onClick} key={index}>
+            <Button
+              type="button"
+              className="uppercase"
+              elType={item.type}
+              onClick={item.onClick}
+              key={index}
+            >
               {item.text}
             </Button>
           ))}
