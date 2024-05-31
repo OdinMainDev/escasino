@@ -28,6 +28,7 @@ import Wallet from '@/pages/Wallet';
 import Currencies from '@/pages/Wallet/Currencies';
 import LanguageGuard from './providers/LanguageGuard';
 import GlobalModals from './providers/GlobalModals';
+import { AuthSocialVk } from '@/pages/Auth';
 
 const availRoutes: RouteObject[] = [
   {
@@ -83,7 +84,6 @@ const availRoutes: RouteObject[] = [
       },
     ],
   },
-
   {
     path: 'profile',
     element: <AuthGuardProvider />,
@@ -102,7 +102,6 @@ const availRoutes: RouteObject[] = [
       },
     ],
   },
-
   {
     path: 'wallet',
     element: <AuthGuardProvider />,
@@ -130,6 +129,15 @@ const availRoutes: RouteObject[] = [
       {
         path: 'currencies',
         element: <Currencies />,
+      },
+    ],
+  },
+  {
+    path: 'auth',
+    children: [
+      {
+        path: 'socials/vk',
+        element: <AuthSocialVk />,
       },
     ],
   },

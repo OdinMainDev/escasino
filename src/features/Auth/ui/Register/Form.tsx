@@ -2,7 +2,7 @@ import { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import styles from './Form.module.scss';
-import { FB, OK, Telegram, Twitter, VK } from './Icons';
+import { FB, OK, Telegram, Twitter, VK } from '../Icons';
 import {
   validateEmail,
   validatePasswordLength,

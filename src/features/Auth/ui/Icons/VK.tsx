@@ -3,21 +3,42 @@
 import React from 'react';
 
 import { useAppSelector } from '@/store/hooks/redux';
+import { getVisitorId } from '@/shared/helpers/getVisitorId';
+import { doSocialsVk } from '@/features/Auth/api/vk';
+import { ISocialsVkRequest } from '@/features/Auth/models/vk';
+import { constructUrlWithCurrentDomain } from '@/shared/helpers/constructUrl';
+import { vkUrl } from '@/app/config/socials';
 
 const VK = () => {
-  const { settings, loading } = useAppSelector((state) => state.settingsReducer);
-  if (loading || !settings?.auth?.social_vk) {
+  const { settings, loading: settingsLoading } = useAppSelector((state) => state.settingsReducer);
+  if (settingsLoading || !settings?.auth?.social_vk) {
     return;
   }
 
-  return (
-    <div
-      onClick={() =>
-        alert(
-          'REQUEST POST (fid (fingerprint), returt_url (string)) /api/v1/auth/socials/vk/register',
-        )
+  const handleClick = async () => {
+    try {
+      const fid = await getVisitorId();
+      // TODO: после тестов изменить ссылку на нормальную
+      let url = constructUrlWithCurrentDomain(vkUrl);
+      url = 'https://exch.viorenginetest.com/socials/social_vk.php';
+      const postData: ISocialsVkRequest = {
+        fid: fid,
+        terms: true,
+        return_url: url,
+      };
+      const { data } = await doSocialsVk(postData);
+      if (!data.success) {
+        // TODO: ошибку выводить
+        return;
       }
-    >
+      window.open(data.url);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return (
+    <div onClick={() => void handleClick()}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="40"
