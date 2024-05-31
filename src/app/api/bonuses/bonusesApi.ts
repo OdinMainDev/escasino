@@ -1,4 +1,4 @@
-import { IBonus } from '@/shared/models/interfaces/bonuses';
+import { IBonus, IBonusTemplate } from '@/shared/models/interfaces/bonuses';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -23,13 +23,24 @@ export interface IResponseBonuses {
   bonuses: IBonus[];
 }
 
-export const getBonusTemplatesApi = () => {
-  return axios.get(bonusTemplatesApi(), {
+export interface IResponseBonusesTemplate {
+  status: number | null;
+  bonusesTemplates: IBonusTemplate[];
+}
+
+export const getBonusTemplatesApi = async (): Promise<IResponseBonusesTemplate> => {
+  const { data, status } = await axios.get<{ data: IBonusTemplate[] }>(bonusTemplatesApi(), {
     headers: {
       Authorization: `Bearer: ${Cookies.get('atoken')}`,
       'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
     },
   });
+  const resp: IResponseBonusesTemplate = {
+    bonusesTemplates: data.data,
+    status: status,
+  };
+
+  return resp;
 };
 
 export const getMyBonusesApi = async (): Promise<IResponseBonuses> => {

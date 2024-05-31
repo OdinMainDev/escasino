@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import styles from './Bonus.module.scss';
 import GoBackButton from '@/shared/ui/GoBackButton';
 import Icons from '@/shared/ui/Icons';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { getGameApi } from '@/app/api/games/getGameById';
 import { IGame } from '@/shared/models/interfaces/game';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
@@ -12,23 +12,45 @@ import { useRouter } from '@/shared/helpers/navigation';
 import { TabItem } from '@/entities/TabItem';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import './Bonus.scss';
+import { getBonusTemplatesApi } from '@/app/api/bonuses/bonusesApi';
+import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
 
 const Bonus = () => {
   const { id } = useParams();
   const [game, setGame] = useState<IGame | null>(null);
+  const [bonusesTemplates, setBonusesTemplates] = useState<IBonusTemplate[]>([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const tabs = ['Макс ставка', 'Макс FS'];
+  const tabs = ['Деньги', 'FS'];
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleSlideChange = (swiper: { activeIndex: SetStateAction<number> }) => {
+    setActiveIndex(swiper.activeIndex);
+  };
 
   useEffect(() => {
-    const getGameById = async () => {
-      setLoading(true);
-      const data = await getGameApi(Number(id));
-      setLoading(false);
-      setGame(data?.game);
+    const getBonusesTemplates = async () => {
+      try {
+        const { bonusesTemplates } = await getBonusTemplatesApi();
+        setBonusesTemplates(bonusesTemplates);
+      } catch (e) {
+        /* empty */
+      }
     };
+    void getBonusesTemplates();
+  }, []);
 
-    void getGameById();
+  useEffect(() => {
+    if (id) {
+      const getGameById = async () => {
+        setLoading(true);
+        const data = await getGameApi(Number(id));
+        setLoading(false);
+        setGame(data?.game);
+      };
+
+      void getGameById();
+    }
   }, [id]);
 
   if (!game) {
@@ -38,6 +60,42 @@ const Bonus = () => {
           <GoBackButton />
           <div className={styles.title}>Собери свой бонус</div>
           <Icons icon="chat" />
+        </div>
+        <div className={styles.content}>
+          <div className={styles.game}>
+            <img src={PlaceholderImage} alt="without_game" className={styles.game_image} />
+            <div className={styles.game_title}>Выберите игру</div>
+            <Button elType="outlined" className="w-[100%]" onClick={() => router.push('/')}>
+              Изменить игру
+            </Button>
+            <div>{bonusesTemplates[activeIndex] && bonusesTemplates[activeIndex].id}</div>
+          </div>
+          <div className={styles.settings}>
+            <div className={styles.settings_title}>Тип бонуса</div>
+            <div className={styles.settings_tabs}>
+              {tabs.map((item, index) => (
+                <TabItem key={index}>{item}</TabItem>
+              ))}
+            </div>
+            <div className={styles.settings_labels}>
+              <div>% бонуса</div>
+            </div>
+            <div className={styles.settings_swiper}>
+              <Swiper
+                spaceBetween={12}
+                effect="coverflow"
+                slidesPerView={3}
+                centeredSlides
+                loop
+                direction="vertical"
+                onSlideChange={handleSlideChange}
+              >
+                {bonusesTemplates?.map((item, index) => (
+                  <SwiperSlide key={index}>{item.bonus_percent}</SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -63,13 +121,13 @@ const Bonus = () => {
               ) : (
                 <img src={PlaceholderImage} alt={game?.name} className={styles.game_image} />
               )}
-              <div className={styles.game_title}>{game.name}</div>
+              <div className={styles.game_title}>{game?.name}</div>
               <Button elType="outlined" className="w-[100%]" onClick={() => router.push('/')}>
                 Изменить игру
               </Button>
             </div>
             <div className={styles.settings}>
-              <div className={styles.settings_title}>Настройки бонуса</div>
+              <div className={styles.settings_title}>Тип бонуса</div>
               <div className={styles.settings_tabs}>
                 {tabs.map((item, index) => (
                   <TabItem key={index}>{item}</TabItem>

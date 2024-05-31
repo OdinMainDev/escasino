@@ -42,8 +42,25 @@ const availRoutes: RouteObject[] = [
     ),
   },
   {
-    path: 'bonus/:id',
-    element: <Bonus />,
+    path: 'bonus',
+    children: [
+      {
+        index: true,
+        element: (
+          <BonusesProvider>
+            <Bonus />
+          </BonusesProvider>
+        ),
+      },
+      {
+        path: ':id',
+        element: (
+          <BonusesProvider>
+            <Bonus />
+          </BonusesProvider>
+        ),
+      },
+    ],
   },
   {
     path: 'games',
@@ -123,17 +140,19 @@ const availRoutes: RouteObject[] = [
       {
         path: 'deposit/:tab',
         element: (
-          <BillingGroupsProvider>
-            <PaymentProvidersProvider>
-              <PaymentAllProvidersProvider>
-                <WithdrawProvidersProvider>
-                  <WithdrawAllProvidersProvider>
-                    <Wallet />
-                  </WithdrawAllProvidersProvider>
-                </WithdrawProvidersProvider>
-              </PaymentAllProvidersProvider>
-            </PaymentProvidersProvider>
-          </BillingGroupsProvider>
+          <BonusesProvider>
+            <BillingGroupsProvider>
+              <PaymentProvidersProvider>
+                <PaymentAllProvidersProvider>
+                  <WithdrawProvidersProvider>
+                    <WithdrawAllProvidersProvider>
+                      <Wallet />
+                    </WithdrawAllProvidersProvider>
+                  </WithdrawProvidersProvider>
+                </PaymentAllProvidersProvider>
+              </PaymentProvidersProvider>
+            </BillingGroupsProvider>
+          </BonusesProvider>
         ),
       },
       {
