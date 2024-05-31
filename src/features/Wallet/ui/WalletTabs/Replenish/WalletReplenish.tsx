@@ -31,6 +31,9 @@ import { IErrorResponse } from '@/shared/models/interfaces/error';
 import { AxiosError } from 'axios';
 import { generateMask } from '@/features/Wallet/helpers/generateMask';
 import { generateErrorMessages } from '@/features/Wallet/helpers/generateMessages';
+import { useModal } from '@/app/providers/ModalProvider';
+import { AlertModal, IAlert } from '@/entities/AlertModal';
+import { useRouter } from '@/shared/helpers/navigation';
 
 const WalletReplenish = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
@@ -54,6 +57,32 @@ const WalletReplenish = () => {
   const [transaction, setTransaction] = useState<IPaymentTransaction | null>(null);
   const [paymentData, setPaymentData] = useState<IPaymentData | null>(null);
   const intervalIdRef = useRef<number | null>(null);
+  const { doOpenModal, doCloseModals } = useModal();
+  const router = useRouter();
+  const { bonuses } = useAppSelector((state) => state.bonusesSlice);
+  const { settings } = useAppSelector((state) => state.settingsReducer);
+  const alertData: IAlert = {
+    title: 'Внимание!',
+    text: (
+      <div>
+        <div className="mb-[5px]">У вас есть 209 Free Spins в игре Starburst XXXtreme.</div>
+        <div>Отыграйте их или откажитесь от бонуса.</div>
+      </div>
+    ),
+    buttons: [
+      {
+        type: 'outlined',
+        text: 'Отказаться',
+        onClick: doCloseModals,
+      },
+      {
+        type: 'contained',
+        text: 'Играть',
+        onClick: () => {},
+      },
+    ],
+    close: doCloseModals,
+  };
 
   useEffect(() => {
     if (billingGroups && billingGroups.length > 0) {
@@ -181,9 +210,23 @@ const WalletReplenish = () => {
     ));
   };
 
+  const openBonus = () => {
+    if (settings) {
+      if (settings.bonus.max_avail_bonuses !== 0 && bonuses) {
+        if (bonuses.length >= settings.bonus.max_avail_bonuses) {
+          doOpenModal('alert');
+        } else {
+          router.push('/bonus');
+        }
+      } else {
+        router.push('/bonus');
+      }
+    }
+  };
+
   return (
     <div className={styles.content}>
-      <Button className={styles.button}>
+      <Button className={styles.button} onClick={openBonus}>
         <svg
           width="23"
           height="22"
@@ -395,6 +438,7 @@ const WalletReplenish = () => {
         layout={layout}
         loading={loading}
       />
+      <AlertModal {...alertData} />
     </div>
   );
 };

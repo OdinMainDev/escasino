@@ -28,7 +28,12 @@ import Wallet from '@/pages/Wallet';
 import Currencies from '@/pages/Wallet/Currencies';
 import LanguageGuard from './providers/LanguageGuard';
 import GlobalModals from './providers/GlobalModals';
+<<<<<<< HEAD
 import { AuthSocialVk } from '@/pages/Auth';
+=======
+import { Bonus } from '@/pages/Bonus';
+import BonusesProvider from './providers/pages/BonusesProvider';
+>>>>>>> 61c4b0eb96068e1145001bc454d008cbfb8c5476
 
 const availRoutes: RouteObject[] = [
   {
@@ -40,11 +45,19 @@ const availRoutes: RouteObject[] = [
     ),
   },
   {
+    path: 'bonus/:id',
+    element: <Bonus />,
+  },
+  {
     path: 'games',
     children: [
       {
         path: 'details/:id',
-        element: <Details />,
+        element: (
+          <BonusesProvider>
+            <Details />
+          </BonusesProvider>
+        ),
       },
       {
         path: 'search',

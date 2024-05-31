@@ -17,6 +17,8 @@ import Footer from '@/widgets/Footer';
 import { useAppSelector } from '@/store/hooks/redux';
 import ModalZeroBalance from './ui/ModalZeroBalance';
 import { gamesHeaderTypeCover } from '@/app/config/app';
+import { getBonusTemplatesApi } from '@/app/api/bonuses/bonusesApi';
+import { AlertModal, IAlert } from '@/entities/AlertModal';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
@@ -24,7 +26,31 @@ const Details = () => {
   const { isAuth } = useAuthProvider();
   const router = useRouter();
   const { doOpenModal, doCloseModals } = useModal();
+  const { bonuses } = useAppSelector((state) => state.bonusesSlice);
+  const { settings } = useAppSelector((state) => state.settingsReducer);
   const { user } = useAppSelector((state) => state.userReducer);
+  const alertData: IAlert = {
+    title: 'Внимание!',
+    text: (
+      <div>
+        <div className="mb-[5px]">У вас есть 209 Free Spins в игре Starburst XXXtreme.</div>
+        <div>Отыграйте их или откажитесь от бонуса.</div>
+      </div>
+    ),
+    buttons: [
+      {
+        type: 'outlined',
+        text: 'Отказаться',
+        onClick: doCloseModals,
+      },
+      {
+        type: 'contained',
+        text: 'Играть',
+        onClick: () => {},
+      },
+    ],
+    close: doCloseModals,
+  };
 
   useEffect(() => {
     const getGameById = async () => {
@@ -32,8 +58,9 @@ const Details = () => {
       setGame(data?.game);
     };
 
+    void getBonusTemplatesApi();
     void getGameById();
-  }, []);
+  }, [id]);
 
   const openDemoPlay = () => {
     router.push('/play/demo/' + id);
@@ -50,6 +77,20 @@ const Details = () => {
     }
 
     doOpenModal('login');
+  };
+
+  const openBonus = () => {
+    if (settings) {
+      if (settings.bonus.max_avail_bonuses !== 0 && bonuses) {
+        if (bonuses.length >= settings.bonus.max_avail_bonuses) {
+          doOpenModal('alert');
+        } else {
+          router.push(`/bonus/${game?.id}`);
+        }
+      } else {
+        router.push(`/bonus/${game?.id}`);
+      }
+    }
   };
 
   // TODOSELF: *для себя* сделать лоадер и дописать потом когда будет админка игры
@@ -100,7 +141,11 @@ const Details = () => {
         {!game?.has_bonus ? (
           ''
         ) : (
-          <Button elType="outlined" className={classNames(styles.button, styles.button_big)}>
+          <Button
+            elType="outlined"
+            className={classNames(styles.button, styles.button_big)}
+            onClick={openBonus}
+          >
             <Icons icon="settings" />
             <span>Сконфигурировать бонус</span>
           </Button>
@@ -118,6 +163,7 @@ const Details = () => {
         </div>
       </div>
       <Footer isHidden={!isAuth} />
+      <AlertModal {...alertData} />
       <ModalZeroBalance close={doCloseModals} gameId={game?.id} />
     </div>
   );

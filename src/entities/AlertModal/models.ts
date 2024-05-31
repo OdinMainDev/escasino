@@ -1,6 +1,8 @@
+import { ReactNode } from 'react';
+
 export interface IAlert {
   title?: string;
-  text?: string;
+  text?: ReactNode | string;
   close?: () => void;
   buttons?: IAlertButton[];
 }
