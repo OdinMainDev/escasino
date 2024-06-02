@@ -10,7 +10,8 @@ import Loader from '@/shared/ui/Loader';
 import Button from '@/shared/ui/Button';
 import { useRouter } from '@/shared/helpers/navigation';
 import { TabItem } from '@/entities/TabItem';
-import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperClass from 'swiper';
 import './Bonus.scss';
 import { getBonusTemplatesApi } from '@/app/api/bonuses/bonusesApi';
 import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
@@ -30,18 +31,6 @@ const Bonus = () => {
   };
 
   useEffect(() => {
-    const getBonusesTemplates = async () => {
-      try {
-        const { bonusesTemplates } = await getBonusTemplatesApi();
-        setBonusesTemplates(bonusesTemplates);
-      } catch (e) {
-        /* empty */
-      }
-    };
-    void getBonusesTemplates();
-  }, []);
-
-  useEffect(() => {
     if (id) {
       const getGameById = async () => {
         setLoading(true);
@@ -49,9 +38,25 @@ const Bonus = () => {
         setLoading(false);
         setGame(data?.game);
       };
-
       void getGameById();
     }
+
+    const getBonusesTemplates = async () => {
+      try {
+        const { bonusesTemplates } = await getBonusTemplatesApi();
+        if (id) {
+          setBonusesTemplates(
+            bonusesTemplates.filter((item) => item.game_ids.includes(Number(id))),
+          );
+        } else {
+          setBonusesTemplates(bonusesTemplates);
+        }
+      } catch (e) {
+        /* empty */
+      }
+    };
+
+    void getBonusesTemplates();
   }, [id]);
 
   return (
@@ -139,7 +144,7 @@ const Bonus = () => {
                       slidesPerView={5}
                       centeredSlides
                       lazyPreloadPrevNext={5}
-                      loop
+                      loop={bonusesTemplates.length >= 5}
                       direction="vertical"
                     >
                       {bonusesTemplates?.map((item, index) => (
@@ -167,7 +172,7 @@ const Bonus = () => {
                       slidesPerView={5}
                       centeredSlides
                       lazyPreloadPrevNext={5}
-                      loop
+                      loop={bonusesTemplates.length >= 5}
                       direction="vertical"
                     >
                       {bonusesTemplates?.map((item, index) => (
