@@ -15,11 +15,16 @@ import SwiperClass from 'swiper';
 import './Bonus.scss';
 import { getBonusTemplatesApi } from '@/app/api/bonuses/bonusesApi';
 import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
+import Game from '@/entities/Game/ui/Game';
+import Slider from 'react-slick';
+import { settings } from '../constants';
+import { getGamesAllApi } from '@/app/api/games/getGamesAll';
 
 const Bonus = () => {
   const { id } = useParams();
   const [game, setGame] = useState<IGame | null>(null);
   const [bonusesTemplates, setBonusesTemplates] = useState<IBonusTemplate[]>([]);
+  const [games, setGames] = useState<IGame[]>([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const tabs = ['Деньги', 'FS'];
@@ -59,6 +64,16 @@ const Bonus = () => {
     void getBonusesTemplates();
   }, [id]);
 
+  useEffect(() => {
+    const getAllGames = async () => {
+      const allGames = await getGamesAllApi();
+      if (allGames.games) {
+        setGames(allGames.games);
+      }
+    };
+    void getAllGames();
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -89,10 +104,25 @@ const Bonus = () => {
               <div className={styles.game}>
                 <img src={PlaceholderImage} alt="without_game" className={styles.game_image} />
                 <div className={styles.game_title}>Выберите игру</div>
-                <Button elType="outlined" className="w-[100%]" onClick={() => router.push('/')}>
+                <Button
+                  elType="outlined"
+                  className="w-[100%] mb-[20px]"
+                  onClick={() => router.push('/')}
+                >
                   Изменить игру
                 </Button>
-                <div>{bonusesTemplates[activeIndex] && bonusesTemplates[activeIndex].id}</div>
+                {bonusesTemplates[activeIndex] && games ? (
+                  <Slider className={styles.list} {...settings}>
+                    {games
+                      ?.filter((item) => bonusesTemplates[activeIndex].game_ids.includes(item.id))
+                      .slice(0, 3)
+                      .map((item) => (
+                        <div className={styles.item} key={item.id}>
+                          <Game game={item} />
+                        </div>
+                      ))}
+                  </Slider>
+                ) : null}
               </div>
             )}
             <div className={styles.settings}>

@@ -160,3 +160,19 @@
     margin-bottom: 18px;
   }
 }
+
+.list {
+  padding: 0 16px;
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  overflow-x: scroll;
+  &::-webkit-scrollbar {
+    height: 0;
+  }
+}
+
+.item {
+  padding: 0 5px;
+  width: 300px;
+}
