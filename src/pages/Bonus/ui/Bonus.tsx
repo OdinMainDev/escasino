@@ -14,13 +14,18 @@ import { getBonusTemplatesApi } from '@/app/api/bonuses/bonusesApi';
 import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
 import { getGamesAllApi } from '@/app/api/games/getGamesAll';
 import { BonuesFS, BonusesGames, BonusesMoney } from '@/features/BonusesTabs';
+import { useAppSelector } from '@/store/hooks/redux';
+import { AlertModal } from '@/entities/AlertModal';
+import { useModal } from '@/app/providers/ModalProvider';
 
 const Bonus = () => {
   const { id } = useParams();
+  const { user } = useAppSelector((state) => state.userReducer);
   const [game, setGame] = useState<IGame | null>(null);
   const [bonusesTemplates, setBonusesTemplates] = useState<IBonusTemplate[]>([]);
   const [games, setGames] = useState<IGame[]>([]);
   const [filtredGames, setFiltredGames] = useState<IGame[]>([]);
+  const { doOpenModal, doCloseModals } = useModal();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const tabs = ['Деньги', 'FS'];
@@ -145,14 +150,39 @@ const Bonus = () => {
               <div className="flex items-center gap-[16px]">
                 <div className={styles.footer_info}>
                   <div className={styles.footer_label}>Сумма депозита</div>
-                  <div className={styles.footer_value}>500.00 ₽</div>
+                  <div className={styles.footer_value}>
+                    {user?.balance.formatted_balance_real} {user?.balance.currency}
+                  </div>
                 </div>
-                <Button className="flex-1 uppercase">Пополнить</Button>
+                <Button
+                  className="flex-1 uppercase"
+                  onClick={() => {
+                    doOpenModal('alert');
+                  }}
+                >
+                  Добавить
+                </Button>
               </div>
             </div>
           </>
         )}
       </div>
+      <AlertModal
+        close={doCloseModals}
+        title="Выдерите способ оплаты"
+        buttons={[
+          {
+            text: 'Добавить в корзину',
+            type: 'contained',
+            onClick: () => {},
+          },
+          {
+            text: 'Оформить сейчас',
+            type: 'outlined',
+            onClick: () => {},
+          },
+        ]}
+      />
     </div>
   );
 };
