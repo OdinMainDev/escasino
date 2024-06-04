@@ -1,11 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  URLSearchParamsInit,
-  createSearchParams,
-  useLocation,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useCallback, useMemo } from 'react';
 import { defaultLanguages } from '@/app/config/locales';
 
@@ -74,12 +68,23 @@ export function useRouter() {
       }
 
       const { pathname, query } = pathOrObj;
-      const searchParams = query
-        ? `?${createSearchParams(query as URLSearchParamsInit).toString()}`
-        : '';
+      const searchParams = new URLSearchParams();
+
+      if (query) {
+        Object.keys(query).forEach((key) => {
+          const value = query[key];
+          if (Array.isArray(value)) {
+            value.forEach((val) => searchParams.append(`${key}[]`, val.toString()));
+          } else if (value !== undefined && value !== null) {
+            searchParams.append(key, value.toString());
+          }
+        });
+      }
+
+      const search = searchParams.toString();
       navigate({
         pathname: `${lang ? '/' + lang : ''}${pathname}`,
-        search: searchParams,
+        search: search ? `?${search}` : '',
       });
       return;
     },

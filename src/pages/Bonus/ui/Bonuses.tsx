@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import styles from './Bonus.module.scss';
+import styles from './Bonuses.module.scss';
 import GoBackButton from '@/shared/ui/GoBackButton';
 import Icons from '@/shared/ui/Icons';
 import { useCallback, useEffect, useState } from 'react';
@@ -33,7 +33,8 @@ const Bonus = () => {
 
   const moneyChangeHandler = useCallback(
     (moneyTemplate: IBonusTemplate) => {
-      setFiltredGames(games.filter((item) => moneyTemplate.game_ids.includes(item.id)));
+      const filtredGames = games.filter((item) => moneyTemplate.game_ids.includes(item.id));
+      setFiltredGames(filtredGames);
     },
     [games],
   );
@@ -41,7 +42,8 @@ const Bonus = () => {
   const fsChangeHandler = useCallback(
     (betTemplate: IBonusTemplate, fsTemplate: IBonusTemplate) => {
       const result = [...new Set([...betTemplate.game_ids, ...fsTemplate.game_ids])];
-      setFiltredGames(games.filter((item) => result.includes(item.id)));
+      const filtredGames = games.filter((item) => result.includes(item.id));
+      setFiltredGames(filtredGames);
     },
     [games],
   );
@@ -55,6 +57,8 @@ const Bonus = () => {
         setGame(data?.game);
       };
       void getGameById();
+    } else {
+      setGame(null);
     }
   }, [id]);
 
@@ -116,7 +120,14 @@ const Bonus = () => {
                 <Button
                   elType="outlined"
                   className="w-[100%] mb-[20px]"
-                  onClick={() => router.push('/')}
+                  onClick={() =>
+                    router.push({
+                      pathname: '/bonus/games',
+                      query: {
+                        game_ids: filtredGames.map((item) => item.id.toString()),
+                      },
+                    })
+                  }
                 >
                   Изменить игру
                 </Button>

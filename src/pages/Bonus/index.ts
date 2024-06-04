@@ -1,3 +1,4 @@
-import Bonus from './ui/Bonus';
+import Bonuses from './ui/Bonuses';
+import BonusesGames from './ui/BonusesGames';
 
-export { Bonus };
+export { Bonuses, BonusesGames };

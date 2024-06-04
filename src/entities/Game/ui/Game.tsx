@@ -1,13 +1,14 @@
 import { IGame } from '@/shared/models/interfaces/game';
 import styles from './Game.module.scss';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
+import { BaseHTMLAttributes } from 'react';
 
-interface IProps {
+interface IProps extends BaseHTMLAttributes<HTMLElement> {
   game: IGame;
 }
-const Game = ({ game }: IProps) => {
+const Game = ({ game, ...otherProps }: IProps) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} {...otherProps}>
       {game.image ? (
         <img className={styles.img} alt={game.name} src={game.image} />
       ) : (
