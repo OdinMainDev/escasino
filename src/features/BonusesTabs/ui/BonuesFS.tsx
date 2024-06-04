@@ -6,22 +6,25 @@ import classNames from 'classnames';
 
 interface IProps {
   bonusesTemplates: IBonusTemplate[];
+  fsChangeHandler: (betTemplate: IBonusTemplate, fsTemplate: IBonusTemplate) => void;
 }
 
-const BonuesFS = ({ bonusesTemplates }: IProps) => {
-  const [selectedBet, setSelectedBet] = useState<number>(
-    bonusesTemplates.length > 0 ? bonusesTemplates[0].configurator.bet_amount : 0,
-  );
-  const [selectedSpins, setSelectedSpins] = useState<number>(
-    bonusesTemplates.length > 0 ? bonusesTemplates[0].spins_count : 0,
-  );
+const BonuesFS = ({ bonusesTemplates, fsChangeHandler }: IProps) => {
+  const [selectedBetIndex, setSelectedBetIndex] = useState<number>(0);
+  const [selectedSpinsIndex, setSelectedSpinsIndex] = useState<number>(0);
 
   const selectBet = (swiper: SwiperClass) => {
-    setSelectedBet(bonusesTemplates[swiper.activeIndex].configurator.bet_amount);
+    if (bonusesTemplates.length > 0) {
+      setSelectedBetIndex(swiper.activeIndex);
+      fsChangeHandler(bonusesTemplates[swiper.activeIndex], bonusesTemplates[selectedSpinsIndex]);
+    }
   };
 
   const selectSpins = (swiper: SwiperClass) => {
-    setSelectedSpins(bonusesTemplates[swiper.activeIndex].spins_count);
+    if (bonusesTemplates.length > 0) {
+      setSelectedSpinsIndex(swiper.activeIndex);
+      fsChangeHandler(bonusesTemplates[selectedBetIndex], bonusesTemplates[swiper.activeIndex]);
+    }
   };
 
   return (
@@ -41,12 +44,13 @@ const BonuesFS = ({ bonusesTemplates }: IProps) => {
           lazyPreloadPrevNext={5}
           loop={bonusesTemplates.length >= 5}
           onSlideChange={selectBet}
+          onSwiper={selectBet}
           direction="vertical"
         >
           {bonusesTemplates?.map((item, index) => (
             <SwiperSlide
               className={classNames(styles.settings_data, {
-                [styles.active]: true,
+                [styles.active]: selectedBetIndex === index,
               })}
               key={index}
             >
@@ -78,10 +82,16 @@ const BonuesFS = ({ bonusesTemplates }: IProps) => {
           lazyPreloadPrevNext={5}
           loop={bonusesTemplates.length >= 5}
           direction="vertical"
+          onSwiper={selectSpins}
           onSlideChange={selectSpins}
         >
           {bonusesTemplates?.map((item, index) => (
-            <SwiperSlide className={styles.settings_data} key={index}>
+            <SwiperSlide
+              className={classNames(styles.settings_data, {
+                [styles.active]: selectedSpinsIndex === index,
+              })}
+              key={index}
+            >
               {item.spins_count}
             </SwiperSlide>
           ))}
@@ -103,7 +113,12 @@ const BonuesFS = ({ bonusesTemplates }: IProps) => {
         </svg>
         <input
           className={styles.settings_input}
-          value={selectedBet * selectedSpins}
+          value={
+            bonusesTemplates.length > 0
+              ? bonusesTemplates[selectedBetIndex].configurator.bet_amount *
+                bonusesTemplates[selectedSpinsIndex].spins_count
+              : 0
+          }
           readOnly
           disabled
         />

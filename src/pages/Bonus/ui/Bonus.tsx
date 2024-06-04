@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import styles from './Bonus.module.scss';
 import GoBackButton from '@/shared/ui/GoBackButton';
 import Icons from '@/shared/ui/Icons';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getGameApi } from '@/app/api/games/getGameById';
 import { IGame } from '@/shared/models/interfaces/game';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
@@ -10,7 +10,6 @@ import Loader from '@/shared/ui/Loader';
 import Button from '@/shared/ui/Button';
 import { useRouter } from '@/shared/helpers/navigation';
 import { TabItem } from '@/entities/TabItem';
-import SwiperClass from 'swiper';
 import { getBonusTemplatesApi } from '@/app/api/bonuses/bonusesApi';
 import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
 import { getGamesAllApi } from '@/app/api/games/getGamesAll';
@@ -21,15 +20,26 @@ const Bonus = () => {
   const [game, setGame] = useState<IGame | null>(null);
   const [bonusesTemplates, setBonusesTemplates] = useState<IBonusTemplate[]>([]);
   const [games, setGames] = useState<IGame[]>([]);
+  const [filtredGames, setFiltredGames] = useState<IGame[]>([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const tabs = ['Деньги', 'FS'];
-  const [activeIndex, setActiveIndex] = useState(0);
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
-  const handleSlideChange = (swiper: SwiperClass) => {
-    setActiveIndex(swiper.activeIndex);
-  };
+  const moneyChangeHandler = useCallback(
+    (moneyTemplate: IBonusTemplate) => {
+      setFiltredGames(games.filter((item) => moneyTemplate.game_ids.includes(item.id)));
+    },
+    [games],
+  );
+
+  const fsChangeHandler = useCallback(
+    (betTemplate: IBonusTemplate, fsTemplate: IBonusTemplate) => {
+      const result = [...new Set([...betTemplate.game_ids, ...fsTemplate.game_ids])];
+      setFiltredGames(games.filter((item) => result.includes(item.id)));
+    },
+    [games],
+  );
 
   useEffect(() => {
     if (id) {
@@ -41,23 +51,6 @@ const Bonus = () => {
       };
       void getGameById();
     }
-
-    const getBonusesTemplates = async () => {
-      try {
-        const { bonusesTemplates } = await getBonusTemplatesApi();
-        if (id) {
-          setBonusesTemplates(
-            bonusesTemplates.filter((item) => item.game_ids.includes(Number(id))),
-          );
-        } else {
-          setBonusesTemplates(bonusesTemplates);
-        }
-      } catch (e) {
-        /* empty */
-      }
-    };
-
-    void getBonusesTemplates();
   }, [id]);
 
   useEffect(() => {
@@ -67,8 +60,23 @@ const Bonus = () => {
         setGames(allGames.games);
       }
     };
+    const getBonusesTemplates = async () => {
+      try {
+        const { bonusesTemplates } = await getBonusTemplatesApi();
+        setBonusesTemplates(bonusesTemplates);
+      } catch (e) {
+        /* empty */
+      }
+    };
     void getAllGames();
+    void getBonusesTemplates();
   }, []);
+
+  useEffect(() => {
+    if (games.length > 0 && bonusesTemplates.length > 0) {
+      moneyChangeHandler(bonusesTemplates[0]);
+    }
+  }, [bonusesTemplates, games, moneyChangeHandler]);
 
   return (
     <div className={styles.container}>
@@ -107,13 +115,7 @@ const Bonus = () => {
                 >
                   Изменить игру
                 </Button>
-                {bonusesTemplates[activeIndex] && games ? (
-                  <BonusesGames
-                    games={games.filter((item) =>
-                      bonusesTemplates[activeIndex].game_ids.includes(item.id),
-                    )}
-                  />
-                ) : null}
+                <BonusesGames games={filtredGames} />
               </div>
             )}
             <div className={styles.settings}>
@@ -131,11 +133,11 @@ const Bonus = () => {
               </div>
               {selectedTab === 'Деньги' ? (
                 <BonusesMoney
-                  handleSlideChange={handleSlideChange}
+                  moneyChangeHandler={moneyChangeHandler}
                   bonusesTemplates={bonusesTemplates}
                 />
               ) : (
-                <BonuesFS bonusesTemplates={bonusesTemplates} />
+                <BonuesFS bonusesTemplates={bonusesTemplates} fsChangeHandler={fsChangeHandler} />
               )}
             </div>
             <div className={styles.footer}>

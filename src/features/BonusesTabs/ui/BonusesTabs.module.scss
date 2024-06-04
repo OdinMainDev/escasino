@@ -37,7 +37,7 @@
   }
 
   &_data {
-    font-weight: 600;
+    font-weight: 400;
     font-size: 14px;
     line-height: 143%;
     letter-spacing: 0.02em;
@@ -46,6 +46,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    &.active {
+      font-weight: 600;
+    }
   }
 
   &_labels {
