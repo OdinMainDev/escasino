@@ -16,12 +16,18 @@ export interface IBonusesList {
   id: number;
 }
 
+export interface IBonusConfigurator {
+  currency: string;
+  bet_amount: number;
+}
+
 export interface IBonusTemplate {
   id: number;
   spins_count: number;
   bonus_percent: number;
   game_ids: number[];
   bet_list: IBetList[];
+  configurator: IBonusConfigurator;
   life_time: number;
   is_cancel: boolean;
   is_real_money_only: boolean;

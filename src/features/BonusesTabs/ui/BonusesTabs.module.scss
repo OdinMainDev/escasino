@@ -109,3 +109,11 @@
     margin-bottom: 24px;
   }
 }
+
+.games {
+  width: 100%;
+  height: 100%;
+  &_item {
+    width: 300px;
+  }
+}

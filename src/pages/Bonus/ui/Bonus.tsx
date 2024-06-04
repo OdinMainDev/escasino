@@ -10,13 +10,11 @@ import Loader from '@/shared/ui/Loader';
 import Button from '@/shared/ui/Button';
 import { useRouter } from '@/shared/helpers/navigation';
 import { TabItem } from '@/entities/TabItem';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperClass from 'swiper';
 import { getBonusTemplatesApi } from '@/app/api/bonuses/bonusesApi';
 import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
-import Game from '@/entities/Game/ui/Game';
 import { getGamesAllApi } from '@/app/api/games/getGamesAll';
-import { BonuesFS, BonusesMoney } from '@/features/BonusesTabs';
+import { BonuesFS, BonusesGames, BonusesMoney } from '@/features/BonusesTabs';
 
 const Bonus = () => {
   const { id } = useParams();
@@ -110,25 +108,11 @@ const Bonus = () => {
                   Изменить игру
                 </Button>
                 {bonusesTemplates[activeIndex] && games ? (
-                  <Swiper
-                    className={styles.games}
-                    spaceBetween={10}
-                    autoplay={{
-                      delay: 1,
-                    }}
-                    speed={500}
-                    lazyPreloadPrevNext={5}
-                    slidesPerView={2}
-                    loop
-                  >
-                    {games
-                      ?.filter((item) => bonusesTemplates[activeIndex].game_ids.includes(item.id))
-                      .map((item) => (
-                        <SwiperSlide className={styles.games_item} key={item.id}>
-                          <Game game={item} />
-                        </SwiperSlide>
-                      ))}
-                  </Swiper>
+                  <BonusesGames
+                    games={games.filter((item) =>
+                      bonusesTemplates[activeIndex].game_ids.includes(item.id),
+                    )}
+                  />
                 ) : null}
               </div>
             )}
