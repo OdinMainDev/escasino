@@ -15,15 +15,17 @@ const BonuesFS = ({ bonusesTemplates, fsChangeHandler }: IProps) => {
 
   const selectBet = (swiper: SwiperClass) => {
     if (bonusesTemplates.length > 0) {
-      setSelectedBetIndex(swiper.activeIndex);
-      fsChangeHandler(bonusesTemplates[swiper.activeIndex], bonusesTemplates[selectedSpinsIndex]);
+      const realIndex = swiper.realIndex;
+      setSelectedBetIndex(realIndex);
+      fsChangeHandler(bonusesTemplates[realIndex], bonusesTemplates[selectedSpinsIndex]);
     }
   };
 
   const selectSpins = (swiper: SwiperClass) => {
     if (bonusesTemplates.length > 0) {
-      setSelectedSpinsIndex(swiper.activeIndex);
-      fsChangeHandler(bonusesTemplates[selectedBetIndex], bonusesTemplates[swiper.activeIndex]);
+      const realIndex = swiper.realIndex;
+      setSelectedSpinsIndex(realIndex);
+      fsChangeHandler(bonusesTemplates[selectedBetIndex], bonusesTemplates[realIndex]);
     }
   };
 

@@ -23,7 +23,7 @@ const BonusesGames = ({ games }: IProps) => {
       modules={[Autoplay]}
       lazyPreloadPrevNext={5}
       slidesPerView={2}
-      loop
+      loop={games.length > 2}
     >
       {games.map((item) => (
         <SwiperSlide className={styles.games_item} key={item.id}>

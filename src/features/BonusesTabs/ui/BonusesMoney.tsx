@@ -12,8 +12,8 @@ const BonusesMoney = ({ bonusesTemplates, moneyChangeHandler }: IProps) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const selectMoney = (swiper: SwiperClass) => {
-    moneyChangeHandler(bonusesTemplates[swiper.activeIndex]);
-    setActiveIndex(swiper.activeIndex);
+    moneyChangeHandler(bonusesTemplates[swiper.realIndex]);
+    setActiveIndex(swiper.realIndex);
   };
   return (
     <div>

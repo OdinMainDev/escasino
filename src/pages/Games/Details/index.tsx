@@ -17,7 +17,6 @@ import Footer from '@/widgets/Footer';
 import { useAppSelector } from '@/store/hooks/redux';
 import ModalZeroBalance from './ui/ModalZeroBalance';
 import { gamesHeaderTypeCover } from '@/app/config/app';
-import { getBonusTemplatesApi } from '@/app/api/bonuses/bonusesApi';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
 
 const Details = () => {
@@ -58,7 +57,6 @@ const Details = () => {
       setGame(data?.game);
     };
 
-    void getBonusTemplatesApi();
     void getGameById();
   }, [id]);
 
