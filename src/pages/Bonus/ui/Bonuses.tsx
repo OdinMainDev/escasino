@@ -87,6 +87,20 @@ const Bonus = () => {
     }
   }, [bonusesTemplates, games, moneyChangeHandler]);
 
+  const navigateBySelectedGame = (game_id: number) => {
+    const templates = bonusesTemplates.filter((item) => item.game_ids.includes(game_id));
+    const combinedGameIds = templates.reduce((acc, obj) => {
+      return acc.concat(obj.game_ids);
+    }, [] as number[]);
+    const uniqueGameIds = [...new Set(combinedGameIds)];
+    router.push({
+      pathname: '/bonus/games',
+      query: {
+        game_ids: uniqueGameIds.map((item) => item.toString()),
+      },
+    });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -110,7 +124,11 @@ const Bonus = () => {
                     <img src={PlaceholderImage} alt={game?.name} className={styles.game_image} />
                   )}
                   <div className={styles.game_title}>{game?.name}</div>
-                  <Button elType="outlined" className="w-[100%]" onClick={() => router.push('/')}>
+                  <Button
+                    elType="outlined"
+                    className="w-[100%]"
+                    onClick={() => navigateBySelectedGame(game.id)}
+                  >
                     Изменить игру
                   </Button>
                 </div>

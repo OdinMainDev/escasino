@@ -28,6 +28,7 @@ const Details = () => {
   const { bonuses } = useAppSelector((state) => state.bonusesSlice);
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const { user } = useAppSelector((state) => state.userReducer);
+
   const alertData: IAlert = {
     title: 'Внимание!',
     text: (
@@ -52,12 +53,14 @@ const Details = () => {
   };
 
   useEffect(() => {
-    const getGameById = async () => {
-      const data = await getGameApi(Number(id));
-      setGame(data?.game);
-    };
+    if (Number(id) > 0) {
+      const getGameById = async () => {
+        const data = await getGameApi(Number(id));
+        setGame(data?.game);
+      };
 
-    void getGameById();
+      void getGameById();
+    }
   }, [id]);
 
   const openDemoPlay = () => {
