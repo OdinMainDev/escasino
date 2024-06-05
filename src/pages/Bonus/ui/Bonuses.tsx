@@ -28,7 +28,7 @@ const Bonus = () => {
   const { doOpenModal, doCloseModals } = useModal();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const tabs = ['Деньги', 'FS'];
+  const tabs = ['FS', 'Деньги'];
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
 
   const moneyChangeHandler = useCallback(
@@ -101,39 +101,41 @@ const Bonus = () => {
           </div>
         ) : (
           <>
-            {game ? (
-              <div className={styles.game}>
-                {game?.image ? (
-                  <img src={game.image} alt={game.name} className={styles.game_image} />
-                ) : (
-                  <img src={PlaceholderImage} alt={game?.name} className={styles.game_image} />
-                )}
-                <div className={styles.game_title}>{game?.name}</div>
-                <Button elType="outlined" className="w-[100%]" onClick={() => router.push('/')}>
-                  Изменить игру
-                </Button>
-              </div>
-            ) : (
-              <div className={styles.game}>
-                <img src={PlaceholderImage} alt="without_game" className={styles.game_image} />
-                <div className={styles.game_title}>Выберите игру</div>
-                <Button
-                  elType="outlined"
-                  className="w-[100%] mb-[20px]"
-                  onClick={() =>
-                    router.push({
-                      pathname: '/bonus/games',
-                      query: {
-                        game_ids: filtredGames.map((item) => item.id.toString()),
-                      },
-                    })
-                  }
-                >
-                  Изменить игру
-                </Button>
-                <BonusesGames games={filtredGames} />
-              </div>
-            )}
+            {selectedTab !== 'Деньги' ? (
+              game ? (
+                <div className={styles.game}>
+                  {game?.image ? (
+                    <img src={game.image} alt={game.name} className={styles.game_image} />
+                  ) : (
+                    <img src={PlaceholderImage} alt={game?.name} className={styles.game_image} />
+                  )}
+                  <div className={styles.game_title}>{game?.name}</div>
+                  <Button elType="outlined" className="w-[100%]" onClick={() => router.push('/')}>
+                    Изменить игру
+                  </Button>
+                </div>
+              ) : (
+                <div className={styles.game}>
+                  <img src={PlaceholderImage} alt="without_game" className={styles.game_image} />
+                  <div className={styles.game_title}>Выберите игру</div>
+                  <Button
+                    elType="outlined"
+                    className="w-[100%] mb-[20px]"
+                    onClick={() =>
+                      router.push({
+                        pathname: '/bonus/games',
+                        query: {
+                          game_ids: filtredGames.map((item) => item.id.toString()),
+                        },
+                      })
+                    }
+                  >
+                    Изменить игру
+                  </Button>
+                  <BonusesGames games={filtredGames} />
+                </div>
+              )
+            ) : null}
             <div className={styles.settings}>
               <div className={styles.settings_title}>Тип бонуса</div>
               <div className={styles.settings_tabs}>
