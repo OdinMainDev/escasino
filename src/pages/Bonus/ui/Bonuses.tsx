@@ -19,11 +19,13 @@ import { AlertModal, IAlert } from '@/entities/AlertModal';
 import { useModal } from '@/app/providers/ModalProvider';
 import { addToCartBonuses } from '@/store/slices/cartBonusesSlice';
 import successIcon from '@/app/assets/images/success.svg';
+import { ISettings } from '@/shared/models/interfaces/settings';
 
 const Bonus = () => {
   const { id } = useParams();
   const { user } = useAppSelector((state) => state.userReducer);
   const { depositAmount } = useAppSelector((state) => state.cartBonusesSlice);
+  const { settings } = useAppSelector((state) => state.settingsReducer);
 
   const [game, setGame] = useState<IGame | null>(null);
   const [bonusesTemplates, setBonusesTemplates] = useState<IBonusTemplate[]>([]);
@@ -32,7 +34,7 @@ const Bonus = () => {
   const { doOpenModal, doCloseModals } = useModal();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const tabs = ['FS', 'Деньги'];
+  const [tabs, setTabs] = useState(getBonusArray(settings));
   const [selectedTab, setSelectedTab] = useState(tabs[0]);
   const [selectedTemplate, setSelectedTemplate] = useState<IBonusTemplate | null>(null);
   const dispatch = useAppDispatch();
@@ -43,7 +45,6 @@ const Bonus = () => {
         text: 'Добавить в корзину',
         type: 'contained',
         onClick: () => {
-          console.log(selectedTemplate);
           if (selectedTemplate) {
             addToBasket();
             successBonusAddedModal();
@@ -61,6 +62,23 @@ const Bonus = () => {
     ],
   });
 
+  function getBonusArray(settings: ISettings | null) {
+    if (settings) {
+      const isFreespinsDisabled = settings?.bonus?.is_freespins_disabled;
+      const isMoneyDisabled = settings?.bonus?.is_money_disabled;
+      if (isFreespinsDisabled && isMoneyDisabled) {
+        return [];
+      }
+      if (isFreespinsDisabled) {
+        return ['Деньги'];
+      }
+      if (isMoneyDisabled) {
+        return ['FS'];
+      }
+    }
+    return ['FS', 'Деньги'];
+  }
+
   const moneyChangeHandler = useCallback(
     (moneyTemplate: IBonusTemplate) => {
       const filtredGames = games.filter((item) => moneyTemplate.game_ids.includes(item.id));
@@ -74,6 +92,12 @@ const Bonus = () => {
     },
     [bonusesTemplates, games],
   );
+
+  useEffect(() => {
+    if (settings) {
+      setTabs(getBonusArray(settings));
+    }
+  }, [setTabs, settings]);
 
   const openGameErrorModal = () => {
     setAlertModalData({
