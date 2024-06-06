@@ -341,6 +341,7 @@ const Bonus = () => {
                 <BonusesFS
                   bonusesTemplates={bonusesTemplates}
                   fsChangeHandler={bonusChangeHandler}
+                  gameId={selectedGame ? selectedGame.id : undefined}
                 />
               )}
             </div>
