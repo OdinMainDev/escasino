@@ -21,10 +21,20 @@ export interface IBonusConfigurator {
   bet_amount: number;
 }
 
+export interface IBonusSetiings {
+  currency: string;
+  min_amount: number;
+  max_amount: number;
+  max_bet_amount: number;
+  max_win_x: number;
+  max_win: number;
+}
+
 export interface IBonusTemplate {
   id: number;
   spins_count: number;
   bonus_percent: number;
+  bonus_settings: IBonusSetiings;
   game_ids: number[];
   bet_list: IBetList[];
   configurator: IBonusConfigurator;

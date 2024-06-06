@@ -29,7 +29,7 @@ import Currencies from '@/pages/Wallet/Currencies';
 import LanguageGuard from './providers/LanguageGuard';
 import GlobalModals from './providers/GlobalModals';
 import { AuthSocialVk } from '@/pages/Auth';
-import { Bonuses, BonusesGames } from '@/pages/Bonus';
+import { Bonuses, BonusesCart, BonusesGames } from '@/pages/Bonus';
 import BonusesProvider from './providers/pages/BonusesProvider';
 
 const availRoutes: RouteObject[] = [
@@ -63,6 +63,10 @@ const availRoutes: RouteObject[] = [
       {
         path: 'games',
         element: <BonusesGames />,
+      },
+      {
+        path: 'cart',
+        element: <BonusesCart />,
       },
     ],
   },

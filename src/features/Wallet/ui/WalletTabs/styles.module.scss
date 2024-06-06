@@ -10,6 +10,11 @@
     svg {
       margin-right: 10px;
     }
+    &:hover .bonuese_count {
+      color: var(--primary);
+      background-color: var(--Text-primary);
+      border: 1px solid var(--primary)
+    }
    }
 }
 
@@ -25,7 +30,7 @@
   font-size: 14px;
   font-weight: 600;
   right: -13px;
-  background-color: #FFF;
+  background-color: var(--primary);
   border: 1px solid var(--Text-primary)
 
 }

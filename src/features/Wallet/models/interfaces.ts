@@ -8,10 +8,17 @@ export interface IProviderLayout {
   [key: string]: string;
 }
 
+export interface IBonusConfigurator {
+  type: 'freespins' | 'money';
+  id: number;
+  game_id?: number;
+}
+
 export interface ICreatePaymentData {
   provider: number;
   fid: string;
   amount: number;
+  bonuses_configurator: IBonusConfigurator[];
 }
 
 export interface IPaymentTransactionFirst {
