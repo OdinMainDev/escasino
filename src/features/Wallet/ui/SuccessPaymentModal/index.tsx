@@ -13,7 +13,7 @@ import Button from '@/shared/ui/Button';
 import { useEffect, useRef, useState } from 'react';
 import Loader from '@/shared/ui/Loader';
 
-import successIcon from '../../images/success.svg';
+import successIcon from '@/app/assets/images/success.svg';
 import { getTransactionType } from '../../helpers/payment';
 import classNames from 'classnames';
 import {

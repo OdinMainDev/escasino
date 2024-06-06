@@ -1,7 +1,7 @@
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import styles from './BonusesTabs.module.scss';
 import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 interface IProps {
@@ -12,12 +12,24 @@ interface IProps {
 const BonuesFS = ({ bonusesTemplates, fsChangeHandler }: IProps) => {
   const [selectedBetIndex, setSelectedBetIndex] = useState<number>(0);
   const [selectedSpinsIndex, setSelectedSpinsIndex] = useState<number>(0);
+  const [betTemplates, setBetTemplates] = useState<IBonusTemplate[]>(bonusesTemplates);
+  const [spinsTemplates, setSpinsTemplates] = useState<IBonusTemplate[]>(bonusesTemplates);
+
+  useEffect(() => {
+    setBetTemplates(bonusesTemplates);
+    setSpinsTemplates(bonusesTemplates);
+  }, [bonusesTemplates]);
 
   const selectBet = (swiper: SwiperClass) => {
     if (bonusesTemplates.length > 0) {
       const realIndex = swiper.realIndex;
       setSelectedBetIndex(realIndex);
-      fsChangeHandler(bonusesTemplates[realIndex], bonusesTemplates[selectedSpinsIndex]);
+      setSpinsTemplates(
+        bonusesTemplates.filter(
+          (item) => item.spins_count === bonusesTemplates[realIndex].spins_count,
+        ),
+      );
+      fsChangeHandler(betTemplates[realIndex], spinsTemplates[selectedSpinsIndex]);
     }
   };
 
@@ -25,7 +37,13 @@ const BonuesFS = ({ bonusesTemplates, fsChangeHandler }: IProps) => {
     if (bonusesTemplates.length > 0) {
       const realIndex = swiper.realIndex;
       setSelectedSpinsIndex(realIndex);
-      fsChangeHandler(bonusesTemplates[selectedBetIndex], bonusesTemplates[realIndex]);
+      setBetTemplates(
+        bonusesTemplates.filter(
+          (item) =>
+            item.configurator.bet_amount === bonusesTemplates[realIndex].configurator.bet_amount,
+        ),
+      );
+      fsChangeHandler(betTemplates[selectedBetIndex], spinsTemplates[realIndex]);
     }
   };
 
@@ -44,12 +62,11 @@ const BonuesFS = ({ bonusesTemplates, fsChangeHandler }: IProps) => {
           centeredSlides
           className={styles.settings_params}
           lazyPreloadPrevNext={5}
-          loop={bonusesTemplates.length >= 5}
+          loop={betTemplates.length >= 5}
           onSlideChange={selectBet}
-          onSwiper={selectBet}
           direction="vertical"
         >
-          {bonusesTemplates?.map((item, index) => (
+          {betTemplates.map((item, index) => (
             <SwiperSlide
               className={classNames(styles.settings_data, {
                 [styles.active]: selectedBetIndex === index,
@@ -82,12 +99,11 @@ const BonuesFS = ({ bonusesTemplates, fsChangeHandler }: IProps) => {
           centeredSlides
           className={styles.settings_params}
           lazyPreloadPrevNext={5}
-          loop={bonusesTemplates.length >= 5}
+          loop={spinsTemplates.length >= 5}
           direction="vertical"
-          onSwiper={selectSpins}
           onSlideChange={selectSpins}
         >
-          {bonusesTemplates?.map((item, index) => (
+          {spinsTemplates.map((item, index) => (
             <SwiperSlide
               className={classNames(styles.settings_data, {
                 [styles.active]: selectedSpinsIndex === index,
@@ -116,9 +132,9 @@ const BonuesFS = ({ bonusesTemplates, fsChangeHandler }: IProps) => {
         <input
           className={styles.settings_input}
           value={
-            bonusesTemplates.length > 0
-              ? bonusesTemplates[selectedBetIndex].configurator.bet_amount *
-                bonusesTemplates[selectedSpinsIndex].spins_count
+            bonusesTemplates.length > 0 && betTemplates.length > 0 && spinsTemplates.length > 0
+              ? betTemplates[selectedBetIndex].configurator.bet_amount *
+                spinsTemplates[selectedSpinsIndex].spins_count
               : 0
           }
           readOnly

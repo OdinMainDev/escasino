@@ -3,7 +3,7 @@ import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
 import { TabBlock } from '@/entities/TabBlock';
 import { TabItem } from '@/entities/TabItem';
-import { useAppSelector } from '@/store/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { defaultLanguage } from '@/app/config/locales';
 import { createPayment, paymentTransaction } from '@/features/Wallet/api/replenishApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
@@ -34,6 +34,7 @@ import { generateErrorMessages } from '@/features/Wallet/helpers/generateMessage
 import { useModal } from '@/app/providers/ModalProvider';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
 import { useRouter } from '@/shared/helpers/navigation';
+import { setDepositAmount } from '@/store/slices/cartBonusesSlice';
 
 const WalletReplenish = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
@@ -47,9 +48,10 @@ const WalletReplenish = () => {
   );
   const { t } = useTranslation();
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
+  const dispatch = useAppDispatch();
+  const { depositAmount } = useAppSelector((state) => state.cartBonusesSlice);
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
   const [layout, setLayout] = useState<IProviderLayout>({});
-  const [amount, setAmount] = useState<string>('');
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -61,6 +63,7 @@ const WalletReplenish = () => {
   const router = useRouter();
   const { bonuses } = useAppSelector((state) => state.bonusesSlice);
   const { settings } = useAppSelector((state) => state.settingsReducer);
+
   const alertData: IAlert = {
     title: 'Внимание!',
     text: (
@@ -124,7 +127,7 @@ const WalletReplenish = () => {
       const payment: ICreatePaymentData = {
         provider: Number(selectedProvider?.id),
         fid,
-        amount: Number(amount),
+        amount: Number(depositAmount),
         ...layout,
       };
       const { data } = await createPayment(payment);
@@ -386,13 +389,15 @@ const WalletReplenish = () => {
           placeholder="Сумма"
           type="number"
           className="mb-[12px]"
-          value={amount}
+          value={depositAmount}
           isError={checkAmount(
-            Number(amount),
+            Number(depositAmount),
             Number(selectedProvider?.conditions.limit_maximum),
             Number(selectedProvider?.conditions.limit_minimum),
           )}
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={(e) => {
+            dispatch(setDepositAmount(e.target.value));
+          }}
         />
         {selectedProvider && (
           <div className={styles.subtitle}>
@@ -400,7 +405,7 @@ const WalletReplenish = () => {
               selectedProvider.conditions.limit_minimum,
               selectedProvider.conditions.limit_maximum,
               selectedProvider.currency,
-              Number(amount),
+              Number(depositAmount),
             )}
           </div>
         )}
@@ -408,7 +413,7 @@ const WalletReplenish = () => {
       <Button
         disabled={
           !validateData({
-            amount: Number(amount),
+            amount: Number(depositAmount),
             max: Number(selectedProvider?.conditions.limit_maximum),
             min: Number(selectedProvider?.conditions.limit_minimum),
             layout,
@@ -420,7 +425,7 @@ const WalletReplenish = () => {
         Пополнить счет
       </Button>
       {!validateData({
-        amount: Number(amount),
+        amount: Number(depositAmount),
         max: Number(selectedProvider?.conditions.limit_maximum),
         min: Number(selectedProvider?.conditions.limit_minimum),
         layout,
@@ -432,7 +437,7 @@ const WalletReplenish = () => {
         isOpen={openModal}
         close={closeModal}
         paymentData={paymentData}
-        amount={Number(amount)}
+        amount={Number(depositAmount)}
         selectedProvider={selectedProvider}
         selectedLayout={selectedProvider && selectedProvider.layout}
         layout={layout}

@@ -34,6 +34,11 @@ export interface IBonusTemplate {
   wager: number;
 }
 
+export interface ICartBonusTemplate extends IBonusTemplate {
+  game_id: number;
+  type: 'freespins' | 'money';
+}
+
 export interface IBetList {
   currency: string;
   min_amount: number;
