@@ -2,13 +2,32 @@
   padding: 24px 16px 16px 16px;
    .button {
     display: flex;
+    align-items: center;
     justify-content: center;
     width: 100%;
+    position: relative;
     margin-bottom: 10px;
     svg {
       margin-right: 10px;
     }
    }
+}
+
+.bonuese_count {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  top: -13px;
+  font-size: 14px;
+  font-weight: 600;
+  right: -13px;
+  background-color: #FFF;
+  border: 1px solid var(--Text-primary)
+
 }
 
 .container {
