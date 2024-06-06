@@ -1,5 +1,5 @@
-import BonuesFS from './ui/BonuesFS';
+import BonusesFS from './ui/BonusesFS';
 import BonusesMoney from './ui/BonusesMoney';
 import BonusesGames from './ui/BonusesGames';
 
-export { BonuesFS, BonusesMoney, BonusesGames };
+export { BonusesFS, BonusesMoney, BonusesGames };

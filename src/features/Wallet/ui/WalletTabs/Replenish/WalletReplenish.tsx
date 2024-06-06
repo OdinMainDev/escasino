@@ -3,7 +3,7 @@ import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
 import { TabBlock } from '@/entities/TabBlock';
 import { TabItem } from '@/entities/TabItem';
-import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
+import { useAppSelector } from '@/store/hooks/redux';
 import { defaultLanguage } from '@/app/config/locales';
 import { createPayment, paymentTransaction } from '@/features/Wallet/api/replenishApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
@@ -34,7 +34,6 @@ import { generateErrorMessages } from '@/features/Wallet/helpers/generateMessage
 import { useModal } from '@/app/providers/ModalProvider';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
 import { useRouter } from '@/shared/helpers/navigation';
-import { setDepositAmount } from '@/store/slices/cartBonusesSlice';
 
 const WalletReplenish = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
@@ -48,10 +47,9 @@ const WalletReplenish = () => {
   );
   const { t } = useTranslation();
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
-  const dispatch = useAppDispatch();
-  const { depositAmount } = useAppSelector((state) => state.cartBonusesSlice);
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
   const [layout, setLayout] = useState<IProviderLayout>({});
+  const [amount, setAmount] = useState<string>('');
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -62,9 +60,6 @@ const WalletReplenish = () => {
   const { doOpenModal, doCloseModals } = useModal();
   const router = useRouter();
   const { bonuses } = useAppSelector((state) => state.bonusesSlice);
-  const { bonusesTemplates, maxAmount, minAmount } = useAppSelector(
-    (state) => state.cartBonusesSlice,
-  );
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const alertData: IAlert = {
     title: 'Внимание!',
@@ -129,20 +124,8 @@ const WalletReplenish = () => {
       const payment: ICreatePaymentData = {
         provider: Number(selectedProvider?.id),
         fid,
-        amount: Number(depositAmount),
-        bonuses_configurator: bonusesTemplates.map((item) => {
-          if (item.type === 'money') {
-            return {
-              type: item.type,
-              id: item.id,
-            };
-          }
-          return {
-            type: item.type,
-            id: item.id,
-            game_id: item.game_id,
-          };
-        }),
+        amount: Number(amount),
+        bonuses_configurator: null,
         ...layout,
       };
       const { data } = await createPayment(payment);
@@ -244,24 +227,6 @@ const WalletReplenish = () => {
 
   return (
     <div className={styles.content}>
-      <Button
-        className={styles.button}
-        elType="outlined"
-        onClick={() => router.push('/bonus/cart')}
-      >
-        <div className={styles.bonuese_count}>{bonusesTemplates.length}</div>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          fill="currentColor"
-          className="bi bi-cart3"
-          viewBox="0 0 16 16"
-        >
-          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
-        </svg>
-        Выбранные бонусы
-      </Button>
       <Button className={styles.button} onClick={openBonus}>
         <svg
           width="23"
@@ -321,41 +286,21 @@ const WalletReplenish = () => {
               <div className={styles.selected_provider_currency}>{selectedProvider.currency}</div>
             </div>
             <div className="flex items-center justify-between">
-              {selectedProvider.conditions.limit_minimum > 0 || minAmount > 0 ? (
+              {selectedProvider.conditions.limit_minimum > 0 && (
                 <div className={styles.selected_provider_conditions}>
                   Минимум:{' '}
                   <strong>
-                    {minAmount > 0 && minAmount > selectedProvider.conditions.limit_minimum ? (
-                      <>
-                        {minAmount} {selectedProvider.currency}
-                      </>
-                    ) : (
-                      selectedProvider.conditions.limit_minimum > 0 && (
-                        <>
-                          {selectedProvider.conditions.limit_minimum} {selectedProvider.currency}
-                        </>
-                      )
-                    )}
+                    {selectedProvider.conditions.limit_minimum} {selectedProvider.currency}
                   </strong>
                 </div>
-              ) : null}
+              )}
             </div>
             <div className="flex items-center justify-between">
-              {(selectedProvider.conditions.limit_maximum > 0 || maxAmount > 0) && (
+              {selectedProvider.conditions.limit_maximum > 0 && (
                 <div className={styles.selected_provider_conditions}>
                   Максимум:{' '}
                   <strong>
-                    {maxAmount < selectedProvider.conditions.limit_maximum && maxAmount !== 0 ? (
-                      <>
-                        {maxAmount} {selectedProvider.currency}
-                      </>
-                    ) : (
-                      selectedProvider.conditions.limit_maximum > 0 && (
-                        <>
-                          {selectedProvider.conditions.limit_maximum} {selectedProvider.currency}
-                        </>
-                      )
-                    )}
+                    {selectedProvider.conditions.limit_maximum} {selectedProvider.currency}
                   </strong>
                 </div>
               )}
@@ -442,31 +387,21 @@ const WalletReplenish = () => {
           placeholder="Сумма"
           type="number"
           className="mb-[12px]"
-          value={depositAmount}
+          value={amount}
           isError={checkAmount(
-            Number(depositAmount),
-            Number(selectedProvider?.conditions.limit_maximum) > maxAmount && maxAmount !== 0
-              ? maxAmount
-              : Number(selectedProvider?.conditions.limit_maximum),
-            Number(selectedProvider?.conditions.limit_minimum) < minAmount
-              ? minAmount
-              : Number(selectedProvider?.conditions.limit_minimum),
+            Number(amount),
+            Number(selectedProvider?.conditions.limit_maximum),
+            Number(selectedProvider?.conditions.limit_minimum),
           )}
-          onChange={(e) => {
-            dispatch(setDepositAmount(e.target.value));
-          }}
+          onChange={(e) => setAmount(e.target.value)}
         />
         {selectedProvider && (
           <div className={styles.subtitle}>
             {generateLimitText(
-              Number(selectedProvider?.conditions.limit_minimum) < minAmount
-                ? minAmount
-                : Number(selectedProvider?.conditions.limit_minimum),
-              Number(selectedProvider?.conditions.limit_maximum) > maxAmount && maxAmount !== 0
-                ? maxAmount
-                : Number(selectedProvider?.conditions.limit_maximum),
+              selectedProvider.conditions.limit_minimum,
+              selectedProvider.conditions.limit_maximum,
               selectedProvider.currency,
-              Number(depositAmount),
+              Number(amount),
             )}
           </div>
         )}
@@ -474,15 +409,9 @@ const WalletReplenish = () => {
       <Button
         disabled={
           !validateData({
-            amount: Number(depositAmount),
-            max:
-              Number(selectedProvider?.conditions.limit_maximum) > maxAmount && maxAmount !== 0
-                ? maxAmount
-                : Number(selectedProvider?.conditions.limit_maximum),
-            min:
-              Number(selectedProvider?.conditions.limit_minimum) < minAmount
-                ? minAmount
-                : Number(selectedProvider?.conditions.limit_minimum),
+            amount: Number(amount),
+            max: Number(selectedProvider?.conditions.limit_maximum),
+            min: Number(selectedProvider?.conditions.limit_minimum),
             layout,
           }) || loading
         }
@@ -492,15 +421,9 @@ const WalletReplenish = () => {
         Пополнить счет
       </Button>
       {!validateData({
-        amount: Number(depositAmount),
-        max:
-          Number(selectedProvider?.conditions.limit_maximum) > maxAmount && maxAmount !== 0
-            ? maxAmount
-            : Number(selectedProvider?.conditions.limit_maximum),
-        min:
-          Number(selectedProvider?.conditions.limit_minimum) < minAmount
-            ? minAmount
-            : Number(selectedProvider?.conditions.limit_minimum),
+        amount: Number(amount),
+        max: Number(selectedProvider?.conditions.limit_maximum),
+        min: Number(selectedProvider?.conditions.limit_minimum),
         layout,
       }) && <div className={styles.error}>Заполните все поля</div>}
       <SuccessPaymentModal
@@ -510,7 +433,7 @@ const WalletReplenish = () => {
         isOpen={openModal}
         close={closeModal}
         paymentData={paymentData}
-        amount={Number(depositAmount)}
+        amount={Number(amount)}
         selectedProvider={selectedProvider}
         selectedLayout={selectedProvider && selectedProvider.layout}
         layout={layout}

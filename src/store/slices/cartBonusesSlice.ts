@@ -1,18 +1,19 @@
+// TODO: сделать сброс если не на странице платежа, бонуса, выбора игр для бонуса и тд
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ICartBonusTemplate } from '@/shared/models/interfaces/bonuses';
 
 export interface IInitialCartBonuses {
   bonusesTemplates: ICartBonusTemplate[];
-  depositAmount: number | string;
   minAmount: number;
   maxAmount: number;
+  game_ids: number[];
 }
 
 const initialState: IInitialCartBonuses = {
   bonusesTemplates: [],
-  depositAmount: '',
   minAmount: 0,
   maxAmount: 0,
+  game_ids: [],
 };
 
 export const cartBonusesSlice = createSlice({
@@ -42,12 +43,11 @@ export const cartBonusesSlice = createSlice({
     deleteCartBonusesItem(state, action: PayloadAction<number>) {
       state.bonusesTemplates = state.bonusesTemplates.filter((item) => item.id !== action.payload);
     },
-    setDepositAmount(state, action: PayloadAction<number | string>) {
-      state.depositAmount = action.payload;
+    setGameIds(state, action: PayloadAction<number[]>) {
+      state.game_ids = action.payload;
     },
   },
 });
 
-export const { addToCartBonuses, deleteCartBonusesItem, setDepositAmount } =
-  cartBonusesSlice.actions;
+export const { addToCartBonuses, deleteCartBonusesItem, setGameIds } = cartBonusesSlice.actions;
 export default cartBonusesSlice.reducer;

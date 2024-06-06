@@ -6,13 +6,34 @@ import classNames from 'classnames';
 
 interface IProps {
   bonusesTemplates: IBonusTemplate[];
-  moneyChangeHandler: (moneyTemplate: IBonusTemplate) => void;
+  moneyChangeHandler: (id: number) => void;
 }
 const BonusesMoney = ({ bonusesTemplates, moneyChangeHandler }: IProps) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  if (!bonusesTemplates) {
+    return;
+  }
+  const sortedBonuses: IBonusTemplate[] = [];
+
+  bonusesTemplates?.forEach((item) => {
+    if (item.bonus_percent <= 0) {
+      return;
+    }
+    const existingIndex = sortedBonuses.findIndex(
+      (sortedBonuses) => sortedBonuses.bonus_percent === item.bonus_percent,
+    );
+
+    if (existingIndex === -1) {
+      sortedBonuses.push(item);
+    } else if (sortedBonuses[existingIndex].wager < item.wager) {
+      sortedBonuses[existingIndex] = item;
+    }
+  });
+
+  sortedBonuses.sort((a, b) => a.bonus_percent - b.bonus_percent);
 
   const selectMoney = (swiper: SwiperClass) => {
-    moneyChangeHandler(bonusesTemplates[swiper.realIndex]);
+    moneyChangeHandler(sortedBonuses[swiper.realIndex].id);
     setActiveIndex(swiper.realIndex);
   };
   return (
@@ -28,12 +49,12 @@ const BonusesMoney = ({ bonusesTemplates, moneyChangeHandler }: IProps) => {
           centeredSlides
           lazyPreloadPrevNext={5}
           className={styles.settings_params}
-          loop={bonusesTemplates.length >= 5}
+          loop={false}
           direction="vertical"
           onSwiper={selectMoney}
           onSlideChange={selectMoney}
         >
-          {bonusesTemplates?.map((item, index) => (
+          {sortedBonuses.map((item, index) => (
             <SwiperSlide
               className={classNames(styles.settings_data, {
                 [styles.active]: activeIndex === index,

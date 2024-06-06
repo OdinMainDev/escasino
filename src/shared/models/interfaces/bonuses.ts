@@ -45,7 +45,7 @@ export interface IBonusTemplate {
 }
 
 export interface ICartBonusTemplate extends IBonusTemplate {
-  game_id: number;
+  game_id: number | null;
   type: 'freespins' | 'money';
 }
 

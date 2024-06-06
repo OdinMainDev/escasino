@@ -18,7 +18,7 @@ export interface ICreatePaymentData {
   provider: number;
   fid: string;
   amount: number;
-  bonuses_configurator: IBonusConfigurator[];
+  bonuses_configurator: IBonusConfigurator[] | null;
 }
 
 export interface IPaymentTransactionFirst {

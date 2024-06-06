@@ -23,8 +23,9 @@ const BonusesGames = ({ games }: IProps) => {
       modules={[Autoplay]}
       lazyPreloadPrevNext={5}
       slidesPerView={2}
-      loop={games.length > 2}
+      loop={games.length > 3}
     >
+      {/* TODO: выводить только первые 25 */}
       {games.map((item) => (
         <SwiperSlide className={styles.games_item} key={item.id}>
           <Game onClick={() => router.push(`/bonus/${item.id}`)} game={item} />
