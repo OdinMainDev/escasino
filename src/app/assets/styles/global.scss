@@ -36,6 +36,12 @@ body {
   background: var(--background);
 }
 
+.swiper-slide {
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: transparent; 
+  cursor: pointer; 
+}
 .title {
   font-size: 20px;
   font-weight: 700;

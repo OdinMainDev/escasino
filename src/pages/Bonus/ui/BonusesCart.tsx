@@ -11,7 +11,7 @@ const BonusesCart = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <GoBackButton />
+        <GoBackButton customPath="/wallet/deposit/replenish" />
         <div className={styles.title}>Игры бонусов</div>
         <Icons icon="chat" />
       </div>

@@ -140,6 +140,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             centeredSlides
             className={styles.settings_params}
             lazyPreloadPrevNext={5}
+            freeMode
             loop={betTemplates.length >= 5}
             onSwiper={selectBet}
             onSlideChange={selectBet}
@@ -177,6 +178,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             effect="coverflow"
             slidesPerView={5}
             centeredSlides
+            freeMode
             className={styles.settings_params}
             lazyPreloadPrevNext={5}
             loop={spinsTemplates.length >= 5}

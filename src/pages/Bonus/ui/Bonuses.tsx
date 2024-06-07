@@ -174,10 +174,14 @@ const Bonuses = () => {
           text: 'Перейти к оплате',
           type: 'outlined',
           onClick: () => {
-            addToBasket();
-            router.push({
-              pathname: '/wallet/deposit/replenish',
-            });
+            if (selectedTemplate) {
+              addToBasket();
+              router.push({
+                pathname: '/wallet/deposit/replenish',
+              });
+            } else {
+              openTemplateErrorModal();
+            }
           },
         },
       ],

@@ -21,6 +21,7 @@ const BonusesGames = ({ games }: IProps) => {
       }}
       speed={1000}
       modules={[Autoplay]}
+      freeMode
       lazyPreloadPrevNext={5}
       slidesPerView={2}
       loop={games.length > 3}

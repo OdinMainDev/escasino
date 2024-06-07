@@ -86,6 +86,7 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
             lazyPreloadPrevNext={5}
             className={styles.settings_params}
             loop={false}
+            freeMode
             direction="vertical"
             onSwiper={selectMoney}
             onSlideChange={selectMoney}

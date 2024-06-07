@@ -1,6 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
-import { usePathname } from '@/shared/helpers/navigation';
+import { usePathname, useRouter } from '@/shared/helpers/navigation';
 import Icons from '@/shared/ui/Icons';
 
 interface IProps {
@@ -9,15 +8,15 @@ interface IProps {
 }
 
 const GoBackButton = ({ className, customPath }: IProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const pathname = usePathname();
 
   const goBack = () => {
     if (customPath) {
-      navigate(customPath);
+      router.push(customPath);
       return;
     }
-    navigate(-1);
+    router.goBack();
   };
 
   if (pathname == '/') {
