@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import styles from './Bonuses.module.scss';
 import GoBackButton from '@/shared/ui/GoBackButton';
 import Icons from '@/shared/ui/Icons';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { IGame } from '@/shared/models/interfaces/game';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import Loader from '@/shared/ui/Loader';
@@ -18,6 +18,8 @@ import { useModal } from '@/app/providers/ModalProvider';
 import { addToCartBonuses } from '@/store/slices/cartBonusesSlice';
 import successIcon from '@/app/assets/images/success.svg';
 import { ISettings } from '@/shared/models/interfaces/settings';
+import { IBonusFSMethods } from '@/features/BonusesTabs/ui/BonusesFS';
+import { IBonusMoneyMethods } from '@/features/BonusesTabs/ui/BonusesMoney';
 
 const Bonuses = () => {
   const { id } = useParams();
@@ -39,6 +41,8 @@ const Bonuses = () => {
   const [selectedTab, setSelectedTab] = useState<string>('');
   const [selectedTemplate, setSelectedTemplate] = useState<IBonusTemplate | null>(null);
   const dispatch = useAppDispatch();
+  const bonusesFS = useRef<IBonusFSMethods>(null);
+  const bonusesMoney = useRef<IBonusMoneyMethods>(null);
   const [alertModalData, setAlertModalData] = useState<IAlert>({});
 
   const getBonusArray = useCallback((settings: ISettings | null) => {
@@ -77,6 +81,20 @@ const Bonuses = () => {
     setAlertModalData({
       title: 'Ошибка',
       text: 'Произошла непредвиденная ошибка, повторите попытку позже',
+      buttons: [
+        {
+          text: 'Отмена',
+          type: 'outlined',
+          onClick: doCloseModals,
+        },
+      ],
+    });
+    doOpenModal('alert');
+  }, [doCloseModals, doOpenModal]);
+
+  const openTemplateErrorModal = useCallback(() => {
+    setAlertModalData({
+      title: 'Отсутствует такая комбинация',
       buttons: [
         {
           text: 'Отмена',
@@ -145,6 +163,8 @@ const Bonuses = () => {
             if (selectedTemplate) {
               addToBasket();
               successBonusAddedModal();
+            } else {
+              openTemplateErrorModal();
             }
           },
         },
@@ -202,6 +222,15 @@ const Bonuses = () => {
     void getBonusesTemplates();
   }, [openErrorModal]);
 
+  const clearBonuses = () => {
+    if (bonusesFS.current) {
+      bonusesFS.current.clearBonusFSSwiper();
+    }
+    if (bonusesMoney.current) {
+      bonusesMoney.current.clearBonusMoneySwiper();
+    }
+  };
+
   const addToBasket = useCallback(() => {
     if (!selectedTemplate) {
       openErrorModal();
@@ -213,6 +242,7 @@ const Bonuses = () => {
       type: selectedTab as 'freespins' | 'money',
     };
     dispatch(addToCartBonuses(data));
+    clearBonuses();
   }, [selectedTemplate, selectedTab, selectedGame, dispatch, openErrorModal]);
 
   return (
@@ -276,11 +306,13 @@ const Bonuses = () => {
               </div>
               {selectedTab === 'money' ? (
                 <BonusesMoney
+                  ref={bonusesMoney}
                   moneyChangeHandler={bonusChangeHandler}
                   bonusesTemplates={bonusesTemplates}
                 />
               ) : (
                 <BonusesFS
+                  ref={bonusesFS}
                   bonusesTemplates={bonusesTemplates}
                   fsChangeHandler={bonusChangeHandler}
                   gameId={selectedGame ? selectedGame.id : undefined}
