@@ -1,9 +1,10 @@
 import { ICartBonusTemplate } from '@/shared/models/interfaces/bonuses';
 import styles from './BonusesItem.module.scss';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
-import { BaseHTMLAttributes } from 'react';
+import { BaseHTMLAttributes, useState } from 'react';
 import { useAppDispatch } from '@/store/hooks/redux';
 import { deleteCartBonusesItem } from '@/store/slices/cartBonusesSlice';
+import classNames from 'classnames';
 
 interface IProps extends BaseHTMLAttributes<HTMLElement> {
   template: ICartBonusTemplate;
@@ -11,8 +12,23 @@ interface IProps extends BaseHTMLAttributes<HTMLElement> {
 const BonusesItem = ({ template, ...otherProps }: IProps) => {
   const data = false;
   const dispatch = useAppDispatch();
+  const [removing, setRemoving] = useState(false);
+
+  const removeItem = () => {
+    setRemoving(true);
+    setTimeout(() => {
+      dispatch(deleteCartBonusesItem(template.uuid));
+      setRemoving(false);
+    }, 300); // Длительность анимации
+  };
+
   return (
-    <div className={styles.container} {...otherProps}>
+    <div
+      className={classNames(styles.container, {
+        [styles.removing]: removing,
+      })}
+      {...otherProps}
+    >
       {data ? (
         <img className={styles.img} alt={template.id.toString()} src="" />
       ) : (
@@ -22,14 +38,10 @@ const BonusesItem = ({ template, ...otherProps }: IProps) => {
         <div className={styles.subtitle}>{template.id}</div>
         <div className={styles.title}>{template.bonus_percent}</div>
       </div>
-      <div
-        onClick={() => {
-          dispatch(deleteCartBonusesItem(template.uuid));
-        }}
-      >
+      <div className={styles.remove} onClick={removeItem}>
         <svg
-          width="14"
-          height="14"
+          width="20"
+          height="20"
           viewBox="0 0 14 14"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

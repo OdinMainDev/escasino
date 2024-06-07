@@ -17,9 +17,7 @@ const BonusesCart = () => {
       </div>
       <div className={styles.content}>
         {bonusesTemplates.length > 0 ? (
-          bonusesTemplates.map((item, index) => (
-            <BonusesItem template={item} key={item.id + index} />
-          ))
+          bonusesTemplates.map((item) => <BonusesItem template={item} key={item.uuid} />)
         ) : (
           <div className={styles.empty}>
             <div className={styles.empty_title}>Не выбраны бонусы</div>

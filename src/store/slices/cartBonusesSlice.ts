@@ -44,6 +44,28 @@ export const cartBonusesSlice = createSlice({
       state.bonusesTemplates = state.bonusesTemplates.filter(
         (item) => item.uuid !== action.payload,
       );
+      if (state.bonusesTemplates.length > 0) {
+        const { maxAmount, minAmount } = state.bonusesTemplates.reduce(
+          (acc, obj) => {
+            if (obj.bonus_settings.min_amount > acc.maxAmount) {
+              acc.minAmount = obj.bonus_settings.min_amount;
+            }
+            if (obj.bonus_settings.max_amount < acc.minAmount) {
+              acc.maxAmount = obj.bonus_settings.max_amount;
+            }
+            return acc;
+          },
+          {
+            minAmount: state.bonusesTemplates[0].bonus_settings.min_amount,
+            maxAmount: state.bonusesTemplates[0].bonus_settings.max_amount,
+          },
+        );
+        state.minAmount = minAmount;
+        state.maxAmount = maxAmount;
+      } else {
+        state.minAmount = 0;
+        state.maxAmount = 0;
+      }
     },
     setGameIds(state, action: PayloadAction<number[]>) {
       state.game_ids = action.payload;

@@ -34,7 +34,7 @@ const Bonuses = () => {
     maxAmount: maxAmountCart,
   } = useAppSelector((state) => state.cartBonusesSlice);
   const [tabs, setTabs] = useState<string[]>([]);
-  const [selectedGame, setSelectedGame] = useState<IGame | undefined>(undefined);
+  const [selectedGame, setSelectedGame] = useState<IGame | null | undefined>(null);
   const [bonusesTemplates, setBonusesTemplates] = useState<IBonusTemplate[]>([]);
   const [availGames, setAvailGames] = useState<IGame[]>([]);
   const { doOpenModal, doCloseModals } = useModal();
@@ -155,7 +155,6 @@ const Bonuses = () => {
       });
       return;
     }
-
     setAlertModalData({
       title: 'Выберите способ оплаты',
       buttons: [
@@ -232,9 +231,11 @@ const Bonuses = () => {
     if (bonusesMoney.current) {
       bonusesMoney.current.clearBonusMoneySwiper();
     }
+    setSelectedGame(null);
+    setSelectedTemplate(null);
   };
 
-  const addToBasket = useCallback(() => {
+  const addToBasket = () => {
     if (!selectedTemplate) {
       openErrorModal();
       return;
@@ -247,7 +248,8 @@ const Bonuses = () => {
     };
     dispatch(addToCartBonuses(data));
     clearBonuses();
-  }, [selectedTemplate, selectedTab, selectedGame, dispatch, openErrorModal]);
+    router.push('/bonus');
+  };
 
   return (
     <div className={styles.container}>
