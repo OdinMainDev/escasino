@@ -1,9 +1,8 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styles from './Bonuses.module.scss';
 import GoBackButton from '@/shared/ui/GoBackButton';
 import Icons from '@/shared/ui/Icons';
 import { useCallback, useEffect, useState } from 'react';
-import { getGameApi } from '@/app/api/games/getGameById';
 import { IGame } from '@/shared/models/interfaces/game';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import Loader from '@/shared/ui/Loader';
@@ -12,7 +11,6 @@ import { useRouter } from '@/shared/helpers/navigation';
 import { TabItem } from '@/entities/TabItem';
 import { getBonusTemplatesApi } from '@/app/api/bonuses/bonusesApi';
 import { IBonusTemplate, ICartBonusTemplate } from '@/shared/models/interfaces/bonuses';
-import { getGamesAllApi } from '@/app/api/games/getGamesAll';
 import { BonusesFS, BonusesGames, BonusesMoney } from '@/features/BonusesTabs';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
@@ -21,7 +19,7 @@ import { addToCartBonuses } from '@/store/slices/cartBonusesSlice';
 import successIcon from '@/app/assets/images/success.svg';
 import { ISettings } from '@/shared/models/interfaces/settings';
 
-const Bonus = () => {
+const Bonuses = () => {
   const { id } = useParams();
   const { user } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
@@ -34,7 +32,6 @@ const Bonus = () => {
   const [tabs, setTabs] = useState<string[]>([]);
   const [selectedGame, setSelectedGame] = useState<IGame | undefined>(undefined);
   const [bonusesTemplates, setBonusesTemplates] = useState<IBonusTemplate[]>([]);
-  // const [games, setGames] = useState<IGame[]>([]);
   const [availGames, setAvailGames] = useState<IGame[]>([]);
   const { doOpenModal, doCloseModals } = useModal();
   const [loading, setLoading] = useState(true);
@@ -44,22 +41,7 @@ const Bonus = () => {
   const dispatch = useAppDispatch();
   const [alertModalData, setAlertModalData] = useState<IAlert>({});
 
-  useEffect(() => {
-    if (!settings) {
-      return;
-    }
-    if (getBonusArray(settings).length == 0) {
-      router.push({
-        pathname: '/wallet/deposit/replenish',
-      });
-      return;
-    }
-    setTabs(getBonusArray(settings));
-    setSelectedTab(getBonusArray(settings)[0]);
-    setLoading(false);
-  }, [settings]);
-
-  function getBonusArray(settings: ISettings | null) {
+  const getBonusArray = useCallback((settings: ISettings | null) => {
     if (settings) {
       const isFreespinsDisabled = settings?.bonus?.is_freespins_disabled;
       const isMoneyDisabled = settings?.bonus?.is_money_disabled;
@@ -74,37 +56,39 @@ const Bonus = () => {
       }
     }
     return ['freespins', 'money'];
-  }
+  }, []);
 
-  // const openGameErrorModal = () => {
-  //   setAlertModalData({
-  //     title: 'Игра не выбрана',
-  //     text: 'Выберите игру прежде чем добавить бонус',
-  //     buttons: [
-  //       {
-  //         text: 'Отмена',
-  //         type: 'outlined',
-  //         onClick: doCloseModals,
-  //       },
-  //       {
-  //         text: 'Выбрать игру',
-  //         type: 'contained',
-  //         onClick: () => {
-  //           router.push({
-  //             pathname: '/bonus/games',
-  //             query: {
-  //               game_ids: filtredGames.map((item) => item.id.toString()),
-  //             },
-  //           });
-  //         },
-  //       },
-  //     ],
-  //   });
-  //   doOpenModal('alert');
-  // };
+  useEffect(() => {
+    if (!settings) return;
 
-  // TODO: после закрытия должна открывать чистую страницу бонусов, чтобы выбрать еще один
-  const successBonusAddedModal = () => {
+    const bonusArray = getBonusArray(settings);
+    if (bonusArray.length === 0) {
+      router.push({
+        pathname: '/wallet/deposit/replenish',
+      });
+      return;
+    }
+    setTabs(bonusArray);
+    setSelectedTab(bonusArray[0]);
+    setLoading(false);
+  }, [settings, getBonusArray]);
+
+  const openErrorModal = useCallback(() => {
+    setAlertModalData({
+      title: 'Ошибка',
+      text: 'Произошла непредвиденная ошибка, повторите попытку позже',
+      buttons: [
+        {
+          text: 'Отмена',
+          type: 'outlined',
+          onClick: doCloseModals,
+        },
+      ],
+    });
+    doOpenModal('alert');
+  }, [doCloseModals, doOpenModal]);
+
+  const successBonusAddedModal = useCallback(() => {
     router.push({
       pathname: '/bonus',
     });
@@ -132,10 +116,10 @@ const Bonus = () => {
       ],
     });
     doOpenModal('alert');
-  };
+  }, [doCloseModals, doOpenModal, router]);
 
   const addToBasketOrOpenModal = () => {
-    if (settings?.bonus.max_bonuses_per_deposit == 1) {
+    if (settings?.bonus.max_bonuses_per_deposit === 1) {
       addToBasket();
       router.push({
         pathname: '/wallet/deposit/replenish',
@@ -143,7 +127,7 @@ const Bonus = () => {
       return;
     }
 
-    if (settings?.bonus.max_bonuses_per_deposit == cartBonuses.length + 1) {
+    if (settings?.bonus.max_bonuses_per_deposit === cartBonuses.length + 1) {
       addToBasket();
       router.push({
         pathname: '/wallet/deposit/replenish',
@@ -186,12 +170,12 @@ const Bonus = () => {
         setSelectedTemplate(findedTemplate);
       }
     },
-    [bonusesTemplates, games],
+    [bonusesTemplates],
   );
 
   useEffect(() => {
     if (id && games) {
-      const game = games?.find((item) => item.id.toString() == id);
+      const game = games.find((item) => item.id.toString() === id);
       setSelectedGame(game);
     }
 
@@ -201,10 +185,10 @@ const Bonus = () => {
         gameIds.push(...item.game_ids);
       });
       gameIds = Array.from(new Set(gameIds));
-      const availGameIds = games?.filter((item) => gameIds.includes(item.id));
+      const availGameIds = games.filter((item) => gameIds.includes(item.id));
       setAvailGames(availGameIds);
     }
-  }, [id, games]);
+  }, [id, games, bonusesTemplates]);
 
   useEffect(() => {
     const getBonusesTemplates = async () => {
@@ -212,54 +196,24 @@ const Bonus = () => {
         const { bonusesTemplates } = await getBonusTemplatesApi();
         setBonusesTemplates(bonusesTemplates);
       } catch (e) {
-        /* empty */
+        openErrorModal();
       }
     };
     void getBonusesTemplates();
-  }, []);
+  }, [openErrorModal]);
 
-  // useEffect(() => {
-  //   if (games.length > 0 && bonusesTemplates.length > 0) {
-  //     moneyChangeHandler(bonusesTemplates[0]);
-  //   }
-  // }, [bonusesTemplates, games, moneyChangeHandler]);
-
-  // const navigateBySelectedGame = (game_id: number) => {
-  //   const templates = bonusesTemplates.filter((item) => item.game_ids.includes(game_id));
-  //   const combinedGameIds = templates.reduce((acc, obj) => {
-  //     return acc.concat(obj.game_ids);
-  //   }, [] as number[]);
-  //   const uniqueGameIds = [...new Set(combinedGameIds)];
-  //   router.push({
-  //     pathname: '/bonus/games',
-  //     query: {
-  //       game_ids: uniqueGameIds.map((item) => item.toString()),
-  //     },
-  //   });
-  // };
-
-  const addToBasket = () => {
+  const addToBasket = useCallback(() => {
     if (!selectedTemplate) {
-      // TODO: сделать модалку что какая то хуйня пошла
-      alert('Undefined Error');
+      openErrorModal();
       return;
     }
-    if (selectedTab === 'freespins') {
-      const data: ICartBonusTemplate = {
-        ...selectedTemplate,
-        game_id: selectedGame ? Number(selectedGame.id) : null,
-        type: 'freespins',
-      };
-      dispatch(addToCartBonuses(data));
-    } else if (selectedTab == 'money') {
-      const data: ICartBonusTemplate = {
-        ...selectedTemplate,
-        game_id: null,
-        type: 'money',
-      };
-      dispatch(addToCartBonuses(data));
-    }
-  };
+    const data: ICartBonusTemplate = {
+      ...selectedTemplate,
+      game_id: selectedTab === 'freespins' && selectedGame ? Number(selectedGame.id) : null,
+      type: selectedTab as 'freespins' | 'money',
+    };
+    dispatch(addToCartBonuses(data));
+  }, [selectedTemplate, selectedTab, selectedGame, dispatch, openErrorModal]);
 
   return (
     <div className={styles.container}>
@@ -278,7 +232,7 @@ const Bonus = () => {
             {selectedTab !== 'money' ? (
               selectedGame ? (
                 <div className={styles.game}>
-                  {selectedGame?.image ? (
+                  {selectedGame.image ? (
                     <img
                       src={selectedGame.image}
                       alt={selectedGame.name}
@@ -291,12 +245,8 @@ const Bonus = () => {
                       className={styles.game_image}
                     />
                   )}
-                  <div className={styles.game_title}>{selectedGame?.name}</div>
-                  <Button
-                    elType="outlined"
-                    className="w-[100%]"
-                    // onClick={() => navigateBySelectedGame(selectedGame.id)}
-                  >
+                  <div className={styles.game_title}>{selectedGame.name}</div>
+                  <Button elType="outlined" className="w-[100%]">
                     Изменить игру
                   </Button>
                 </div>
@@ -304,15 +254,7 @@ const Bonus = () => {
                 <div className={styles.game}>
                   <img src={PlaceholderImage} alt="without_game" className={styles.game_image} />
                   <div className={styles.game_title}>Выберите игру</div>
-                  <Button
-                    elType="outlined"
-                    className="w-[100%] mb-[20px]"
-                    // onClick={() =>
-                    //   router.push({
-                    //     pathname: '/bonus/games',
-                    //   })
-                    // }
-                  >
+                  <Button elType="outlined" className="w-[100%] mb-[20px]">
                     Изменить игру
                   </Button>
                   <BonusesGames games={availGames} />
@@ -350,12 +292,12 @@ const Bonus = () => {
               <div className="flex items-center gap-[16px]">
                 <div className={styles.footer_info}>
                   <div className={styles.footer_label}>
-                    {minAmountCart != 0 || maxAmountCart != 0 ? 'Сумма депозита' : ''}
+                    {minAmountCart !== 0 || maxAmountCart !== 0 ? 'Сумма депозита' : ''}
                   </div>
                   <div className={styles.footer_value}>
-                    {minAmountCart == 0 && maxAmountCart == 0 ? (
+                    {minAmountCart === 0 && maxAmountCart === 0 ? (
                       ''
-                    ) : minAmountCart != maxAmountCart ? (
+                    ) : minAmountCart !== maxAmountCart ? (
                       <>
                         От {minAmountCart} до {maxAmountCart} {user?.balance.currency}
                       </>
@@ -372,11 +314,11 @@ const Bonus = () => {
                     addToBasketOrOpenModal();
                   }}
                 >
-                  {settings?.bonus.max_bonuses_per_deposit == 1
+                  {settings?.bonus.max_bonuses_per_deposit === 1
                     ? 'Перейти к оплате'
-                    : settings?.bonus.max_bonuses_per_deposit == 0
+                    : settings?.bonus.max_bonuses_per_deposit === 0
                       ? 'Добавить'
-                      : settings?.bonus.max_bonuses_per_deposit == cartBonuses.length + 1
+                      : settings?.bonus.max_bonuses_per_deposit === cartBonuses.length + 1
                         ? 'Перейти к оплате'
                         : 'Добавить'}
                 </Button>
@@ -390,4 +332,4 @@ const Bonus = () => {
   );
 };
 
-export default Bonus;
+export default Bonuses;
