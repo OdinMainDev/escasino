@@ -43,6 +43,9 @@ export const generateComissionText = (
 };
 
 export const checkAmount = (amout: number, max: number, min: number): boolean => {
+  if (amout === 0) {
+    return true;
+  }
   if (amout < min) {
     return true;
   }

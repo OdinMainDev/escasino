@@ -21,6 +21,7 @@ import { ISettings } from '@/shared/models/interfaces/settings';
 import { IBonusFSMethods } from '@/features/BonusesTabs/ui/BonusesFS';
 import { IBonusMoneyMethods } from '@/features/BonusesTabs/ui/BonusesMoney';
 import { BonusesGamesModal } from '@/features/BonusesGamesModal';
+import { v4 as uuidv4 } from 'uuid';
 
 const Bonuses = () => {
   const { id } = useParams();
@@ -240,6 +241,7 @@ const Bonuses = () => {
     }
     const data: ICartBonusTemplate = {
       ...selectedTemplate,
+      uuid: uuidv4(),
       game_id: selectedTab === 'freespins' && selectedGame ? Number(selectedGame.id) : null,
       type: selectedTab as 'freespins' | 'money',
     };

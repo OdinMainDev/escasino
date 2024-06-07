@@ -1,4 +1,4 @@
-import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
+import { ICartBonusTemplate } from '@/shared/models/interfaces/bonuses';
 import styles from './BonusesItem.module.scss';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import { BaseHTMLAttributes } from 'react';
@@ -6,7 +6,7 @@ import { useAppDispatch } from '@/store/hooks/redux';
 import { deleteCartBonusesItem } from '@/store/slices/cartBonusesSlice';
 
 interface IProps extends BaseHTMLAttributes<HTMLElement> {
-  template: IBonusTemplate;
+  template: ICartBonusTemplate;
 }
 const BonusesItem = ({ template, ...otherProps }: IProps) => {
   const data = false;
@@ -24,7 +24,7 @@ const BonusesItem = ({ template, ...otherProps }: IProps) => {
       </div>
       <div
         onClick={() => {
-          dispatch(deleteCartBonusesItem(template.id));
+          dispatch(deleteCartBonusesItem(template.uuid));
         }}
       >
         <svg

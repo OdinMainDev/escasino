@@ -59,7 +59,7 @@ export const getMyBonusesApi = async (): Promise<IResponseBonuses> => {
 };
 
 export const postSetMyActiveBonusApi = () => {
-  return axios.get(setMyActiveBonusApi(), {
+  return axios.post(setMyActiveBonusApi(), {
     headers: {
       Authorization: `Bearer: ${Cookies.get('atoken')}`,
       'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
@@ -67,8 +67,8 @@ export const postSetMyActiveBonusApi = () => {
   });
 };
 
-export const postSetMyActiveBonusCancelApi = () => {
-  return axios.get(setMyActiveBonusCancelApi(), {
+export const postSetMyActiveBonusCancelApi = (body: unknown) => {
+  return axios.post(setMyActiveBonusCancelApi(), body, {
     headers: {
       Authorization: `Bearer: ${Cookies.get('atoken')}`,
       'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',

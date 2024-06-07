@@ -40,8 +40,10 @@ export const cartBonusesSlice = createSlice({
       state.minAmount = minAmount;
       state.maxAmount = maxAmount;
     },
-    deleteCartBonusesItem(state, action: PayloadAction<number>) {
-      state.bonusesTemplates = state.bonusesTemplates.filter((item) => item.id !== action.payload);
+    deleteCartBonusesItem(state, action: PayloadAction<string>) {
+      state.bonusesTemplates = state.bonusesTemplates.filter(
+        (item) => item.uuid !== action.payload,
+      );
     },
     setGameIds(state, action: PayloadAction<number[]>) {
       state.game_ids = action.payload;
