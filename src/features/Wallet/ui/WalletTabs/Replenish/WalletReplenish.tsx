@@ -67,7 +67,7 @@ const WalletReplenish = () => {
     maxAmount,
     minAmount,
   } = useAppSelector((state) => state.cartBonusesSlice);
-  const alertData: IAlert = {
+  const [alertData, setAlertData] = useState<IAlert>({
     title: 'Внимание!',
     text: (
       <div>
@@ -88,7 +88,7 @@ const WalletReplenish = () => {
       },
     ],
     close: doCloseModals,
-  };
+  });
 
   useEffect(() => {
     if (billingGroups && billingGroups.length > 0) {
@@ -233,6 +233,55 @@ const WalletReplenish = () => {
     if (settings) {
       if (settings.bonus.max_avail_bonuses !== 0 && bonuses) {
         if (bonuses.length >= settings.bonus.max_avail_bonuses) {
+          if (bonuses.find((item) => item.status === 2)) {
+            setAlertData({
+              title: 'Внимание!',
+              text: (
+                <div>
+                  <div className="mb-[5px]">
+                    У вас есть 209 Free Spins в игре Starburst XXXtreme.
+                  </div>
+                  <div>Отыграйте их или откажитесь от бонуса.</div>
+                </div>
+              ),
+              buttons: [
+                {
+                  type: 'outlined',
+                  text: 'Отказаться',
+                  onClick: doCloseModals,
+                },
+                {
+                  type: 'contained',
+                  text: 'Играть',
+                  onClick: () => {},
+                },
+              ],
+              close: doCloseModals,
+            });
+          } else {
+            setAlertData({
+              title: 'Внимание!',
+              text: (
+                <div>
+                  <div className="mb-[5px]">У вас есть не закрытые бонусы</div>
+                  <div>Закройте их или откажитесь от бонуса.</div>
+                </div>
+              ),
+              buttons: [
+                {
+                  type: 'outlined',
+                  text: 'Отказаться',
+                  onClick: doCloseModals,
+                },
+                {
+                  type: 'contained',
+                  text: 'Закрыть',
+                  onClick: () => {},
+                },
+              ],
+              close: doCloseModals,
+            });
+          }
           doOpenModal('alert');
         } else {
           router.push('/bonus');
