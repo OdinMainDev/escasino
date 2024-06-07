@@ -11,7 +11,7 @@ export interface IProviderLayout {
 export interface IBonusConfigurator {
   type: 'freespins' | 'money';
   id: number;
-  game_id?: number;
+  game_id?: number | null;
 }
 
 export interface ICreatePaymentData {
