@@ -25,8 +25,7 @@ const BonusesGames = ({ games }: IProps) => {
       slidesPerView={2}
       loop={games.length > 3}
     >
-      {/* TODO: выводить только первые 25 */}
-      {games.map((item) => (
+      {games.slice(0, 25).map((item) => (
         <SwiperSlide className={styles.games_item} key={item.id}>
           <Game onClick={() => router.push(`/bonus/${item.id}`)} game={item} />
         </SwiperSlide>
