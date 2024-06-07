@@ -1,10 +1,10 @@
-import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
+import { ICartBonusTemplate } from '@/shared/models/interfaces/bonuses';
 import styles from './ActiveBonus.module.scss';
 import PlaceholderGame from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import Button from '@/shared/ui/Button';
 
 interface IProps {
-  template: IBonusTemplate;
+  template: ICartBonusTemplate;
 }
 
 const ActiveBonus = ({ template }: IProps) => {
@@ -24,10 +24,18 @@ const ActiveBonus = ({ template }: IProps) => {
             </div>
           </div>
           <div className={styles.col}>
-            <div>
-              <div className={styles.subtitle}>Фриспины</div>
-              <div className={styles.value}>{template.spins_count}</div>
-            </div>
+            {template.type === 'money' ? (
+              <div>
+                <div className={styles.subtitle}>Фриспины</div>
+                <div className={styles.value}>{template.spins_count}</div>
+              </div>
+            ) : (
+              <div>
+                <div className={styles.subtitle}>% бонуса</div>
+                <div className={styles.value}>{template.spins_count}</div>
+              </div>
+            )}
+
             <div>
               <div className={styles.subtitle}>Вейджер</div>
               <div className={styles.subtitle}>X{template.wager}</div>
