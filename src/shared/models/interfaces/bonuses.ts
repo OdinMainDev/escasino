@@ -40,6 +40,7 @@ export interface IBonusTemplate {
   configurator: IBonusConfigurator;
   life_time: number;
   is_cancel: boolean;
+  is_duplicatable: boolean;
   is_real_money_only: boolean;
   wager: number;
 }

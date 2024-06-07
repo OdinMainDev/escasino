@@ -350,7 +350,7 @@ const WalletReplenish = () => {
               <div className={styles.selected_provider_currency}>{selectedProvider.currency}</div>
             </div>
             <div className="flex items-center justify-between">
-              {selectedProvider.conditions.limit_minimum > 0 || minAmount > 0 ? (
+              {selectedProvider.conditions.limit_minimum > 0 ? (
                 <div className={styles.selected_provider_conditions}>
                   Минимум:{' '}
                   <strong>
@@ -360,7 +360,7 @@ const WalletReplenish = () => {
               ) : null}
             </div>
             <div className="flex items-center justify-between">
-              {(selectedProvider.conditions.limit_maximum > 0 || maxAmount > 0) && (
+              {selectedProvider.conditions.limit_maximum > 0 && (
                 <div className={styles.selected_provider_conditions}>
                   Максимум:{' '}
                   <strong>

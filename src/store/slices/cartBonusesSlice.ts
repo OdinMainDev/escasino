@@ -21,6 +21,12 @@ export const cartBonusesSlice = createSlice({
   initialState: initialState,
   reducers: {
     addToCartBonuses(state, action: PayloadAction<ICartBonusTemplate>) {
+      if (!action.payload.is_duplicatable) {
+        const exists = state.bonusesTemplates.some((bonus) => bonus.id === action.payload.id);
+        if (exists) {
+          return;
+        }
+      }
       state.bonusesTemplates = [...state.bonusesTemplates, action.payload];
       const { maxAmount, minAmount } = state.bonusesTemplates.reduce(
         (acc, obj) => {
