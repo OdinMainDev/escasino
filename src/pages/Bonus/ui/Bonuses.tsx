@@ -20,6 +20,7 @@ import successIcon from '@/app/assets/images/success.svg';
 import { ISettings } from '@/shared/models/interfaces/settings';
 import { IBonusFSMethods } from '@/features/BonusesTabs/ui/BonusesFS';
 import { IBonusMoneyMethods } from '@/features/BonusesTabs/ui/BonusesMoney';
+import { BonusesGamesModal } from '@/features/BonusesGamesModal';
 
 const Bonuses = () => {
   const { id } = useParams();
@@ -44,6 +45,7 @@ const Bonuses = () => {
   const bonusesFS = useRef<IBonusFSMethods>(null);
   const bonusesMoney = useRef<IBonusMoneyMethods>(null);
   const [alertModalData, setAlertModalData] = useState<IAlert>({});
+  const [openGamesModal, setOpenGamesModal] = useState(false);
 
   const getBonusArray = useCallback((settings: ISettings | null) => {
     if (settings) {
@@ -276,7 +278,11 @@ const Bonuses = () => {
                     />
                   )}
                   <div className={styles.game_title}>{selectedGame.name}</div>
-                  <Button elType="outlined" className="w-[100%]">
+                  <Button
+                    elType="outlined"
+                    className="w-[100%]"
+                    onClick={() => setOpenGamesModal(true)}
+                  >
                     Изменить игру
                   </Button>
                 </div>
@@ -284,7 +290,11 @@ const Bonuses = () => {
                 <div className={styles.game}>
                   <img src={PlaceholderImage} alt="without_game" className={styles.game_image} />
                   <div className={styles.game_title}>Выберите игру</div>
-                  <Button elType="outlined" className="w-[100%] mb-[20px]">
+                  <Button
+                    elType="outlined"
+                    className="w-[100%] mb-[20px]"
+                    onClick={() => setOpenGamesModal(true)}
+                  >
                     Изменить игру
                   </Button>
                   <BonusesGames games={availGames} />
@@ -359,6 +369,11 @@ const Bonuses = () => {
           </>
         )}
       </div>
+      <BonusesGamesModal
+        games={availGames}
+        isOpen={openGamesModal}
+        close={() => setOpenGamesModal(false)}
+      />
       <AlertModal {...alertModalData} close={doCloseModals} />
     </div>
   );

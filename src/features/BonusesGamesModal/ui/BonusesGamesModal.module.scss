@@ -1,0 +1,19 @@
+.container {
+  height: 70vh;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header {
+  padding-top: 30px;
+}
+
+.games {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  overflow-y: auto;
+}
