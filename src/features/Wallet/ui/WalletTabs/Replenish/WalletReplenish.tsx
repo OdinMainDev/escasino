@@ -356,9 +356,8 @@ const WalletReplenish = () => {
   return (
     <div className={styles.content}>
       {generateBonusesButtons()}
-      {settings &&
-      (settings?.bonus.max_bonuses_per_deposit === 0 ||
-        settings?.bonus.max_bonuses_per_deposit > cartBonuses.length) ? (
+      {(settings && settings?.bonus.max_bonuses_per_deposit === 1) ||
+      settings?.bonus.max_bonuses_per_deposit === cartBonuses.length + 1 ? null : (
         <Button className={styles.button} onClick={openBonus}>
           <svg
             width="23"
@@ -377,7 +376,7 @@ const WalletReplenish = () => {
           </svg>
           {cartBonuses.length > 0 ? 'Добавить еще бонус' : 'Играть с бонусом'}
         </Button>
-      ) : null}
+      )}
 
       <div className={styles.block}>
         <div className={styles.title}>Способ оплаты</div>

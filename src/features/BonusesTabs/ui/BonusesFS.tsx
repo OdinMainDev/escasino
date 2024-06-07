@@ -3,6 +3,7 @@ import styles from './BonusesTabs.module.scss';
 import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import classNames from 'classnames';
+import { useAppSelector } from '@/store/hooks/redux';
 
 interface IProps {
   bonusesTemplates: IBonusTemplate[];
@@ -19,7 +20,9 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     const [selectedBetIndex, setSelectedBetIndex] = useState<number>(0);
     const [selectedSpinsIndex, setSelectedSpinsIndex] = useState<number>(0);
     const [betTemplates, setBetTemplates] = useState<IBonusTemplate[]>([]);
+    const [filtredBonuses, setFiltredBonuses] = useState<IBonusTemplate[]>([]);
     const [spinsTemplates, setSpinsTemplates] = useState<IBonusTemplate[]>([]);
+    const cartBonuses = useAppSelector((state) => state.cartBonusesSlice.bonusesTemplates);
     const betSwiper = useRef<SwiperRef>(null);
     const spinsSwiper = useRef<SwiperRef>(null);
 
@@ -38,14 +41,24 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       }
       setSelectedBetIndex(0);
       setSelectedSpinsIndex(0);
+      setBetTemplates([]);
+      setSpinsTemplates([]);
     };
 
     useEffect(() => {
       let filteredTemplates = bonusesTemplates;
 
+      // Скрываем элементы, если они есть в корзине и is_duplicatable = false
+      filteredTemplates = filteredTemplates.filter(
+        (template) =>
+          !cartBonuses.some((cartItem) => cartItem.id === template.id && !cartItem.is_duplicatable),
+      );
+
+      setFiltredBonuses(filteredTemplates);
+
       // Фильтруем по gameId, если он указан
       if (gameId !== undefined) {
-        filteredTemplates = bonusesTemplates.filter((template) =>
+        filteredTemplates = filteredTemplates.filter((template) =>
           template.game_ids.includes(gameId),
         );
       }
@@ -88,7 +101,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
       setBetTemplates(uniqueBetTemplates);
       setSpinsTemplates(uniqueSpinsTemplates);
-    }, [bonusesTemplates, gameId]);
+    }, [bonusesTemplates, cartBonuses, gameId]);
 
     const selectBet = (swiper: SwiperClass) => {
       const realIndex = swiper.realIndex;
@@ -96,7 +109,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       const selectedBetTemplate = betTemplates[realIndex];
       const selectedFsTemplate = spinsTemplates[selectedSpinsIndex];
       if (selectedBetTemplate && selectedFsTemplate) {
-        const matchingTemplate = bonusesTemplates.find(
+        const matchingTemplate = filtredBonuses.find(
           (template) =>
             template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
             template.spins_count === selectedFsTemplate.spins_count,
@@ -113,7 +126,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       const selectedBetTemplate = betTemplates[selectedBetIndex];
       const selectedFsTemplate = spinsTemplates[realIndex];
       if (selectedBetTemplate && selectedFsTemplate) {
-        const matchingTemplate = bonusesTemplates.find(
+        const matchingTemplate = filtredBonuses.find(
           (template) =>
             template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
             template.spins_count === selectedFsTemplate.spins_count,

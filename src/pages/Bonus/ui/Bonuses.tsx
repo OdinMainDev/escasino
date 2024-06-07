@@ -140,7 +140,14 @@ const Bonuses = () => {
   }, [doCloseModals, doOpenModal, router]);
 
   const addToBasketOrOpenModal = () => {
-    if (settings?.bonus.max_bonuses_per_deposit === 1) {
+    const moneyCount = cartBonuses.filter((item) => item.type === 'money').length;
+    const fsCount = cartBonuses.filter((item) => item.type === 'freespins').length;
+    if (
+      settings &&
+      (settings?.bonus.max_bonuses_per_deposit === 1 ||
+        (selectedTab === 'money' && settings?.bonus.max_bonuses_money_per_deposit <= moneyCount) ||
+        (selectedTab === 'freespins' && settings?.bonus.max_bonuses_money_per_deposit <= fsCount))
+    ) {
       addToBasket();
       router.push({
         pathname: '/wallet/deposit/replenish',
@@ -226,7 +233,7 @@ const Bonuses = () => {
       }
     };
     void getBonusesTemplates();
-  }, [openErrorModal]);
+  }, []);
 
   const clearBonuses = () => {
     if (bonusesFS.current) {
@@ -364,7 +371,14 @@ const Bonuses = () => {
                     addToBasketOrOpenModal();
                   }}
                 >
-                  {settings?.bonus.max_bonuses_per_deposit === 1
+                  {settings &&
+                  (settings?.bonus.max_bonuses_per_deposit === 1 ||
+                    (selectedTab === 'money' &&
+                      settings?.bonus.max_bonuses_money_per_deposit <=
+                        cartBonuses.filter((item) => item.type === 'money').length) ||
+                    (selectedTab === 'freespins' &&
+                      settings?.bonus.max_bonuses_money_per_deposit <=
+                        cartBonuses.filter((item) => item.type === 'freespins').length))
                     ? 'Перейти к оплате'
                     : settings?.bonus.max_bonuses_per_deposit === 0
                       ? 'Добавить'

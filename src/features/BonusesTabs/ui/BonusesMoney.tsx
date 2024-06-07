@@ -3,6 +3,7 @@ import styles from './BonusesTabs.module.scss';
 import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
 import { useState, useMemo, useCallback, forwardRef, useImperativeHandle, useRef } from 'react';
 import classNames from 'classnames';
+import { useAppSelector } from '@/store/hooks/redux';
 
 interface IProps {
   bonusesTemplates: IBonusTemplate[];
@@ -17,6 +18,7 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
   ({ bonusesTemplates, moneyChangeHandler }, ref) => {
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const moneySwiper = useRef<SwiperRef>(null);
+    const cartBonuses = useAppSelector((state) => state.cartBonusesSlice.bonusesTemplates);
 
     useImperativeHandle(ref, () => {
       return {
@@ -35,8 +37,14 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
       if (!bonusesTemplates || bonusesTemplates.length === 0) {
         return [];
       }
+      let filteredTemplates = bonusesTemplates;
 
-      const uniqueBonuses = bonusesTemplates.reduce(
+      filteredTemplates = filteredTemplates.filter(
+        (template) =>
+          !cartBonuses.some((cartItem) => cartItem.id === template.id && !cartItem.is_duplicatable),
+      );
+
+      const uniqueBonuses = filteredTemplates.reduce(
         (acc: IBonusTemplate[], item: IBonusTemplate) => {
           if (item.bonus_percent > 0) {
             const existingIndex = acc.findIndex(
@@ -54,7 +62,7 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
       );
 
       return uniqueBonuses.sort((a, b) => a.bonus_percent - b.bonus_percent);
-    }, [bonusesTemplates]);
+    }, [bonusesTemplates, cartBonuses]);
 
     const selectMoney = useCallback(
       (swiper: SwiperClass) => {
