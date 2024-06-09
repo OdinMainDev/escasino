@@ -47,7 +47,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     useEffect(() => {
       let filteredTemplates = bonusesTemplates;
-
       // Скрываем элементы, если они есть в корзине и is_duplicatable = false
       filteredTemplates = filteredTemplates.filter(
         (template) =>
@@ -55,7 +54,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       );
 
       setFiltredBonuses(filteredTemplates);
-
       // Фильтруем по gameId, если он указан
       if (gameId !== undefined) {
         filteredTemplates = filteredTemplates.filter((template) =>
@@ -103,12 +101,56 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       setSpinsTemplates(uniqueSpinsTemplates);
     }, [bonusesTemplates, cartBonuses, gameId]);
 
+    useEffect(() => {
+      if (spinsSwiper.current) {
+        spinsSwiper.current.swiper.slideTo(0, 0);
+        selectBet(spinsSwiper.current.swiper);
+      }
+    }, [filtredBonuses]);
+
+    const removeDuplicatesBySpinsCount = (data: IBonusTemplate[]): IBonusTemplate[] => {
+      const map = new Map<number, IBonusTemplate>();
+
+      data.forEach((item) => {
+        const existingItem = map.get(item.spins_count);
+        if (!existingItem || item.wager > existingItem.wager) {
+          map.set(item.spins_count, item);
+        }
+      });
+
+      return Array.from(map.values()).sort((a, b) => a.spins_count - b.spins_count);
+    };
+
+    const removeDuplicatesByBet = (data: IBonusTemplate[]): IBonusTemplate[] => {
+      const map = new Map<number, IBonusTemplate>();
+
+      data.forEach((item) => {
+        const existingItem = map.get(item.configurator.bet_amount);
+        if (!existingItem || item.wager > existingItem.wager) {
+          map.set(item.configurator.bet_amount, item);
+        }
+      });
+
+      return Array.from(map.values()).sort(
+        (a, b) => a.configurator.bet_amount - b.configurator.bet_amount,
+      );
+    };
+
     const selectBet = (swiper: SwiperClass) => {
       const realIndex = swiper.realIndex;
       setSelectedBetIndex(realIndex);
       const selectedBetTemplate = betTemplates[realIndex];
       const selectedFsTemplate = spinsTemplates[selectedSpinsIndex];
+
       if (selectedBetTemplate && selectedFsTemplate) {
+        setSpinsTemplates(
+          removeDuplicatesBySpinsCount(
+            filtredBonuses.filter(
+              (item) =>
+                item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
+            ),
+          ),
+        );
         const matchingTemplate = filtredBonuses.find(
           (template) =>
             template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
@@ -120,11 +162,16 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       }
     };
 
-    const selectSpins = (swiper: SwiperClass) => {
-      const realIndex = swiper.realIndex;
+    const selectSpins = (swiper?: SwiperClass) => {
+      const realIndex = swiper ? swiper.realIndex : 0;
       setSelectedSpinsIndex(realIndex);
       const selectedBetTemplate = betTemplates[selectedBetIndex];
       const selectedFsTemplate = spinsTemplates[realIndex];
+      setBetTemplates(
+        removeDuplicatesByBet(
+          filtredBonuses.filter((item) => item.spins_count === betTemplates[realIndex].spins_count),
+        ),
+      );
       if (selectedBetTemplate && selectedFsTemplate) {
         const matchingTemplate = filtredBonuses.find(
           (template) =>
@@ -153,7 +200,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             centeredSlides
             className={styles.settings_params}
             lazyPreloadPrevNext={5}
-            freeMode
             loop={betTemplates.length >= 5}
             onSwiper={selectBet}
             onSlideChange={selectBet}
@@ -191,12 +237,10 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             effect="coverflow"
             slidesPerView={5}
             centeredSlides
-            freeMode
             className={styles.settings_params}
             lazyPreloadPrevNext={5}
             loop={spinsTemplates.length >= 5}
             direction="vertical"
-            onSwiper={selectSpins}
             onSlideChange={selectSpins}
           >
             {spinsTemplates.map((item, index) => (

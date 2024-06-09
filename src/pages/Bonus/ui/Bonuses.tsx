@@ -210,6 +210,8 @@ const Bonuses = () => {
     if (id && games) {
       const game = games.find((item) => item.id.toString() === id);
       setSelectedGame(game);
+    } else {
+      setSelectedGame(null);
     }
 
     if (games) {

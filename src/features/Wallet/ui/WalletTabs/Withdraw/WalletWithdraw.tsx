@@ -141,9 +141,9 @@ const WalletWithdraw = () => {
           ) : (
             <Swiper
               modules={[FreeMode]}
+              freeMode={true}
               slidesPerView={2.5}
               spaceBetween={10}
-              freeMode={true}
               className={styles.slider}
             >
               {billingGroups?.map((item, index) => (
