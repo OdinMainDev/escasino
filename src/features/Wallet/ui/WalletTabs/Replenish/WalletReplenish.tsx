@@ -35,6 +35,7 @@ import { useModal } from '@/app/providers/ModalProvider';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
 import { useRouter } from '@/shared/helpers/navigation';
 import { ActiveBonus } from '@/entities/ActiiveBonus';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 const WalletReplenish = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
@@ -304,7 +305,7 @@ const WalletReplenish = () => {
       settings &&
       cartBonuses.length > 0 &&
       settings.bonus.max_bonuses_per_deposit !== 1 &&
-      settings.bonus.max_bonuses_per_deposit > cartBonuses.length
+      settings.bonus.max_bonuses_per_deposit >= cartBonuses.length
     ) {
       return (
         <>
@@ -364,18 +365,22 @@ const WalletReplenish = () => {
                 .fill(0)
                 .map((_, index) => <TabItem key={index} skeleton />)
             : billingGroups?.map((item, index) => (
-                <TabItem
-                  key={index}
-                  className={styles.billing}
-                  selected={item.id === selectedBillingGroup}
-                  onClick={() => handleGroupSelection(item.id)}
-                >
-                  {item.data.image && <img src={item.data.image} className={styles.billing_img} />}
-                  {
-                    item.data.texts.find((text) => text.language.toLowerCase() === defaultLanguage)
-                      ?.value
-                  }
-                </TabItem>
+                <div key={index}>
+                  <TabItem
+                    className={styles.billing}
+                    selected={item.id === selectedBillingGroup}
+                    onClick={() => handleGroupSelection(item.id)}
+                  >
+                    {item.data.image && (
+                      <img src={item.data.image} className={styles.billing_img} />
+                    )}
+                    {
+                      item.data.texts.find(
+                        (text) => text.language.toLowerCase() === defaultLanguage,
+                      )?.value
+                    }
+                  </TabItem>
+                </div>
               ))}
         </div>
         {paymentProviders && paymentProviders?.length > 0 ? (
