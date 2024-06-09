@@ -335,8 +335,7 @@ const WalletReplenish = () => {
   return (
     <div className={styles.content}>
       {generateBonusesButtons()}
-      {(settings && settings?.bonus.max_bonuses_per_deposit === 1) ||
-      settings?.bonus.max_bonuses_per_deposit === cartBonuses.length + 1 ? null : (
+      {settings && settings?.bonus.max_bonuses_per_deposit > cartBonuses.length && (
         <Button className={styles.button} onClick={openBonus}>
           <svg
             width="23"
