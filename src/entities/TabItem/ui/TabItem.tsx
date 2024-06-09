@@ -10,7 +10,7 @@ interface IProps extends BaseHTMLAttributes<HTMLDivElement> {
 
 const TabItem = ({ children, selected, skeleton, ...otherProps }: IProps) => {
   if (skeleton) {
-    return <div className={styles.skeleton}></div>;
+    return <div className={classNames(styles.skeleton, otherProps.className)}></div>;
   }
 
   return (

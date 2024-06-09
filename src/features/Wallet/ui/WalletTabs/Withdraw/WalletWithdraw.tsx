@@ -17,6 +17,8 @@ import SuccessPaymentModal from '../../SuccessPaymentModal';
 import { IErrorResponse } from '@/shared/models/interfaces/error';
 import { errorValidator } from '@/features/Wallet/helpers/validators';
 import { AxiosError } from 'axios';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { FreeMode } from 'swiper/modules';
 
 interface IValidateData {
   amount: number;
@@ -128,24 +130,42 @@ const WalletWithdraw = () => {
       <div className={styles.block}>
         <div className={styles.title}>Способ оплаты</div>
         <div className={styles.slider}>
-          {billingLoading
-            ? Array(3)
+          {billingLoading ? (
+            <div className={styles.slider}>
+              {Array(3)
                 .fill(0)
-                .map((_, index) => <TabItem key={index} skeleton />)
-            : billingGroups?.map((item, index) => (
-                <TabItem
-                  key={index}
-                  className={styles.billing}
-                  selected={item.id === selectedBillingGroup}
-                  onClick={() => handleGroupSelection(item.id)}
-                >
-                  {item.data.image && <img src={item.data.image} className={styles.billing_img} />}
-                  {
-                    item.data.texts.find((text) => text.language.toLowerCase() === defaultLanguage)
-                      ?.value
-                  }
-                </TabItem>
+                .map((_, index) => (
+                  <TabItem key={index} skeleton />
+                ))}
+            </div>
+          ) : (
+            <Swiper
+              modules={[FreeMode]}
+              slidesPerView={2.5}
+              spaceBetween={10}
+              freeMode={true}
+              className={styles.slider}
+            >
+              {billingGroups?.map((item, index) => (
+                <SwiperSlide key={index}>
+                  <TabItem
+                    className={styles.billing}
+                    selected={item.id === selectedBillingGroup}
+                    onClick={() => handleGroupSelection(item.id)}
+                  >
+                    {item.data.image && (
+                      <img src={item.data.image} className={styles.billing_img} />
+                    )}
+                    {
+                      item.data.texts.find(
+                        (text) => text.language.toLowerCase() === defaultLanguage,
+                      )?.value
+                    }
+                  </TabItem>
+                </SwiperSlide>
               ))}
+            </Swiper>
+          )}
         </div>
         {withdrawProviders && withdrawProviders?.length > 0 ? (
           <div className={styles.title}>Провайдеры</div>
