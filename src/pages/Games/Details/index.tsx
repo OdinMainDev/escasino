@@ -127,6 +127,7 @@ const Details = () => {
   const openBonus = () => {
     if (!isAuth) {
       doOpenModal('login');
+      return;
     }
     if (settings) {
       if (settings.bonus.max_avail_bonuses !== 0 && bonuses) {
