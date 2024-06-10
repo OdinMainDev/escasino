@@ -14,10 +14,11 @@ import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { useRouter } from '@/shared/helpers/navigation';
 import { useModal } from '@/app/providers/ModalProvider';
 import Footer from '@/widgets/Footer';
-import { useAppSelector } from '@/store/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import ModalZeroBalance from './ui/ModalZeroBalance';
 import { gamesHeaderTypeCover } from '@/app/config/app';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
+import { deleteCartBonusesItem } from '@/store/slices/cartBonusesSlice';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
@@ -28,29 +29,9 @@ const Details = () => {
   const { bonuses } = useAppSelector((state) => state.bonusesSlice);
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const { user } = useAppSelector((state) => state.userReducer);
-
-  const alertData: IAlert = {
-    title: 'Внимание!',
-    text: (
-      <div>
-        <div className="mb-[5px]">У вас есть 209 Free Spins в игре Starburst XXXtreme.</div>
-        <div>Отыграйте их или откажитесь от бонуса.</div>
-      </div>
-    ),
-    buttons: [
-      {
-        type: 'outlined',
-        text: 'Отказаться',
-        onClick: doCloseModals,
-      },
-      {
-        type: 'contained',
-        text: 'Играть',
-        onClick: () => {},
-      },
-    ],
-    close: doCloseModals,
-  };
+  const { bonusesTemplates: cartBonuses } = useAppSelector((state) => state.cartBonusesSlice);
+  const [alertData, setAlertData] = useState<IAlert | null>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (Number(id) > 0) {
@@ -62,6 +43,69 @@ const Details = () => {
       void getGameById();
     }
   }, [id]);
+
+  const openBonusError = () => {
+    setAlertData({
+      title: 'Внимание!',
+      text: (
+        <div>
+          <div className="mb-[5px]">
+            {bonuses && bonuses.length > 0
+              ? `У вас есть ${bonuses[0].id} в игре Starburst XXXtreme.`
+              : null}
+          </div>
+          <div>Отыграйте их или откажитесь от бонуса.</div>
+        </div>
+      ),
+      buttons: [
+        {
+          type: 'outlined',
+          text: 'Отказаться',
+          onClick: doCloseModals,
+        },
+        {
+          type: 'contained',
+          text: 'Играть',
+          onClick: () => {},
+        },
+      ],
+      close: doCloseModals,
+    });
+    doOpenModal('alert');
+  };
+
+  const openCartError = () => {
+    setAlertData({
+      title: 'Внимание!',
+      text: (
+        <div>
+          <div className="mb-[5px]">
+            {cartBonuses.length > 0
+              ? `У вас есть бонус под id:${cartBonuses[0].id} вы достигли лимита бонусов`
+              : null}
+          </div>
+          <div>Удалите бонус из корзины чтобы доавить новый</div>
+        </div>
+      ),
+      buttons: [
+        {
+          type: 'outlined',
+          text: 'Отмена',
+          onClick: doCloseModals,
+        },
+        {
+          type: 'contained',
+          text: 'Удалить',
+          onClick: () => {
+            dispatch(deleteCartBonusesItem(cartBonuses[0].uuid));
+            doCloseModals();
+          },
+        },
+      ],
+      close: doCloseModals,
+    });
+    doOpenModal('alert');
+  };
 
   const openDemoPlay = () => {
     router.push('/play/demo/' + id);
@@ -84,10 +128,12 @@ const Details = () => {
     if (settings) {
       if (settings.bonus.max_avail_bonuses !== 0 && bonuses) {
         if (bonuses.length >= settings.bonus.max_avail_bonuses) {
-          doOpenModal('alert');
+          openBonusError();
         } else {
           router.push(`/bonus/${game?.id}`);
         }
+      } else if (settings.bonus.max_bonuses_per_deposit <= cartBonuses.length) {
+        openCartError();
       } else {
         router.push(`/bonus/${game?.id}`);
       }

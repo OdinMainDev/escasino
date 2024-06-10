@@ -367,12 +367,7 @@ const Bonuses = () => {
                     )}
                   </div>
                 </div>
-                <Button
-                  className="flex-1 uppercase"
-                  onClick={() => {
-                    addToBasketOrOpenModal();
-                  }}
-                >
+                <Button className="flex-1 uppercase" onClick={addToBasketOrOpenModal}>
                   {settings &&
                   (settings?.bonus.max_bonuses_per_deposit === 1 ||
                     (selectedTab === 'money' &&
