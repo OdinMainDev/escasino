@@ -75,11 +75,7 @@ const availRoutes: RouteObject[] = [
     children: [
       {
         path: 'details/:id',
-        element: (
-          <BonusesProvider>
-            <Details />
-          </BonusesProvider>
-        ),
+        element: <Details />,
       },
       {
         path: 'search',
@@ -94,11 +90,6 @@ const availRoutes: RouteObject[] = [
             </GameProvidersProvider>
           </GameCategoriesProvider>
         ),
-      },
-      // TODO: удалить позже по концу разработки
-      {
-        path: 'bugpage',
-        element: <GamesFilter />,
       },
     ],
   },
