@@ -22,6 +22,7 @@ import { IBonusFSMethods } from '@/features/BonusesTabs/ui/BonusesFS';
 import { IBonusMoneyMethods } from '@/features/BonusesTabs/ui/BonusesMoney';
 import { BonusesGamesModal } from '@/features/BonusesGamesModal';
 import { v4 as uuidv4 } from 'uuid';
+import { useCurrentLanguage } from '@/app/providers/LangProvider';
 
 const Bonuses = () => {
   const { id } = useParams();
@@ -34,6 +35,7 @@ const Bonuses = () => {
     maxAmount: maxAmountCart,
   } = useAppSelector((state) => state.cartBonusesSlice);
   const [tabs, setTabs] = useState<string[]>([]);
+  const currentLanguage = useCurrentLanguage();
   const [selectedGame, setSelectedGame] = useState<IGame | null | undefined>(null);
   const [bonusesTemplates, setBonusesTemplates] = useState<IBonusTemplate[]>([]);
   const [availGames, setAvailGames] = useState<IGame[]>([]);
@@ -267,7 +269,7 @@ const Bonuses = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <GoBackButton />
+        <GoBackButton customPath={'/' + currentLanguage + '/wallet/deposit/replenish'} />
         <div className={styles.title}>Собери свой бонус</div>
         <Icons icon="chat" />
       </div>

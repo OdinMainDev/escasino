@@ -4,7 +4,6 @@ import Input from '@/shared/ui/Input';
 import { TabBlock } from '@/entities/TabBlock';
 import { TabItem } from '@/entities/TabItem';
 import { useAppSelector } from '@/store/hooks/redux';
-import { defaultLanguage } from '@/app/config/locales';
 import { createPayment, paymentTransaction } from '@/features/Wallet/api/replenishApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import {
@@ -37,6 +36,7 @@ import { useRouter } from '@/shared/helpers/navigation';
 import { ActiveBonus } from '@/entities/ActiiveBonus';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
+import { useCurrentLanguage } from '@/app/providers/LangProvider';
 
 const WalletReplenish = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
@@ -49,6 +49,7 @@ const WalletReplenish = () => {
     (state) => state.paymentAllProvidersSlice,
   );
   const { t } = useTranslation();
+  const currentLanguage = useCurrentLanguage();
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
   const [layout, setLayout] = useState<IProviderLayout>({});
@@ -385,7 +386,7 @@ const WalletReplenish = () => {
                 >
                   {item.data.image && <img src={item.data.image} className={styles.billing_img} />}
                   {
-                    item.data.texts.find((text) => text.language.toLowerCase() === defaultLanguage)
+                    item.data.texts.find((text) => text.language.toLowerCase() === currentLanguage)
                       ?.value
                   }
                 </TabItem>
@@ -405,7 +406,7 @@ const WalletReplenish = () => {
                 <div className={styles.selected_provider_title}>
                   {
                     selectedProvider.meta.texts.find(
-                      (text) => text.language.toLowerCase() === defaultLanguage,
+                      (text) => text.language.toLowerCase() === currentLanguage,
                     )?.value
                   }
                 </div>

@@ -5,14 +5,60 @@ import { BaseHTMLAttributes, useState } from 'react';
 import { useAppDispatch } from '@/store/hooks/redux';
 import { deleteCartBonusesItem } from '@/store/slices/cartBonusesSlice';
 import classNames from 'classnames';
+import { IGame } from '@/shared/models/interfaces/game';
+import { useCurrentLanguage } from '@/app/providers/LangProvider';
 
 interface IProps extends BaseHTMLAttributes<HTMLElement> {
   template: ICartBonusTemplate;
+  games: IGame[] | null;
 }
-const BonusesItem = ({ template, ...otherProps }: IProps) => {
-  const data = false;
+const BonusesItem = ({ template, games, ...otherProps }: IProps) => {
+  let image = PlaceholderImage;
+  let gameName = '';
+  let bonusTitle = '';
+  let description = '';
+  const currentLanguage = useCurrentLanguage();
   const dispatch = useAppDispatch();
   const [removing, setRemoving] = useState(false);
+
+  if (template.meta.image != '') {
+    image = template.meta.image;
+  }
+
+  bonusTitle =
+    template.meta.texts?.find((item) => item.language.toLowerCase() === currentLanguage)?.value ??
+    '';
+
+  if (template.game_id) {
+    games?.forEach((game) => {
+      if (game.id != template.game_id) {
+        return;
+      }
+      image = game.image;
+      gameName =
+        game.data.texts?.find((item) => item.language.toLowerCase() === currentLanguage)?.value ??
+        game.name;
+    });
+  }
+
+  if (!description) {
+    if (template.type == 'freespins') {
+      description = template.spins_count.toString() + ' FS';
+      if (gameName.length > 0) {
+        description += ' (' + gameName + ')';
+      }
+    } else {
+      description = template.bonus_percent.toString() + ' %';
+    }
+  }
+
+  if (!bonusTitle) {
+    if (template.type == 'freespins') {
+      bonusTitle = 'Freespins бонус';
+    } else {
+      bonusTitle = 'Бонус к депозиту';
+    }
+  }
 
   const removeItem = () => {
     setRemoving(true);
@@ -29,14 +75,10 @@ const BonusesItem = ({ template, ...otherProps }: IProps) => {
       })}
       {...otherProps}
     >
-      {data ? (
-        <img className={styles.img} alt={template.id.toString()} src="" />
-      ) : (
-        <img className={styles.img} alt={template.id.toString()} src={PlaceholderImage} />
-      )}
+      <img className={styles.img} alt={bonusTitle} src={image} />
       <div className="flex flex-col gap-[8px] flex-1">
-        <div className={styles.subtitle}>{template.id}</div>
-        <div className={styles.title}>{template.bonus_percent}</div>
+        <div className={styles.subtitle}>{bonusTitle}</div>
+        <div className={styles.title}>{description}</div>
       </div>
       <div className={styles.remove} onClick={removeItem}>
         <svg

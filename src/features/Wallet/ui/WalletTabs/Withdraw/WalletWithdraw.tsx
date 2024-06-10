@@ -4,7 +4,6 @@ import Input from '@/shared/ui/Input';
 import { TabBlock } from '@/entities/TabBlock';
 import { TabItem } from '@/entities/TabItem';
 import { useAppSelector } from '@/store/hooks/redux';
-import { defaultLanguage } from '@/app/config/locales';
 import { createWithdraw } from '@/features/Wallet/api/withdrawApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { IWithdrawProvider } from '@/shared/models/interfaces/withdrawProviders';
@@ -19,6 +18,7 @@ import { errorValidator } from '@/features/Wallet/helpers/validators';
 import { AxiosError } from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
+import { useCurrentLanguage } from '@/app/providers/LangProvider';
 
 interface IValidateData {
   amount: number;
@@ -38,6 +38,7 @@ const WalletWithdraw = () => {
     (state) => state.withdrawAllProvidersSlice,
   );
   const { t } = useTranslation();
+  const currentLanguage = useCurrentLanguage();
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
   const [selectedProvider, setSelectedProvider] = useState<IWithdrawProvider | null>(null);
   const [layout, setLayout] = useState<IProviderLayout>({});
@@ -158,7 +159,7 @@ const WalletWithdraw = () => {
                     )}
                     {
                       item.data.texts.find(
-                        (text) => text.language.toLowerCase() === defaultLanguage,
+                        (text) => text.language.toLowerCase() === currentLanguage,
                       )?.value
                     }
                   </TabItem>
@@ -178,7 +179,7 @@ const WalletWithdraw = () => {
                 <div className={styles.selected_provider_title}>
                   {
                     selectedProvider.meta.texts.find(
-                      (text) => text.language.toLowerCase() === defaultLanguage,
+                      (text) => text.language.toLowerCase() === currentLanguage,
                     )?.value
                   }
                 </div>

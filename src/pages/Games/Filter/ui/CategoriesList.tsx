@@ -3,6 +3,7 @@ import { useAppSelector } from '@/store/hooks/redux';
 import styles from './CategoriesList.module.scss';
 import { TabItem } from '@/entities/TabItem';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
+import { useCurrentLanguage } from '@/app/providers/LangProvider';
 
 interface IProps {
   selectCategory: (selectedCategory: string) => void;
@@ -11,6 +12,7 @@ interface IProps {
 const CategoriesList = ({ selectCategory }: IProps) => {
   const { categories, loading } = useAppSelector((state) => state.gameCategoriesReducer);
   const { getFilters } = useGamesFilters();
+  const currentLanguage = useCurrentLanguage();
 
   return (
     <div className={styles.container}>
@@ -24,7 +26,11 @@ const CategoriesList = ({ selectCategory }: IProps) => {
               selected={getFilters().categories.includes(item.url)}
               key={item.url}
             >
-              {item.data.texts.find((item) => item.language.toLocaleLowerCase() === 'ru')?.value}
+              {
+                item.data.texts.find(
+                  (item) => item.language.toLocaleLowerCase() === currentLanguage,
+                )?.value
+              }
             </TabItem>
           ))}
     </div>

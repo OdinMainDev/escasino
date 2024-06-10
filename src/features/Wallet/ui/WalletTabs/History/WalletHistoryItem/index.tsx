@@ -7,11 +7,11 @@ import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { padNumber } from '@/shared/helpers/padNumber';
 import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
-import { defaultLanguage } from '@/app/config/locales';
 import { paymentTransaction } from '@/features/Wallet/api/replenishApi';
 import Button from '@/shared/ui/Button';
 import { useTranslation } from 'react-i18next';
 import { IWithdrawProvider } from '@/shared/models/interfaces/withdrawProviders';
+import { useCurrentLanguage } from '@/app/providers/LangProvider';
 
 interface IProps {
   transaction: IHistoryItem;
@@ -36,6 +36,7 @@ const WalletHistoryItem = ({
 }: IProps) => {
   const provider = providers.find((item) => item.id === transaction.provider_id);
   const { t } = useTranslation();
+  const currentLanguage = useCurrentLanguage();
 
   const getStatus = (status: number, type: string) => {
     if (type == 'payment') {
@@ -141,7 +142,7 @@ const WalletHistoryItem = ({
           <div className={styles.label}>Платежная система</div>
           <div className={styles.value}>
             {provider &&
-              provider.meta.texts.find((item) => item.language.toLowerCase() === defaultLanguage)
+              provider.meta.texts.find((item) => item.language.toLowerCase() === currentLanguage)
                 ?.value}
           </div>
         </div>

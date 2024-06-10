@@ -6,14 +6,12 @@ export interface IInitialCartBonuses {
   bonusesTemplates: ICartBonusTemplate[];
   minAmount: number;
   maxAmount: number;
-  game_ids: number[];
 }
 
 const initialState: IInitialCartBonuses = {
   bonusesTemplates: [],
   minAmount: 0,
   maxAmount: 0,
-  game_ids: [],
 };
 
 export const cartBonusesSlice = createSlice({
@@ -73,11 +71,8 @@ export const cartBonusesSlice = createSlice({
         state.maxAmount = 0;
       }
     },
-    setGameIds(state, action: PayloadAction<number[]>) {
-      state.game_ids = action.payload;
-    },
   },
 });
 
-export const { addToCartBonuses, deleteCartBonusesItem, setGameIds } = cartBonusesSlice.actions;
+export const { addToCartBonuses, deleteCartBonusesItem } = cartBonusesSlice.actions;
 export default cartBonusesSlice.reducer;

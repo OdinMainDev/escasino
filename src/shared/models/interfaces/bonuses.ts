@@ -43,6 +43,7 @@ export interface IBonusTemplate {
   is_duplicatable: boolean;
   is_real_money_only: boolean;
   wager: number;
+  meta: Meta;
 }
 
 export interface ICartBonusTemplate extends IBonusTemplate {
@@ -58,4 +59,15 @@ export interface IBetList {
   max_bet_amount: number;
   max_win_x: number;
   max_win: number;
+}
+
+export interface Meta {
+  texts: Text[];
+  image: string;
+}
+
+export interface Text {
+  language: string;
+  key: string;
+  value: string;
 }
