@@ -3,16 +3,12 @@
   position: relative;
   text-align: center;
   transition: background-color 0.2s ease-in-out, color 0.2s, opacity 0.2s;
-  border: 1px solid var(--Divider-main, #4E4E4E);
   opacity: 1;
+  border-radius: 2px;
   @media (min-width: 375px) {
     padding: 12px 32px;
   }
-
-  &.light {
-    border: 1px solid #F9F9F9;
-    color: #FFF;
-  }
+  
 }
 
 .size_m {
@@ -39,28 +35,32 @@
 
 .outlined {
   background-color: transparent;
-  color: var(--secondary);
-  &.light {
-    &:hover {
-      background-color: var(--primary);
-      color: var(--secondary);
-      svg {
-        path {
-          stroke: var(--secondary);
-        }
+  border: 1px solid var(--main-button-color);
+  color: var(--main-button-color);
+  &:hover {
+    background-color: var(--main-button-color);
+    color: var(--secondary-button-color);
+    svg {
+      path {
+        fill:  transparent;
+        stroke: var(--secondary-button-color);
       }
-    } 
+    }
   }
-  &.dark {
+
+  &.reverse_theme {
+    border: 1px solid var(--secondary-button-color);
+    color: var(--secondary-button-color);
     &:hover {
-      background-color: var(--main-button-color);
-      color: var(--primary);
+      background-color: var(--secondary-button-color);
+      color: var(--main-button-color);
       svg {
         path {
-          stroke: #FFF;
+          fill:  transparent;
+          stroke: var(--main-button-color);
         }
       }
-    } 
+    }
   }
  
   &.disabled {
@@ -73,19 +73,38 @@
 }
 
 .contained {
+  border: 1px solid var(--main-button-color);
   background-color: var(--main-button-color);
-  color: var(--primary);
+  color: var(--secondary-button-color);
   &:hover {
-    opacity: 0.7;
-    color: var(--secondary);
-    background-color: transparent;  
-  }  
+    background-color: transparent;
+    color: var(--main-button-color);
+    svg {
+      path {
+        fill:  transparent;
+        stroke: var(--main-button-color);
+      }
+    }
+  }
+  &.reverse_theme {
+    border: 1px solid var(--secondary-button-color);
+    background-color: var(--secondary-button-color);
+    color: var(--main-button-color);
+    &:hover {
+      background-color: transparent;
+      color: var(--secondary-button-color);
+      svg {
+        path {
+          fill:  transparent;
+          stroke: var(--secondary-button-color);
+        }
+      }
+    }
+  }
 
   &.disabled {
     &:hover {
       opacity: 0.7;
-      background-color: var(--main-button-color);
-      color: var(--primary);
     }
   }
 }

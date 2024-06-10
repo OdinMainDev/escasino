@@ -61,7 +61,7 @@ const ActiveBonus = ({ template }: IProps) => {
           </div>
         </div>
       </div>
-      <Button onClick={cancelBonus} className="w-[100%]" theme="light">
+      <Button onClick={cancelBonus} className="w-[100%]" elType="outlined" reverseTheme>
         Отменить бонус
       </Button>
     </div>
