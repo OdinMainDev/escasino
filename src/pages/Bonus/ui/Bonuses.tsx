@@ -338,6 +338,8 @@ const Bonuses = () => {
                   ref={bonusesMoney}
                   moneyChangeHandler={bonusChangeHandler}
                   bonusesTemplates={bonusesTemplates}
+                  minAmount={minAmountCart}
+                  maxAmount={maxAmountCart}
                 />
               ) : (
                 <BonusesFS
@@ -345,6 +347,8 @@ const Bonuses = () => {
                   bonusesTemplates={bonusesTemplates}
                   fsChangeHandler={bonusChangeHandler}
                   gameId={selectedGame ? selectedGame.id : undefined}
+                  minAmount={minAmountCart}
+                  maxAmount={maxAmountCart}
                 />
               )}
             </div>

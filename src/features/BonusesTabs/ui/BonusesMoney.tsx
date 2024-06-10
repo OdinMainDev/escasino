@@ -8,6 +8,8 @@ import { useAppSelector } from '@/store/hooks/redux';
 interface IProps {
   bonusesTemplates: IBonusTemplate[];
   moneyChangeHandler: (id: number) => void;
+  minAmount?: number;
+  maxAmount?: number;
 }
 
 export interface IBonusMoneyMethods {
@@ -15,7 +17,7 @@ export interface IBonusMoneyMethods {
 }
 
 const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
-  ({ bonusesTemplates, moneyChangeHandler }, ref) => {
+  ({ bonusesTemplates, moneyChangeHandler, minAmount, maxAmount }, ref) => {
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const moneySwiper = useRef<SwiperRef>(null);
     const cartBonuses = useAppSelector((state) => state.cartBonusesSlice.bonusesTemplates);
@@ -44,6 +46,24 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
           !cartBonuses.some((cartItem) => cartItem.id === template.id && !cartItem.is_duplicatable),
       );
 
+      // Фильтруем по minAmount, если он указан
+      if (minAmount !== undefined && minAmount > 0) {
+        filteredTemplates = filteredTemplates.filter(
+          (template) =>
+            template.bonus_settings.min_amount == 0 ||
+            template.bonus_settings.min_amount >= minAmount,
+        );
+      }
+
+      // Фильтруем по maxAmount, если он указан
+      if (maxAmount !== undefined && maxAmount > 0) {
+        filteredTemplates = filteredTemplates.filter(
+          (template) =>
+            template.bonus_settings.max_amount == 0 ||
+            template.bonus_settings.max_amount >= maxAmount,
+        );
+      }
+
       const uniqueBonuses = filteredTemplates.reduce(
         (acc: IBonusTemplate[], item: IBonusTemplate) => {
           if (item.bonus_percent > 0) {
@@ -62,7 +82,7 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
       );
 
       return uniqueBonuses.sort((a, b) => a.bonus_percent - b.bonus_percent);
-    }, [bonusesTemplates, cartBonuses]);
+    }, [bonusesTemplates, cartBonuses, minAmount, maxAmount]);
 
     const selectMoney = useCallback(
       (swiper: SwiperClass) => {

@@ -9,6 +9,8 @@ interface IProps {
   bonusesTemplates: IBonusTemplate[];
   fsChangeHandler: (betTemplateId: number) => void;
   gameId?: number;
+  minAmount?: number;
+  maxAmount?: number;
 }
 
 export interface IBonusFSMethods {
@@ -16,7 +18,7 @@ export interface IBonusFSMethods {
 }
 
 const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
-  ({ bonusesTemplates, fsChangeHandler, gameId }, ref) => {
+  ({ bonusesTemplates, fsChangeHandler, gameId, minAmount, maxAmount }, ref) => {
     const [selectedBetIndex, setSelectedBetIndex] = useState<number>(0);
     const [selectedSpinsIndex, setSelectedSpinsIndex] = useState<number>(0);
     const [betTemplates, setBetTemplates] = useState<IBonusTemplate[]>([]);
@@ -61,6 +63,24 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         );
       }
 
+      // Фильтруем по minAmount, если он указан
+      if (minAmount !== undefined && minAmount > 0) {
+        filteredTemplates = filteredTemplates.filter(
+          (template) =>
+            template.bonus_settings.min_amount == 0 ||
+            template.bonus_settings.min_amount >= minAmount,
+        );
+      }
+
+      // Фильтруем по maxAmount, если он указан
+      if (maxAmount !== undefined && maxAmount > 0) {
+        filteredTemplates = filteredTemplates.filter(
+          (template) =>
+            template.bonus_settings.max_amount == 0 ||
+            template.bonus_settings.max_amount >= maxAmount,
+        );
+      }
+
       // Уникальные ставки с учетом большего значения wager
       const uniqueBetTemplates = filteredTemplates
         .reduce((acc, template) => {
@@ -99,7 +119,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
       setBetTemplates(uniqueBetTemplates);
       setSpinsTemplates(uniqueSpinsTemplates);
-    }, [bonusesTemplates, cartBonuses, gameId]);
+    }, [bonusesTemplates, cartBonuses, gameId, minAmount, maxAmount]);
 
     useEffect(() => {
       if (spinsSwiper.current) {
