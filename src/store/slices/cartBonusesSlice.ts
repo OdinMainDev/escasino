@@ -71,8 +71,12 @@ export const cartBonusesSlice = createSlice({
         state.maxAmount = 0;
       }
     },
+    resetCartBonuses: (state: IInitialCartBonuses) => {
+      Object.assign(state, initialState);
+    },
   },
 });
 
-export const { addToCartBonuses, deleteCartBonusesItem } = cartBonusesSlice.actions;
+export const { addToCartBonuses, deleteCartBonusesItem, resetCartBonuses } =
+  cartBonusesSlice.actions;
 export default cartBonusesSlice.reducer;

@@ -7,6 +7,7 @@ import { getUser } from '@/store/slices/userSlice';
 import { useAppDispatch } from '@/store/hooks/redux';
 import { useGamesFilters } from './pages/GamesFilter';
 import { useModal } from './ModalProvider';
+import { resetCartBonuses } from '@/store/slices/cartBonusesSlice';
 
 interface EventDispatcherProviderProps {
   children: ReactNode;
@@ -25,7 +26,7 @@ export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = (
     if (isAuth) {
       void dispatch(getUser());
     }
-    function checkPathname(pathname: string) {
+    function checkAvailGameFilterPathname(pathname: string) {
       const pathParts = pathname.split('/');
       if (pathname == '/games/filter') {
         return true;
@@ -40,7 +41,37 @@ export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = (
       return false;
     }
 
-    if (!checkPathname(pathname)) {
+    function checkAvailBonusCartPathname(pathname: string) {
+      const pathParts = pathname.split('/');
+      const validPaths = [
+        '/wallet/deposit/replenish',
+        '/wallet/deposit/withdraw',
+        '/wallet/deposit/history',
+        '/bonus',
+      ];
+
+      // Check if the path matches any of the valid paths directly
+      if (validPaths.includes(pathname)) {
+        return true;
+      }
+
+      // Check if the path includes a language prefix or game ID
+      const langPaths = validPaths.map((path) => `/${pathParts[1]}${path}`);
+      if (langPaths.includes(pathname)) {
+        return true;
+      }
+
+      // Check for bonus with GAME_ID
+      if (pathParts[1] === 'bonus' || (pathParts.length > 2 && pathParts[2] === 'bonus')) {
+        return true;
+      }
+    }
+
+    if (!checkAvailBonusCartPathname(pathname)) {
+      dispatch(resetCartBonuses());
+    }
+
+    if (!checkAvailGameFilterPathname(pathname)) {
       const newFilters = getFilters();
       newFilters.categories = [];
       newFilters.providers = [];

@@ -3,7 +3,7 @@ import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
 import { TabBlock } from '@/entities/TabBlock';
 import { TabItem } from '@/entities/TabItem';
-import { useAppSelector } from '@/store/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { createPayment, paymentTransaction } from '@/features/Wallet/api/replenishApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import {
@@ -37,6 +37,7 @@ import { ActiveBonus } from '@/entities/ActiiveBonus';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
+import { resetCartBonuses } from '@/store/slices/cartBonusesSlice';
 
 const WalletReplenish = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
@@ -49,6 +50,7 @@ const WalletReplenish = () => {
     (state) => state.paymentAllProvidersSlice,
   );
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const currentLanguage = useCurrentLanguage();
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
   const [selectedProvider, setSelectedProvider] = useState<IPaymentProvider | null>(null);
@@ -105,6 +107,12 @@ const WalletReplenish = () => {
     }
   }, [billingGroups, paymentProviders]);
 
+  useEffect(() => {
+    if (minAmount == maxAmount && minAmount > 0) {
+      setAmount(minAmount.toString());
+    }
+  }, [minAmount, maxAmount, setAmount]);
+
   const handleGroupSelection = (id: number) => {
     setSelectedBillingGroup(id);
     const provider = paymentProviders?.find((provider) => provider.billing_groups.includes(id));
@@ -150,6 +158,7 @@ const WalletReplenish = () => {
         ...layout,
       };
       const { data } = await createPayment(payment);
+      dispatch(resetCartBonuses());
       startFetching(data.hash);
     } catch (e) {
       const axiosError = e as AxiosError;
@@ -518,10 +527,12 @@ const WalletReplenish = () => {
           value={amount}
           isError={checkAmount(
             Number(amount),
-            Number(selectedProvider?.conditions.limit_maximum) > maxAmount && maxAmount !== 0
+            maxAmount > 0 &&
+              (maxAmount < Number(selectedProvider?.conditions.limit_maximum) ||
+                Number(selectedProvider?.conditions.limit_maximum) == 0)
               ? maxAmount
               : Number(selectedProvider?.conditions.limit_maximum),
-            Number(selectedProvider?.conditions.limit_minimum) < minAmount
+            minAmount > 0 && minAmount > Number(selectedProvider?.conditions.limit_minimum)
               ? minAmount
               : Number(selectedProvider?.conditions.limit_minimum),
           )}
@@ -530,10 +541,12 @@ const WalletReplenish = () => {
         {selectedProvider && (
           <div className={styles.subtitle}>
             {generateLimitText(
-              Number(selectedProvider?.conditions.limit_minimum) < minAmount
+              minAmount > 0 && minAmount > Number(selectedProvider?.conditions.limit_minimum)
                 ? minAmount
                 : Number(selectedProvider?.conditions.limit_minimum),
-              Number(selectedProvider?.conditions.limit_maximum) > maxAmount && maxAmount !== 0
+              maxAmount > 0 &&
+                (maxAmount < Number(selectedProvider?.conditions.limit_maximum) ||
+                  Number(selectedProvider?.conditions.limit_maximum) == 0)
                 ? maxAmount
                 : Number(selectedProvider?.conditions.limit_maximum),
               selectedProvider.currency,
@@ -547,11 +560,13 @@ const WalletReplenish = () => {
           !validateData({
             amount: Number(amount),
             max:
-              Number(selectedProvider?.conditions.limit_maximum) > maxAmount && maxAmount !== 0
+              maxAmount > 0 &&
+              (maxAmount < Number(selectedProvider?.conditions.limit_maximum) ||
+                Number(selectedProvider?.conditions.limit_maximum) == 0)
                 ? maxAmount
                 : Number(selectedProvider?.conditions.limit_maximum),
             min:
-              Number(selectedProvider?.conditions.limit_minimum) < minAmount
+              minAmount > 0 && minAmount > Number(selectedProvider?.conditions.limit_minimum)
                 ? minAmount
                 : Number(selectedProvider?.conditions.limit_minimum),
             layout,

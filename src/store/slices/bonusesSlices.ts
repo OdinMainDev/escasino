@@ -51,7 +51,13 @@ export const bonusesSlice = createSlice({
       state.status = action?.payload?.status ?? 500;
     });
   },
-  reducers: {},
+  reducers: {
+    resetBonuses: (state: IInitialBonuses) => {
+      Object.assign(state, initialState);
+    },
+  },
 });
+
+export const { resetBonuses } = bonusesSlice.actions;
 
 export default bonusesSlice.reducer;
