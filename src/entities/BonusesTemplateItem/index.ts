@@ -1,3 +1,3 @@
-import BonusesItem from './ui/BonusesTemplateItem';
+import BonusesTemplateItem from './ui/BonusesTemplateItem';
 
-export { BonusesItem };
+export { BonusesTemplateItem };

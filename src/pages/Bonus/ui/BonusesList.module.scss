@@ -23,5 +23,10 @@
 }
 
 .content {
-  flex: 1;
+  flex:1;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  padding: 0 16px;
+
 }

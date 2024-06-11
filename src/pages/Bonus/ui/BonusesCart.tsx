@@ -2,7 +2,7 @@ import GoBackButton from '@/shared/ui/GoBackButton';
 import styles from './BonusesCart.module.scss';
 import Icons from '@/shared/ui/Icons';
 import { useAppSelector } from '@/store/hooks/redux';
-import { BonusesItem } from '@/entities/BonusesTemplateItem';
+import { BonusesTemplateItem } from '@/entities/BonusesTemplateItem';
 import Button from '@/shared/ui/Button';
 import { useRouter } from '@/shared/helpers/navigation';
 const BonusesCart = () => {
@@ -19,7 +19,7 @@ const BonusesCart = () => {
       <div className={styles.content}>
         {bonusesTemplates.length > 0 ? (
           bonusesTemplates.map((item) => (
-            <BonusesItem template={item} games={games} key={item.uuid} />
+            <BonusesTemplateItem template={item} games={games} key={item.uuid} />
           ))
         ) : (
           <div className={styles.empty}>

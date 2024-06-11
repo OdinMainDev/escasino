@@ -39,14 +39,17 @@ export const bonusesSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getBonuses.pending, (state) => {
       ParentPending(state);
+      state.loading = true;
     });
     builder.addCase(getBonuses.fulfilled, (state, action) => {
       ParentFilled(state);
       state.status = action.payload?.status ?? 200;
       state.bonuses = action.payload?.bonuses ?? null;
+      state.loading = false;
     });
     builder.addCase(getBonuses.rejected, (state, action) => {
       ParentRejected(state);
+      state.loading = false;
       state.bonuses = action?.payload?.bonuses ?? null;
       state.status = action?.payload?.status ?? 500;
     });

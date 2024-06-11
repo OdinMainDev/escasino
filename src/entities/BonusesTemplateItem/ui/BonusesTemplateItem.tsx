@@ -13,7 +13,7 @@ interface IProps extends BaseHTMLAttributes<HTMLElement> {
   games: IGame[] | null;
 }
 
-const BonusesItem = ({ template, games, ...otherProps }: IProps) => {
+const BonusesTemplateItem = ({ template, games, ...otherProps }: IProps) => {
   const currentLanguage = useCurrentLanguage();
   const dispatch = useAppDispatch();
   const [removing, setRemoving] = useState(false);
@@ -101,4 +101,4 @@ const BonusesItem = ({ template, games, ...otherProps }: IProps) => {
   );
 };
 
-export default BonusesItem;
+export default BonusesTemplateItem;

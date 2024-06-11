@@ -15,6 +15,7 @@ export interface IBonusData {
 export interface IBonusesList {
   type: string;
   id: number;
+  game_id: number;
 }
 
 export interface IBonusConfigurator {

@@ -87,7 +87,7 @@ const Profile = () => {
       <div className={styles.block}>
         <div className={styles.block_header}>
           <div className={styles.title}>Активный бонус</div>
-          <div onClick={() => router.push('/profile/edit')} className={styles.side_url}>
+          <div onClick={() => router.push('/bonus/list')} className={styles.side_url}>
             смотреть
           </div>
         </div>
