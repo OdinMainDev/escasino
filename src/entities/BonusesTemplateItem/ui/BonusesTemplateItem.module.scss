@@ -1,0 +1,54 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 16px;
+  background: #292929;
+  border-radius: 2px;
+  position: relative;
+  width: 100%;
+  height: 100px;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  cursor: pointer;
+  overflow: hidden;
+  &.removing {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  &:hover .remove {
+    right: 0;
+  }
+}
+
+.remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  right: -100%;
+  background-color: #a72929;
+  transition: right 0.2s ;
+}
+
+.img {
+  width: 60px;
+  height: 60px;
+}
+
+.subtitle {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 133%;
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.title {
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 120%;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.87);
+}

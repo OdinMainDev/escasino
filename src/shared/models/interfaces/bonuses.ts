@@ -5,6 +5,7 @@ export interface IBonus {
   data: IBonusData;
   created_at: number;
   expired_at: number;
+  bonus_template: IBonusTemplate;
 }
 
 export interface IBonusData {

@@ -2,7 +2,7 @@ import GoBackButton from '@/shared/ui/GoBackButton';
 import styles from './BonusesCart.module.scss';
 import Icons from '@/shared/ui/Icons';
 import { useAppSelector } from '@/store/hooks/redux';
-import { BonusesItem } from '@/entities/BonusesItem';
+import { BonusesItem } from '@/entities/BonusesTemplateItem';
 import Button from '@/shared/ui/Button';
 import { useRouter } from '@/shared/helpers/navigation';
 const BonusesCart = () => {

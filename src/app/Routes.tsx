@@ -31,6 +31,7 @@ import GlobalModals from './providers/GlobalModals';
 import { AuthSocialVk } from '@/pages/Auth';
 import { Bonuses, BonusesCart, BonusesGames } from '@/pages/Bonus';
 import BonusesProvider from './providers/pages/BonusesProvider';
+import BonusesList from '@/pages/Bonus/ui/BonusesList';
 
 const availRoutes: RouteObject[] = [
   {
@@ -57,6 +58,14 @@ const availRoutes: RouteObject[] = [
         element: (
           <BonusesProvider>
             <Bonuses />
+          </BonusesProvider>
+        ),
+      },
+      {
+        path: 'list',
+        element: (
+          <BonusesProvider>
+            <BonusesList />
           </BonusesProvider>
         ),
       },
@@ -115,8 +124,12 @@ const availRoutes: RouteObject[] = [
     element: <AuthGuardProvider />,
     children: [
       {
-        path: '',
-        element: <Profile />,
+        index: true,
+        element: (
+          <BonusesProvider>
+            <Profile />
+          </BonusesProvider>
+        ),
       },
       {
         path: 'edit',

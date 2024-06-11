@@ -11,25 +11,9 @@
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   cursor: pointer;
   overflow: hidden;
-  &.removing {
-    opacity: 0;
-    transform: translateX(-100%);
-  }
   &:hover .remove {
     right: 0;
   }
-}
-
-.remove {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  height: 100px;
-  width: 100px;
-  right: -100%;
-  background-color: #a72929;
-  transition: right 0.2s ;
 }
 
 .img {
