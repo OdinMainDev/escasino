@@ -68,7 +68,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         filteredTemplates = filteredTemplates.filter(
           (template) =>
             template.bonus_settings.min_amount == 0 ||
-            template.bonus_settings.min_amount >= minAmount,
+            template.bonus_settings.min_amount <= minAmount,
         );
       }
 
@@ -77,7 +77,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         filteredTemplates = filteredTemplates.filter(
           (template) =>
             template.bonus_settings.max_amount == 0 ||
-            template.bonus_settings.max_amount <= maxAmount,
+            template.bonus_settings.max_amount >= maxAmount,
         );
       }
 
