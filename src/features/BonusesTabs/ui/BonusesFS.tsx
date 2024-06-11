@@ -55,7 +55,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           !cartBonuses.some((cartItem) => cartItem.id === template.id && !cartItem.is_duplicatable),
       );
 
-      setFiltredBonuses(filteredTemplates);
       // Фильтруем по gameId, если он указан
       if (gameId !== undefined) {
         filteredTemplates = filteredTemplates.filter((template) =>
@@ -116,6 +115,8 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           return acc;
         }, [] as IBonusTemplate[])
         .sort((a, b) => a.spins_count - b.spins_count);
+
+      setFiltredBonuses(filteredTemplates);
 
       setBetTemplates(uniqueBetTemplates);
       setSpinsTemplates(uniqueSpinsTemplates);
