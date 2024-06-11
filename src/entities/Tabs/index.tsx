@@ -4,18 +4,18 @@ import { useEffect, useState } from 'react';
 
 interface IProps {
   tabs: ITab[];
-  value?: string;
+  value?: string | number;
   onChange?: (tab: ITab) => void;
   className?: string;
 }
 
 export interface ITab {
-  value: string;
+  value: string | number;
   label: string;
 }
 
 const Tabs = ({ tabs, onChange, value, className }: IProps) => {
-  const [activeTab, setActiveTab] = useState<string | null>(value ?? null);
+  const [activeTab, setActiveTab] = useState<string | number | null>(value ?? null);
 
   useEffect(() => {
     setActiveTab(value ?? null);

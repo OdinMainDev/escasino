@@ -381,13 +381,13 @@ const WalletReplenish = () => {
         ) : (
           <Swiper
             modules={[FreeMode]}
-            slidesPerView={2.5}
+            slidesPerView="auto"
             spaceBetween={10}
             freeMode={true}
             className={styles.slider}
           >
             {billingGroups?.map((item, index) => (
-              <SwiperSlide key={index}>
+              <SwiperSlide className="w-auto" key={index}>
                 <TabItem
                   className={styles.billing}
                   selected={item.id === selectedBillingGroup}
