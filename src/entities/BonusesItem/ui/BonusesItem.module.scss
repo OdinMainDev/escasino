@@ -1,5 +1,24 @@
 .container {
   display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background: #1E1E1E;
+  border-radius: 2px;
+}
+
+.title {
+  color: rgba(255, 255, 255, 0.87);
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.02em;
+}
+
+
+
+.game {
+  display: flex;
   align-items: center;
   gap: 18px;
   padding: 16px;
@@ -11,28 +30,27 @@
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   cursor: pointer;
   overflow: hidden;
-  &:hover .remove {
-    right: 0;
+  margin-bottom: 20px;
+
+  &_title {
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 120%;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  &_subtitle {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 133%;
+    letter-spacing: 0.01em;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  &_img {
+    width: 60px;
+    height: 60px;
   }
 }
 
-.img {
-  width: 60px;
-  height: 60px;
-}
-
-.subtitle {
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 133%;
-  letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.title {
-  font-weight: 600;
-  font-size: 17px;
-  line-height: 120%;
-  letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.87);
-}

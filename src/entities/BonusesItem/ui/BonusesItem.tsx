@@ -1,9 +1,9 @@
 import { IBonus } from '@/shared/models/interfaces/bonuses';
 import styles from './BonusesItem.module.scss';
-import classNames from 'classnames';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import { useAppSelector } from '@/store/hooks/redux';
+import Button from '@/shared/ui/Button';
 
 interface IProps {
   bonus: IBonus;
@@ -32,7 +32,7 @@ const BonusesItem = ({ bonus }: IProps) => {
         );
       }
     }
-    return '';
+    return 'Игра не выбрана';
   };
 
   const getBonusTitle = () => {
@@ -43,16 +43,41 @@ const BonusesItem = ({ bonus }: IProps) => {
     return 'Бонус';
   };
 
+  const getBonusStatus = () => {
+    switch (bonus.status) {
+      case 1:
+        return 'Не активный бонус';
+      case 2:
+        return 'Активный бонус';
+      case 3:
+        return 'Завершенный бонус';
+      case 4:
+        return 'Отмененный бонус';
+      case 5:
+        return 'Истекший бонус';
+      default:
+        return '';
+    }
+  };
+
   const image = getImage();
   const gameName = getGameName();
   const bonusTitle = getBonusTitle();
+  const bonusStatus = getBonusStatus();
   return (
-    <div className={classNames(styles.container, {})}>
-      <img className={styles.img} alt="sw" src={image} />
-      <div className="flex flex-col gap-[8px] flex-1">
-        <div className={styles.subtitle}>{bonusTitle}</div>
-        <div className={styles.title}>{gameName}</div>
+    <div className={styles.container}>
+      <div className={styles.title}>{bonusStatus}</div>
+      <div className={styles.info}></div>
+      <div className={styles.game}>
+        <img className={styles.game_img} alt="sw" src={image} />
+        <div className="flex flex-col gap-[8px] flex-1">
+          <div className={styles.game_subtitle}>{bonusTitle}</div>
+          <div className={styles.game_title}>{gameName}</div>
+        </div>
       </div>
+      <Button reverseTheme elType="outlined">
+        Отменить
+      </Button>
     </div>
   );
 };
