@@ -4,6 +4,7 @@ import { useCurrentLanguage } from '@/app/providers/LangProvider';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import { useAppSelector } from '@/store/hooks/redux';
 import Button from '@/shared/ui/Button';
+import dateFormatter from '@/shared/helpers/dateFormatter';
 
 interface IProps {
   bonus: IBonus;
@@ -67,7 +68,31 @@ const BonusesItem = ({ bonus }: IProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.title}>{bonusStatus}</div>
-      <div className={styles.info}></div>
+      <div className={styles.info}>
+        <div className={styles.info_block}>
+          <div className={styles.label}>Бонусный ставка</div>
+          <div className={styles.value}>
+            {bonus.bonus_template.configurator.bet_amount}{' '}
+            {bonus.bonus_template.configurator.currency}
+          </div>
+        </div>
+        <div className={styles.info_block}>
+          <div className={styles.label}>Количество FS</div>
+          <div className={styles.value}>{bonus.bonus_template.spins_count}</div>
+        </div>
+        <div className={styles.info_block}>
+          <div className={styles.label}>Максимальная сумма</div>
+          <div className={styles.value}>{bonus.bonus_template.bonus_settings.max_amount}</div>
+        </div>
+        <div className={styles.info_block}>
+          <div className={styles.label}>Минимальная сумма</div>
+          <div className={styles.value}>{bonus.bonus_template.bonus_settings.min_amount}</div>
+        </div>
+        <div className={styles.info_block}>
+          <div className={styles.label}>Отыграш истекает</div>
+          <div className={styles.value}>{dateFormatter(bonus.expired_at)}</div>
+        </div>
+      </div>
       <div className={styles.game}>
         <img className={styles.game_img} alt="sw" src={image} />
         <div className="flex flex-col gap-[8px] flex-1">

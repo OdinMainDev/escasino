@@ -5,13 +5,13 @@ import {
 } from '@/features/Wallet/models/interfaces';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
-import { padNumber } from '@/shared/helpers/padNumber';
 import { IPaymentProvider } from '@/shared/models/interfaces/paymentProviders';
 import { paymentTransaction } from '@/features/Wallet/api/replenishApi';
 import Button from '@/shared/ui/Button';
 import { useTranslation } from 'react-i18next';
 import { IWithdrawProvider } from '@/shared/models/interfaces/withdrawProviders';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
+import dateFormatter from '@/shared/helpers/dateFormatter';
 
 interface IProps {
   transaction: IHistoryItem;
@@ -64,15 +64,6 @@ const WalletHistoryItem = ({
     return 'Created';
   };
 
-  const getDate = (date: number): string => {
-    if (date !== 0) {
-      const timestampInMilliseconds = date * 1000;
-      const convertedDate = new Date(timestampInMilliseconds);
-      return `${padNumber(convertedDate.getDate())}.${padNumber(convertedDate.getMonth() + 1)}.${padNumber(convertedDate.getFullYear())}, ${padNumber(convertedDate.getHours())}:${padNumber(convertedDate.getMinutes())}`;
-    }
-    return '--.--.----, --:--';
-  };
-
   const paymentTransactionHandler = async (hash: string) => {
     try {
       setIsError(false);
@@ -116,11 +107,11 @@ const WalletHistoryItem = ({
       <div className="flex justify-between mb-[10px]">
         <div className={styles.data}>
           <div className={styles.label}>Дата создания</div>
-          <div className={styles.value}>{getDate(transaction.created_at)}</div>
+          <div className={styles.value}>{dateFormatter(transaction.created_at)}</div>
         </div>
         <div className={styles.data}>
           <div className={styles.label}>Дата завершения</div>
-          <div className={styles.value}>{getDate(transaction.completed_at)}</div>
+          <div className={styles.value}>{dateFormatter(transaction.completed_at)}</div>
         </div>
       </div>
       <div className="flex justify-between mb-[10px]">

@@ -117,7 +117,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         .sort((a, b) => a.spins_count - b.spins_count);
 
       setFiltredBonuses(filteredTemplates);
-
       setBetTemplates(uniqueBetTemplates);
       setSpinsTemplates(uniqueSpinsTemplates);
     }, [bonusesTemplates, cartBonuses, gameId, minAmount, maxAmount]);

@@ -54,3 +54,31 @@
   }
 }
 
+.info {
+  display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+  &_block {
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+  }
+}
+
+.label {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 125%;
+  letter-spacing: 0.01em;
+  color: #A5A5A5;
+}
+
+.value {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 120%;
+  letter-spacing: 0.02em;
+  color: #FFF;
+}
+
