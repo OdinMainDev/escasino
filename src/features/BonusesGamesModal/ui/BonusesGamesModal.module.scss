@@ -4,10 +4,19 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow-y: auto;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 120%;
+  letter-spacing: 0.02em;
+  color: var(--Text-primary);
+  margin-bottom: 5px;
 }
 
 .header {
-  padding-top: 30px;
 }
 
 .games {
@@ -15,5 +24,4 @@
   flex-direction: column;
   gap: 10px;
   flex: 1;
-  overflow-y: auto;
 }
