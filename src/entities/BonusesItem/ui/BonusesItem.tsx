@@ -57,7 +57,21 @@ const BonusesItem = ({ bonus }: IProps) => {
       case 5:
         return 'Истекший бонус';
       default:
-        return '';
+        return null;
+    }
+  };
+
+  const getButton = () => {
+    switch (bonus.status) {
+      case 1:
+        return <Button reverseTheme>Активировать бонус</Button>;
+      case 2:
+        return <Button reverseTheme>Отменить боунс</Button>;
+      case 3:
+      case 4:
+      case 5:
+      default:
+        return null;
     }
   };
 
@@ -100,9 +114,7 @@ const BonusesItem = ({ bonus }: IProps) => {
           <div className={styles.game_title}>{gameName}</div>
         </div>
       </div>
-      <Button reverseTheme elType="outlined">
-        Отменить
-      </Button>
+      <div className={styles.buttons}>{getButton()}</div>
     </div>
   );
 };
