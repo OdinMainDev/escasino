@@ -18,6 +18,12 @@ export interface IBonusesList {
   game_id: number;
 }
 
+export interface ISetActiveBonus {
+  id: number;
+  fid: string;
+  games_ids: number[];
+}
+
 export interface IBonusConfigurator {
   currency: string;
   bet_amount: number;

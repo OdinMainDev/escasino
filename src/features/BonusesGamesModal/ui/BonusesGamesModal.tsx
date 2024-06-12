@@ -9,9 +9,10 @@ import { useRouter } from '@/shared/helpers/navigation';
 
 interface IProps extends IModal {
   games: IGame[];
+  onSelectGame?: (game: IGame) => void;
 }
 
-const BonusesGamesModal = ({ close, isOpen, games }: IProps) => {
+const BonusesGamesModal = ({ close, isOpen, games, onSelectGame }: IProps) => {
   const [allGames, setAllGames] = useState(games);
   const router = useRouter();
 
@@ -28,10 +29,14 @@ const BonusesGamesModal = ({ close, isOpen, games }: IProps) => {
   };
 
   const selectGame = (game: IGame) => {
-    if (close) {
-      close();
+    if (!onSelectGame) {
+      if (close) {
+        close();
+      }
+      router.push(`/bonus/${game.id}`);
+    } else {
+      onSelectGame(game);
     }
-    router.push(`/bonus/${game.id}`);
   };
 
   return (

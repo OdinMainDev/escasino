@@ -4,6 +4,7 @@
   padding: 16px;
   background: #1E1E1E;
   border-radius: 2px;
+  position: relative;
 }
 
 .title {
@@ -86,4 +87,16 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.loader {
+  background: rgba($color: #000000, $alpha: 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
 }

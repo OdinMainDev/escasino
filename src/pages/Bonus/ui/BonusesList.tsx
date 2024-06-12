@@ -10,61 +10,12 @@ import { TabItem } from '@/entities/TabItem';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
 import { IBonus } from '@/shared/models/interfaces/bonuses';
-
-interface IBonusTabs {
-  tab: ITab;
-  filters: ITab[];
-}
+import { tabs } from '../constants';
 
 const BonusesList = () => {
   const { bonuses: storeBonuses, loading } = useAppSelector((state) => state.bonusesSlice);
   const [bonuses, setBonuses] = useState<IBonus[]>([]);
-  const tabs: IBonusTabs[] = [
-    {
-      tab: {
-        label: 'Активные',
-        value: 'current',
-      },
-      filters: [
-        {
-          label: 'Все',
-          value: 0,
-        },
-        {
-          label: 'Активные',
-          value: 2,
-        },
-        {
-          label: 'Не активные',
-          value: 1,
-        },
-      ],
-    },
-    {
-      tab: {
-        label: 'История',
-        value: 'history',
-      },
-      filters: [
-        {
-          label: 'Все',
-          value: 0,
-        },
-        {
-          label: 'Завершенный',
-          value: 3,
-        },
-        {
-          label: 'Отмененные',
-          value: 4,
-        },
-        {
-          label: 'Истекший',
-          value: 5,
-        },
-      ],
-    },
-  ];
+
   const [selectedTab, setSelectedTab] = useState<ITab>(tabs[0].tab);
   const [selectedFilter, setSelectedFilter] = useState<ITab>(tabs[0].filters[0]);
   const [filters, setFilters] = useState<ITab[]>(tabs[0].filters);

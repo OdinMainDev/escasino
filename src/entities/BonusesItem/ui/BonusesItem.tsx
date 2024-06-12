@@ -1,10 +1,19 @@
-import { IBonus } from '@/shared/models/interfaces/bonuses';
+import { IBonus, ISetActiveBonus } from '@/shared/models/interfaces/bonuses';
 import styles from './BonusesItem.module.scss';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import { useAppSelector } from '@/store/hooks/redux';
 import Button from '@/shared/ui/Button';
 import dateFormatter from '@/shared/helpers/dateFormatter';
+import { IGame } from '@/shared/models/interfaces/game';
+import { BonusesGamesModal } from '@/features/BonusesGamesModal';
+import { useEffect, useState } from 'react';
+import Loader from '@/shared/ui/Loader';
+import {
+  postSetMyActiveBonusApi,
+  postSetMyActiveBonusCancelApi,
+} from '@/app/api/bonuses/bonusesApi';
+import { getVisitorId } from '@/shared/helpers/getVisitorId';
 
 interface IProps {
   bonus: IBonus;
@@ -12,7 +21,16 @@ interface IProps {
 const BonusesItem = ({ bonus }: IProps) => {
   const currentLanguage = useCurrentLanguage();
   const { games } = useAppSelector((state) => state.gamesAllSlice);
+  const [selectedGames, setSelectedGames] = useState<IGame[]>([]);
   const template = bonus.bonus_template;
+  const [openGamesModal, setOpenGamesModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (games && games.length > 0) {
+      setSelectedGames(games.filter((item) => bonus.bonus_template.game_ids.includes(item.id)));
+    }
+  }, [bonus.bonus_template.game_ids, games]);
 
   const getImage = () => {
     if (template.meta.image) return template.meta.image;
@@ -62,16 +80,68 @@ const BonusesItem = ({ bonus }: IProps) => {
   };
 
   const getButton = () => {
+    if (bonus.data.bonuses_list[0].game_id === 0) {
+      return (
+        <Button reverseTheme elType="outlined" onClick={() => setOpenGamesModal(true)}>
+          Выбрать игру
+        </Button>
+      );
+    }
     switch (bonus.status) {
       case 1:
-        return <Button reverseTheme>Активировать бонус</Button>;
+        return (
+          <Button reverseTheme onClick={() => void activeBonus(bonus.data.bonuses_list[0].game_id)}>
+            Активировать бонус
+          </Button>
+        );
       case 2:
-        return <Button reverseTheme>Отменить боунс</Button>;
+        if (!bonus.bonus_template.is_cancel) {
+          return null;
+        }
+        return (
+          <Button reverseTheme onClick={() => void cancelBonus(bonus.data.bonuses_list[0].game_id)}>
+            Отменить боунс
+          </Button>
+        );
       case 3:
       case 4:
       case 5:
       default:
         return null;
+    }
+  };
+
+  const activeBonus = async (game_id: number) => {
+    try {
+      setOpenGamesModal(false);
+      setLoading(true);
+      const data: ISetActiveBonus = {
+        id: bonus.id,
+        games_ids: [game_id],
+        fid: await getVisitorId(),
+      };
+      await postSetMyActiveBonusApi(data);
+    } catch (e) {
+      /* empty */
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const cancelBonus = async (game_id: number) => {
+    try {
+      setOpenGamesModal(false);
+      setLoading(true);
+      const data: ISetActiveBonus = {
+        id: bonus.id,
+        games_ids: [game_id],
+        fid: await getVisitorId(),
+      };
+      await postSetMyActiveBonusCancelApi(data);
+    } catch (e) {
+      /* empty */
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -115,6 +185,19 @@ const BonusesItem = ({ bonus }: IProps) => {
         </div>
       </div>
       <div className={styles.buttons}>{getButton()}</div>
+      {bonus.data.bonuses_list[0].game_id === 0 && (
+        <BonusesGamesModal
+          onSelectGame={(game) => void activeBonus(game.id)}
+          games={selectedGames}
+          isOpen={openGamesModal}
+          close={() => setOpenGamesModal(false)}
+        />
+      )}
+      {loading && (
+        <div className={styles.loader}>
+          <Loader />
+        </div>
+      )}
     </div>
   );
 };

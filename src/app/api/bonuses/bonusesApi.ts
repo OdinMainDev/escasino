@@ -1,4 +1,4 @@
-import { IBonus, IBonusTemplate } from '@/shared/models/interfaces/bonuses';
+import { IBonus, IBonusTemplate, ISetActiveBonus } from '@/shared/models/interfaces/bonuses';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -11,11 +11,11 @@ export const myBonusesApi = (): string => {
 };
 
 export const setMyActiveBonusApi = (): string => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/set/my/bonus`;
+  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/set/my/active/bonus`;
 };
 
 export const setMyActiveBonusCancelApi = (): string => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/set/my/bonus/cancel`;
+  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/set/my/active/bonus/cancel`;
 };
 
 export interface IResponseBonuses {
@@ -58,8 +58,8 @@ export const getMyBonusesApi = async (): Promise<IResponseBonuses> => {
   return resp;
 };
 
-export const postSetMyActiveBonusApi = () => {
-  return axios.post(setMyActiveBonusApi(), {
+export const postSetMyActiveBonusApi = (body: ISetActiveBonus) => {
+  return axios.post(setMyActiveBonusApi(), body, {
     headers: {
       Authorization: `Bearer: ${Cookies.get('atoken')}`,
       'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
