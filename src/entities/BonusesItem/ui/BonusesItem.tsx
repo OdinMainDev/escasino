@@ -14,6 +14,7 @@ import {
   postSetMyActiveBonusCancelApi,
 } from '@/app/api/bonuses/bonusesApi';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
+import { useModal } from '@/app/providers/ModalProvider';
 
 interface IProps {
   bonus: IBonus;
@@ -21,10 +22,12 @@ interface IProps {
 const BonusesItem = ({ bonus }: IProps) => {
   const currentLanguage = useCurrentLanguage();
   const { games } = useAppSelector((state) => state.gamesAllSlice);
+  const { activeBonus } = useAppSelector((state) => state.bonusesSlice);
   const [selectedGames, setSelectedGames] = useState<IGame[]>([]);
   const template = bonus.bonus_template;
   const [openGamesModal, setOpenGamesModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { doOpenModal } = useModal();
 
   useEffect(() => {
     if (games && games.length > 0) {
@@ -80,17 +83,26 @@ const BonusesItem = ({ bonus }: IProps) => {
   };
 
   const getButton = () => {
-    if (bonus.data.bonuses_list[0].game_id === 0) {
-      return (
-        <Button reverseTheme elType="outlined" onClick={() => setOpenGamesModal(true)}>
-          Выбрать игру
-        </Button>
-      );
-    }
+    // if (bonus.data.bonuses_list[0].game_id === 0) {
+    //   return (
+    //     <Button reverseTheme elType="outlined" onClick={() => setOpenGamesModal(true)}>
+    //       Выбрать игру
+    //     </Button>
+    //   );
+    // }
     switch (bonus.status) {
       case 1:
         return (
-          <Button reverseTheme onClick={() => void activeBonus(bonus.data.bonuses_list[0].game_id)}>
+          <Button
+            reverseTheme
+            onClick={() => {
+              if (bonus.data.bonuses_list[0].game_id === 0) {
+                setOpenGamesModal(true);
+              } else {
+                void setActiveBonus(bonus.data.bonuses_list[0].game_id);
+              }
+            }}
+          >
             Активировать бонус
           </Button>
         );
@@ -119,20 +131,24 @@ const BonusesItem = ({ bonus }: IProps) => {
     }
   };
 
-  const activeBonus = async (game_id: number) => {
-    try {
-      setOpenGamesModal(false);
-      setLoading(true);
-      const data: ISetActiveBonus = {
-        id: bonus.id,
-        games_ids: [game_id],
-        fid: await getVisitorId(),
-      };
-      await postSetMyActiveBonusApi(data);
-    } catch (e) {
-      /* empty */
-    } finally {
-      setLoading(false);
+  const setActiveBonus = async (game_id: number) => {
+    if (!activeBonus) {
+      try {
+        setOpenGamesModal(false);
+        setLoading(true);
+        const data: ISetActiveBonus = {
+          id: bonus.id,
+          games_ids: [game_id],
+          fid: await getVisitorId(),
+        };
+        await postSetMyActiveBonusApi(data);
+      } catch (e) {
+        /* empty */
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      doOpenModal('alert');
     }
   };
 
@@ -195,7 +211,7 @@ const BonusesItem = ({ bonus }: IProps) => {
       <div className={styles.buttons}>{getButton()}</div>
       {bonus.data.bonuses_list[0].game_id === 0 && (
         <BonusesGamesModal
-          onSelectGame={(game) => void activeBonus(game.id)}
+          onSelectGame={(game) => void setActiveBonus(game.id)}
           games={selectedGames}
           isOpen={openGamesModal}
           close={() => setOpenGamesModal(false)}
