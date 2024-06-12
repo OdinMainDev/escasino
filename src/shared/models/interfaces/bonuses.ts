@@ -21,7 +21,7 @@ export interface IBonusesList {
 export interface ISetActiveBonus {
   id: number;
   fid: string;
-  games_ids: number[];
+  game_ids: number[];
 }
 
 export interface IBonusConfigurator {

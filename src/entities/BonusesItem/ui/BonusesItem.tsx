@@ -138,7 +138,7 @@ const BonusesItem = ({ bonus }: IProps) => {
         setLoading(true);
         const data: ISetActiveBonus = {
           id: bonus.id,
-          games_ids: [game_id],
+          game_ids: [game_id],
           fid: await getVisitorId(),
         };
         await postSetMyActiveBonusApi(data);
@@ -158,7 +158,7 @@ const BonusesItem = ({ bonus }: IProps) => {
       setLoading(true);
       const data: ISetActiveBonus = {
         id: bonus.id,
-        games_ids: [game_id],
+        game_ids: [game_id],
         fid: await getVisitorId(),
       };
       await postSetMyActiveBonusCancelApi(data);
