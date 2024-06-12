@@ -95,11 +95,19 @@ const BonusesItem = ({ bonus }: IProps) => {
           </Button>
         );
       case 2:
-        if (!bonus.bonus_template.is_cancel) {
-          return null;
+        if (bonus.bonus_template.is_cancel) {
+          return (
+            <Button disabled reverseTheme elType="outlined">
+              Бонус нельзя отменить
+            </Button>
+          );
         }
         return (
-          <Button reverseTheme onClick={() => void cancelBonus(bonus.data.bonuses_list[0].game_id)}>
+          <Button
+            reverseTheme
+            elType="outlined"
+            onClick={() => void cancelBonus(bonus.data.bonuses_list[0].game_id)}
+          >
             Отменить боунс
           </Button>
         );
