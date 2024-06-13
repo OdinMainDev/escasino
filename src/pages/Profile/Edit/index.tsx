@@ -7,7 +7,7 @@ const ProfileEdit = () => {
   return (
     <>
       <div className={styles.container}>
-        <PageHeader title="Редактировать профиль" />
+        <PageHeader customBackPath="/profile" title="Редактировать профиль" />
         <ProfileForm />
       </div>
       <ProfileModals />

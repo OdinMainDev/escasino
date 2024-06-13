@@ -31,7 +31,7 @@ const Profile = () => {
           : true;
   return (
     <div className={styles.container}>
-      <PageHeader title="Профиль" />
+      <PageHeader customBackPath="/" title="Профиль" />
       <div className={styles.content}>
         <div className={styles.block}>
           {loadingUser && (
