@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import styles from './styles.module.scss';
 import { IGame } from '@/shared/models/interfaces/game';
 import { getGameApi } from '@/app/api/games/getGameById';
-import GoBackButton from '@/shared/ui/GoBackButton';
 import Icons from '@/shared/ui/Icons';
 import Button from '@/shared/ui/Button';
 import { WinningsList } from '@/widgets/WinningsList';
@@ -19,6 +18,7 @@ import ModalZeroBalance from './ui/ModalZeroBalance';
 import { gamesHeaderTypeCover } from '@/app/config/app';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
 import { deleteCartBonusesItem } from '@/store/slices/cartBonusesSlice';
+import { PageHeader } from '@/widgets/Header';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
@@ -149,15 +149,7 @@ const Details = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header_container}>
-        <div
-          className={classNames(styles.header, {
-            [styles.header_cover]: gamesHeaderTypeCover,
-          })}
-        >
-          <GoBackButton />
-          <div className={styles.provider_name}>{game?.game_provider}</div>
-          <Icons icon="chat" />
-        </div>
+        <PageHeader title={game?.game_provider} isHover={gamesHeaderTypeCover} />
         <div
           className={classNames(styles.image_container, {
             [styles.cover]: gamesHeaderTypeCover,

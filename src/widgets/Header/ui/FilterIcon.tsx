@@ -1,5 +1,5 @@
 import Icons from '@/shared/ui/Icons';
-import styles from '../styles.module.scss';
+import styles from './MainHeader.module.scss';
 
 interface IProps {
   quantity?: number;

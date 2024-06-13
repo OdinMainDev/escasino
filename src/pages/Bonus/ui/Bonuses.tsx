@@ -1,7 +1,5 @@
 import { useParams } from 'react-router-dom';
 import styles from './Bonuses.module.scss';
-import GoBackButton from '@/shared/ui/GoBackButton';
-import Icons from '@/shared/ui/Icons';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { IGame } from '@/shared/models/interfaces/game';
 import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
@@ -23,6 +21,7 @@ import { IBonusMoneyMethods } from '@/features/BonusesTabs/ui/BonusesMoney';
 import { BonusesGamesModal } from '@/features/BonusesGamesModal';
 import { v4 as uuidv4 } from 'uuid';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
+import { PageHeader } from '@/widgets/Header';
 
 const Bonuses = () => {
   const { id } = useParams();
@@ -268,11 +267,10 @@ const Bonuses = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <GoBackButton customPath={'/' + currentLanguage + '/wallet/deposit/replenish'} />
-        <div className={styles.title}>Собери свой бонус</div>
-        <Icons icon="chat" />
-      </div>
+      <PageHeader
+        customBackPath={'/' + currentLanguage + '/wallet/deposit/replenish'}
+        title="Собери свой бонус"
+      />
       <div className={styles.content}>
         {loading ? (
           <div className={styles.loader}>

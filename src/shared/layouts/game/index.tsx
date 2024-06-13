@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import styles from './styles.module.scss';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
-import Header from '@/widgets/Header';
+import { PageHeader } from '@/widgets/Header';
 import Footer from '@/widgets/Footer';
 
 interface IProps {
@@ -15,7 +15,7 @@ const GameLayout = ({ children, gameTitle }: IProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <Header hasNotSearch={true} hasTitle={gameTitle} />
+        <PageHeader title={gameTitle} />
       </div>
       {children}
       <Footer isHidden={!isAuth} />

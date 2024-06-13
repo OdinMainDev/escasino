@@ -1,21 +1,16 @@
-import GoBackButton from '@/shared/ui/GoBackButton';
 import styles from './BonusesCart.module.scss';
-import Icons from '@/shared/ui/Icons';
 import { useAppSelector } from '@/store/hooks/redux';
 import { BonusesTemplateItem } from '@/entities/BonusesTemplateItem';
 import Button from '@/shared/ui/Button';
 import { useRouter } from '@/shared/helpers/navigation';
+import { PageHeader } from '@/widgets/Header';
 const BonusesCart = () => {
   const { bonusesTemplates } = useAppSelector((state) => state.cartBonusesSlice);
   const { games } = useAppSelector((state) => state.gamesAllSlice);
   const router = useRouter();
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <GoBackButton customPath="/wallet/deposit/replenish" />
-        <div className={styles.title}>Корзина бонусов</div>
-        <Icons icon="chat" />
-      </div>
+      <PageHeader customBackPath="/wallet/deposit/replenish" title="Корзина бонусов" />
       <div className={styles.content}>
         {bonusesTemplates.length > 0 ? (
           bonusesTemplates.map((item) => (

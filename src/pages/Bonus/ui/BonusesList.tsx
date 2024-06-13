@@ -1,6 +1,4 @@
-import GoBackButton from '@/shared/ui/GoBackButton';
 import styles from './BonusesList.module.scss';
-import Icons from '@/shared/ui/Icons';
 import { useAppSelector } from '@/store/hooks/redux';
 import Loader from '@/shared/ui/Loader';
 import { BonusesItem } from '@/entities/BonusesItem';
@@ -13,6 +11,7 @@ import { IBonus } from '@/shared/models/interfaces/bonuses';
 import { tabs } from '../constants';
 import { AlertModal } from '@/entities/AlertModal';
 import { useModal } from '@/app/providers/ModalProvider';
+import { PageHeader } from '@/widgets/Header';
 
 const BonusesList = () => {
   const {
@@ -59,11 +58,7 @@ const BonusesList = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <GoBackButton />
-        <div className={styles.title}>Спиок бонусов</div>
-        <Icons icon="chat" />
-      </div>
+      <PageHeader title="Спиок бонусов" />
       <Tabs
         className={styles.tabs}
         tabs={tabs.map((item) => item.tab)}

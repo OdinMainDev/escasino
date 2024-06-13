@@ -1,12 +1,11 @@
 import styles from './BonusesGames.module.scss';
 import { Game } from '@/entities/Game';
-import GoBackButton from '@/shared/ui/GoBackButton';
-import Icons from '@/shared/ui/Icons';
 import { useRouter } from '@/shared/helpers/navigation';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { IGame } from '@/shared/models/interfaces/game';
 import { getGamesAllApi } from '@/app/api/games/getGamesAll';
+import { PageHeader } from '@/widgets/Header';
 const BonusesGames = () => {
   const [searchParams] = useSearchParams();
   const [bonusesGames, setBonusesGames] = useState<IGame[]>([]);
@@ -24,11 +23,7 @@ const BonusesGames = () => {
   }, [searchParams]);
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <GoBackButton />
-        <div className={styles.title}>Игры бонусов</div>
-        <Icons icon="chat" />
-      </div>
+      <PageHeader title="Игры бонусов" />
       <div className={styles.games}>
         {bonusesGames.map((item) => (
           <Game
