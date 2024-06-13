@@ -179,7 +179,7 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
         <div className={styles.title}>{bonusStatus}</div>
         {isMain && (
           <div onClick={() => router.push('/bonus/list')} className={styles.side_url}>
-            Cмотреть все
+            история
           </div>
         )}
       </div>
