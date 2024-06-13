@@ -7,11 +7,13 @@ import { useAuthProvider } from '@/app/providers/AuthProvider';
 import GoBackButton from '@/shared/ui/GoBackButton';
 import Button from '@/shared/ui/Button';
 import Loader from '@/shared/ui/Loader';
+import { BonusesItem } from '@/entities/BonusesItem';
 
 const Profile = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const router = useRouter();
+  const { activeBonus } = useAppSelector((state) => state.bonusesSlice);
   const { unsetAuthenticated } = useAuthProvider();
 
   const logoutHandler = () => {
@@ -84,23 +86,7 @@ const Profile = () => {
           </Button>
         </div>
       </div>
-      <div className={styles.block}>
-        <div className={styles.block_header}>
-          <div className={styles.title}>Активный бонус</div>
-          <div onClick={() => router.push('/bonus/list')} className={styles.side_url}>
-            смотреть
-          </div>
-        </div>
-        <div className={styles.balance}>
-          <div className={styles.balance_title}>Вейджер {user?.balance.formatted_wager}</div>
-          <div className={styles.balance_value}>{user?.balance.formatted_wager}</div>
-        </div>
-        <div className={styles.buttons}>
-          <Button elType="outlined" className={styles.button}>
-            Отказаться от бонуса
-          </Button>
-        </div>
-      </div>
+      <BonusesItem bonus={activeBonus} isMain />
       <div className={styles.block}>
         <div className={styles.title}>Документы</div>
         <div

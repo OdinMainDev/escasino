@@ -1,23 +1,12 @@
-:root {
-  --background: #121212;
-  --primary: #121212;
-  --secondary: #FFF;
-  --Input-bg: #2F2F2F;
-  --Select-bg: #f2f2f2;
-  --Text-primary: #F2F2F2;
-  --Divider-main: #4E4E4E;
-  --Action-active: #E1E1E1;
-  --Icon-primary: #E1E1E1;
-  --Aditional-error: #CF6679;
-  --Background-secondary: #1C1C1C;
-  --desktop-max-width: 568px;
-  --main-button-color: #161616;
-  --color-title-main: #ffffff;
-  --color-tab-main: rgba(255, 255, 255, 0.60);
-}
 
-// OVERRIDE
 :root {
+  --background: #161616;
+  --main-button-color: #161616;
+  --secondary-button-color: #F9F9F9;
+  --border-button-color: #F9F9F9;
+  --block-main: #1E1E1E;
+  --secondary: #E1E1E1;
+
   --background: #F9F9F9;
   --primary: #F9F9F9;
   --secondary: #1C1C1C;
@@ -29,18 +18,48 @@
   --Action-active: #E1E1E1;
   --Icon-primary: #E1E1E1;
   --Tabs-main: #333333;
+  --block-main: rgba(0, 0, 0, 0.05);
   --Aditional-error: #CF6679;
   --Background-secondary: #F0F0F0;
   --desktop-max-width: 568px;
-  --main-button-color: #161616;
-  --secondary-button-color: #F9F9F9;
   --color-title-main: #000;
   --color-tab-main: rgba(0, 0, 0, 0.60);
 }
 
+// DARK THEME
+:root {
+  --primary: #121212;
+  --secondary: #E1E1E1;
+  --thrid: #1C1C1C;
 
-// @media (prefers-color-scheme: white) {
-//   :root {
-//     --background: #000000;
-//   }
-// }
+  --button-primary-color: #E2E2E2;
+  --button-secondary-color: #1E1E1E;
+
+  --block-primary: #1E1E1E;
+  --block-secondary: #292929;
+
+
+  --label-primary: #A5A5A5;
+  --text-primary: #E2E2E2;
+  --text-secondary: #121212;
+
+  --error-primary: #CF6679;
+  --success-primary: #8EC690;
+
+  --modal-primary: 
+
+  
+  --Input-bg: #2F2F2F;
+  --Select-bg: #f2f2f2;
+  --Text-primary: #F2F2F2;
+  --Divider-main: #4E4E4E;
+  --Action-active: #E1E1E1;
+  --Icon-primary: #E1E1E1;
+  --Aditional-error: #CF6679;
+  --Background-secondary: #1C1C1C;
+  --desktop-max-width: 568px;
+  --color-title-main: #ffffff;
+  --color-tab-main: rgba(255, 255, 255, 0.60);
+}
+
+

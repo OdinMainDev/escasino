@@ -25,7 +25,7 @@
   left: 0;
   z-index: 98;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.5)
+  background-color:  var(--block-primary);
 }
 
 
@@ -37,7 +37,7 @@
   width: 100%;
   gap: 16px;
   border-radius: 2px;
-  background: rgba(0, 0, 0, 0.05);
+  background-color: var(--block-primary);
   &_header {
     display: flex;
     justify-content: space-between;
@@ -47,7 +47,7 @@
 
 .title {
   font-size: 16px;
-  color: var(--Text-primary);
+  color: var(--text-primary);
   font-style: normal;
   font-weight: 500;
   line-height: 24px;
@@ -70,7 +70,7 @@
 
 .balance {
   &_bonus {
-    color: var(--Text-primary);
+    color: var(--text-primary);
     font-size: 20px;
     font-style: normal;
     font-weight: 600;
@@ -78,17 +78,17 @@
     letter-spacing: 0.24px;
   }
   &_title {
-    color: var(--color-title-main);
-    opacity: 0.6;
+    color: var(--label-primary);
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
     line-height: 16px;
     letter-spacing: 0.12px;
+    margin-bottom: 4px;
   }
 
   &_value {
-    color: var(--Text-primary);
+    color: var(--text-primary);
     font-size: 24px;
     font-style: normal;
     font-weight: 600;
@@ -102,7 +102,7 @@
   flex-direction: column;
   gap: 16px;
   &_label {
-    color: var(--color-title-main);
+    color: var(--label-primary);
     opacity: 0.6;
     font-size: 14px;
     font-style: normal;
@@ -113,7 +113,7 @@
   }
 
   &_value {
-    color: var(--Text-primary);
+    color: var(--text-primary);
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -125,15 +125,15 @@
     align-self: flex-start;
     padding: 4px 12px;
     border-radius: 24px;
-    background: #8EC690;
+    background: var(--success-primary);
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
     line-height: 16px;
-    color: var(--primary);
+    color: var(--text-secondary);
     letter-spacing: 0.12px;
     &.is_verificated {
-      background-color: var(--Aditional-error);
+      background-color: var(--error-primary);
     }
   }
 }
@@ -142,4 +142,5 @@
   text-decoration: underline;
   opacity: 0.7;
   cursor: pointer;
+  color: var(--text-primary);
 }
