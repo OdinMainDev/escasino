@@ -4,8 +4,9 @@
   --secondary: #E1E1E1;
   --thrid: #1C1C1C;
 
-  --button-primary-color: #E2E2E2;
+  --button-primary-color: #F2F2F2;
   --button-secondary-color: #1E1E1E;
+  --button-border-color: #393939;
 
   --block-primary: #1E1E1E;
   --block-secondary: #292929;
@@ -24,13 +25,13 @@
   --modal-primary: #1C1C1C; 
 
   --input-primary: #333333;
-  --input-border-color: #333333;
+  --input-border-color: #393939;
   --input-placeholder: #8E8E8E;
 
   --select-primary: #333333; 
 
-  --tab-primary: #333333;
-  --tab-secondary: #E1E1E1;
+  --tab-primary: #A3A3A3;
+  --tab-secondary: #303030;
   --tab-thrid: #E1E1E1;
 
 
@@ -38,39 +39,40 @@
 }
 
 // LIGHT THEME
-:root {
-  --primary: #F9F9F9;
-  --secondary: #161616;
-  --thrid: #F5F5F5;
+// :root {
+//   --primary: #F5F5F5;
+//   --secondary: #161616;
+//   --thrid: #F5F5F5;
 
-  --button-primary-color: #1E1E1E;
-  --button-secondary-color: #E2E2E2;
+//   --button-primary-color: #252525;
+//   --button-secondary-color: #F5F5F5;
+//   --button-border-color: #cfcfcf;
 
-  --block-primary: #E1E1E1;
-  --block-secondary: #cacaca;
+//   --block-primary: #E1E1E1;
+//   --block-secondary: #cacaca;
 
-  --line-primary: #303030;
+//   --line-primary: #303030;
 
-  --label-primary: #898989;
-  --text-primary: #121212;
-  --text-secondary: #E2E2E2;
+//   --label-primary: #898989;
+//   --text-primary: #252525;
+//   --text-secondary: #898989;
 
-  --error-primary: #CF6679;
-  --error-secondary: #a72929;
-  --success-primary: #8EC690;
-  --warning-primary: #F9B166;
+//   --error-primary: #CF6679;
+//   --error-secondary: #a72929;
+//   --success-primary: #8EC690;
+//   --warning-primary: #F9B166;
 
-  --modal-primary: #F5F5F5; 
+//   --modal-primary: #F5F5F5; 
 
-  --input-primary: #F9F9F9;
-  --input-border-color: #333333;
-  --input-placeholder: #898989;
+//   --input-primary: #E8E8E8;
+//   --input-border-color: #E8E8E8;
+//   --input-placeholder: #898989;
 
-  --select-primary: #E8E8E8; 
+//   --select-primary: #E8E8E8; 
 
-  --tab-primary: #333333;
-  --tab-secondary: #E1E1E1;
-  --tab-thrid: #000;
+//   --tab-primary: #252525;
+//   --tab-secondary: #E8E8E8;
+//   --tab-thrid: #252525;
 
-  --desktop-max-width: 568px;
-}
+//   --desktop-max-width: 568px;
+// }
