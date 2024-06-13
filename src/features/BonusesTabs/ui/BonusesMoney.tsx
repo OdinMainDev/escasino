@@ -30,7 +30,7 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
 
     const clearBonusMoneySwiper = () => {
       if (moneySwiper.current) {
-        moneySwiper.current.swiper.slideTo(0, 0);
+        moneySwiper.current.swiper?.slideTo(0, 0);
       }
       setActiveIndex(0);
     };
@@ -89,8 +89,8 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
       [moneyChangeHandler, sortedBonuses],
     );
 
-    if (sortedBonuses.length === 0) {
-      return null;
+    if (sortedBonuses?.length === 0) {
+      return <div className={styles.title}>К сожалению доступные комбинации закончились</div>;
     }
 
     return (

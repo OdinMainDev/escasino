@@ -36,10 +36,10 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     const clearBonusFSSwiper = () => {
       if (betSwiper.current) {
-        betSwiper.current.swiper.slideTo(0, 0);
+        betSwiper.current.swiper?.slideTo(0, 0);
       }
       if (spinsSwiper.current) {
-        spinsSwiper.current.swiper.slideTo(0, 0);
+        spinsSwiper.current.swiper?.slideTo(0, 0);
       }
       setSelectedBetIndex(0);
       setSelectedSpinsIndex(0);
@@ -123,7 +123,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     useEffect(() => {
       if (spinsSwiper.current) {
-        spinsSwiper.current.swiper.slideTo(0, 0);
+        spinsSwiper.current.swiper?.slideTo(0, 0);
         selectBet(spinsSwiper.current.swiper);
       }
     }, [filtredBonuses]);
@@ -156,53 +156,63 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       );
     };
 
-    const selectBet = (swiper: SwiperClass) => {
-      const realIndex = swiper.realIndex;
-      setSelectedBetIndex(realIndex);
-      const selectedBetTemplate = betTemplates[realIndex];
-      const selectedFsTemplate = spinsTemplates[selectedSpinsIndex];
+    const selectBet = (swiper: SwiperClass | null) => {
+      if (swiper) {
+        const realIndex = swiper.realIndex;
+        setSelectedBetIndex(realIndex);
+        const selectedBetTemplate = betTemplates[realIndex];
+        const selectedFsTemplate = spinsTemplates[selectedSpinsIndex];
 
-      if (selectedBetTemplate && selectedFsTemplate) {
-        setSpinsTemplates(
-          removeDuplicatesBySpinsCount(
-            filtredBonuses.filter(
-              (item) =>
-                item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
+        if (selectedBetTemplate && selectedFsTemplate) {
+          setSpinsTemplates(
+            removeDuplicatesBySpinsCount(
+              filtredBonuses.filter(
+                (item) =>
+                  item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
+              ),
             ),
-          ),
-        );
-        const matchingTemplate = filtredBonuses.find(
-          (template) =>
-            template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
-            template.spins_count === selectedFsTemplate.spins_count,
-        );
-        if (matchingTemplate) {
-          fsChangeHandler(matchingTemplate.id);
+          );
+          const matchingTemplate = filtredBonuses.find(
+            (template) =>
+              template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
+              template.spins_count === selectedFsTemplate.spins_count,
+          );
+          if (matchingTemplate) {
+            fsChangeHandler(matchingTemplate.id);
+          }
         }
       }
     };
 
     const selectSpins = (swiper?: SwiperClass) => {
-      const realIndex = swiper ? swiper.realIndex : 0;
-      setSelectedSpinsIndex(realIndex);
-      const selectedBetTemplate = betTemplates[selectedBetIndex];
-      const selectedFsTemplate = spinsTemplates[realIndex];
-      setBetTemplates(
-        removeDuplicatesByBet(
-          filtredBonuses.filter((item) => item.spins_count === betTemplates[realIndex].spins_count),
-        ),
-      );
-      if (selectedBetTemplate && selectedFsTemplate) {
-        const matchingTemplate = filtredBonuses.find(
-          (template) =>
-            template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
-            template.spins_count === selectedFsTemplate.spins_count,
+      if (swiper) {
+        const realIndex = swiper ? swiper.realIndex : 0;
+        setSelectedSpinsIndex(realIndex);
+        const selectedBetTemplate = betTemplates[selectedBetIndex];
+        const selectedFsTemplate = spinsTemplates[realIndex];
+        setBetTemplates(
+          removeDuplicatesByBet(
+            filtredBonuses.filter(
+              (item) => item.spins_count === betTemplates[realIndex].spins_count,
+            ),
+          ),
         );
-        if (matchingTemplate) {
-          fsChangeHandler(matchingTemplate.id);
+        if (selectedBetTemplate && selectedFsTemplate) {
+          const matchingTemplate = filtredBonuses.find(
+            (template) =>
+              template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
+              template.spins_count === selectedFsTemplate.spins_count,
+          );
+          if (matchingTemplate) {
+            fsChangeHandler(matchingTemplate.id);
+          }
         }
       }
     };
+
+    if (betTemplates?.length === 0 && spinsTemplates?.length === 0) {
+      return <div className={styles.title}>К сожалению доступные комбинации закончились</div>;
+    }
 
     return (
       <div>
