@@ -3,13 +3,13 @@
   position: relative;
   &.error {
     .wrapper {
-      border: 1px solid var(--Aditional-error, #CF6679) !important;
+      border: 1px solid var(--error-primary) !important;
     }
     .placeholder {
-      color: var(--Aditional-error, #CF6679) !important;
+      color: var(--error-primary) !important;
     }
     .message {
-      color: var(--Aditional-error, #CF6679) !important;
+      color: var(--error-primary) !important;
     }
   }
 }
@@ -18,7 +18,7 @@
 .input {
   height: 20px;
   background-color: transparent;
-  color: var(--Text-primary);
+  color: var(--text-primary);
   font-size: 14px;
   font-weight: 500;
   width: 100%;
@@ -37,14 +37,14 @@
   &:-webkit-autofill:focus,
   &:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0px 1000px rgb(47, 47, 47) inset !important;
-    -webkit-text-fill-color: #8E8E8E;
+    -webkit-text-fill-color: var(--input-placeholder);
   }
 }
 
 .placeholder {
   top: 50%;
   transform: translateY(-50%);
-  color: #8E8E8E;
+  color: var(--input-placeholder);
   z-index: 1;
   font-size: 14px;
   font-weight: 500;
@@ -72,7 +72,7 @@
   align-items: center;
   position: relative;
   width: 100%;
-  background:  #FFF;
+  background:  var(--input-primary);
   border: 1px solid #000 !important;
   border-radius: 2px;
   &.disabled {
@@ -98,7 +98,7 @@
 
 .message {
   margin-top: 10px;
-  color: #8E8E8E;
+  color: var(--input-placeholder);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

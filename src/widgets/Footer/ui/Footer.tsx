@@ -24,7 +24,7 @@ export const Footer = ({ isHidden }: FooterProps) => {
   }
   return (
     <div className={styles.container}>
-      <div className={styles.footer}>
+      <div className={styles.footer_container}>
         {isAuth ? (
           // Меню если авторизован
           <div className={styles.footer}>

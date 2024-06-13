@@ -7,7 +7,7 @@
 }
 
 .select {
-  background: var(--Select-bg, #f2f2f2);
+  background: var(--select-primary);
   width: 100%;
   position: relative;
   border-radius: 2px;
@@ -16,7 +16,7 @@
   cursor: pointer;
   padding: 14px 16px;
   appearance: none;
-  color: var(--Text-primary);
+  color: var(--text-primary);
   
 }
 
@@ -25,14 +25,14 @@
 }
 .error {
   .container {
-    border: 1px solid var(--Aditional-error, #CF6679);
+    border: 1px solid var(--error-primary);
   }
   .message {
-    color: var(--Aditional-error, #CF6679);
+    color: var(--error-primary);
   }
 
   .select_container {
-    border: 1px solid var(--Aditional-error, #CF6679);
+    border: 1px solid  var(--error-primary);
   }
 }
 
@@ -45,7 +45,7 @@
 
 .message {
   margin-top: 10px;
-  color: #8E8E8E;
+  color: var(--input-placeholder);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

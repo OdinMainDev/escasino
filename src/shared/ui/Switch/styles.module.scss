@@ -32,11 +32,11 @@
 }
 .container input[type="checkbox"]:checked + .switch::before {
   transform: translateX(15px);
-  background-color: #FFF;
+  background-color: var(--primary);
 
 }
 .container input[type="checkbox"]:checked + .switch {
-  background-color: #000;
+  background-color: var(--secondary);
 
 }
   

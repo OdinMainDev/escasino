@@ -2,7 +2,7 @@
   position: relative;
   z-index: 9;
   padding: 12px 0;
-  background-color: var(--background);
+  background-color: var(--primary);
 }
 
 .search {
@@ -62,9 +62,9 @@
     height: 16px;
     top: -8px;
     right: -8px;
-    color: #FFF;
+    color: var(--text-primary);
     border-radius: 50%;
-    background: var(--Text-primary, #E1E1E1);
+    background: var(--primary);
     position: absolute;
   }
 }

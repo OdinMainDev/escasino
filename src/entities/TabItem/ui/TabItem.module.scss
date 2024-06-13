@@ -1,7 +1,7 @@
 .container {
   padding: 6px 16px;
-  background: var(--Tabs-main, #333);
-  color: #F2F2F2;
+  background: var(--tab-primary);
+  color: var(--tab-secondary);
   font-size: 14px;
   font-style: normal;
   border-radius: 2px;
@@ -14,8 +14,8 @@
   justify-content: center;
   cursor: pointer;
   &.selected {
-    color:  var(--Tabs-main, #333);
-    background: var(--Action-active, #E1E1E1);
+    color: var(--tab-primary);
+    background: var(--tab-secondary);
   }
 }
 
@@ -23,7 +23,7 @@
   height: 28px;
   width: 80px;
   border-radius: 2px;
-  background-image: linear-gradient(-45deg, var(--Input-bg, #333), #585858, var(--Input-bg, #333));
+  background-image: linear-gradient(-45deg, var(--input-primary), #585858, var(--input-primary));
   background-size: 400% 400%;
   animation: gradient 2s ease infinite;
 }

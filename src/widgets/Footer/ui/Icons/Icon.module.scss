@@ -1,7 +1,7 @@
 .wallet {
   padding: 12px;
   justify-content: center;
-  background: var(--Action-active, #E1E1E1);
+  background: var(--secondary);
   border-radius: 2px;
   cursor: pointer;
 }
@@ -15,10 +15,10 @@
   cursor: pointer;
   border-radius: 4px;
   &.outline {
-    border: 2px solid var(--Text-primary);
+    border: 2px solid var(--text-primary);
   }
 
   &.contain {
-    background-color: var(--Text-primary);
+    background-color: var(--text-primary);
   }
 }

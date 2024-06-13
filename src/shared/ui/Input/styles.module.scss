@@ -2,19 +2,19 @@
   width: 100%;
   &.error {
     .label {
-      border: 1px solid var(--Aditional-error, #CF6679);
+      border: 1px solid var(--error-primary, #CF6679);
       .placeholder {
-        color: var(--Aditional-error, #CF6679);
+        color: var(--error-primary, #CF6679);
       }
     }
     .phone_input_continer {
-      border: 1px solid var(--Aditional-error, #CF6679);
+      border: 1px solid var(--error-primary, #CF6679);
       .placeholder {
-        color: var(--Aditional-error, #CF6679);
+        color: var(--error-primary, #CF6679);
       }
     }
     .message {
-      color: var(--Aditional-error, #CF6679);
+      color: var(--error-primary, #CF6679);
     }
   }
 }
@@ -35,14 +35,16 @@
   align-items: center;
   position: relative;
   width: 100%;
-  background:  #FFF;
-  border: 1px solid #000;
+  background:  var(--input-primary);
+  border: 1px solid var(--input-border-color);
   border-radius: 2px;
   height: 50px;
   .phone_input {
     width: 100% !important;
     font-family: "Montserrat", sans-serif !important;
     font-size: 14px !important;
+    background:  var(--input-primary);
+    color: var(--text-primary);
     font-weight: 500 !important;
     border: none !important;
   }
@@ -54,9 +56,8 @@
   align-items: center;
   position: relative;
   width: 100%;
-  background:  #FFF;
-
-  border: 1px solid #000;
+  background:  var(--input-primary);
+  border: 1px solid var(--input-border-color);
   border-radius: 2px;
   &.disabled {
     opacity: 0.5;
@@ -84,7 +85,7 @@
 .input {
   height: 20px;
   background-color: transparent;
-  color: var(--Text-primary);
+  color: var(--text-primary);
   font-size: 14px;
   font-weight: 500;
   width: 100%;
@@ -104,7 +105,7 @@
   &:-webkit-autofill:focus,
   &:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0px 1000px rgb(47, 47, 47) inset !important;
-    -webkit-text-fill-color: #8E8E8E;
+    -webkit-text-fill-color: var(--input-placeholder);
   }
 
   &.active + .placeholder {
@@ -117,7 +118,7 @@
 .placeholder {
   top: 50%;
   transform: translateY(-50%);
-  color: #8E8E8E;
+  color: var(--input-placeholder);
   font-size: 14px;
   font-weight: 500;
   position: absolute;
@@ -139,7 +140,7 @@
 
 .message {
   margin-top: 10px;
-  color: #8E8E8E;
+  color: var(--input-placeholder);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

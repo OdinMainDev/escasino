@@ -18,7 +18,7 @@
   }
   
   .label {
-    color: #8E8E8E;
+    color: var(--label-primary);
     text-align: center;
     font-size: 14px;
     font-style: normal;
@@ -26,7 +26,7 @@
     line-height: 20px;
     span {
       cursor: pointer;
-      color: var(--secondary);;
+      color: var(--secondary);
       font-size: 14px;
       font-style: normal;
       font-weight: 400;
@@ -41,7 +41,7 @@
     line-height: 20px;
     letter-spacing: 0.14px;
     text-decoration-line: underline;
-    color: var(--Text-primary, #F2F2F2);
+    color: var(--text-primary);
     margin-bottom: 58px;
   }
   
@@ -51,7 +51,7 @@
     font-weight: 600;
     line-height: 24px; 
     letter-spacing: 0.32px;
-    color: var(--Text-primary, #F2F2F2);
+    color: var(--text-primary);
     margin-bottom: 10px;
   }
   

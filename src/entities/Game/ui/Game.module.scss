@@ -3,7 +3,7 @@
   align-items: center;
   gap: 18px;
   padding: 16px;
-  background: #292929;
+  background: var(--block-secondary);
   border-radius: 2px;
   width: 100%;
   height: 100px;
@@ -20,7 +20,7 @@
   font-size: 12px;
   line-height: 133%;
   letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--label-primary);
 }
 
 .title {
@@ -28,5 +28,5 @@
   font-size: 17px;
   line-height: 120%;
   letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.87);
+  color: var(--text-primary);
 }

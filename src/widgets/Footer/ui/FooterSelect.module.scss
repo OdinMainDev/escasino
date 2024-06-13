@@ -1,5 +1,5 @@
 .container {
-  background: var(--Select-bg);
+  background: var(--select-primary);
   height: 48px;
   padding: 6px 12px;
   box-sizing: border-box;
@@ -23,7 +23,7 @@
 }
 
 .label {
-  color: var(--Text-secondary, #95999D);
+  color: var(--label-primary);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -32,7 +32,7 @@
 }
 
 .balance {
-  color: var(--Text-primary, #F2F2F2);
+  color: var(--text-primary);
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -63,9 +63,9 @@
   left: 0;
   min-width: inherit;
   border-radius: 2px;
-  background: var(--Background-secondary, #1C1C1C);
+  background: var(--modal-primary);
   &_balace {
-    color: var(--Text-primary, #F2F2F2);
+    color: var(--text-primary);
     font-size: 16px;
     font-style: normal;
     font-weight: 400;

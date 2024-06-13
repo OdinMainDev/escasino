@@ -4,17 +4,17 @@
     flex: 1;
     cursor: pointer;
     padding: 8px 0 15px 0;
-    color: var(--color-tab-main);
+    color: var(--tab-secondary);
     text-align: center;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
     line-height: 20px;
     letter-spacing: 0.28px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.60);
+    border-bottom: 2px solid var(--tab-secondary);
+    opacity: 0.6;
     &.active {
-      color: var(--Text-primary);
-      border-bottom: 2px solid var(--Text-primary);
+      opacity: 1;
     }
   }
 }

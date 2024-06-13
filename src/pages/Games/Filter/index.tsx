@@ -8,6 +8,7 @@ import ProviderList from './ui/ProviderList';
 import Button from '@/shared/ui/Button';
 import Switch from '@/shared/ui/Switch';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
+import Icons from '@/shared/ui/Icons';
 
 const Filter = () => {
   const { setFilters, getFilters, countActiveKeys } = useGamesFilters();
@@ -69,15 +70,7 @@ const Filter = () => {
         <div className="flex items-center justify-between">
           <div className={styles.title}>Фильтр и сортировка</div>
           <div className="cursor-pointer" onClick={router.goBack}>
-            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M18 6L6 18M6 6L18 18"
-                stroke="#000"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <Icons icon="cross" />
           </div>
         </div>
         <div className={styles.bonus}>
