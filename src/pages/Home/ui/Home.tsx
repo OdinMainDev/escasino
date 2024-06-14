@@ -19,22 +19,24 @@ export default function Home() {
 
   return (
     <IndexLayout>
-      {!loading && themeHasTopGames ? (
-        <div className={styles.top_games}>
-          <TopGames games={topGamesGrid} />
-        </div>
-      ) : (
-        ''
-      )}
-      {loading ? (
-        <div className={styles.loader}>
-          <Loader />
-        </div>
-      ) : (
-        <div className={styles.games_table}>
-          <GamesGrid games={gamesGrid} />
-        </div>
-      )}
+      <div className={styles.container}>
+        {!loading && themeHasTopGames ? (
+          <div className={styles.top_games}>
+            <TopGames games={topGamesGrid} />
+          </div>
+        ) : (
+          ''
+        )}
+        {loading ? (
+          <div className={styles.loader}>
+            <Loader />
+          </div>
+        ) : (
+          <div className={styles.games_table}>
+            <GamesGrid games={gamesGrid} />
+          </div>
+        )}
+      </div>
     </IndexLayout>
   );
 }

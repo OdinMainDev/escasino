@@ -5,7 +5,7 @@
   box-sizing: border-box;
   min-width: 180px;
   position: relative;
-  border-radius: 2px;
+  border-radius: 4px;
   cursor: pointer;
   &.active {
     .arrow {
@@ -62,7 +62,7 @@
   bottom: 60px;
   left: 0;
   min-width: inherit;
-  border-radius: 2px;
+  border-radius: 4px;
   background: var(--modal-primary);
   &_balace {
     color: var(--text-primary);

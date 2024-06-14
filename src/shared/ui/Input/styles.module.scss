@@ -1,7 +1,9 @@
 .container {
   width: 100%;
+  border-radius: 4px;
   &.error {
     .label {
+      
       border: 1px solid var(--error-primary, #CF6679);
       .placeholder {
         color: var(--error-primary, #CF6679);
@@ -37,7 +39,7 @@
   width: 100%;
   background:  var(--input-primary);
   border: 1px solid var(--input-border-color);
-  border-radius: 2px;
+  border-radius: 4px;
   height: 50px;
   .phone_input {
     width: 100% !important;
@@ -58,7 +60,7 @@
   width: 100%;
   background:  var(--input-primary);
   border: 1px solid var(--input-border-color);
-  border-radius: 2px;
+  border-radius: 4px;
   &.disabled {
     opacity: 0.5;
   }

@@ -3,6 +3,11 @@
   z-index: 9;
   padding: 12px 0;
   background-color: var(--primary);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  max-width: var(--desktop-max-width);
+
 }
 
 .search {
