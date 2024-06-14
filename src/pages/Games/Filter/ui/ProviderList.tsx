@@ -26,7 +26,7 @@ const ProviderList = memo(({ selectProvider }: IProps) => {
             >
               <div className={styles.provider}>
                 <img src={item.data.image || ''} alt={item.url} className={styles.image} />
-                <div className={styles.text}>{item.url}</div>
+                {/* <div className={styles.text}>{item.url}</div> */}
               </div>
             </TabBlock>
           ))}
