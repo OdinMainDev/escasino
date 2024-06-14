@@ -7,16 +7,24 @@ import styles from '../ui/WalletTabs/styles.module.scss';
 import { IPaymentTransaction } from '../models/interfaces';
 import { transactionTypes } from '../models/types';
 
-export const generateLimitText = (min: number, max: number, currency: string, amount: number) => {
+export const generateLimitText = (min: number, max: number, currency: string, amount: string) => {
   const minimum =
     min > 0 ? (
-      <div className={classNames({ [styles.error]: checkAmount(amount, max, min) })}>
+      <div
+        className={classNames({
+          [styles.error]: amount.length > 0 ? checkAmount(Number(amount), max, min) : false,
+        })}
+      >
         Mинимум: {min} {currency}
       </div>
     ) : null;
   const maximum =
     max > 0 ? (
-      <div className={classNames({ [styles.error]: checkAmount(amount, max, min) })}>
+      <div
+        className={classNames({
+          [styles.error]: amount.length > 0 ? checkAmount(Number(amount), max, min) : false,
+        })}
+      >
         Максимум: {max} {currency}
       </div>
     ) : null;

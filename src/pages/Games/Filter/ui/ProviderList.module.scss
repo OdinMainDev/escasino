@@ -8,14 +8,14 @@
 }
 
 .image {
-  height: 30px;
+  height: 25px;
+  margin-bottom: 5px;
 }
 
 .provider {
   display: flex;
+  flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 10px;
   color: var(--text-primary)
-
 }

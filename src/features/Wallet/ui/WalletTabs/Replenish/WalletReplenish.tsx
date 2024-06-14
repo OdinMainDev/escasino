@@ -229,7 +229,7 @@ const WalletReplenish = () => {
           }
           validationFunction={(value) => validateByInputName(item.name, value)}
           type={item.type?.toString()}
-          isError={!layout[item.name]}
+          isError={layout[item.name].length > 0 && !layout[item.name]}
           onChange={(e) =>
             setLayout((prev) => ({
               ...prev,
@@ -525,17 +525,21 @@ const WalletReplenish = () => {
           type="number"
           className="mb-[12px]"
           value={amount}
-          isError={checkAmount(
-            Number(amount),
-            maxAmount > 0 &&
-              (maxAmount < Number(selectedProvider?.conditions.limit_maximum) ||
-                Number(selectedProvider?.conditions.limit_maximum) == 0)
-              ? maxAmount
-              : Number(selectedProvider?.conditions.limit_maximum),
-            minAmount > 0 && minAmount > Number(selectedProvider?.conditions.limit_minimum)
-              ? minAmount
-              : Number(selectedProvider?.conditions.limit_minimum),
-          )}
+          isError={
+            amount.length > 0
+              ? checkAmount(
+                  Number(amount),
+                  maxAmount > 0 &&
+                    (maxAmount < Number(selectedProvider?.conditions.limit_maximum) ||
+                      Number(selectedProvider?.conditions.limit_maximum) == 0)
+                    ? maxAmount
+                    : Number(selectedProvider?.conditions.limit_maximum),
+                  minAmount > 0 && minAmount > Number(selectedProvider?.conditions.limit_minimum)
+                    ? minAmount
+                    : Number(selectedProvider?.conditions.limit_minimum),
+                )
+              : false
+          }
           onChange={(e) => setAmount(e.target.value)}
         />
         {selectedProvider && (
@@ -550,7 +554,7 @@ const WalletReplenish = () => {
                 ? maxAmount
                 : Number(selectedProvider?.conditions.limit_maximum),
               selectedProvider.currency,
-              Number(amount),
+              amount,
             )}
           </div>
         )}

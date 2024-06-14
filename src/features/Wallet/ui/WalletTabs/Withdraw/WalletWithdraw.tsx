@@ -251,7 +251,7 @@ const WalletWithdraw = () => {
                   value={layout[item.name]}
                   placeholder={t('withdrawForm.' + (item.name || 'undefined'))}
                   type={item.type?.toString()}
-                  isError={!layout[item.name]}
+                  isError={layout[item.name].length > 0 && !layout[item.name]}
                   onChange={(e) =>
                     setLayout((prev) => ({
                       ...prev,
@@ -269,11 +269,15 @@ const WalletWithdraw = () => {
           type="number"
           className="mb-[12px]"
           value={withdrawData.amount}
-          isError={checkAmount(
-            Number(withdrawData.amount),
-            Number(selectedProvider?.conditions.limit_maximum),
-            Number(selectedProvider?.conditions.limit_minimum),
-          )}
+          isError={
+            withdrawData.amount.length > 0
+              ? checkAmount(
+                  Number(withdrawData.amount),
+                  Number(selectedProvider?.conditions.limit_maximum),
+                  Number(selectedProvider?.conditions.limit_minimum),
+                )
+              : false
+          }
           onChange={(e) => setWithdrawData((prev) => ({ ...prev, amount: e.target.value }))}
         />
         {selectedProvider && (
@@ -282,7 +286,7 @@ const WalletWithdraw = () => {
               selectedProvider.conditions.limit_minimum,
               selectedProvider.conditions.limit_maximum,
               selectedProvider.currency,
-              Number(withdrawData.amount),
+              withdrawData.amount,
             )}
           </div>
         )}

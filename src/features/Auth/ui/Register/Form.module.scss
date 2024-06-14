@@ -12,6 +12,13 @@
   margin-bottom: 16px;
 }
 
+.line {
+  height: 1px;
+  width: 100%;
+  background-color: var(--line-primary);
+  margin-bottom: 24px;
+  
+}
 
 .input {
   margin-bottom: 20px;
@@ -72,14 +79,14 @@
   line-height: 16px;
   gap: 12px;
   letter-spacing: 0.14px;
-  margin-top: 24px;
-  margin-bottom: 50px;
+  margin-bottom: 24px;
   color: var(--text-primary);
 
   a {
     cursor: pointer;
     text-decoration: underline;
   }
+
 
 }
 

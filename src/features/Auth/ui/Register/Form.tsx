@@ -368,6 +368,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           onChange={(value) => setRegisterData((prev) => ({ ...prev, terms: value }))}
         />
       </div>
+      <div className={styles.line}></div>
       {hasSocials ? (
         <div>
           <div className={styles.subtitle}>C помощью социальных сетей</div>
