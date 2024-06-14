@@ -139,7 +139,7 @@ const WalletHistoryItem = ({
         </div>
         {transaction.status === 1 && (
           <div className={styles.data}>
-            <Button size="s" reverseTheme className="uppercase w-[100%]" elType="outlined">
+            <Button size="s" className="uppercase w-[100%]">
               перейти к платежу
             </Button>
           </div>

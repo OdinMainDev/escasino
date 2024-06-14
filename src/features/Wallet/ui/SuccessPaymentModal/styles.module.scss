@@ -36,7 +36,7 @@
   }
 
   &_label {
-    color: var(-main);
+    color: var(--text-primary);
     font-weight: 400;
     font-size: 13px;
     line-height: 133%;
@@ -172,6 +172,7 @@
   font-size: 14px;
   margin-top: 20px;
   text-decoration: underline;
+  color: var(--text-primary);
 }
 
 .value {
