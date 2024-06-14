@@ -5,11 +5,12 @@ export interface IBonus {
   data: IBonusData;
   created_at: number;
   expired_at: number;
-  bonus_template: IBonusTemplate;
+  bonus_template: IBonusTemplate[];
 }
 
 export interface IBonusData {
   bonuses_list: IBonusesList[];
+  is_cancel: boolean;
 }
 
 export interface IBonusesList {

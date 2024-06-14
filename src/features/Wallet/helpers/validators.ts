@@ -29,7 +29,7 @@ export const errorValidator = (error?: IErrorResponse): string => {
 export const validateByInputName = (name: string, value: string | null): boolean => {
   if (value) {
     if (name === 'exp_year') {
-      return Number(new Date().getFullYear().toString().slice(-2)) < Number(value);
+      return Number(new Date().getFullYear().toString().slice(-2)) <= Number(value);
     }
 
     if (name === 'exp_month') {

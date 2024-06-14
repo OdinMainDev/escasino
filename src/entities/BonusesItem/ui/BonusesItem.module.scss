@@ -15,7 +15,15 @@
   letter-spacing: 0.02em;
 }
 
+.tabs{
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
 .game {
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 18px;

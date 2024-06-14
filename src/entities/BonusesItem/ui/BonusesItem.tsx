@@ -1,13 +1,16 @@
-import { IBonus, ISetActiveBonus } from '@/shared/models/interfaces/bonuses';
+import {
+  IBonus,
+  IBonusesList,
+  IBonusTemplate,
+  ISetActiveBonus,
+} from '@/shared/models/interfaces/bonuses';
 import styles from './BonusesItem.module.scss';
-import { useCurrentLanguage } from '@/app/providers/LangProvider';
-import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import Button from '@/shared/ui/Button';
 import dateFormatter from '@/shared/helpers/dateFormatter';
 import { IGame } from '@/shared/models/interfaces/game';
 import { BonusesGamesModal } from '@/features/BonusesGamesModal';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Loader from '@/shared/ui/Loader';
 import {
   postSetMyActiveBonusApi,
@@ -17,59 +20,32 @@ import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { useModal } from '@/app/providers/ModalProvider';
 import { getBonuses } from '@/store/slices/bonusesSlices';
 import { useRouter } from '@/shared/helpers/navigation';
+import { TabItem } from '@/entities/TabItem';
+import BonusGame from './BonusGame';
 
 interface IProps {
   bonus: IBonus | null;
   isMain?: boolean;
 }
 const BonusesItem = ({ bonus, isMain }: IProps) => {
-  const currentLanguage = useCurrentLanguage();
-  const { games } = useAppSelector((state) => state.gamesAllSlice);
   const { activeBonus } = useAppSelector((state) => state.bonusesSlice);
-  const [selectedGames, setSelectedGames] = useState<IGame[]>([]);
-  const template = bonus?.bonus_template;
+  const [selectedTemplate, setSelectedTemplate] = useState<IBonusTemplate | null>(
+    bonus?.bonus_template[0] ?? null,
+  );
+  const { games } = useAppSelector((state) => state.gamesAllSlice);
+  const [templateGames, setTemplateGames] = useState<IGame[]>([]);
+  const [selectedGamesIds, setSelectedGamesIds] = useState<IBonusesList[]>(
+    bonus?.data.bonuses_list.filter((item) => item.type === 'freespins') || [],
+  );
   const [openGamesModal, setOpenGamesModal] = useState(false);
+  const [selectedGame, setSelectedGame] = useState<{
+    index: number;
+    game_id: number;
+  } | null>(null);
   const [loading, setLoading] = useState(false);
   const { doOpenModal } = useModal();
   const dispatch = useAppDispatch();
   const router = useRouter();
-
-  useEffect(() => {
-    if (games && games.length > 0) {
-      setSelectedGames(games.filter((item) => bonus?.bonus_template.game_ids.includes(item.id)));
-    }
-  }, [bonus?.bonus_template.game_ids, games]);
-
-  const getImage = () => {
-    if (template?.meta.image) return template.meta.image;
-    if (bonus && bonus?.data.bonuses_list.length > 0) {
-      const game = games?.find((game) => game.id === bonus?.data.bonuses_list[0].game_id);
-      if (game?.image) return game.image;
-    }
-    return PlaceholderImage;
-  };
-
-  const getGameName = () => {
-    if (bonus && bonus?.data.bonuses_list.length > 0) {
-      const game = games?.find((game) => game.id === bonus?.data.bonuses_list[0].game_id);
-      if (game) {
-        return (
-          game.data.texts?.find((item) => item.language.toLowerCase() === currentLanguage)?.value ??
-          game.name
-        );
-      }
-    }
-    return 'Игра не выбрана';
-  };
-
-  const getBonusTitle = () => {
-    const bonusTitle = template
-      ? template.meta.texts?.find((item) => item.language.toLowerCase() === currentLanguage)
-          ?.value || ''
-      : '';
-    if (bonusTitle) return bonusTitle;
-    return 'Бонус';
-  };
 
   const getBonusStatus = () => {
     switch (bonus?.status) {
@@ -91,21 +67,20 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
   const getButton = () => {
     switch (bonus?.status) {
       case 1:
+        if (!selectedGamesIds.find((item) => item.game_id > 0)) {
+          return <Button disabled>Выберите для бонуса игры</Button>;
+        }
         return (
           <Button
             onClick={() => {
-              if (bonus?.data.bonuses_list[0].game_id === 0) {
-                setOpenGamesModal(true);
-              } else {
-                void setActiveBonus(bonus?.data.bonuses_list[0].game_id);
-              }
+              void setActiveBonus();
             }}
           >
             Активировать бонус
           </Button>
         );
       case 2:
-        if (bonus?.bonus_template.is_cancel) {
+        if (bonus?.data.is_cancel) {
           return (
             <Button disabled elType="outlined">
               Бонус нельзя отменить
@@ -128,14 +103,13 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
     }
   };
 
-  const setActiveBonus = async (game_id: number) => {
+  const setActiveBonus = async () => {
     if (!activeBonus && bonus) {
       try {
-        setOpenGamesModal(false);
         setLoading(true);
         const data: ISetActiveBonus = {
           id: bonus?.id,
-          game_ids: [game_id],
+          game_ids: selectedGamesIds.map((item) => item.game_id),
           fid: await getVisitorId(),
         };
         await postSetMyActiveBonusApi(data);
@@ -169,9 +143,17 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
     }
   };
 
-  const image = getImage();
-  const gameName = getGameName();
-  const bonusTitle = getBonusTitle();
+  const selectTemplate = (template: IBonusTemplate) => {
+    setSelectedTemplate(template);
+  };
+
+  const updateNumberAtIndex = (index: number, game_id: number) => {
+    const newNumbers = [...selectedGamesIds];
+    newNumbers[index] = { ...newNumbers[index], game_id };
+    setSelectedGamesIds(newNumbers);
+    setOpenGamesModal(false);
+  };
+
   const bonusStatus = getBonusStatus();
   return (
     <div className={styles.container}>
@@ -183,47 +165,70 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
           </div>
         )}
       </div>
+      <div className={styles.tabs}>
+        {bonus?.bonus_template.map((item, index) => (
+          <TabItem
+            selected={item.id === selectedTemplate?.id}
+            key={index}
+            onClick={() => selectTemplate(item)}
+          >
+            Шаблон #{index + 1}
+          </TabItem>
+        ))}
+      </div>
       <div className={styles.info}>
         <div className={styles.info_block}>
           <div className={styles.label}>Бонусный ставка</div>
           <div className={styles.value}>
-            {bonus?.bonus_template.configurator.bet_amount}{' '}
-            {bonus?.bonus_template.configurator.currency}
+            {selectedTemplate?.configurator.bet_amount} {selectedTemplate?.configurator.currency}
           </div>
         </div>
         <div className={styles.info_block}>
           <div className={styles.label}>Количество FS</div>
-          <div className={styles.value}>{bonus?.bonus_template.spins_count}</div>
+          <div className={styles.value}>{selectedTemplate?.spins_count}</div>
         </div>
         <div className={styles.info_block}>
           <div className={styles.label}>Максимальная сумма</div>
-          <div className={styles.value}>{bonus?.bonus_template.bonus_settings.max_amount}</div>
+          <div className={styles.value}>{selectedTemplate?.bonus_settings.max_amount}</div>
         </div>
         <div className={styles.info_block}>
           <div className={styles.label}>Минимальная сумма</div>
-          <div className={styles.value}>{bonus?.bonus_template.bonus_settings.min_amount}</div>
+          <div className={styles.value}>{selectedTemplate?.bonus_settings.min_amount}</div>
         </div>
         <div className={styles.info_block}>
           <div className={styles.label}>Отыгрыш истекает</div>
           <div className={styles.value}>{bonus ? dateFormatter(bonus?.expired_at) : ''}</div>
         </div>
       </div>
-      <div className={styles.game}>
-        <img className={styles.game_img} alt="sw" src={image} />
-        <div className="flex flex-col gap-[8px] flex-1">
-          <div className={styles.game_subtitle}>{bonusTitle}</div>
-          <div className={styles.game_title}>{gameName}</div>
-        </div>
+      <div>
+        {selectedGamesIds.map((item, index) => (
+          <BonusGame
+            key={index}
+            gameId={item.game_id}
+            onClick={() => {
+              const findedTemplate = bonus?.bonus_template.find(
+                (template) => template.id === item.id,
+              );
+              if (findedTemplate) {
+                const findedGames = games?.filter((item) =>
+                  findedTemplate.game_ids.includes(item.id),
+                );
+                console.log(findedGames);
+                setTemplateGames(findedGames || []);
+                setOpenGamesModal(true);
+                setSelectedGame({ index, game_id: item.game_id });
+              }
+            }}
+          />
+        ))}
       </div>
       <div className={styles.buttons}>{getButton()}</div>
-      {bonus?.data.bonuses_list[0].game_id === 0 && (
-        <BonusesGamesModal
-          onSelectGame={(game) => void setActiveBonus(game.id)}
-          games={selectedGames}
-          isOpen={openGamesModal}
-          close={() => setOpenGamesModal(false)}
-        />
-      )}
+      <BonusesGamesModal
+        onSelectGame={(game) => updateNumberAtIndex(selectedGame?.index || 0, game.id)}
+        games={templateGames}
+        isOpen={openGamesModal}
+        close={() => setOpenGamesModal(false)}
+      />
       {loading && (
         <div className={styles.loader}>
           <Loader />
