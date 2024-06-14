@@ -198,11 +198,11 @@ const Details = () => {
         <WinningsList />
       </div>
       <div className={styles.description}>
-        <div className={styles.description_title}>Monster Blox</div>
+        <div className={styles.description_title}>{game?.name}</div>
         <div className={styles.description_info}>
-          Heroes gather at the old tavern where the bounty for hunting them down are on display and
-          for the taken. The rewards are grand for the bravest warriors, those who can take down the
-          biggest ones.
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos aut voluptatum,
+          delectus laboriosam, modi quia quisquam repudiandae dolorem autem voluptates repellat,
+          ipsum aliquid explicabo. Omnis deserunt ratione facilis quod exercitationem.
         </div>
       </div>
       <Footer isHidden={!isAuth} />
