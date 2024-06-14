@@ -80,7 +80,7 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
             <Tabs
               className="mb-[36px]"
               value={selectedType}
-              onChange={(value) => setSelectedType(value.value)}
+              onChange={(value) => setSelectedType(value.value.toString())}
               tabs={[
                 {
                   value: 'email',
@@ -114,13 +114,13 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
             {(formType === 'full' && selectedType === 'phone') || formType === 'phone' ? (
               <Input
                 placeholder={'Телефон'}
-                type={'text'}
+                type="phone"
                 containerClassName={styles.input}
                 isError={!!errorData?.errors['phone']}
                 validationFunction={validatePhone}
                 // autoComplete={autoCompleteHandler('phone')}
-                onChange={(e) => {
-                  setResetData((prev) => ({ ...prev, phone: e.target.value }));
+                onChangePhone={(value) => {
+                  setResetData((prev) => ({ ...prev, phone: value }));
                   if (!isAppDebug) {
                     setResetData((prev) => ({ ...prev, email: '' }));
                   }

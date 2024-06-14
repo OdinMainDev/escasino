@@ -6,8 +6,8 @@ import { PageHeader } from '@/widgets/Header';
 const ProfileEdit = () => {
   return (
     <>
+      <PageHeader customBackPath="/profile" title="Редактировать профиль" />
       <div className={styles.container}>
-        <PageHeader customBackPath="/profile" title="Редактировать профиль" />
         <ProfileForm />
       </div>
       <ProfileModals />

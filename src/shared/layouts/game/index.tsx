@@ -14,9 +14,7 @@ const GameLayout = ({ children, gameTitle }: IProps) => {
   const { isAuth } = useAuthProvider();
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <PageHeader title={gameTitle} />
-      </div>
+      <PageHeader title={gameTitle} />
       {children}
       <Footer isHidden={!isAuth} />
     </div>

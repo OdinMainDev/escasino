@@ -11,9 +11,8 @@ interface IProps {
 const IndexLayout = ({ children }: IProps) => {
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <MainHeader />
-      </div>
+      <MainHeader />
+
       {children}
       <Footer />
     </div>

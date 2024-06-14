@@ -4,10 +4,12 @@ import { PageHeader } from '@/widgets/Header';
 
 const Wallet = () => {
   return (
-    <div className={styles.container}>
+    <>
       <PageHeader customBackPath="/profile" title="Кошелек" />
-      <WalletTabs />
-    </div>
+      <div className={styles.container}>
+        <WalletTabs />
+      </div>
+    </>
   );
 };
 
