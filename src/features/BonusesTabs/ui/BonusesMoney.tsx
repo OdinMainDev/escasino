@@ -1,7 +1,7 @@
 import { Swiper, SwiperClass, SwiperRef, SwiperSlide } from 'swiper/react';
 import styles from './BonusesTabs.module.scss';
 import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
-import { useState, useCallback, forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
+import { useState, forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import { useAppSelector } from '@/store/hooks/redux';
 
@@ -21,6 +21,7 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const moneySwiper = useRef<SwiperRef>(null);
     const cartBonuses = useAppSelector((state) => state.cartBonusesSlice.bonusesTemplates);
+    const [filtredBonuses, setFiltredBonuses] = useState<IBonusTemplate[]>([]);
     const [sortedBonuses, setSortedBonuses] = useState<IBonusTemplate[]>([]);
     useImperativeHandle(ref, () => {
       return {
@@ -60,6 +61,7 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
             template.bonus_settings.max_amount >= maxAmount,
         );
       }
+
       const uniqueBonuses = filteredTemplates
         .reduce((acc: IBonusTemplate[], item: IBonusTemplate) => {
           if (item.bonus_percent > 0) {
@@ -75,19 +77,27 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
           return acc;
         }, [])
         .sort((a, b) => a.bonus_percent - b.bonus_percent);
+      setFiltredBonuses(uniqueBonuses);
       setSortedBonuses(uniqueBonuses);
     }, [bonusesTemplates, cartBonuses, minAmount, maxAmount]);
 
-    const selectMoney = useCallback(
-      (swiper: SwiperClass) => {
-        const selectedBonus = sortedBonuses[swiper.realIndex];
+    useEffect(() => {
+      if (moneySwiper.current) {
+        moneySwiper.current.swiper?.slideTo(0, 0);
+        selectMoney(moneySwiper.current.swiper);
+      }
+    }, [filtredBonuses]);
+
+    const selectMoney = (swiper: SwiperClass | null) => {
+      const realIndex = swiper?.realIndex;
+      if (realIndex) {
+        const selectedBonus = sortedBonuses[realIndex];
         if (selectedBonus) {
           moneyChangeHandler(selectedBonus.id);
-          setActiveIndex(swiper.realIndex);
+          setActiveIndex(realIndex);
         }
-      },
-      [moneyChangeHandler, sortedBonuses],
-    );
+      }
+    };
 
     if (sortedBonuses?.length === 0) {
       return <div className={styles.title}>К сожалению доступные комбинации закончились</div>;
