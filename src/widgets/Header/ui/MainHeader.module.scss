@@ -1,20 +1,15 @@
 .container {
   position: relative;
   z-index: 9;
-  padding: 12px 0;
+  padding: 20px 16px 20px 16px;
   background-color: var(--primary);
   position: fixed;
   width: 100%;
   top: 0;
-  max-width: var(--desktop-max-width);
-
-}
-
-.search {
   display: flex;
   align-items: center;
-  padding: 0 16px;
-  margin-bottom: 12px;
+  max-width: var(--desktop-max-width);
+
 }
 
 .input {
