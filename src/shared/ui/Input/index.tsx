@@ -238,7 +238,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
               >
                 <path
                   d="M13 1L1 13M1 1L13 13"
-                  stroke="#000"
+                  stroke="var(--secondary)"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
