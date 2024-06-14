@@ -150,7 +150,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           <Tabs
             className="mb-[36px]"
             value={selectedType}
-            onChange={(value) => setSelectedType(value.value)}
+            onChange={(value) => setSelectedType(value.value.toString())}
             tabs={[
               {
                 value: 'email',

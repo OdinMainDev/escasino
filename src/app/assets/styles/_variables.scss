@@ -2,7 +2,6 @@
 // :root {
 //   --primary: #F5F5F5;
 //   --secondary: #161616;
-//   --thrid: #F5F5F5;
 
 //   --button-primary-color: #252525;
 //   --button-secondary-color: #F5F5F5;
@@ -39,16 +38,15 @@
 
 // DARK THEME
 :root {
-  --primary: #121212;
-  --secondary: #E1E1E1;
-  --thrid: #1C1C1C;
+  --primary: #161616;
+  --secondary: #F2F2F2;
 
-  --button-primary-color: #E2E2E2;
-  --button-secondary-color: #1E1E1E;
-  --button-border-color: #cfcfcf;
+  --button-primary-color: #F2F2F2;
+  --button-secondary-color: #161616;
+  --button-border-color: #303030;
 
-  --block-primary: #1E1E1E;
-  --block-secondary: #292929;
+  --block-primary: #1e1e1e;
+  --block-secondary: #2a2a2a;
 
   --line-primary: #303030;
 
@@ -64,14 +62,14 @@
   --modal-primary: #1C1C1C; 
 
   --input-primary: #333333;
-  --input-border-color: #333333;
+  --input-border-color: #393939;
   --input-placeholder: #8E8E8E;
 
   --select-primary: #333333; 
 
-  --tab-primary: #333333;
-  --tab-secondary: #E1E1E1;
-  --tab-thrid: #E1E1E1;
+  --tab-primary: #000;
+  --tab-secondary: #333;
+  --tab-thrid: #e0e0e0;
 
 
   --desktop-max-width: 568px;

@@ -1,7 +1,7 @@
 .container {
   padding: 6px 16px;
-  background: var(--tab-primary);
-  color: var(--tab-secondary);
+  background: var(--tab-secondary);
+  color: var(--text-primary);
   font-size: 14px;
   font-style: normal;
   border-radius: 2px;
@@ -14,8 +14,8 @@
   justify-content: center;
   cursor: pointer;
   &.selected {
-    color: var(--tab-primary);
-    background: var(--tab-secondary);
+    color: var(--text-secondary);
+    background: var(--tab-thrid);
   }
 }
 
