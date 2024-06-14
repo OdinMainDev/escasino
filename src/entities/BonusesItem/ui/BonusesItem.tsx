@@ -155,6 +155,30 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
   };
 
   const bonusStatus = getBonusStatus();
+
+  console.log(bonus);
+  if (!bonus && isMain) {
+    return (
+      <div className={styles.container}>
+        <div className="flex items-center justify-between mb-[70px]">
+          <div className={styles.title}>Активный бонус не выбран</div>
+          {isMain && (
+            <div onClick={() => router.push('/bonus/list')} className={styles.side_url}>
+              история
+            </div>
+          )}
+        </div>
+        <div className={styles.buttons}>
+          <Button onClick={() => router.push('/bonus/list')}>Выбрать активный бонус</Button>
+        </div>
+        {loading && (
+          <div className={styles.loader}>
+            <Loader />
+          </div>
+        )}
+      </div>
+    );
+  }
   return (
     <div className={styles.container}>
       <div className="flex items-center justify-between mb-[16px]">
