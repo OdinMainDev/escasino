@@ -229,7 +229,7 @@ const WalletReplenish = () => {
           }
           validationFunction={(value) => validateByInputName(item.name, value)}
           type={item.type?.toString()}
-          isError={layout[item.name].length > 0 && !layout[item.name]}
+          isError={!layout[item.name] && layout[item.name]?.length > 0}
           onChange={(e) =>
             setLayout((prev) => ({
               ...prev,

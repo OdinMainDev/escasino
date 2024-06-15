@@ -7,17 +7,24 @@
   box-sizing: border-box;
   align-items: center;
   justify-content: center;
-  background: var(--tab-primary);
+  background: var(--tab-secondary);
   border-radius: 2px;
   font-size: 12px;
   font-weight: 600;
   color: var(--tab-secondary);
   cursor: pointer;
+
+
   &.selected {
     color: var(--tab-primary);
-    background: var(--tab-secondary);
+    background: var(--secondary);
+    
+    img {
+      filter: invert(100%);
+    }
   }
 }
+
 
 .skeleton {
   flex-shrink: 0;
