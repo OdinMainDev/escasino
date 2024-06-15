@@ -24,6 +24,7 @@ import SuccessPaymentModal from '../../SuccessPaymentModal';
 import {
   errorValidator,
   validateByInputName,
+  validateCardData,
   validateData,
 } from '@/features/Wallet/helpers/validators';
 import { IErrorResponse } from '@/shared/models/interfaces/error';
@@ -215,6 +216,17 @@ const WalletReplenish = () => {
     const cardLayouts = ['number', 'exp_year', 'exp_month', 'cvc'];
 
     const found = selectedLayout.every((field) => cardLayouts.includes(field.name ?? ''));
+
+    const validateCard = (layoutItem: IPaymentProviderLayout, value: string) => {
+      if ((layoutItem.name === 'exp_month' || layoutItem.name === 'exp_year') && found) {
+        const expMonth =
+          layoutItem.name === 'exp_month' ? Number(value) : Number(layout?.exp_month);
+        const expYear = layoutItem.name === 'exp_year' ? Number(value) : Number(layout?.exp_year);
+        return validateCardData(expMonth, expYear);
+      }
+      return validateByInputName(layoutItem.name, value);
+    };
+
     return selectedLayout.map((item, index) => (
       <div className={classNames(item.className)} key={index}>
         <div className={styles.title}>{t('paymentForm.' + item.name)}</div>
@@ -223,13 +235,15 @@ const WalletReplenish = () => {
           value={layout[item.name]}
           placeholder={t('paymentForm.' + item.name)}
           message={
-            !validateByInputName(item.name, layout[item.name])
+            layout[item.name]?.length > 0 && !validateByInputName(item.name, layout[item.name])
               ? generateErrorMessages(item.name)
               : null
           }
-          validationFunction={(value) => validateByInputName(item.name, value)}
+          validationFunction={(value) => !validateCard(item, value)}
           type={item.type?.toString()}
-          isError={layout[item.name].length > 0 && !layout[item.name]}
+          isError={
+            layout[item.name]?.length > 0 && !validateByInputName(item.name, layout[item.name])
+          }
           onChange={(e) =>
             setLayout((prev) => ({
               ...prev,

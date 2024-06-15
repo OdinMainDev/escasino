@@ -177,11 +177,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
               containerClassName={styles.input}
               validationFunction={validateEmail}
               isError={!!errorData?.errors['email']}
-              message={
-                validateEmail(registerData.email)
-                  ? 'Будет использоваться как логин для входа'
-                  : 'Введите корректный e-mail'
-              }
+              message={ErrorResponseAsString('email', 'Введите корректный e-mail', errorData)}
             />
           ) : null}
           {(formType === 'full' && selectedType === 'phone') || formType === 'phone' ? (

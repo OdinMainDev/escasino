@@ -26,6 +26,26 @@ export const errorValidator = (error?: IErrorResponse): string => {
   return 'ошибка платежа, попробуйте позжe';
 };
 
+export const validateCardData = (month: number, year: number): boolean => {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+
+  if (year < currentYear) {
+    return false;
+  }
+
+  if (year === currentYear && month < currentMonth) {
+    return false;
+  }
+
+  if (month < 1 || month > 12) {
+    return false;
+  }
+
+  return true;
+};
+
 export const validateByInputName = (name: string, value: string | null): boolean => {
   if (value) {
     if (name === 'exp_year') {
