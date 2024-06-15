@@ -6,9 +6,10 @@ interface IProps extends BaseHTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
   selected?: boolean;
   skeleton?: boolean;
+  secondary?: boolean;
 }
 
-const TabBlock = ({ children, selected, skeleton, ...otherProps }: IProps) => {
+const TabBlock = ({ children, selected, skeleton, secondary, ...otherProps }: IProps) => {
   if (skeleton) {
     return <div className={styles.skeleton}></div>;
   }
@@ -20,6 +21,7 @@ const TabBlock = ({ children, selected, skeleton, ...otherProps }: IProps) => {
         styles.container,
         {
           [styles.selected]: selected,
+          [styles.secondary]: secondary,
         },
         otherProps.className,
       )}
