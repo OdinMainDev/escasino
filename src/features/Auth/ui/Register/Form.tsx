@@ -391,7 +391,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
       )}
       <Button
         type="submit"
-        disabled={!validateRegister(registerData)}
+        disabled={!validateRegister(registerData, settings?.auth.register)}
         className={styles.button}
         onClick={(e) => void sendData(e)}
       >
