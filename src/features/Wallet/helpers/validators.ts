@@ -29,7 +29,15 @@ export const errorValidator = (error?: IErrorResponse): string => {
 export const validateCardData = (month: number, year: number): boolean => {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
-  const currentYear = currentDate.getFullYear();
+  const currentYear = currentDate.getFullYear() % 100;
+
+  if (year >= currentYear && month === 0) {
+    return true;
+  }
+
+  if (year === 0 && month >= 1 && month <= 12) {
+    return true;
+  }
 
   if (year < currentYear) {
     return false;

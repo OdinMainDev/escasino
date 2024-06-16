@@ -1,10 +1,10 @@
 export const generateErrorMessages = (name: string): string => {
   if (name === 'exp_year') {
-    return 'Введите корректный год';
+    return 'Введите корректную дату';
   }
 
   if (name === 'exp_month') {
-    return 'Введите корректный месяц';
+    return 'Введите корректную дату';
   }
 
   if (name === 'cvc') {
