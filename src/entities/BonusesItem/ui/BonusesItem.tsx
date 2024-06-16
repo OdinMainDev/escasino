@@ -80,7 +80,7 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
           </Button>
         );
       case 2:
-        if (bonus?.data.is_cancel) {
+        if (!bonus?.data.is_cancel) {
           return (
             <Button disabled elType="outlined">
               Бонус нельзя отменить
