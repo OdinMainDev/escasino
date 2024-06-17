@@ -5,3 +5,11 @@ export interface IDocument {
 }
 
 export type documentType = 'passport' | 'card' | 'something';
+
+export interface IVerificationHistoryItem {
+  status: number;
+  reason: string;
+  tag: string;
+  created_at: number;
+  updated_at: number;
+}

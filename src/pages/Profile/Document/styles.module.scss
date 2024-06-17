@@ -25,6 +25,7 @@
   font-weight: 600;
   text-transform: uppercase;
   margin-bottom: 5px;
+  color: var(--text-primary);
 }
 
 .button {
@@ -45,6 +46,7 @@
   font-size: 16px;
   line-height: 24px;
   margin-bottom: 50px;
+  color: var(--text-primary);
 }
 
 .buttons {
@@ -65,4 +67,5 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  color: var(--text-primary);
 }
