@@ -230,17 +230,18 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
             key={index}
             gameId={item.game_id}
             onClick={() => {
-              const findedTemplate = bonus?.bonus_template.find(
-                (template) => template.id === item.id,
-              );
-              if (findedTemplate) {
-                const findedGames = games?.filter((item) =>
-                  findedTemplate.game_ids.includes(item.id),
+              if (bonus?.status !== 2) {
+                const findedTemplate = bonus?.bonus_template.find(
+                  (template) => template.id === item.id,
                 );
-                console.log(findedGames);
-                setTemplateGames(findedGames || []);
-                setOpenGamesModal(true);
-                setSelectedGame({ index, game_id: item.game_id });
+                if (findedTemplate) {
+                  const findedGames = games?.filter((item) =>
+                    findedTemplate.game_ids.includes(item.id),
+                  );
+                  setTemplateGames(findedGames || []);
+                  setOpenGamesModal(true);
+                  setSelectedGame({ index, game_id: item.game_id });
+                }
               }
             }}
           />
