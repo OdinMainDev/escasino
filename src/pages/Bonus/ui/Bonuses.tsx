@@ -22,6 +22,7 @@ import { BonusesGamesModal } from '@/features/BonusesGamesModal';
 import { v4 as uuidv4 } from 'uuid';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
 import { PageHeader } from '@/widgets/Header';
+import { useTranslation } from 'react-i18next';
 
 const Bonuses = () => {
   const { id } = useParams();
@@ -48,6 +49,7 @@ const Bonuses = () => {
   const bonusesMoney = useRef<IBonusMoneyMethods>(null);
   const [alertModalData, setAlertModalData] = useState<IAlert>({});
   const [openGamesModal, setOpenGamesModal] = useState(false);
+  const { t } = useTranslation();
 
   const getBonusArray = useCallback((settings: ISettings | null) => {
     if (settings) {
@@ -327,7 +329,7 @@ const Bonuses = () => {
                     onClick={() => setSelectedTab(item)}
                     key={index}
                   >
-                    bonusesConfigurator.tab.{item}
+                    {t('bonusesConfigurator.tab.' + item)}
                   </TabItem>
                 ))}
               </div>

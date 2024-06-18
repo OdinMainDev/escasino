@@ -22,5 +22,16 @@
     "Success": "Успешно",
     "Error": "Ошибка",
     "Delete": "Удалено"
+  },
+  "historyVerificationStatuses": {
+    "Pending": "В обработке",
+    "Decline": "Отклонено",
+    "Accept": "Подтверждено"
+  },
+  "bonusesConfigurator": {
+    "tab": {
+      "freespins": "Фриспины",
+      "money": "Бонусный баланс"
+    }
   }
 }
