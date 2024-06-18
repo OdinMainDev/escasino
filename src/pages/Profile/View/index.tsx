@@ -83,25 +83,23 @@ const Profile = () => {
             </div>
           </div>
           <BonusesItem bonus={activeBonus} isMain />
-          <div className={styles.block}>
-            <div className={styles.title}>Документы</div>
-            <div
-              className={classNames(styles.profile_verification, {
-                [styles.is_verificated]: !IsUserVerified,
-              })}
-            >
-              {IsUserVerified ? 'Документы верифицирован' : 'Документы не верифицирован'}
-            </div>
-            <div className={styles.buttons}>
-              <Button
-                elType="outlined"
-                className={styles.button}
-                onClick={() => router.push('/profile/document')}
+          {user?.data.documents_verified_at == 0 && (
+            <div className={styles.block}>
+              <div className={styles.title}>Верификация документов</div>
+              <div
+                className={classNames(styles.profile_verification, {
+                  [styles.is_not_verificated]: true,
+                })}
               >
-                Посмотреть документ
-              </Button>
+                Документы верифицирован
+              </div>
+              <div className={styles.buttons}>
+                <Button className={styles.button} onClick={() => router.push('/profile/document')}>
+                  Пройти верификацию
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
           <div className={styles.block}>
             {loadingUser && (
               <div className={styles.loading}>
@@ -143,7 +141,7 @@ const Profile = () => {
               ) : null}
               <div
                 className={classNames(styles.profile_verification, {
-                  [styles.is_verificated]: !IsUserVerified,
+                  [styles.is_not_verificated]: !IsUserVerified,
                 })}
               >
                 {IsUserVerified ? 'Игрок верифицирован' : 'Игрок не верифицирован'}

@@ -5,11 +5,17 @@ import Icons from '@/shared/ui/Icons';
 import { ProgressBar } from '@/entities/ProgressBar';
 import { useAppSelector } from '@/store/hooks/redux';
 import VerificationModal from './DocumentVerificationModal';
-import { documentType } from './models';
-import { useState } from 'react';
+import { IVerificationHistoryItem, documentType } from './models';
+import { useEffect, useState } from 'react';
+import { getVerifications } from './api/historyApi';
+import HistoryItem from './HistoryItem';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileDocument = () => {
   const { user } = useAppSelector((state) => state.userReducer);
+  const [verifications, setVerifications] = useState<IVerificationHistoryItem[]>([]);
+  const [disabledVerifications, setDisabledVerifications] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   const [openModal, setOpenModal] = useState<{ isOpen: boolean; modalType: documentType }>({
     isOpen: false,
@@ -29,6 +35,27 @@ const ProfileDocument = () => {
     });
   };
 
+  useEffect(() => {
+    if (user?.data.documents_verified_at && user?.data.documents_verified_at > 0) {
+      navigate('/profile');
+      return;
+    }
+    const getData = async () => {
+      setVerifications(await getVerifications());
+    };
+    void getData();
+  }, []);
+
+  useEffect(() => {
+    const temp: string[] = [];
+    verifications.map((item) => {
+      if (item.status == 0) {
+        temp.push(item.tag);
+      }
+    });
+    setDisabledVerifications(temp);
+  }, [verifications]);
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -45,7 +72,7 @@ const ProfileDocument = () => {
             elType="outlined"
             className={styles.button}
             onClick={() => openModalHandler('passport')}
-            disabled={user?.data.documents_verified_at !== 0}
+            disabled={disabledVerifications.includes('passport')}
           >
             <Icons icon="passport" />
             Отправьте ваш паспорт
@@ -54,6 +81,7 @@ const ProfileDocument = () => {
             elType="outlined"
             className={styles.button}
             onClick={() => openModalHandler('card')}
+            disabled={disabledVerifications.includes('card')}
           >
             <Icons icon="card" />
             Отправьте вашу карту
@@ -62,17 +90,31 @@ const ProfileDocument = () => {
             elType="outlined"
             className={styles.button}
             onClick={() => openModalHandler('something')}
+            disabled={disabledVerifications.includes('something')}
           >
             <Icons icon="document" />
             Отправьте еще что то
           </Button>
         </div>
+        {verifications.map((item, index) => (
+          <HistoryItem key={index} verification={item} />
+        ))}
       </div>
       <div className={styles.footer}>
+        Процесс верификации
         <div className={styles.progress}>
-          <ProgressBar progress={10} />
+          <ProgressBar
+            progress={
+              disabledVerifications.length == 0
+                ? 0
+                : disabledVerifications.length == 1
+                  ? 30
+                  : disabledVerifications.length == 2
+                    ? 60
+                    : 90
+            }
+          />
         </div>
-        <Button>Верифицировать</Button>
       </div>
       <VerificationModal
         isOpen={openModal.isOpen}

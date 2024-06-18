@@ -135,7 +135,7 @@
     line-height: 16px;
     color: var(--text-secondary);
     letter-spacing: 0.12px;
-    &.is_verificated {
+    &.is_not_verificated {
       background-color: var(--error-primary);
     }
   }

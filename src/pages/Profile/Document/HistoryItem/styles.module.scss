@@ -1,0 +1,64 @@
+.container {
+  width: 100%;
+  min-height: 176px;
+  padding: 16px;
+  border-radius: 2px;
+  background-color: var(--block-primary);
+}
+
+.status {
+  height: 24px;
+  padding: 4px 12px;
+  border-radius: 24px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.01em;
+  background-color: #f0faff;
+  &.good {
+    background-color: var(--success-primary);
+  }
+
+  &.middle {
+    background-color: var(--warning-primary);
+  }
+
+  &.bad {
+    background-color: var(--error-primary);
+  }
+}
+
+.cancel {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.01em;
+  text-align: left;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.data {
+  flex: 1px
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  opacity: 0.6;
+  margin-bottom: 4px;
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  opacity: 0.8;
+}

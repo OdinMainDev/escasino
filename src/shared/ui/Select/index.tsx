@@ -41,7 +41,7 @@ const Select = ({ optionList, isError, containerClassName, message, ...otherProp
           >
             <path
               d="M1 1L7 7L13 1"
-              stroke="var(--Text-primary)"
+              stroke="var(--text-primary)"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"

@@ -35,7 +35,7 @@
 
 .title {
   font-size: 16px;
-  color: var(--Text-primary);
+  color: var(--text-primary);
   font-style: normal;
   font-weight: 500;
   line-height: 24px;
@@ -57,7 +57,7 @@
 
 .balance {
   &_bonus {
-    color: var(--Text-primary);
+    color: var(--text-primary);
     font-size: 20px;
     font-style: normal;
     font-weight: 600;
@@ -75,7 +75,7 @@
   }
 
   &_value {
-    color: var(--Text-primary);
+    color: var(--text-primary);
     font-size: 24px;
     font-style: normal;
     font-weight: 600;
@@ -100,7 +100,7 @@
   }
 
   &_value {
-    color: var(--Text-primary);
+    color: var(--text-primary);
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
