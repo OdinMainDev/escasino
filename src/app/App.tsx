@@ -8,26 +8,29 @@ import GamesFilterProvider from './providers/pages/GamesFilter';
 import StaticSettingsProvider from './providers/StaticSettingsProvider';
 import 'swiper/css';
 import GamesAllProviders from './providers/GamesAllProviders';
+import ThemeProvider from './providers/ThemeProvider';
 function App() {
   return (
-    <AuthProvider>
-      <StaticSettingsProvider>
-        <SettingsProvider>
-          <GamesAllProviders>
-            <LangProvider>
-              <ModalProvider>
-                <GamesFilterProvider>
-                  {/* EventDispatcherProvider -после него мы не вставляем никакие провайдеры, он завершающий */}
-                  <EventDispatcherProvider>
-                    <Outlet />
-                  </EventDispatcherProvider>
-                </GamesFilterProvider>
-              </ModalProvider>
-            </LangProvider>
-          </GamesAllProviders>
-        </SettingsProvider>
-      </StaticSettingsProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <StaticSettingsProvider>
+          <SettingsProvider>
+            <GamesAllProviders>
+              <LangProvider>
+                <ModalProvider>
+                  <GamesFilterProvider>
+                    {/* EventDispatcherProvider -после него мы не вставляем никакие провайдеры, он завершающий */}
+                    <EventDispatcherProvider>
+                      <Outlet />
+                    </EventDispatcherProvider>
+                  </GamesFilterProvider>
+                </ModalProvider>
+              </LangProvider>
+            </GamesAllProviders>
+          </SettingsProvider>
+        </StaticSettingsProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

@@ -1,6 +1,6 @@
 
 //LIGHT THEME
-:root {
+body {
   --primary: #F5F5F5;
   --secondary: #161616;
 
@@ -40,7 +40,7 @@
 
 
 // DARK THEME
-:root {
+body.dark {
   --primary: #161616;
   --secondary: #F2F2F2;
 
