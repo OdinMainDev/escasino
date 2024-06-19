@@ -29,20 +29,24 @@ export const validatePasswordMatching = (password: string, repeat_password: stri
 export const validateRegister = (
   registerData: IRegisterData,
   formConfig: Register | undefined,
+  isFastAuth: boolean,
 ): boolean => {
   if (formConfig) {
     for (const key in formConfig) {
+      if (key == 'use_fast_auth') {
+        continue;
+      }
       if (formConfig[key as keyof typeof formConfig] && !registerData[key as keyof IRegisterData]) {
         console.log(`Field ${key} is required but not provided.`);
         return false;
       }
     }
   }
-
   if (
     (validateEmail(registerData.email) || validatePhone(registerData.phone)) &&
-    validatePasswordLength(registerData.password) &&
-    validatePasswordMatching(registerData.password, registerData.repeat_password) &&
+    (isFastAuth ||
+      (validatePasswordLength(registerData.password) &&
+        validatePasswordMatching(registerData.password, registerData.repeat_password))) &&
     registerData.terms
   ) {
     return true;

@@ -53,12 +53,14 @@ export interface Register {
   promo: boolean;
   gender: boolean;
   captcha: boolean;
+  use_fast_auth: boolean;
 }
 
 export interface Reset {
   email: boolean;
   captcha: boolean;
   phone: boolean;
+  use_alternative_method: boolean;
 }
 
 export interface Profile {

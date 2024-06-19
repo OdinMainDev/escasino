@@ -72,6 +72,8 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
   const hasGender = settings?.auth.register.gender;
   const hasPromo = settings?.auth.register.promo;
 
+  const isFastAuth = settings?.auth.register.use_fast_auth;
+
   // OVERRIDE FOR TESTS
   // const formType = 'full';
   // const hasSocials = false;
@@ -203,25 +205,35 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
         </div>
       </div>
 
-      <Input
-        placeholder="Пароль"
-        type="password"
-        isError={!!errorData?.errors['password']}
-        containerClassName={styles.input}
-        value={registerData.password}
-        validationFunction={validatePasswordLength}
-        message={ErrorResponseAsString('password', 'Введите корректный пароль', errorData)}
-        onChange={(e) => setRegisterData((prev) => ({ ...prev, password: e.target.value }))}
-      />
-      <Input
-        placeholder="Повторите пароль"
-        type="password"
-        isError={!!errorData?.errors['repeat_password']}
-        containerClassName={styles.input}
-        validationFunction={(value) => validatePasswordMatching(registerData.password, value)}
-        message={ErrorResponseAsString('repeat_password', 'Введите корректный пароль', errorData)}
-        onChange={(e) => setRegisterData((prev) => ({ ...prev, repeat_password: e.target.value }))}
-      />
+      {!isFastAuth && (
+        <>
+          <Input
+            placeholder="Пароль"
+            type="password"
+            isError={!!errorData?.errors['password']}
+            containerClassName={styles.input}
+            value={registerData.password}
+            validationFunction={validatePasswordLength}
+            message={ErrorResponseAsString('password', 'Введите корректный пароль', errorData)}
+            onChange={(e) => setRegisterData((prev) => ({ ...prev, password: e.target.value }))}
+          />
+          <Input
+            placeholder="Повторите пароль"
+            type="password"
+            isError={!!errorData?.errors['repeat_password']}
+            containerClassName={styles.input}
+            validationFunction={(value) => validatePasswordMatching(registerData.password, value)}
+            message={ErrorResponseAsString(
+              'repeat_password',
+              'Введите корректный пароль',
+              errorData,
+            )}
+            onChange={(e) =>
+              setRegisterData((prev) => ({ ...prev, repeat_password: e.target.value }))
+            }
+          />
+        </>
+      )}
       {currenciesList.length > 1 ? (
         <Select
           isError={!!errorData?.errors['currency']}
@@ -391,7 +403,9 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
       )}
       <Button
         type="submit"
-        disabled={!validateRegister(registerData, settings?.auth.register)}
+        disabled={
+          !validateRegister(registerData, settings?.auth.register, isFastAuth ? true : false)
+        }
         className={styles.button}
         onClick={(e) => void sendData(e)}
       >
