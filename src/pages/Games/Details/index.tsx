@@ -19,6 +19,7 @@ import { gamesHeaderTypeCover } from '@/app/config/app';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
 import { deleteCartBonusesItem } from '@/store/slices/cartBonusesSlice';
 import { PageHeader } from '@/widgets/Header';
+import { useCurrentLanguage } from '@/app/providers/LangProvider';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
@@ -32,6 +33,7 @@ const Details = () => {
   const { bonusesTemplates: cartBonuses } = useAppSelector((state) => state.cartBonusesSlice);
   const [alertData, setAlertData] = useState<IAlert | null>(null);
   const dispatch = useAppDispatch();
+  const currentLanguage = useCurrentLanguage();
 
   useEffect(() => {
     if (Number(id) > 0) {
@@ -144,8 +146,6 @@ const Details = () => {
     }
   };
 
-  // TODOSELF: *для себя* сделать лоадер и дописать потом когда будет админка игры
-
   return (
     <div className={styles.container}>
       <div className={styles.header_container}>
@@ -200,9 +200,8 @@ const Details = () => {
       <div className={styles.description}>
         <div className={styles.description_title}>{game?.name}</div>
         <div className={styles.description_info}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos aut voluptatum,
-          delectus laboriosam, modi quia quisquam repudiandae dolorem autem voluptates repellat,
-          ipsum aliquid explicabo. Omnis deserunt ratione facilis quod exercitationem.
+          {game &&
+            game.data.texts?.find((item) => item.language.toLowerCase() === currentLanguage)?.value}
         </div>
       </div>
       <Footer isHidden={!isAuth} />

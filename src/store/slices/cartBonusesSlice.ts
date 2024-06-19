@@ -1,4 +1,3 @@
-// TODO: сделать сброс если не на странице платежа, бонуса, выбора игр для бонуса и тд
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ICartBonusTemplate } from '@/shared/models/interfaces/bonuses';
 

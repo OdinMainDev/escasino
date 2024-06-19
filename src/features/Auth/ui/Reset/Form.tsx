@@ -48,12 +48,13 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
       setLoader(true);
       const fid = await getVisitorId();
       const data = await doResetApi({ ...resetData, fid });
-      // TODO: для себя ( сделать в админке новый параметр reset_type и если он code то так делаем)
-      doSetResetHash(data.hash);
-      doOpenModal(resetData.email != '' ? 'reset-confirm-email' : 'reset-confirm-phone');
-
-      // если другой ( пока 2 будет пароль и код )
-      // doOpenModal('reset-send-complete');
+      // TODO: сделать модалку reset-send-complete
+      if (!settings?.auth.reset.use_alternative_method) {
+        doSetResetHash(data.hash);
+        doOpenModal(resetData.email != '' ? 'reset-confirm-email' : 'reset-confirm-phone');
+      } else {
+        doOpenModal('reset-send-complete');
+      }
     } catch (e: unknown) {
       const resetError = e as IResponseError;
       const errorList = Object.keys(resetError.errors);
