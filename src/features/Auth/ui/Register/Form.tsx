@@ -358,7 +358,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           value={registerData.terms}
           label={
             <span>
-              Я ознакомился с <Link to="/terms">правилами и условиями</Link>
+              Я ознакомился с <Link to="/rules">правилами и условиями</Link>
             </span>
           }
           onChange={(value) => setRegisterData((prev) => ({ ...prev, terms: value }))}

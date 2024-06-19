@@ -32,6 +32,7 @@ import { AuthSocialVk } from '@/pages/Auth';
 import { Bonuses, BonusesCart, BonusesGames } from '@/pages/Bonus';
 import BonusesProvider from './providers/pages/BonusesProvider';
 import BonusesList from '@/pages/Bonus/ui/BonusesList';
+import { Rules } from '@/pages/Rules';
 
 const availRoutes: RouteObject[] = [
   {
@@ -99,6 +100,15 @@ const availRoutes: RouteObject[] = [
             </GameProvidersProvider>
           </GameCategoriesProvider>
         ),
+      },
+    ],
+  },
+  {
+    path: 'rules',
+    children: [
+      {
+        index: true,
+        element: <Rules />,
       },
     ],
   },
