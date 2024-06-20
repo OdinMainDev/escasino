@@ -72,7 +72,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
   const hasGender = settings?.auth.register.gender;
   const hasPromo = settings?.auth.register.promo;
 
-  const isFastAuth = settings?.auth.register.use_fast_auth;
+  const isFastAuth = !!settings?.auth.register.use_fast_auth;
 
   // OVERRIDE FOR TESTS
   // const formType = 'full';
@@ -370,7 +370,10 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           value={registerData.terms}
           label={
             <span>
-              Я ознакомился с <Link to="/rules">правилами и условиями</Link>
+              Я ознакомился с{' '}
+              <Link to="/rules" className="underline">
+                правилами и условиями
+              </Link>
             </span>
           }
           onChange={(value) => setRegisterData((prev) => ({ ...prev, terms: value }))}
