@@ -23,7 +23,7 @@ const FooterAuthModals = () => {
   const openReset = () => {
     document.body.classList.add('overflow-hidden');
     doCloseModals();
-    doOpenModal('reset-send-complete');
+    doOpenModal('reset');
   };
 
   const closeAll = () => {

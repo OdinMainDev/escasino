@@ -52,7 +52,6 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
         doSetResetHash(data.hash);
         doOpenModal(resetData.email != '' ? 'reset-confirm-email' : 'reset-confirm-phone');
       } else {
-        // TODO сделать две модалки, под тлф и под емейл
         doOpenModal('reset-send-complete');
       }
     } catch (e: unknown) {
