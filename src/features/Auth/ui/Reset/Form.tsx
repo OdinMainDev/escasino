@@ -48,7 +48,6 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
       setLoader(true);
       const fid = await getVisitorId();
       const data = await doResetApi({ ...resetData, fid });
-      // TODO: сделать модалку reset-send-complete
       if (!settings?.auth.reset.use_alternative_method) {
         doSetResetHash(data.hash);
         doOpenModal(resetData.email != '' ? 'reset-confirm-email' : 'reset-confirm-phone');
