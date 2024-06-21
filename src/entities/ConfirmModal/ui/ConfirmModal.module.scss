@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+
+  padding: 32px 18px;
+}
+
+.icon {
+  margin: auto;
+  margin-bottom: 24px;
+  
+  svg .icon_elem{
+    stroke-dashoffset: 143.24354553222656px;
+    stroke-dasharray: 143.24354553222656px;
+    -webkit-transition: stroke-dashoffset 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) 0s;
+            transition: stroke-dashoffset 0.5s cubic-bezier(0.47, 0, 0.745, 0.715) 0s;
+  }
+
+  svg.active .icon_elem {
+    stroke-dashoffset: 0;
+  }
+}
+
+.text {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 133%;
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: var(--text-primary);
+  margin-bottom: 32px;
+}

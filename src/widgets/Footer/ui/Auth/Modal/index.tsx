@@ -1,4 +1,5 @@
 import { useModal } from '@/app/providers/ModalProvider';
+import { ConfirmModal } from '@/entities/ConfirmModal';
 import AuthLoginModal from '@/features/Auth/ui/Login';
 import AuthRegisterModal from '@/features/Auth/ui/Register';
 import AuthResetModal from '@/features/Auth/ui/Reset';
@@ -22,7 +23,7 @@ const FooterAuthModals = () => {
   const openReset = () => {
     document.body.classList.add('overflow-hidden');
     doCloseModals();
-    doOpenModal('reset');
+    doOpenModal('reset-send-complete');
   };
 
   const closeAll = () => {
@@ -41,6 +42,7 @@ const FooterAuthModals = () => {
       <AuthResetModal close={closeAll} openLoginModal={openLogin} />
       <AuthResetFormSetPasswordModal close={closeAll} />
       <AuthResetSetPasswordCompleteModal close={closeAll} />
+      <ConfirmModal close={doCloseModals} />
     </>
   );
 };
