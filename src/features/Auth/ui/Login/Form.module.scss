@@ -5,11 +5,13 @@
   margin-bottom: 16px;
 }
 
-.input {
+.input_label {
+  color: var(--label-primary);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 133%;
+  letter-spacing: 0.01em;
   margin-bottom: 24px;
-  &:last-child {
-    margin-bottom: 10px;
-  }
 }
 
 .button {

@@ -4,7 +4,6 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import styles from './Form.module.scss';
 import { FB, OK, Telegram, Twitter, VK } from '../Icons';
 import {
-  validateEmail,
   validateLogin,
   validatePasswordLength,
   validatePhone,
@@ -114,6 +113,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
               <Input
                 placeholder="Электронная почта"
                 type="email"
+                containerClassName="mb-[10px]"
                 onChange={(e) => {
                   setLoginData((prev) => ({ ...prev, email: e.target.value }));
                   if (!isAppDebug) {
@@ -121,11 +121,9 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
                   }
                 }}
                 value={loginData.email}
-                containerClassName={styles.input}
-                validationFunction={validateEmail}
                 autoComplete={autoCompleteHandler('email')}
                 isError={!!errorData?.errors['email']}
-                message={ErrorResponseAsString('email', 'Введите корректный e-mail', errorData)}
+                message={'Введите корректный e-mail'}
               />
             ) : null}
             {(formType === 'full' && selectedType === 'phone') || formType === 'phone' ? (
@@ -133,7 +131,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
                 placeholder={'Телефон'}
                 type="phone"
                 value={loginData.phone}
-                containerClassName={styles.input}
+                containerClassName="mb-[10px]"
                 isError={!!errorData?.errors['phone']}
                 validationFunction={validatePhone}
                 autoComplete={autoCompleteHandler('phone')}
@@ -147,6 +145,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
               />
             ) : null}
           </div>
+          <div className={styles.input_label}>Будет использоваться как логин для входа</div>
         </div>
 
         <Input
