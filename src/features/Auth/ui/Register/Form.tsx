@@ -4,11 +4,9 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import styles from './Form.module.scss';
 import { FB, OK, Telegram, Twitter, VK } from '../Icons';
 import {
-  validateEmail,
   validatePasswordLength,
   validatePasswordMatching,
   validatePhone,
-  validateRegister,
 } from '@/features/Auth/helpers/validators';
 
 import Loader from '@/shared/ui/Loader';
@@ -176,8 +174,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
                   setRegisterData((prev) => ({ ...prev, phone: '' }));
                 }
               }}
-              containerClassName={styles.input}
-              validationFunction={validateEmail}
+              containerClassName="mb-[10px]"
               isError={!!errorData?.errors['email']}
               message={ErrorResponseAsString('email', 'Введите корректный e-mail', errorData)}
             />
@@ -192,17 +189,14 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
                   setRegisterData((prev) => ({ ...prev, email: '' }));
                 }
               }}
-              containerClassName={styles.input}
+              containerClassName="mb-[10px]"
               validationFunction={validatePhone}
               isError={!!errorData?.errors['phone']}
-              message={
-                validatePhone(registerData.phone)
-                  ? 'Будет использоваться как логин для входа'
-                  : 'Введите корректный телефон'
-              }
+              message={ErrorResponseAsString('phone', 'Введите корректный телефон', errorData)}
             />
           ) : null}
         </div>
+        <div className={styles.input_label}>Будет использоваться как логин для входа</div>
       </div>
 
       {!isFastAuth && (
@@ -404,14 +398,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           }
         />
       )}
-      <Button
-        type="submit"
-        disabled={
-          !validateRegister(registerData, settings?.auth.register, isFastAuth ? true : false)
-        }
-        className={styles.button}
-        onClick={(e) => void sendData(e)}
-      >
+      <Button type="submit" className={styles.button} onClick={(e) => void sendData(e)}>
         Зарегистрироваться
       </Button>
       <div className={styles.label}>
