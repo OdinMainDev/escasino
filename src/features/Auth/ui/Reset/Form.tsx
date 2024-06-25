@@ -2,11 +2,7 @@ import { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import styles from './Form.module.scss';
-import {
-  validateEmail,
-  validatePhone,
-  validateResetPassword,
-} from '@/features/Auth/helpers/validators';
+import { validatePhone, validateResetPassword } from '@/features/Auth/helpers/validators';
 import { autoCompleteHandler } from '@/features/Auth/helpers/autoCompleteHandler';
 
 import Loader from '@/shared/ui/Loader';
@@ -105,7 +101,6 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
                   }
                 }}
                 containerClassName={styles.input}
-                validationFunction={validateEmail}
                 autoComplete={autoCompleteHandler('email')}
                 isError={!!errorData?.errors['email']}
                 message={ErrorResponseAsString('email', 'Введите корректный e-mail', errorData)}
