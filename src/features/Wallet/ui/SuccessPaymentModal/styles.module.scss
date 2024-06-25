@@ -20,7 +20,7 @@
     font-size: 24px;
     line-height: 133%;
     letter-spacing: 0.01em;
-    color: var(--secondary);
+    color: var(--text-primary);
     margin-bottom: 8px;
   }
 
@@ -45,7 +45,7 @@
   }
 
   &_value {
-    color: var(--secondary);
+    color: var(--text-primary);
     font-weight: 400;
     font-size: 16px;
     line-height: 125%;
@@ -104,7 +104,7 @@
   height: 100%;
   &_title {
     text-transform: uppercase;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     font-size: 17px;
     font-weight: 500;
   }
@@ -125,7 +125,7 @@
   align-items: center;
   text-transform: uppercase;
   font-weight: 700;
-  color: var(--text-secondary)
+  color: var(--text-primary)
 }
 
 .success_image {
