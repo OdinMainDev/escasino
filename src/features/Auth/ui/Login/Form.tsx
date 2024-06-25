@@ -123,7 +123,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
                 value={loginData.email}
                 autoComplete={autoCompleteHandler('email')}
                 isError={!!errorData?.errors['email']}
-                message={'Введите корректный e-mail'}
+                message={ErrorResponseAsString('email', 'Введите корректный e-mail', errorData)}
               />
             ) : null}
             {(formType === 'full' && selectedType === 'phone') || formType === 'phone' ? (
@@ -152,8 +152,8 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
           placeholder="Пароль"
           type="password"
           isError={!!errorData?.errors['password']}
-          containerClassName={styles.input}
           value={loginData.password}
+          containerClassName="mb-[10px]"
           validationFunction={validatePasswordLength}
           autoComplete={autoCompleteHandler('password')}
           message={ErrorResponseAsString('password', 'Введите корректный пароль', errorData)}
