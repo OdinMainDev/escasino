@@ -156,7 +156,6 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
 
   const bonusStatus = getBonusStatus();
 
-  console.log(bonus);
   if (!bonus && isMain) {
     return (
       <div className={styles.container}>

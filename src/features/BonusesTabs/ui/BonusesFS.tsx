@@ -302,7 +302,10 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           <input
             className={styles.settings_input}
             value={
-              betTemplates.length > 0 && spinsTemplates.length > 0
+              betTemplates.length > 0 &&
+              spinsTemplates.length > 0 &&
+              spinsTemplates[selectedSpinsIndex] &&
+              betTemplates[selectedBetIndex]
                 ? betTemplates[selectedBetIndex].configurator.bet_amount *
                   spinsTemplates[selectedSpinsIndex].spins_count
                 : 0

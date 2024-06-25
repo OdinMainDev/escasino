@@ -85,8 +85,6 @@ const ProfileForm = () => {
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
-      console.log(new Date(userData.dob).getTime(), new Date(new Date(userData.dob).getTime()));
-
       setLoader(true);
       const fid = await getVisitorId();
       const data = await doSetUserData({
