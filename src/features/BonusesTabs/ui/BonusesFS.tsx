@@ -4,6 +4,7 @@ import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { useAppSelector } from '@/store/hooks/redux';
+import { removeDuplicatesByBet, removeDuplicatesBySpinsCount } from '../helpers/removeDuplicates';
 
 interface IProps {
   bonusesTemplates: IBonusTemplate[];
@@ -128,54 +129,29 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       }
     }, [filtredBonuses]);
 
-    const removeDuplicatesBySpinsCount = (data: IBonusTemplate[]): IBonusTemplate[] => {
-      const map = new Map<number, IBonusTemplate>();
-
-      data.forEach((item) => {
-        const existingItem = map.get(item.spins_count);
-        if (!existingItem || item.wager > existingItem.wager) {
-          map.set(item.spins_count, item);
-        }
-      });
-
-      return Array.from(map.values()).sort((a, b) => a.spins_count - b.spins_count);
-    };
-
-    const removeDuplicatesByBet = (data: IBonusTemplate[]): IBonusTemplate[] => {
-      const map = new Map<number, IBonusTemplate>();
-
-      data.forEach((item) => {
-        const existingItem = map.get(item.configurator.bet_amount);
-        if (!existingItem || item.wager > existingItem.wager) {
-          map.set(item.configurator.bet_amount, item);
-        }
-      });
-
-      return Array.from(map.values()).sort(
-        (a, b) => a.configurator.bet_amount - b.configurator.bet_amount,
-      );
-    };
-
     const selectBet = (swiper: SwiperClass | null) => {
       if (swiper) {
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
-        const selectedBetTemplate = betTemplates[realIndex];
-        const selectedFsTemplate = spinsTemplates[selectedSpinsIndex];
+        // setIgnoreSpinsSlideChange(true);
+        // if (spinsSwiper.current) {
+        //   spinsSwiper.current.swiper?.slideTo(0, 0);
+        // }
+        // setIgnoreSpinsSlideChange(false);
 
-        if (selectedBetTemplate && selectedFsTemplate) {
-          setSpinsTemplates(
-            removeDuplicatesBySpinsCount(
-              filtredBonuses.filter(
-                (item) =>
-                  item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
-              ),
-            ),
-          );
+        const selectedBetTemplate = betTemplates[realIndex];
+        const selectedFsTemplates = removeDuplicatesBySpinsCount(
+          filtredBonuses.filter(
+            (item) => item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
+          ),
+        );
+
+        if (selectedBetTemplate && selectedFsTemplates[0]) {
+          setSpinsTemplates(selectedFsTemplates);
           const matchingTemplate = filtredBonuses.find(
             (template) =>
               template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
-              template.spins_count === selectedFsTemplate.spins_count,
+              template.spins_count === selectedFsTemplates[0].spins_count,
           );
           if (matchingTemplate) {
             fsChangeHandler(matchingTemplate.id);
@@ -184,23 +160,20 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       }
     };
 
-    const selectSpins = (swiper?: SwiperClass) => {
+    const selectSpins = (swiper: SwiperClass | null) => {
       if (swiper) {
-        const realIndex = swiper ? swiper.realIndex : 0;
+        const realIndex = swiper.realIndex;
         setSelectedSpinsIndex(realIndex);
-        const selectedBetTemplate = betTemplates[selectedBetIndex];
         const selectedFsTemplate = spinsTemplates[realIndex];
-        setBetTemplates(
-          removeDuplicatesByBet(
-            filtredBonuses.filter(
-              (item) => item.spins_count === betTemplates[realIndex].spins_count,
-            ),
-          ),
+        const selectedBetTemplates = removeDuplicatesByBet(
+          filtredBonuses.filter((item) => item.spins_count === selectedFsTemplate.spins_count),
         );
-        if (selectedBetTemplate && selectedFsTemplate) {
+        if (selectedBetTemplates[0] && selectedFsTemplate) {
+          setBetTemplates(selectedBetTemplates);
           const matchingTemplate = filtredBonuses.find(
             (template) =>
-              template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
+              template.configurator.bet_amount ===
+                selectedBetTemplates[0].configurator.bet_amount &&
               template.spins_count === selectedFsTemplate.spins_count,
           );
           if (matchingTemplate) {
@@ -231,8 +204,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             className={styles.settings_params}
             lazyPreloadPrevNext={5}
             loop={betTemplates.length >= 6}
-            onSwiper={selectBet}
-            onSlideChange={selectBet}
+            onSlideChange={(swiper) => selectBet(swiper)}
             direction="vertical"
           >
             {betTemplates.map((item, index) => (
@@ -271,7 +243,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             lazyPreloadPrevNext={5}
             loop={spinsTemplates.length >= 6}
             direction="vertical"
-            onSlideChange={selectSpins}
+            onSlideChange={(swiper) => selectSpins(swiper)}
           >
             {spinsTemplates.map((item, index) => (
               <SwiperSlide
