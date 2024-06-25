@@ -230,7 +230,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             centeredSlides
             className={styles.settings_params}
             lazyPreloadPrevNext={5}
-            loop={betTemplates.length >= 5}
+            loop={betTemplates.length >= 6}
             onSwiper={selectBet}
             onSlideChange={selectBet}
             direction="vertical"
@@ -269,7 +269,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             centeredSlides
             className={styles.settings_params}
             lazyPreloadPrevNext={5}
-            loop={spinsTemplates.length >= 5}
+            loop={spinsTemplates.length >= 6}
             direction="vertical"
             onSlideChange={selectSpins}
           >
