@@ -138,7 +138,10 @@ const Details = () => {
         } else {
           router.push(`/bonus/${game?.id}`);
         }
-      } else if (settings.bonus.max_bonuses_per_deposit <= cartBonuses.length) {
+      } else if (
+        settings.bonus.max_bonuses_per_deposit > 0 &&
+        settings.bonus.max_bonuses_per_deposit <= cartBonuses.length
+      ) {
         openCartError();
       } else {
         router.push(`/bonus/${game?.id}`);
