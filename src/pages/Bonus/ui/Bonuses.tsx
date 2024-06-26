@@ -143,28 +143,37 @@ const Bonuses = () => {
   }, [doCloseModals, doOpenModal, router]);
 
   const addToBasketOrOpenModal = () => {
-    const moneyCount = cartBonuses.filter((item) => item.type === 'money').length;
-    const fsCount = cartBonuses.filter((item) => item.type === 'freespins').length;
-    if (
-      settings &&
-      (settings?.bonus.max_bonuses_per_deposit === 1 ||
-        (selectedTab === 'money' && settings?.bonus.max_bonuses_money_per_deposit <= moneyCount) ||
-        (selectedTab === 'freespins' && settings?.bonus.max_bonuses_money_per_deposit <= fsCount))
-    ) {
-      addToBasket();
-      router.push({
-        pathname: '/wallet/deposit/replenish',
-      });
-      return;
+    if (settings) {
+      const moneyCount = cartBonuses.filter((item) => item.type === 'money').length;
+      const fsCount = cartBonuses.filter((item) => item.type === 'freespins').length;
+      const totalBonuses = cartBonuses.length;
+
+      const maxMoneyBonusesReached = settings?.bonus.max_bonuses_money_per_deposit <= moneyCount;
+      const maxFsBonusesReached = settings?.bonus.max_bonuses_freespins_per_deposit <= fsCount;
+      const maxTotalBonusesReached = settings?.bonus.max_bonuses_per_deposit === totalBonuses;
+
+      if (settings && selectedTab === 'money' && maxMoneyBonusesReached) {
+        router.push({
+          pathname: '/wallet/deposit/replenish',
+        });
+        return;
+      }
+
+      if (settings && selectedTab === 'freespins' && maxFsBonusesReached) {
+        router.push({
+          pathname: '/wallet/deposit/replenish',
+        });
+        return;
+      }
+
+      if (maxTotalBonusesReached) {
+        router.push({
+          pathname: '/wallet/deposit/replenish',
+        });
+        return;
+      }
     }
 
-    if (settings?.bonus.max_bonuses_per_deposit === cartBonuses.length + 1) {
-      addToBasket();
-      router.push({
-        pathname: '/wallet/deposit/replenish',
-      });
-      return;
-    }
     setAlertModalData({
       title: 'Выберите способ оплаты',
       buttons: [
@@ -380,12 +389,12 @@ const Bonuses = () => {
                       settings?.bonus.max_bonuses_money_per_deposit <=
                         cartBonuses.filter((item) => item.type === 'money').length) ||
                     (selectedTab === 'freespins' &&
-                      settings?.bonus.max_bonuses_money_per_deposit <=
+                      settings?.bonus.max_bonuses_freespins_per_deposit <=
                         cartBonuses.filter((item) => item.type === 'freespins').length))
                     ? 'Перейти к оплате'
                     : settings?.bonus.max_bonuses_per_deposit === 0
                       ? 'Добавить'
-                      : settings?.bonus.max_bonuses_per_deposit === cartBonuses.length + 1
+                      : settings?.bonus.max_bonuses_per_deposit === cartBonuses.length
                         ? 'Перейти к оплате'
                         : 'Добавить'}
                 </Button>

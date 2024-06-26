@@ -37,10 +37,10 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     const clearBonusFSSwiper = () => {
       if (betSwiper.current) {
-        betSwiper.current.swiper?.slideTo(0, 0);
+        betSwiper.current.swiper?.slideToLoop(0, 0);
       }
       if (spinsSwiper.current) {
-        spinsSwiper.current.swiper?.slideTo(0, 0);
+        spinsSwiper.current.swiper?.slideToLoop(0, 0);
       }
       setSelectedBetIndex(0);
       setSelectedSpinsIndex(0);
@@ -124,21 +124,19 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     useEffect(() => {
       if (spinsSwiper.current) {
-        spinsSwiper.current.swiper?.slideTo(0, 0);
+        spinsSwiper.current.swiper?.slideToLoop(0, 0);
         selectBet(spinsSwiper.current.swiper);
       }
     }, [filtredBonuses]);
 
     const selectBet = (swiper: SwiperClass | null) => {
       if (swiper) {
+        setSelectedSpinsIndex(0);
+        if (spinsSwiper.current) {
+          spinsSwiper.current.swiper?.slideToLoop(0, 0, false);
+        }
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
-        // setIgnoreSpinsSlideChange(true);
-        // if (spinsSwiper.current) {
-        //   spinsSwiper.current.swiper?.slideTo(0, 0);
-        // }
-        // setIgnoreSpinsSlideChange(false);
-
         const selectedBetTemplate = betTemplates[realIndex];
         const selectedFsTemplates = removeDuplicatesBySpinsCount(
           filtredBonuses.filter(
@@ -169,7 +167,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           filtredBonuses.filter((item) => item.spins_count === selectedFsTemplate.spins_count),
         );
         if (selectedBetTemplates[0] && selectedFsTemplate) {
-          setBetTemplates(selectedBetTemplates);
           const matchingTemplate = filtredBonuses.find(
             (template) =>
               template.configurator.bet_amount ===
@@ -203,6 +200,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             centeredSlides
             className={styles.settings_params}
             lazyPreloadPrevNext={5}
+            slideToClickedSlide
             loop={betTemplates.length >= 6}
             onSlideChange={(swiper) => selectBet(swiper)}
             direction="vertical"
@@ -239,6 +237,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             effect="coverflow"
             slidesPerView={5}
             centeredSlides
+            slideToClickedSlide
             className={styles.settings_params}
             lazyPreloadPrevNext={5}
             loop={spinsTemplates.length >= 6}

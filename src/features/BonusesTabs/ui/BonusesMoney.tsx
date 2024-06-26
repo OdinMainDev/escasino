@@ -77,13 +77,13 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
           return acc;
         }, [])
         .sort((a, b) => a.bonus_percent - b.bonus_percent);
-      setFiltredBonuses(uniqueBonuses);
+      setFiltredBonuses(filteredTemplates);
       setSortedBonuses(uniqueBonuses);
     }, [bonusesTemplates, cartBonuses, minAmount, maxAmount]);
 
     useEffect(() => {
       if (moneySwiper.current) {
-        moneySwiper.current.swiper?.slideTo(0, 0);
+        moneySwiper.current.swiper?.slideToLoop(0, 0);
         selectMoney(moneySwiper.current.swiper);
       }
     }, [filtredBonuses]);
