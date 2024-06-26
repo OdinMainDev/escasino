@@ -89,11 +89,11 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
     }, [filtredBonuses]);
 
     const selectMoney = (swiper: SwiperClass | null) => {
-      const realIndex = swiper?.realIndex;
-      if (realIndex) {
-        const selectedBonus = sortedBonuses[realIndex];
-        if (selectedBonus) {
-          moneyChangeHandler(selectedBonus.id);
+      if (swiper) {
+        const realIndex = swiper?.realIndex;
+
+        if (sortedBonuses[realIndex]) {
+          moneyChangeHandler(sortedBonuses[realIndex].id);
           setActiveIndex(realIndex);
         }
       }

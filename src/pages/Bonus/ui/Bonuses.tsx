@@ -265,6 +265,7 @@ const Bonuses = () => {
       openErrorModal();
       return;
     }
+    clearBonuses();
     const data: ICartBonusTemplate = {
       ...selectedTemplate,
       uuid: uuidv4(),
@@ -272,7 +273,6 @@ const Bonuses = () => {
       type: selectedTab as 'freespins' | 'money',
     };
     dispatch(addToCartBonuses(data));
-    clearBonuses();
     router.push('/bonus');
   };
 
@@ -373,7 +373,10 @@ const Bonuses = () => {
                       ''
                     ) : minAmountCart !== maxAmountCart ? (
                       <>
-                        От {minAmountCart} до {maxAmountCart} {user?.balance.currency}
+                        От {minAmountCart}{' '}
+                        {maxAmountCart !== 0
+                          ? `до ${maxAmountCart} ${user?.balance.currency}`
+                          : null}
                       </>
                     ) : (
                       <>

@@ -166,11 +166,11 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         const selectedBetTemplates = removeDuplicatesByBet(
           filtredBonuses.filter((item) => item.spins_count === selectedFsTemplate.spins_count),
         );
-        if (selectedBetTemplates[0] && selectedFsTemplate) {
+        if (selectedBetTemplates[selectedBetIndex] && selectedFsTemplate) {
           const matchingTemplate = filtredBonuses.find(
             (template) =>
               template.configurator.bet_amount ===
-                selectedBetTemplates[0].configurator.bet_amount &&
+                selectedBetTemplates[selectedBetIndex].configurator.bet_amount &&
               template.spins_count === selectedFsTemplate.spins_count,
           );
           if (matchingTemplate) {
@@ -196,12 +196,12 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             ref={betSwiper}
             spaceBetween={12}
             effect="coverflow"
-            slidesPerView={5}
+            slidesPerView={3}
             centeredSlides
             className={styles.settings_params}
-            lazyPreloadPrevNext={5}
+            lazyPreloadPrevNext={2}
             slideToClickedSlide
-            loop={betTemplates.length >= 6}
+            loop={betTemplates.length >= 5}
             onSlideChange={(swiper) => selectBet(swiper)}
             direction="vertical"
           >
