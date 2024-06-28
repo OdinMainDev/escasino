@@ -131,10 +131,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     const selectBet = (swiper: SwiperClass | null) => {
       if (swiper) {
-        setSelectedSpinsIndex(0);
-        if (spinsSwiper.current) {
-          spinsSwiper.current.swiper?.slideToLoop(0, 0, false);
-        }
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
         const selectedBetTemplate = betTemplates[realIndex];
@@ -143,13 +139,22 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             (item) => item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
           ),
         );
+        let mainIndex = 0;
+        if (!selectedFsTemplates[selectedSpinsIndex]) {
+          setSelectedSpinsIndex(0);
+          if (spinsSwiper.current) {
+            spinsSwiper.current.swiper?.slideToLoop(0, 0, false);
+          }
+        } else {
+          mainIndex = selectedSpinsIndex;
+        }
 
-        if (selectedBetTemplate && selectedFsTemplates[0]) {
+        if (selectedBetTemplate && selectedFsTemplates[mainIndex]) {
           setSpinsTemplates(selectedFsTemplates);
           const matchingTemplate = filtredBonuses.find(
             (template) =>
               template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
-              template.spins_count === selectedFsTemplates[0].spins_count,
+              template.spins_count === selectedFsTemplates[mainIndex].spins_count,
           );
           if (matchingTemplate) {
             fsChangeHandler(matchingTemplate.id);
