@@ -28,7 +28,7 @@ import Wallet from '@/pages/Wallet';
 import Currencies from '@/pages/Wallet/Currencies';
 import LanguageGuard from './providers/LanguageGuard';
 import GlobalModals from './providers/GlobalModals';
-import { AuthSocialVk } from '@/pages/Auth';
+import { AuthSocialApi, AuthSocialVk } from '@/pages/Auth';
 import { Bonuses, BonusesCart, BonusesGames } from '@/pages/Bonus';
 import BonusesProvider from './providers/pages/BonusesProvider';
 import BonusesList from '@/pages/Bonus/ui/BonusesList';
@@ -189,6 +189,10 @@ const availRoutes: RouteObject[] = [
       {
         path: 'socials/vk',
         element: <AuthSocialVk />,
+      },
+      {
+        path: 'api',
+        element: <AuthSocialApi />,
       },
     ],
   },

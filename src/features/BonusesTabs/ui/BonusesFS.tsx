@@ -127,6 +127,9 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         spinsSwiper.current.swiper?.slideToLoop(0, 0);
         selectBet(spinsSwiper.current.swiper);
       }
+      if (filtredBonuses.length > 0) {
+        fsChangeHandler(filtredBonuses[0].id);
+      }
     }, [filtredBonuses]);
 
     const selectBet = (swiper: SwiperClass | null) => {

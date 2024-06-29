@@ -148,6 +148,29 @@ const Bonuses = () => {
       const fsCount = cartBonuses.filter((item) => item.type === 'freespins').length;
       const totalBonuses = cartBonuses.length;
 
+      if (totalBonuses > 0 && settings.bonus.max_bonuses_per_deposit == 1) {
+        setAlertModalData({
+          title: 'У вас уже выбран бонус',
+          buttons: [
+            {
+              text: 'Отмена',
+              type: 'outlined',
+              onClick: doCloseModals,
+            },
+          ],
+        });
+        doOpenModal('alert');
+        return;
+      }
+
+      if (totalBonuses == 0 && settings.bonus.max_bonuses_per_deposit == 1) {
+        addToBasket();
+        router.push({
+          pathname: '/wallet/deposit/replenish',
+        });
+        return;
+      }
+
       const maxMoneyBonusesReached = settings?.bonus.max_bonuses_money_per_deposit <= moneyCount;
       const maxFsBonusesReached = settings?.bonus.max_bonuses_freespins_per_deposit <= fsCount;
       const maxTotalBonusesReached = settings?.bonus.max_bonuses_per_deposit === totalBonuses;
@@ -193,6 +216,7 @@ const Bonuses = () => {
           text: 'Перейти к оплате',
           type: 'outlined',
           onClick: () => {
+            alert(selectedTemplate);
             if (selectedTemplate) {
               addToBasket();
               router.push({

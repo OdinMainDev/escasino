@@ -1,3 +1,4 @@
 import AuthSocialVk from './ui/Vk';
+import AuthSocialApi from './ui/Api';
 
-export { AuthSocialVk };
+export { AuthSocialVk, AuthSocialApi };

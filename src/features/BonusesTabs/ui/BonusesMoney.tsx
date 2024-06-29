@@ -21,7 +21,7 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const moneySwiper = useRef<SwiperRef>(null);
     const cartBonuses = useAppSelector((state) => state.cartBonusesSlice.bonusesTemplates);
-    const [filtredBonuses, setFiltredBonuses] = useState<IBonusTemplate[]>([]);
+    // const [filtredBonuses, setFiltredBonuses] = useState<IBonusTemplate[]>([]);
     const [sortedBonuses, setSortedBonuses] = useState<IBonusTemplate[]>([]);
     useImperativeHandle(ref, () => {
       return {
@@ -77,7 +77,7 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
           return acc;
         }, [])
         .sort((a, b) => a.bonus_percent - b.bonus_percent);
-      setFiltredBonuses(filteredTemplates);
+      // setFiltredBonuses(filteredTemplates);
       setSortedBonuses(uniqueBonuses);
     }, [bonusesTemplates, cartBonuses, minAmount, maxAmount]);
 
@@ -86,7 +86,10 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
         moneySwiper.current.swiper?.slideToLoop(0, 0);
         selectMoney(moneySwiper.current.swiper);
       }
-    }, [filtredBonuses]);
+      if (sortedBonuses.length > 0) {
+        void moneyChangeHandler(sortedBonuses[0].id);
+      }
+    }, [sortedBonuses]);
 
     const selectMoney = (swiper: SwiperClass | null) => {
       if (swiper) {

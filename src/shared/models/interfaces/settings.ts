@@ -32,6 +32,7 @@ export interface Auth {
   social_ok: boolean;
   social_fb: boolean;
   social_tg: boolean;
+  social_tg_username: string;
   social_tw: boolean;
 }
 
