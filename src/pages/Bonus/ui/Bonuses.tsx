@@ -216,7 +216,6 @@ const Bonuses = () => {
           text: 'Перейти к оплате',
           type: 'outlined',
           onClick: () => {
-            alert(selectedTemplate);
             if (selectedTemplate) {
               addToBasket();
               router.push({
