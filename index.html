@@ -3,11 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" crossorigin href="/assets/index-BHrPGfJp.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>White casino</title>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div
+    id="essupport"
+    data-api-token="8a99fb2f-1bb9-424b-a1d9-8243c01dddb9"
+    data-user-token=""
+    ></div>
+    <script defer>
+      function getCookie(name) {
+          let value = "; " + document.cookie;
+          let parts = value.split("; " + name + "=");
+          if (parts.length === 2) return parts.pop().split(";").shift();
+      }
+
+      function setUserToken() {
+          const userToken = getCookie('atoken');
+          const supportDiv = document.getElementById('essupport');
+
+          if (supportDiv && userToken) {
+            supportDiv.setAttribute('data-user-token', userToken);
+          }
+      }
+
+      setUserToken();
+  </script>
+  <script type="module" src="/src/main.tsx"></script>
+
+  <script src="/assets/index-Cbnf7jX6.js" defer></script>
+
   </body>
 </html>
