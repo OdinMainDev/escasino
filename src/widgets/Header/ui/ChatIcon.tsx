@@ -6,6 +6,7 @@ const ChatIcon = () => {
     const vanillaButton = document.getElementById('essupportchatwidgetButtonOpenId');
     const handleIconClick = () => {
       if (vanillaButton) {
+        alert("OK1");
         vanillaButton.click();
       }
     };
