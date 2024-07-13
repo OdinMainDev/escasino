@@ -3,10 +3,9 @@ import { useEffect } from 'react';
 
 const ChatIcon = () => {
   useEffect(() => {
-    const vanillaButton = document.getElementById('essupportchatwidgetButtonOpenId');
     const handleIconClick = () => {
+      const vanillaButton = document.getElementById('essupportchatwidgetButtonOpenId');
       if (vanillaButton) {
-        alert("OK1");
         vanillaButton.click();
       }
     };
