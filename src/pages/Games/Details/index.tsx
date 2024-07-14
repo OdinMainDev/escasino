@@ -152,7 +152,7 @@ const Details = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header_container}>
-        <PageHeader title={game?.game_provider} isHover={gamesHeaderTypeCover} />
+        <PageHeader fixed title={game?.game_provider} isHover={gamesHeaderTypeCover} />
         <div
           className={classNames(styles.image_container, {
             [styles.cover]: gamesHeaderTypeCover,
@@ -207,7 +207,7 @@ const Details = () => {
             game.data.texts?.find((item) => item.language.toLowerCase() === currentLanguage)?.value}
         </div>
       </div>
-      <Footer isHidden={!isAuth} />
+      <Footer isHidden={isAuth} />
       <AlertModal {...alertData} />
       <ModalZeroBalance close={doCloseModals} gameId={game?.id} />
     </div>
