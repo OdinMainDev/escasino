@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import styles from './PageHeader.module.scss';
-import Icons from '@/shared/ui/Icons';
 import GoBackButton from '@/shared/ui/GoBackButton';
+import ChatIcon from './ChatIcon';
 
 interface IProps {
   title?: string;
@@ -19,7 +19,7 @@ const PageHeader = ({ title, isHover, customBackPath, fixed }: IProps) => {
     >
       <GoBackButton customPath={customBackPath} />
       <div className={styles.title}>{title}</div>
-      <Icons icon="chat" />
+      <ChatIcon />
     </div>
   );
 };
