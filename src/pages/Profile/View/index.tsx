@@ -91,7 +91,7 @@ const Profile = () => {
                   [styles.is_not_verificated]: true,
                 })}
               >
-                Документы верифицирован
+                Документы не верифицированы
               </div>
               <div className={styles.buttons}>
                 <Button className={styles.button} onClick={() => router.push('/profile/document')}>
