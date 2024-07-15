@@ -207,7 +207,7 @@ const Details = () => {
             game.data.texts?.find((item) => item.language.toLowerCase() === currentLanguage)?.value}
         </div>
       </div>
-      <Footer isHidden={isAuth} />
+      <Footer />
       <AlertModal {...alertData} />
       <ModalZeroBalance close={doCloseModals} gameId={game?.id} />
     </div>
