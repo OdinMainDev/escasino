@@ -31,8 +31,16 @@ const WalletHistory = () => {
   const [paymentData, setPaymentData] = useState<IPaymentData | null>(null);
   const [isError, setIsError] = useState(false);
   const [datePicker, setDatePicker] = useState({
-    start: new Date(),
-    end: new Date(),
+    start: (() => {
+      const d = new Date();
+      d.setHours(0, 0, 0, 0);
+      return d;
+    })(),
+    end: (() => {
+      const d = new Date();
+      d.setHours(23, 59, 59, 0);
+      return d;
+    })(),
   });
 
   const selectFilter = (tab: IFilterHistory) => {
@@ -40,22 +48,27 @@ const WalletHistory = () => {
       setPage(1);
       setHasNextPage(false);
       setSelectedTab(tab);
+      if (selectedTab.value === 'replenish') {
+        setPayments([]);
+      } else {
+        setWithdraws([]);
+      }
     }
   };
 
   useEffect(() => {
     const getPayments = async () => {
       setLoading(true);
-      const newPayments = await getPaymentTransactions();
+      const newPayments = await getPaymentTransactions(page, datePicker);
       setHasNextPage(newPayments.length === 25);
-      setPayments(newPayments);
+      setPayments((prev) => [...prev, ...newPayments]);
       setLoading(false);
     };
     const getWithdraw = async () => {
       setLoading(true);
-      const newWithdraws = await getWithdrawTransactions();
-      setWithdraws(await getWithdrawTransactions());
+      const newWithdraws = await getWithdrawTransactions(page, datePicker);
       setHasNextPage(newWithdraws.length === 25);
+      setWithdraws((prev) => [...prev, ...newWithdraws]);
       setLoading(false);
     };
     if (selectedTab.value === 'replenish') {
@@ -63,26 +76,20 @@ const WalletHistory = () => {
     } else {
       void getWithdraw();
     }
-  }, [selectedTab.value]);
+  }, [selectedTab.value, page, datePicker]);
 
-  const addPage = async (page: number) => {
+  const addPage = (page: number) => {
     setPage(page);
-    if (selectedTab.value === 'replenish') {
-      const newPayments = await getPaymentTransactions(page);
-      setHasNextPage(newPayments.length === 25);
-      setPayments((prev) => [...prev, ...newPayments]);
-    } else {
-      const newWithdraw = await getWithdrawTransactions(page);
-      setHasNextPage(newWithdraw.length === 25);
-      setWithdraws((prev) => [...prev, ...newWithdraw]);
-    }
   };
 
   const changeDate = (start: Date, end: Date) => {
     setDatePicker({ start: start, end: end });
-    const startDate = start.getTime() / 1000;
-    const endDate = end.getTime() / 1000;
-    console.log(startDate, endDate);
+    setPage(1);
+    if (selectedTab.value === 'replenish') {
+      setPayments([]);
+    } else {
+      setWithdraws([]);
+    }
   };
 
   const closeModal = () => {
@@ -163,7 +170,7 @@ const WalletHistory = () => {
       {hasNextPage ? (
         <Button
           className="flex items-center w-[100%] justify-center gap-[10px]"
-          onClick={() => void addPage(page + 1)}
+          onClick={() => addPage(page + 1)}
         >
           ЕЩЕ
           <svg
