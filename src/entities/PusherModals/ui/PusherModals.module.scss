@@ -1,0 +1,34 @@
+.container {
+  
+}
+
+.replenish {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px 24px 16px;
+  min-height: 200px;
+  &_icon {
+    width: 104px;
+    height: 104px;
+  }
+
+  .title {
+    color: var(--text-primary);
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 32px;
+    letter-spacing: 0.01em;
+  }
+
+  .subtitle {
+    color: var(--label-primary);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.01em;
+    text-align: center;
+
+  }
+}

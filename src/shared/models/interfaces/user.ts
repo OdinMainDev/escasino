@@ -6,6 +6,7 @@ export interface IUser {
   data: Data;
   balance: Balance;
   balances: Balances[];
+  pusher_id: string;
 }
 
 export interface Data {

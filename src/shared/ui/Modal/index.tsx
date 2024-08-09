@@ -3,11 +3,7 @@ import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 
-interface IProps extends IModal {
-  isOpen: boolean;
-}
-
-const Modal = ({ isOpen, close, children, reRendering = true }: IProps) => {
+const Modal = ({ isOpen, close, children, reRendering = true }: IModal) => {
   const [shouldRenderChildren, setShouldRenderChildren] = useState(isOpen);
   useEffect(() => {
     if (isOpen) {

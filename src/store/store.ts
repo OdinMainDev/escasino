@@ -25,6 +25,7 @@ import { IInitialWithdrawAllProviders } from './slices/withdrawAllProvidersSlice
 import bonusesSlices, { IInitialBonuses } from './slices/bonusesSlices';
 import gamesAllSlice, { IInitialGameAll } from './slices/gamesAll';
 import cartBonusesSlice, { IInitialCartBonuses } from './slices/cartBonusesSlice';
+import pusherReducer, { IInitialPusherState } from './slices/pusherSlice';
 
 interface IReducers {
   settingsReducer: IInitialSettings;
@@ -42,6 +43,7 @@ interface IReducers {
   paymentAllProvidersSlice: IInitialPaymentAllProviders;
   withdrawProvidersReducer: IInitialWithdrawProviders;
   withdrawAllProvidersSlice: IInitialWithdrawAllProviders;
+  pusherReducer: IInitialPusherState;
 }
 
 const reducers: ReducersMapObject<IReducers> = {
@@ -60,6 +62,7 @@ const reducers: ReducersMapObject<IReducers> = {
   paymentAllProvidersSlice: paymentAllProvidersSlice,
   withdrawProvidersReducer: withdrawProvidersReducer,
   withdrawAllProvidersSlice: withdrawAllProvidersSlice,
+  pusherReducer,
 };
 
 const rootReducers = combineReducers(reducers);

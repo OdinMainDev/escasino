@@ -1,3 +1,5 @@
+import { IPusher } from './pusher';
+
 export interface ISettings {
   languages: string[];
   currencies: string[];
@@ -8,6 +10,7 @@ export interface ISettings {
   profile: Profile;
   bonus: Bonus;
   affiliate: Affiliate;
+  pusher: IPusher;
 }
 
 export interface IStaticSettings {
