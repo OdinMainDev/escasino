@@ -18,7 +18,7 @@ const Replenish = () => {
   return (
     <Modal isOpen={isOpen} close={closeModal}>
       <div className={styles.replenish}>
-        <img src={replanishIcon} className={classNames(styles.replenish_icon, 'mb-[24px]')} />
+        <img src={replanishIcon} className={classNames(styles.icon, 'mb-[24px]')} />
         <div className={classNames(styles.title, 'mb-[8px]')}>Счет успешно пополнен.</div>
         <div className={styles.subtitle}>Желаем вам приятной игры!</div>
         <Button className="w-[100%] mt-[32px]">Вернуться к игре</Button>
