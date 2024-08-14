@@ -8,7 +8,7 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
   const { user } = useAppSelector((state) => state.userReducer);
   useEffect(() => {
     if (settings && settings.pusher.cluster && settings.pusher.key && user?.pusher_id) {
-      const pusher = new PusherService(settings.pusher.key, settings.pusher.cluster);
+      const pusher = PusherService.getInstance(settings.pusher.key, settings.pusher.cluster);
       pusher.subscribe(user.pusher_id, 'payment_receive', (data) => {
         console.log(data);
       });
