@@ -10,7 +10,7 @@ import Button from '@/shared/ui/Button';
 import dateFormatter from '@/shared/helpers/dateFormatter';
 import { IGame } from '@/shared/models/interfaces/game';
 import { BonusesGamesModal } from '@/features/BonusesGamesModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Loader from '@/shared/ui/Loader';
 import {
   postSetMyActiveBonusApi,
@@ -63,6 +63,17 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
         return null;
     }
   };
+
+  useEffect(() => {
+    if (bonus?.bonus_template && bonus?.bonus_template.length > 0) {
+      setSelectedTemplate(bonus?.bonus_template[0]);
+    }
+    if (bonus?.data.bonuses_list && bonus?.data.bonuses_list.length > 0) {
+      setSelectedGamesIds(
+        bonus?.data.bonuses_list.filter((item) => item.type === 'freespins') || [],
+      );
+    }
+  }, [bonus]);
 
   const getButton = () => {
     switch (bonus?.status) {

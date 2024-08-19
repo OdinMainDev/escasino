@@ -12,6 +12,9 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
       pusher.subscribe(user.pusher_id, 'payment_receive', (data) => {
         console.log(data);
       });
+      pusher.subscribe(user.pusher_id, 'payment_receive', (data) => {
+        console.log(data);
+      });
     }
   }, [settings, user?.pusher_id]);
   return (
