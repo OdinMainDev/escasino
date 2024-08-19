@@ -6,12 +6,12 @@ import bonusIcon from '../icons/bonus.svg';
 import classNames from 'classnames';
 import Button from '@/shared/ui/Button';
 
-const Replenish = () => {
+const Bonus = () => {
   const key = 'get-bonus';
   const { openPusherModals } = useAppSelector((state) => state.pusherReducer);
   const dispatch = useAppDispatch();
   const isOpen = !!openPusherModals.find((item) => item === key);
-
+  console.log(openPusherModals);
   const closeModal = () => {
     dispatch(closePusherModal(key));
   };
@@ -38,4 +38,4 @@ const Replenish = () => {
   );
 };
 
-export default Replenish;
+export default Bonus;

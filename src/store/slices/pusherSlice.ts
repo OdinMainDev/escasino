@@ -17,7 +17,7 @@ const pusherSlice = createSlice({
       state.openPusherModals.push(action.payload);
     },
     closePusherModal: (state: IInitialPusherState, action: PayloadAction<typeOfPosherModal>) => {
-      state.openPusherModals.filter((item) => item !== action.payload);
+      state.openPusherModals = state.openPusherModals.filter((item) => item !== action.payload);
     },
   },
 });
