@@ -11,7 +11,6 @@ const Bonus = () => {
   const { openPusherModals } = useAppSelector((state) => state.pusherReducer);
   const dispatch = useAppDispatch();
   const isOpen = !!openPusherModals.find((item) => item === key);
-  console.log(openPusherModals);
   const closeModal = () => {
     dispatch(closePusherModal(key));
   };
