@@ -12,7 +12,7 @@ export type typeOfPosherModal =
 const PusherModals = () => {
   return (
     <>
-      <Replenish />;
+      <Replenish />
       <Lottery />
       <Bonus />
       <BonusAdded />
