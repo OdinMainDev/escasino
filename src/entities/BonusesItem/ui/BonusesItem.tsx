@@ -115,23 +115,31 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
   };
 
   const setActiveBonus = async () => {
-    if (!activeBonus && bonus) {
-      try {
-        setLoading(true);
-        const data: ISetActiveBonus = {
-          id: bonus?.id,
-          game_ids: selectedGamesIds.map((item) => item.game_id),
-          fid: await getVisitorId(),
-        };
-        await postSetMyActiveBonusApi(data);
-        void dispatch(getBonuses());
-      } catch (e) {
-        /* empty */
-      } finally {
-        setLoading(false);
-      }
-    } else {
+    if (!bonus) {
       doOpenModal('alert');
+      return;
+    }
+    if (activeBonus) {
+      for (let i = 0; i < bonus.bonus_template.length; i++) {
+        if (!bonus.bonus_template[i].is_bonus_can_activate_always) {
+          doOpenModal('alert');
+          return;
+        }
+      }
+    }
+    try {
+      setLoading(true);
+      const data: ISetActiveBonus = {
+        id: bonus?.id,
+        game_ids: selectedGamesIds.map((item) => item.game_id),
+        fid: await getVisitorId(),
+      };
+      await postSetMyActiveBonusApi(data);
+      void dispatch(getBonuses());
+    } catch (e) {
+      /* empty */
+    } finally {
+      setLoading(false);
     }
   };
 
