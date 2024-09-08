@@ -252,7 +252,9 @@ const Bonuses = () => {
     if (games) {
       let gameIds: number[] = [];
       bonusesTemplates.forEach((item) => {
-        gameIds.push(...item.game_ids);
+        if (item.game_ids) {
+          gameIds.push(...item.game_ids);
+        }
       });
       gameIds = Array.from(new Set(gameIds));
       const availGameIds = games.filter((item) => gameIds.includes(item.id));
