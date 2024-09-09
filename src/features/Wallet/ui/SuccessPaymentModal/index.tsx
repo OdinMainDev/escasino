@@ -41,20 +41,20 @@ interface IUrlPageProps {
 }
 
 const UrlPage = ({ url, closeModal }: IUrlPageProps) => {
-  useEffect(() => {
-    setTimeout(() => {
-      window.open(url, '_blank');
-      closeModal();
-    }, 3000);
-  }, [closeModal, url]);
+  const redirecеt = () => {
+    window.open(url, '_blank');
+    closeModal();
+  };
 
   return (
     <div className={styles.loader}>
       <div className="w-[100%] h-[100%] flex flex-col items-center justify-center gap-[10px]">
-        <div className="w-[55px] h-[55px]">
+        <div className="w-[55px] h-[55px] mb-[20px]">
           <Loader />
         </div>
-        <div className={styles.loader_title}>Идет переадресация...</div>
+        <Button className="uppercase" onClick={redirecеt}>
+          Нажмите для переадресации
+        </Button>
       </div>
     </div>
   );
