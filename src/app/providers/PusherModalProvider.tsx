@@ -14,8 +14,9 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
       pusher.subscribe(user.pusher_id, 'payment_receive', () => {
         dispatch(openPusherModal('success-replenish'));
       });
-      pusher.subscribe(user.pusher_id, 'bonus_receive', () => {
+      pusher.subscribe(user.pusher_id, 'bonus_receive', (data) => {
         dispatch(openPusherModal('bonus-added'));
+        console.log(data);
       });
       pusher.subscribe(user.pusher_id, 'lottery_win', () => {
         dispatch(openPusherModal('lottery-ticket'));
