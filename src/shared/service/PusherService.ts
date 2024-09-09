@@ -27,7 +27,7 @@ class PusherService {
     });
 
     this.pusher.connection.bind('connected', () => {
-      console.log('Pusher reconnected successfully.');
+      console.log('Pusher connected successfully.');
     });
   }
 
