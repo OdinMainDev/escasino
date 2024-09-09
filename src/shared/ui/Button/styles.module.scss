@@ -73,7 +73,7 @@
 
 .contained {
   border: 1px solid var(--button-border-color);
-  background-color: var(--button-primary-color);
+  background-color: var(--button-primary-color) !important;
   color: var(--button-secondary-color);
   svg {
     path {
@@ -82,7 +82,7 @@
     }
   }
   &:hover {
-    background-color: transparent;
+    background-color: transparent !important;
     color: var(--button-primary-color);
     svg {
       path {

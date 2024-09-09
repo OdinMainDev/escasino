@@ -13,7 +13,7 @@ const Profile = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const router = useRouter();
-  const { activeBonus } = useAppSelector((state) => state.bonusesSlice);
+  const { activeBonuses } = useAppSelector((state) => state.bonusesSlice);
   const { unsetAuthenticated } = useAuthProvider();
 
   const logoutHandler = () => {
@@ -82,7 +82,7 @@ const Profile = () => {
               </Button>
             </div>
           </div>
-          <BonusesItem bonus={activeBonus} isMain />
+          {activeBonuses.length > 0 && <BonusesItem bonus={activeBonuses[0]} isMain />}
           {user?.data.documents_verified_at == 0 && (
             <div className={styles.block}>
               <div className={styles.title}>Верификация документов</div>

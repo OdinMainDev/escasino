@@ -7,7 +7,7 @@ import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.pn
 interface IProps extends BaseHTMLAttributes<HTMLDivElement> {
   gameId: number;
 }
-const BonusGame = ({ gameId, ...otherProps }: IProps) => {
+const BonusGame = ({ gameId, onClick }: IProps) => {
   const { games } = useAppSelector((state) => state.gamesAllSlice);
   const [game, setGame] = useState<IGame | null>(null);
 
@@ -19,7 +19,7 @@ const BonusGame = ({ gameId, ...otherProps }: IProps) => {
 
   if (!game && gameId === 0) {
     return (
-      <div className={styles.game} {...otherProps}>
+      <div className={styles.game} onClick={onClick}>
         <img className={styles.game_img} alt="sw" src={PlaceholderImage} />
         <div className="flex flex-col gap-[8px] flex-1">
           <div className={styles.game_subtitle}>Выберите игру</div>
@@ -29,7 +29,7 @@ const BonusGame = ({ gameId, ...otherProps }: IProps) => {
     );
   }
   return (
-    <div className={styles.game} {...otherProps}>
+    <div className={styles.game} onClick={onClick}>
       <img className={styles.game_img} alt="sw" src={game?.image ? game.image : PlaceholderImage} />
       <div className="flex flex-col gap-[8px] flex-1">
         <div className={styles.game_subtitle}>{game?.game_provider}</div>

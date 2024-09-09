@@ -9,22 +9,21 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
 import { IBonus } from '@/shared/models/interfaces/bonuses';
 import { tabs } from '../constants';
-// import { AlertModal } from '@/entities/AlertModal';
-// import { useModal } from '@/app/providers/ModalProvider';
+import { AlertModal } from '@/entities/AlertModal';
+import { useModal } from '@/app/providers/ModalProvider';
 import { PageHeader } from '@/widgets/Header';
 
 const BonusesList = () => {
   const {
     bonuses: storeBonuses,
     loading,
-    // activeBonus,
+    activeBonuses,
   } = useAppSelector((state) => state.bonusesSlice);
   const [bonuses, setBonuses] = useState<IBonus[]>([]);
   const [selectedTab, setSelectedTab] = useState<ITab>(tabs[0].tab);
   const [selectedFilter, setSelectedFilter] = useState<ITab>(tabs[0].filters[0]);
   const [filters, setFilters] = useState<ITab[]>(tabs[0].filters);
-  // const { doCloseModals } = useModal();
-  // const { games } = useAppSelector((state) => state.gamesAllSlice);
+  const { doCloseModals } = useModal();
 
   const changeTab = (tab: ITab) => {
     setSelectedTab(tab);
@@ -95,7 +94,7 @@ const BonusesList = () => {
           <div className={styles.emplty}>У вас нет бонусов</div>
         )}
       </div>
-      {/* {activeBonus && (
+      {activeBonuses.length > 0 && (
         <AlertModal
           title="Отмените бонус"
           close={doCloseModals}
@@ -106,9 +105,9 @@ const BonusesList = () => {
               type: 'outlined',
             },
           ]}
-          text={`Отмените бонус ${games?.find((item) => item.id === activeBonus.data.bonuses_list[0].game_id)?.name} прежде чем активировать этот`}
+          text={'Отмените один из активных бонусов прежде чем активировать этот'}
         />
-      )} */}
+      )}
     </div>
   );
 };

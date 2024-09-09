@@ -42,7 +42,7 @@ const BonusesGamesModal = ({ close, isOpen, games, onSelectGame }: IProps) => {
   return (
     <Modal close={close} isOpen={!!isOpen}>
       <div className={styles.container}>
-        <div className={styles.title}>Выбеприте игру для бонуса</div>
+        <div className={styles.title}>Выберите игру для бонуса</div>
         <div className={styles.header}>
           <Input
             elType="search"

@@ -28,7 +28,7 @@ interface IProps {
   isMain?: boolean;
 }
 const BonusesItem = ({ bonus, isMain }: IProps) => {
-  const { activeBonus } = useAppSelector((state) => state.bonusesSlice);
+  const { activeBonuses } = useAppSelector((state) => state.bonusesSlice);
   const [selectedTemplate, setSelectedTemplate] = useState<IBonusTemplate | null>(
     bonus?.bonus_template[0] ?? null,
   );
@@ -75,6 +75,24 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
     }
   }, [bonus]);
 
+  useEffect(() => {
+    const selectedGames =
+      bonus?.data.bonuses_list.filter((item) => item.type === 'freespins') || [];
+    if (selectedGames.find((item) => item.game_id === 0)) {
+      selectedGamesIds.forEach((item, index) => {
+        if (bonus?.status !== 2) {
+          const findedTemplate = bonus?.bonus_template.find((template) => template.id === item.id);
+          if (findedTemplate) {
+            const findedGames = games?.filter((item) => findedTemplate.game_ids.includes(item.id));
+            if (findedGames && findedGames.length === 1) {
+              updateNumberAtIndex(index, findedGames[0].id);
+            }
+          }
+        }
+      });
+    }
+  }, [bonus, games]);
+
   const getButton = () => {
     switch (bonus?.status) {
       case 1:
@@ -119,7 +137,7 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
       doOpenModal('alert');
       return;
     }
-    if (activeBonus) {
+    if (activeBonuses.length > 0) {
       for (let i = 0; i < bonus.bonus_template.length; i++) {
         if (!bonus.bonus_template[i].is_bonus_can_activate_always) {
           doOpenModal('alert');

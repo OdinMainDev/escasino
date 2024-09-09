@@ -6,7 +6,7 @@ import { getMyBonusesApi, IResponseBonuses } from '@/app/api/bonuses/bonusesApi'
 
 export interface IInitialBonuses extends ISlice {
   bonuses: IBonus[] | null;
-  activeBonus: IBonus | null;
+  activeBonuses: IBonus[];
   status: number;
 }
 
@@ -15,7 +15,7 @@ const initialState: IInitialBonuses = {
   loading: false,
   hasError: false,
   bonuses: null,
-  activeBonus: null,
+  activeBonuses: [],
   status: 0,
 };
 
@@ -48,7 +48,7 @@ export const bonusesSlice = createSlice({
       state.status = action.payload?.status ?? 200;
       state.bonuses = action.payload?.bonuses ?? null;
       if (state.bonuses) {
-        state.activeBonus = state.bonuses.find((item) => item.status === 2) ?? null;
+        state.activeBonuses = state.bonuses.filter((item) => item.status === 2) ?? null;
       }
       state.loading = false;
     });
