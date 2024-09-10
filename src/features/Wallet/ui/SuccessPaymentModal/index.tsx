@@ -49,9 +49,6 @@ const UrlPage = ({ url, closeModal }: IUrlPageProps) => {
   return (
     <div className={styles.loader}>
       <div className="w-[100%] h-[100%] flex flex-col items-center justify-center gap-[10px]">
-        <div className="w-[55px] h-[55px] mb-[20px]">
-          <Loader />
-        </div>
         <Button className="uppercase" onClick={redirecеt}>
           Нажмите для переадресации
         </Button>
