@@ -172,6 +172,7 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
           fid: await getVisitorId(),
         };
         await postSetMyActiveBonusCancelApi(data);
+        void dispatch(getBonuses());
       } catch (e) {
         /* empty */
       } finally {

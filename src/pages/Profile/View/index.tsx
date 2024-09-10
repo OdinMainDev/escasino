@@ -82,7 +82,7 @@ const Profile = () => {
               </Button>
             </div>
           </div>
-          {activeBonuses.length > 0 && <BonusesItem bonus={activeBonuses[0]} isMain />}
+          <BonusesItem bonus={activeBonuses[0]} isMain />
           {user?.data.documents_verified_at == 0 && (
             <div className={styles.block}>
               <div className={styles.title}>Верификация документов</div>
