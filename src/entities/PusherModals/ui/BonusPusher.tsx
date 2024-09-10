@@ -17,6 +17,7 @@ const BonusPusher = () => {
     'bonus_scratch_receive',
     'bonus_scratch_complete',
     'bonus_complete',
+    'do_update_active_bonuses',
   ];
   const { openPusherModals } = useAppSelector((state) => state.pusherReducer);
   const filtredModalsKeys = openPusherModals.filter((item) => keys.includes(item));

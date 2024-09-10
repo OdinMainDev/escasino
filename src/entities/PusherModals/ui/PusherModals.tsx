@@ -13,7 +13,8 @@ export type typeOfPosherModal =
   | 'do_bonus_activate'
   | 'bonus_scratch_receive'
   | 'bonus_scratch_complete'
-  | 'bonus_complete';
+  | 'bonus_complete'
+  | 'do_update_active_bonuses';
 
 const PusherModals = () => {
   return (

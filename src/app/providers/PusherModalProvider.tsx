@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { openPusherModal } from '@/store/slices/pusherSlice';
 import { PropsWithChildren, useEffect } from 'react';
 import { postSetMyActiveBonusApi } from '../api/bonuses/bonusesApi';
-import { getBonuses } from '@/store/slices/bonusesSlices';
+import { getBonuses, resetBonuses } from '@/store/slices/bonusesSlices';
 
 const PusherModalProvider = ({ children }: PropsWithChildren) => {
   const { settings } = useAppSelector((state) => state.settingsReducer);
@@ -52,6 +52,9 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
       pusher.subscribe(user.pusher_id, 'do_bonus_activate', (data) => {
         const bonus = data as IBonusPusher;
         void addActiveBonus(bonus);
+      });
+      pusher.subscribe(user.pusher_id, 'do_update_active_bonuses', () => {
+        dispatch(resetBonuses());
       });
       pusher.subscribe(user.pusher_id, 'bonus_scratch_receive', (data) => {
         dispatch(openPusherModal('bonus_scratch_receive'));
