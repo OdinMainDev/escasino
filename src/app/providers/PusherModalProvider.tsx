@@ -1,6 +1,6 @@
 import { PusherModals } from '@/entities/PusherModals';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
-import { ISetActiveBonus } from '@/shared/models/interfaces/bonuses';
+import { IBonusesList, ISetActiveBonus } from '@/shared/models/interfaces/bonuses';
 import { IBonusPusher } from '@/shared/models/interfaces/pusher/bonus';
 import PusherService from '@/shared/service/PusherService';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
@@ -13,17 +13,50 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.userReducer);
+  const { games } = useAppSelector((state) => state.gamesAllSlice);
 
   useEffect(() => {
+    const updateNumberAtIndex = (games: IBonusesList[], index: number, game_id: number) => {
+      const newNumbers = [...games];
+      newNumbers[index] = { ...newNumbers[index], game_id };
+      return newNumbers;
+    };
     const addActiveBonus = async (bonus: IBonusPusher) => {
       try {
-        const data: ISetActiveBonus = {
+        const freeSpinsBonuses = bonus.data.bonuses_list.filter(
+          (item) => item.type === 'freespins',
+        );
+        const fid = await getVisitorId();
+        let data: ISetActiveBonus = {
           id: bonus.id,
-          game_ids: bonus.data.bonuses_list
-            .filter((item) => item.type === 'freespins')
-            .map((item) => item.game_id),
-          fid: await getVisitorId(),
+          game_ids: freeSpinsBonuses.map((item) => item.game_id),
+          fid,
         };
+        if (freeSpinsBonuses.filter((item) => item.game_id === 0).length > 0) {
+          freeSpinsBonuses.forEach((item, index) => {
+            if (bonus?.status !== 2) {
+              const findedTemplate = bonus?.bonus_template.find(
+                (template) => template.id === item.id,
+              );
+              if (findedTemplate) {
+                const findedGames = games?.filter((item) =>
+                  findedTemplate.game_ids.includes(item.id),
+                );
+                if (findedGames && findedGames.length === 1) {
+                  data = {
+                    id: bonus.id,
+                    game_ids: updateNumberAtIndex(
+                      freeSpinsBonuses,
+                      index,
+                      findedGames[index].id,
+                    ).map((item) => item.game_id),
+                    fid,
+                  };
+                }
+              }
+            }
+          });
+        }
         await postSetMyActiveBonusApi(data);
         void dispatch(getBonuses());
       } catch (e) {

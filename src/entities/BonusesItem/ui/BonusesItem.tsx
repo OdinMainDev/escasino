@@ -85,7 +85,7 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
           if (findedTemplate) {
             const findedGames = games?.filter((item) => findedTemplate.game_ids.includes(item.id));
             if (findedGames && findedGames.length === 1) {
-              updateNumberAtIndex(index, findedGames[0].id);
+              updateNumberAtIndex(index, findedGames[index].id);
             }
           }
         }
