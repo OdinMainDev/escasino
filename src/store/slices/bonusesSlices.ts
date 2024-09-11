@@ -21,10 +21,10 @@ const initialState: IInitialBonuses = {
 
 export const getBonuses = createAsyncThunk<
   IResponseBonuses,
-  void,
+  { completed?: boolean } | undefined,
   { rejectValue: IResponseBonuses }
 >('getMyBonusesApi', async (_settings, { rejectWithValue }) => {
-  const data = await getMyBonusesApi();
+  const data = await getMyBonusesApi(!!_settings?.completed);
   if (isAppDebug) {
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
     await sleep(5000);

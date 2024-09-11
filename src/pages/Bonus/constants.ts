@@ -4,7 +4,7 @@ export const tabs: IBonusTabs[] = [
   {
     tab: {
       label: 'Активные',
-      value: 'current',
+      value: 'false',
     },
     filters: [
       {
@@ -24,7 +24,7 @@ export const tabs: IBonusTabs[] = [
   {
     tab: {
       label: 'История',
-      value: 'history',
+      value: 'true',
     },
     filters: [
       {

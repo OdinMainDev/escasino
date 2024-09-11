@@ -43,8 +43,11 @@ export const getBonusTemplatesApi = async (): Promise<IResponseBonusesTemplate> 
   return resp;
 };
 
-export const getMyBonusesApi = async (): Promise<IResponseBonuses> => {
+export const getMyBonusesApi = async (completed?: boolean): Promise<IResponseBonuses> => {
   const { data, status } = await axios.get<{ data: IBonus[] }>(myBonusesApi(), {
+    params: {
+      completed,
+    },
     headers: {
       Authorization: `Bearer: ${Cookies.get('atoken')}`,
       'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',

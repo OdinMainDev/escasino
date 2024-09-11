@@ -1,5 +1,5 @@
 import styles from './BonusesList.module.scss';
-import { useAppSelector } from '@/store/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import Loader from '@/shared/ui/Loader';
 import { BonusesItem } from '@/entities/BonusesItem';
 import Tabs, { ITab } from '@/entities/Tabs';
@@ -12,6 +12,7 @@ import { tabs } from '../constants';
 import { AlertModal } from '@/entities/AlertModal';
 import { useModal } from '@/app/providers/ModalProvider';
 import { PageHeader } from '@/widgets/Header';
+import { getBonuses } from '@/store/slices/bonusesSlices';
 
 const BonusesList = () => {
   const {
@@ -24,9 +25,11 @@ const BonusesList = () => {
   const [selectedFilter, setSelectedFilter] = useState<ITab>(tabs[0].filters[0]);
   const [filters, setFilters] = useState<ITab[]>(tabs[0].filters);
   const { doCloseModals } = useModal();
+  const dispatch = useAppDispatch();
 
   const changeTab = (tab: ITab) => {
     setSelectedTab(tab);
+    void dispatch(getBonuses({ completed: tab.value === 'true' }));
     const selected = tabs.find((item) => item.tab.value === tab.value);
     if (selected) {
       setFilters(selected.filters);
