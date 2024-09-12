@@ -22,12 +22,14 @@ import { getBonuses } from '@/store/slices/bonusesSlices';
 import { useRouter } from '@/shared/helpers/navigation';
 import { TabItem } from '@/entities/TabItem';
 import BonusGame from './BonusGame';
+import classNames from 'classnames';
 
 interface IProps {
   bonus: IBonus | null;
   isMain?: boolean;
+  className?: string;
 }
-const BonusesItem = ({ bonus, isMain }: IProps) => {
+const BonusesItem = ({ bonus, isMain, className }: IProps) => {
   const { activeBonuses } = useAppSelector((state) => state.bonusesSlice);
   const [selectedTemplate, setSelectedTemplate] = useState<IBonusTemplate | null>(
     bonus?.bonus_template[0] ?? null,
@@ -196,7 +198,7 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
 
   if (!bonus && isMain) {
     return (
-      <div className={styles.container}>
+      <div className={classNames(styles.container, className)}>
         <div className="flex items-center justify-between mb-[70px]">
           <div className={styles.title}>Активный бонус не выбран</div>
           {isMain && (
@@ -217,7 +219,7 @@ const BonusesItem = ({ bonus, isMain }: IProps) => {
     );
   }
   return (
-    <div className={styles.container}>
+    <div className={classNames(styles.container, className)}>
       <div className="flex items-center justify-between mb-[16px]">
         <div className={styles.title}>{bonusStatus}</div>
         {isMain && (

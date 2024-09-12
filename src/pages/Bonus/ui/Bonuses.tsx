@@ -242,8 +242,11 @@ const Bonuses = () => {
   );
 
   useEffect(() => {
-    if (id && games) {
+    if (id && games && games.length > 0) {
       const game = games.find((item) => item.id.toString() === id);
+      setSelectedGame(game);
+    } else if (games && games.length > 0 && settings?.bonus) {
+      const game = games.find((item) => item.id === settings.bonus.default_game_id);
       setSelectedGame(game);
     } else {
       setSelectedGame(null);
@@ -350,23 +353,32 @@ const Bonuses = () => {
                   >
                     Изменить игру
                   </Button>
-                  <BonusesGames games={availGames} />
                 </div>
               )
             ) : null}
-            <div className={styles.settings}>
-              <div className={styles.settings_title}>Тип бонуса</div>
-              <div className={styles.settings_tabs}>
-                {tabs.map((item, index) => (
-                  <TabItem
-                    selected={item === selectedTab}
-                    onClick={() => setSelectedTab(item)}
-                    key={index}
-                  >
-                    {t('bonusesConfigurator.tab.' + item)}
-                  </TabItem>
-                ))}
+            {selectedGame?.id === settings?.bonus.default_game_id && (
+              <div className="mb-[25px]">
+                <BonusesGames games={availGames} />
               </div>
+            )}
+            <div className={styles.settings}>
+              {tabs.length > 0 && (
+                <>
+                  <div className={styles.settings_title}>Тип бонуса</div>
+                  <div className={styles.settings_tabs}>
+                    {tabs.map((item, index) => (
+                      <TabItem
+                        selected={item === selectedTab}
+                        onClick={() => setSelectedTab(item)}
+                        key={index}
+                      >
+                        {t('bonusesConfigurator.tab.' + item)}
+                      </TabItem>
+                    ))}
+                  </div>
+                </>
+              )}
+
               {selectedTab === 'money' ? (
                 <BonusesMoney
                   ref={bonusesMoney}

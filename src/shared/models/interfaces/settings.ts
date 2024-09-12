@@ -88,6 +88,7 @@ export interface Profile {
 export interface Bonus {
   bonus_inactive_life_time: number;
   max_avail_bonuses: number;
+  default_game_id: number;
   max_wager_per_deposit: number;
   max_bonuses_per_deposit: number;
   max_bonuses_freespins_per_deposit: number;

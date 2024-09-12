@@ -23,8 +23,15 @@ const BonusesGames = ({ games }: IProps) => {
       modules={[Autoplay]}
       freeMode
       lazyPreloadPrevNext={5}
-      slidesPerView={2}
       loop={games.length > 3}
+      breakpoints={{
+        320: {
+          slidesPerView: 1.2,
+        },
+        640: {
+          slidesPerView: 2.2,
+        },
+      }}
     >
       {games.slice(0, 25).map((item) => (
         <SwiperSlide className={styles.games_item} key={item.id}>

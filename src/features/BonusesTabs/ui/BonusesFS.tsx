@@ -123,10 +123,25 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     }, [bonusesTemplates, cartBonuses, gameId, minAmount, maxAmount]);
 
     useEffect(() => {
-      if (spinsSwiper.current) {
-        spinsSwiper.current.swiper?.slideToLoop(0, 0);
-        selectBet(spinsSwiper.current.swiper);
-      }
+      setTimeout(() => {
+        if (betSwiper.current) {
+          const maxIndex = betTemplates.reduce(
+            (maxIdx, currVal, idx, arr) =>
+              currVal.configurator.bet_amount > arr[maxIdx].configurator.bet_amount ? idx : maxIdx,
+            0,
+          );
+          betSwiper.current.swiper?.slideToLoop(maxIndex, 400);
+        }
+        if (spinsSwiper.current) {
+          const maxIndex = spinsTemplates.reduce(
+            (maxIdx, currVal, idx, arr) =>
+              currVal.configurator.bet_amount > arr[maxIdx].configurator.bet_amount ? idx : maxIdx,
+            0,
+          );
+          spinsSwiper.current.swiper?.slideToLoop(maxIndex, 400);
+        }
+      }, 1000);
+      // selectBet(spinsSwiper.current.swiper);
       if (filtredBonuses.length > 0) {
         fsChangeHandler(filtredBonuses[0].id);
       }
@@ -137,6 +152,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
         const selectedBetTemplate = betTemplates[realIndex];
+        console.log(selectedBetTemplate, realIndex);
         const selectedFsTemplates = removeDuplicatesBySpinsCount(
           filtredBonuses.filter(
             (item) => item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
@@ -204,7 +220,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             ref={betSwiper}
             spaceBetween={12}
             effect="coverflow"
-            slidesPerView={3}
+            slidesPerView={5}
             centeredSlides
             className={styles.settings_params}
             lazyPreloadPrevNext={2}
@@ -247,7 +263,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             centeredSlides
             slideToClickedSlide
             className={styles.settings_params}
-            lazyPreloadPrevNext={5}
+            lazyPreloadPrevNext={2}
             loop={false}
             direction="vertical"
             onSlideChange={(swiper) => selectSpins(swiper)}

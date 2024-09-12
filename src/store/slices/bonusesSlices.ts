@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ParentPending, ParentFilled, ParentRejected, ISlice } from './slices';
 import { isAppDebug } from '@/app/config/app';
-import { IBonus } from '@/shared/models/interfaces/bonuses';
+import { BonusStatusesType, IBonus } from '@/shared/models/interfaces/bonuses';
 import { getMyBonusesApi, IResponseBonuses } from '@/app/api/bonuses/bonusesApi';
 
 export interface IInitialBonuses extends ISlice {
@@ -21,10 +21,10 @@ const initialState: IInitialBonuses = {
 
 export const getBonuses = createAsyncThunk<
   IResponseBonuses,
-  { completed?: boolean } | undefined,
+  { completed?: boolean; page?: number; status?: BonusStatusesType } | undefined,
   { rejectValue: IResponseBonuses }
->('getMyBonusesApi', async (_settings, { rejectWithValue }) => {
-  const data = await getMyBonusesApi(!!_settings?.completed);
+>('getMyBonusesApi', async (params, { rejectWithValue }) => {
+  const data = await getMyBonusesApi(!!params?.completed, params?.page, params?.status);
   if (isAppDebug) {
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
     await sleep(5000);

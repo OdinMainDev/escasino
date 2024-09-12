@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useEffect, useState } from 'react';
+import React, { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 import styles from './MainHeader.module.scss';
 import FilterIcon from './FilterIcon';
@@ -20,6 +20,7 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
   const [filterVal, setFilterVal] = useState<string>(getFilters().query);
   const router = useRouter();
   const pathname = usePathname();
+  const timer = useRef<null | ReturnType<typeof setTimeout>>(null);
 
   useEffect(() => {
     setFilterVal(getFilters().query);
@@ -61,6 +62,23 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
 
   const availKeys = countActiveKeys(getFilters());
 
+  const onSearchHandler = (value: string) => {
+    setFilterVal(value);
+    if (value.length >= 3) {
+      if (timer.current) {
+        clearTimeout(timer.current);
+      }
+      timer.current = setTimeout(() => {
+        router.push({
+          pathname: '/games/search',
+          query: {
+            query: value,
+          },
+        });
+      }, 1000);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <GoBackButton className={styles.back} customPath="/" />
@@ -77,7 +95,7 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
           elSize="s"
           value={filterVal}
           onClear={() => setFilterVal('')}
-          onChange={(e) => setFilterVal(() => e.target.value)}
+          onChange={(e) => onSearchHandler(e.target.value)}
         />
       )}
 

@@ -13,6 +13,8 @@ export interface IBonusData {
   is_cancel: boolean;
 }
 
+export type BonusStatusesType = 1 | 2 | 3 | 4 | 5;
+
 export interface IBonusesList {
   type: string;
   id: number;

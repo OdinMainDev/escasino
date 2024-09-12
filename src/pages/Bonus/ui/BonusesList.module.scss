@@ -22,6 +22,16 @@
   color: var(--text-primary);
 }
 
+.empty {
+  margin-top: 40px;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 120%;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: var(--text-primary);
+}
+
 .content {
   flex:1;
   display: flex;
