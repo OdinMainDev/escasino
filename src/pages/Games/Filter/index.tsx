@@ -9,11 +9,15 @@ import Button from '@/shared/ui/Button';
 import Switch from '@/shared/ui/Switch';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 import Icons from '@/shared/ui/Icons';
+import { useAppSelector } from '@/store/hooks/redux';
 
 const Filter = () => {
   const { setFilters, getFilters, countActiveKeys } = useGamesFilters();
   const router = useRouter();
+  const { categories } = useAppSelector((state) => state.gameCategoriesReducer);
+  const { providers } = useAppSelector((state) => state.gameProvidersReducer);
   const [withBonuses, setWithBonuses] = useState<boolean>(getFilters().is_game_avail_for_bonus);
+  const withProviders = import.meta.env.VITE_APP_WITH_PROVIDERS === 'true';
 
   const selectCategory = useCallback((selectedCategory: string) => {
     const category = getFilters().categories.find((item) => item === selectedCategory);
@@ -94,12 +98,20 @@ const Filter = () => {
           </div>
         </div>
         <div className={styles.type}>
-          <div className={styles.subtitle}>Тип игры</div>
+          {categories && categories.length > 0 ? (
+            <div className={styles.subtitle}>Тип игры</div>
+          ) : null}
           <CategoriesList selectCategory={selectCategory} />
         </div>
         <div className={styles.provider}>
-          <div className={styles.subtitle}>Провайдеры</div>
-          <ProviderList selectProvider={selectProvider} />
+          {withProviders && (
+            <>
+              {providers && providers.length > 0 ? (
+                <div className={styles.subtitle}>Провайдеры</div>
+              ) : null}
+              <ProviderList selectProvider={selectProvider} />
+            </>
+          )}
         </div>
         <div className={styles.footer}>
           <Button elType="outlined" onClick={resetFilter}>
