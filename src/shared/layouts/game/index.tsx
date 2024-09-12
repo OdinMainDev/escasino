@@ -18,12 +18,12 @@ const GameLayout = ({ children, gameTitle }: IProps) => {
   return (
     <div
       className={classNames(styles.container, {
-        [styles.mobileHirizont]: isMobile && !isPortrait,
+        [styles.isPhoneHorizontal]: isMobile && !isPortrait,
       })}
     >
-      <PageHeader title={gameTitle} />
+      <PageHeader title={gameTitle} isPhoneHorizontal={isMobile && !isPortrait} />
       {children}
-      <Footer isHidden={!isAuth} />
+      <Footer isHidden={!isAuth} isPhoneHorizontal={isMobile && !isPortrait} />
     </div>
   );
 };

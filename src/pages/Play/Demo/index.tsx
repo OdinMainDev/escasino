@@ -14,6 +14,8 @@ import { isAppDebug } from '@/app/config/app';
 import Loader from '@/shared/ui/Loader';
 import ModalOpenReal from './ui/ModalOpenReal';
 import { useModal } from '@/app/providers/ModalProvider';
+import classNames from 'classnames';
+import useOrientation from '@/shared/hooks/useOrientation';
 
 export default function Demo() {
   const [demoUrl, setDemoUrl] = useState<string>('');
@@ -22,6 +24,7 @@ export default function Demo() {
   const { doOpenModal, doCloseModals } = useModal();
   const { isAuth } = useAuthProvider();
   const router = useRouter();
+  const { isMobile, isPortrait } = useOrientation();
 
   useEffect(() => {
     const getDemo = async () => {
@@ -57,7 +60,11 @@ export default function Demo() {
   return (
     <GameLayout gameTitle={headerTitle}>
       <>
-        <div className={styles.games_table}>
+        <div
+          className={classNames(styles.games_table, {
+            [styles.isPhoneHorizontal]: isMobile && !isPortrait,
+          })}
+        >
           {!demoUrl || demoUrl == '' ? (
             <div className={styles.not_found}>
               <Loader />

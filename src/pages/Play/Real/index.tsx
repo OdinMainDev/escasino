@@ -10,12 +10,15 @@ import { getRealApi } from '@/app/api/play/getReal';
 import { getGameApi } from '@/app/api/games/getGameById';
 import { useRouter } from '@/shared/helpers/navigation';
 import Loader from '@/shared/ui/Loader';
+import classNames from 'classnames';
+import useOrientation from '@/shared/hooks/useOrientation';
 // import { isAppDebug } from '@/app/config/app';
 
 export default function Real() {
   const [loading, setLoading] = useState(false);
   const [realUrl, setRealUrl] = useState<string>('');
   const [headerTitle, setHeaderTitle] = useState<string>('');
+  const { isMobile, isPortrait } = useOrientation();
   const { id } = useParams();
   const router = useRouter();
   useEffect(() => {
@@ -42,7 +45,11 @@ export default function Real() {
 
   return (
     <GameLayout gameTitle={headerTitle}>
-      <div className={styles.games_table}>
+      <div
+        className={classNames(styles.games_table, {
+          [styles.isPhoneHorizontal]: isMobile && !isPortrait,
+        })}
+      >
         {loading ? (
           <div className={styles.not_found}>
             <Loader />

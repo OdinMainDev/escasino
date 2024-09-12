@@ -1,15 +1,18 @@
+import classNames from 'classnames';
 import { FooterAuthButtons, FooterAuthModal } from './Auth';
 import styles from './Footer.module.scss';
-import FooterSelect from './FooterSelect';
+import { CurrencyInfo } from '@/features/CurrencyInfo';
 import { UserIcon, Wallet } from './Icons';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
 import Loader from '@/shared/ui/Loader';
+import ChatIcon from '@/widgets/Header/ui/ChatIcon';
 
 type FooterProps = {
   isHidden?: boolean;
+  isPhoneHorizontal?: boolean;
 };
 
-export const Footer = ({ isHidden }: FooterProps) => {
+export const Footer = ({ isHidden, isPhoneHorizontal }: FooterProps) => {
   const { isAuth, loading } = useAuthProvider();
   if (loading) {
     return footerLoading();
@@ -23,12 +26,16 @@ export const Footer = ({ isHidden }: FooterProps) => {
     );
   }
   return (
-    <div className={styles.container}>
+    <div
+      className={classNames(styles.container, {
+        [styles.isPhoneHorizontal]: isPhoneHorizontal,
+      })}
+    >
       <div className={styles.footer_container}>
         {isAuth ? (
           // Меню если авторизован
           <div className={styles.footer}>
-            <FooterSelect />
+            {isPhoneHorizontal ? <ChatIcon /> : <CurrencyInfo />}
             <div className={styles.icons}>
               <UserIcon />
               <Wallet />

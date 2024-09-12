@@ -5,6 +5,21 @@
   position: fixed;
   max-width: var(--desktop-max-width);
   z-index: 1;
+  &.isPhoneHorizontal {
+    height: 100vh;
+    width: 82px;
+    right: 0;
+    .footer_container {
+      flex-direction: column;
+      height: 100vh;
+      .footer {
+        flex-direction: column;
+        .icons {
+          flex-direction: column;
+        }
+      }
+    }
+  }
 }
 
 .footer {

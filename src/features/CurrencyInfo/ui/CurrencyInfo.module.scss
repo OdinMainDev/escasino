@@ -7,6 +7,15 @@
   position: relative;
   border-radius: 4px;
   cursor: pointer;
+
+  &.isPhoneHorizontal {
+    transform: rotate(-90deg) translateX(70px);
+    &.active {
+      .menu {
+        transform: translateY(226px);
+      }
+    }
+  }
   &.active {
     .arrow {
       transform: translateY(-50%) rotate(180deg);

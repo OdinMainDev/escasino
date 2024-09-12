@@ -2,8 +2,22 @@ import '@/app/assets/styles/global.scss';
 import './styles.scss';
 import './preloader.scss';
 import { Outlet } from 'react-router-dom';
+import useOrientation from '@/shared/hooks/useOrientation';
+import { usePathname } from '@/shared/helpers/navigation';
+import { useEffect } from 'react';
 
 const Layout = () => {
+  const { isMobile, isPortrait } = useOrientation();
+  const pathname = usePathname();
+  const isGamePage = pathname.includes('/play/');
+
+  useEffect(() => {
+    const body = document.body;
+    if (isGamePage && isMobile && !isPortrait) {
+      body.style.setProperty('--desktop-max-width', 'none');
+    }
+  }, [isGamePage, isMobile, isPortrait]);
+
   return (
     <div>
       {/* <div className="device">
@@ -19,7 +33,7 @@ const Layout = () => {
         <div className="device__g"></div>
       </div> */}
       <div className="desktop-container">
-        <div className="desktop-wrapper">
+        <div className={'desktop-wrapper'}>
           <Outlet />
         </div>
       </div>

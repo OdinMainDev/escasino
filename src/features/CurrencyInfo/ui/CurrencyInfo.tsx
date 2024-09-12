@@ -1,16 +1,17 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 
-import styles from './FooterSelect.module.scss';
+import styles from './CurrencyInfo.module.scss';
 import { useAppSelector } from '@/store/hooks/redux';
 
-const FooterSelect = () => {
+const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) => {
   const { user } = useAppSelector((state) => state.userReducer);
   const [openBalance, setIsOpenBalance] = useState<boolean>(false);
   return (
     <div
       className={classNames(styles.container, {
         [styles.active]: openBalance,
+        [styles.isPhoneHorizontal]: isPhoneHorizontal,
       })}
       onClick={() => setIsOpenBalance((prev) => !prev)}
     >
@@ -61,4 +62,4 @@ const FooterSelect = () => {
   );
 };
 
-export default FooterSelect;
+export default CurrencyInfo;
