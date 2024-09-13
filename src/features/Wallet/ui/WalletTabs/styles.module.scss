@@ -191,6 +191,8 @@
 .slider {
   display: flex;
   overflow-x: auto;
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
   gap: 10px;
   margin-bottom: 25px;
   &::-webkit-scrollbar {

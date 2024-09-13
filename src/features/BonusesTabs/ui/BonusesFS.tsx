@@ -5,6 +5,8 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 're
 import classNames from 'classnames';
 import { useAppSelector } from '@/store/hooks/redux';
 import { removeDuplicatesByBet, removeDuplicatesBySpinsCount } from '../helpers/removeDuplicates';
+import { ITab } from '@/entities/Tabs';
+import { TabItem } from '@/entities/TabItem';
 
 interface IProps {
   bonusesTemplates: IBonusTemplate[];
@@ -20,7 +22,18 @@ export interface IBonusFSMethods {
 
 const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
   ({ bonusesTemplates, fsChangeHandler, gameId, minAmount, maxAmount }, ref) => {
+    const tabs: ITab[] = [
+      {
+        label: 'Макс FS',
+        value: 'fs',
+      },
+      {
+        label: 'Макс ставка',
+        value: 'bet',
+      },
+    ];
     const [selectedBetIndex, setSelectedBetIndex] = useState<number>(0);
+    const [selectedTab, setSelectedTab] = useState<ITab>(tabs[0]);
     const [selectedSpinsIndex, setSelectedSpinsIndex] = useState<number>(0);
     const [betTemplates, setBetTemplates] = useState<IBonusTemplate[]>([]);
     const [filtredBonuses, setFiltredBonuses] = useState<IBonusTemplate[]>([]);
@@ -34,6 +47,25 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         clearBonusFSSwiper,
       };
     });
+
+    const selectMaxValue = (type: string | number) => {
+      console.log('type', type);
+      if (type === 'bet' && betSwiper.current) {
+        const maxIndex = betTemplates.reduce(
+          (maxIdx, currVal, idx, arr) =>
+            currVal.configurator.bet_amount > arr[maxIdx].configurator.bet_amount ? idx : maxIdx,
+          0,
+        );
+        betSwiper.current.swiper?.slideToLoop(maxIndex, 400);
+      } else if (spinsSwiper.current && type === 'fs') {
+        const maxIndex = spinsTemplates.reduce(
+          (maxIdx, currVal, idx, arr) =>
+            currVal.configurator.bet_amount > arr[maxIdx].spins_count ? idx : maxIdx,
+          0,
+        );
+        spinsSwiper.current.swiper?.slideToLoop(maxIndex, 400);
+      }
+    };
 
     const clearBonusFSSwiper = () => {
       if (betSwiper.current) {
@@ -123,25 +155,8 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     }, [bonusesTemplates, cartBonuses, gameId, minAmount, maxAmount]);
 
     useEffect(() => {
-      setTimeout(() => {
-        if (betSwiper.current) {
-          const maxIndex = betTemplates.reduce(
-            (maxIdx, currVal, idx, arr) =>
-              currVal.configurator.bet_amount > arr[maxIdx].configurator.bet_amount ? idx : maxIdx,
-            0,
-          );
-          betSwiper.current.swiper?.slideToLoop(maxIndex, 400);
-        }
-        if (spinsSwiper.current) {
-          const maxIndex = spinsTemplates.reduce(
-            (maxIdx, currVal, idx, arr) =>
-              currVal.configurator.bet_amount > arr[maxIdx].configurator.bet_amount ? idx : maxIdx,
-            0,
-          );
-          spinsSwiper.current.swiper?.slideToLoop(maxIndex, 400);
-        }
-      }, 1000);
       // selectBet(spinsSwiper.current.swiper);
+      selectMaxValue(selectedTab.value);
       if (filtredBonuses.length > 0) {
         fsChangeHandler(filtredBonuses[0].id);
       }
@@ -210,6 +225,22 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     return (
       <div>
+        <div className={styles.settings_title}>Настройки бонуса</div>
+        <div className={styles.settings_tabs}>
+          {tabs.map((item, index) => (
+            <TabItem
+              selected={item.value === selectedTab.value}
+              onClick={() => {
+                setSelectedTab(item);
+                selectMaxValue(item.value);
+              }}
+              key={index}
+            >
+              {item.label}
+            </TabItem>
+          ))}
+        </div>
+
         <div className={styles.settings_labels}>
           <div>Ставка</div>
           <div>Кол-во FS</div>

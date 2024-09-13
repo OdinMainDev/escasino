@@ -10,28 +10,30 @@
   <body>
     <div id="root"></div>
     <div
-        id="essupport" 
-        data-api-token="8a99fb2f-1bb9-424b-a1d9-8243c01dddb9" 
-        data-user-token="" 
-        data-language="ru"
-    ></div>
-    <script defer>
-      function getCookie(name) {
-          let value = "; " + document.cookie;
-          let parts = value.split("; " + name + "=");
-          if (parts.length === 2) return parts.pop().split(";").shift();
-      }
+    id="essupport" 
+    data-user-token="" 
+    data-language="ru"
+></div>
+  <script type="module">
+    document.getElementById("essupport").setAttribute("data-api-token", import.meta.env.VITE_APP_CHAT_API_TOKEN);
+  </script>
+  <script defer>
+    function getCookie(name) {
+        let value = "; " + document.cookie;
+        let parts = value.split("; " + name + "=");
+        if (parts.length === 2) return parts.pop().split(";").shift();
+    }
 
-      function setUserToken() {
-          const userToken = getCookie('atoken');
-          const supportDiv = document.getElementById('essupport');
+    function setUserToken() {
+        const userToken = getCookie('atoken');
+        const supportDiv = document.getElementById('essupport');
 
-          if (supportDiv && userToken) {
-            supportDiv.setAttribute('data-user-token', userToken);
-          }
-      }
+        if (supportDiv && userToken) {
+          supportDiv.setAttribute('data-user-token', userToken);
+        }
+    }
 
-      setUserToken();
+    setUserToken();
   </script>
   <script type="module" src="/src/main.tsx"></script>
 

@@ -362,7 +362,7 @@ const Bonuses = () => {
               </div>
             )}
             <div className={styles.settings}>
-              {tabs.length > 0 && (
+              {tabs.length > 1 && (
                 <>
                   <div className={styles.settings_title}>Тип бонуса</div>
                   <div className={styles.settings_tabs}>
