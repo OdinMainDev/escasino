@@ -30,6 +30,9 @@
       }
     }
   }
+  &.isMobileSafari {
+    transform: rotate(-90deg) translateX(140px);
+  }
   &.active {
     .arrow {
       transform: translateY(-50%) rotate(180deg);

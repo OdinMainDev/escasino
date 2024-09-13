@@ -23,6 +23,15 @@
       }
     }
   }
+  &.isMobileSafari {
+    .footer_container {
+      .footer {
+        .icons {
+          margin-bottom: 65px;
+        }
+      }
+    }
+  }
 }
 
 .footer {

@@ -6,6 +6,7 @@ import { UserIcon, Wallet } from './Icons';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
 import Loader from '@/shared/ui/Loader';
 import ChatIcon from '@/widgets/Header/ui/ChatIcon';
+import useBrowserInfo from '@/shared/hooks/useBrowserInfo';
 
 type FooterProps = {
   isHidden?: boolean;
@@ -14,6 +15,7 @@ type FooterProps = {
 
 export const Footer = ({ isHidden, isPhoneHorizontal }: FooterProps) => {
   const { isAuth, loading } = useAuthProvider();
+  const browserInfo = useBrowserInfo();
   if (loading) {
     return footerLoading();
   }
@@ -47,6 +49,7 @@ export const Footer = ({ isHidden, isPhoneHorizontal }: FooterProps) => {
     <div
       className={classNames(styles.container, {
         [styles.isPhoneHorizontal]: isPhoneHorizontal,
+        [styles.isMobileSafari]: browserInfo.name === 'Safari' && isPhoneHorizontal,
       })}
     >
       <div className={styles.footer_container}>

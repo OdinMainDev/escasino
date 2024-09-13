@@ -3,15 +3,18 @@ import { useState } from 'react';
 
 import styles from './CurrencyInfo.module.scss';
 import { useAppSelector } from '@/store/hooks/redux';
+import useBrowserInfo from '@/shared/hooks/useBrowserInfo';
 
 const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) => {
   const { user } = useAppSelector((state) => state.userReducer);
   const [openBalance, setIsOpenBalance] = useState<boolean>(false);
+  const browserInfo = useBrowserInfo();
   return (
     <div
       className={classNames(styles.container, {
         [styles.active]: openBalance,
         [styles.isPhoneHorizontal]: isPhoneHorizontal,
+        [styles.isMobileSafari]: browserInfo.name === 'Safari' && isPhoneHorizontal,
       })}
       onClick={() => setIsOpenBalance((prev) => !prev)}
     >
