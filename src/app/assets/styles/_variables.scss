@@ -1,5 +1,12 @@
 
 //LIGHT THEME
+:root {
+  --desktop-max-width: 568px;
+  --vh: 100vh;
+  @media (max-width: 780px) {
+    --desktop-max-width: none;
+  }
+}
 body {
   --primary: #F5F5F5;
   --secondary: #161616;
@@ -33,10 +40,6 @@ body {
   --tab-primary: #252525;
   --tab-secondary: #E8E8E8;
   --tab-thrid: #252525;
-  --desktop-max-width: 568px;
-  @media (max-width: 780px) {
-    --desktop-max-width: none;
-  }
 }
 
 // DARK THEME
@@ -73,10 +76,4 @@ body.dark {
   --tab-primary: #000;
   --tab-secondary: #333;
   --tab-thrid: #e0e0e0;
-
-
-  --desktop-max-width: 568px;
-  @media (max-width: 780px) {
-    --desktop-max-width: none;
-  }
 }

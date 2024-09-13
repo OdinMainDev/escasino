@@ -191,10 +191,10 @@
 .slider {
   display: flex;
   overflow-x: auto;
-  scrollbar-width: none; 
-  -ms-overflow-style: none; 
   gap: 10px;
   margin-bottom: 25px;
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
   &::-webkit-scrollbar {
     display: none;
   }

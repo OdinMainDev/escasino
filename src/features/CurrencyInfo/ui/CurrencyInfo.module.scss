@@ -9,7 +9,7 @@
   cursor: pointer;
 
   &.isPhoneHorizontal {
-    transform: rotate(-90deg) translateX(70px);
+    transform: rotate(-90deg) translateX(110px);
     &.active {
       .menu {
         transform: translateY(226px);

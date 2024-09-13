@@ -12,11 +12,25 @@ const Layout = () => {
   const isGamePage = pathname.includes('/play/');
 
   useEffect(() => {
-    const body = document.body;
+    const body = document.documentElement;
     if (isGamePage && isMobile && !isPortrait) {
       body.style.setProperty('--desktop-max-width', 'none');
     }
   }, [isGamePage, isMobile, isPortrait]);
+
+  useEffect(() => {
+    const setViewportHeight = () => {
+      const vh = window.innerHeight;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    setViewportHeight();
+    window.addEventListener('resize', setViewportHeight);
+
+    return () => {
+      window.removeEventListener('resize', setViewportHeight);
+    };
+  }, []);
 
   return (
     <div>

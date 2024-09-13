@@ -10,8 +10,12 @@
   flex: 1;
   padding-bottom: 82px;
   &.isPhoneHorizontal {
-    padding-bottom: 0;
+    padding-bottom: 43px;
     padding-right: 82px;
+  }
+
+  &.isPhone {
+    padding-bottom: 164px;
   }
 }
 

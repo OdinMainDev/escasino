@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import styles from './styles.module.scss';
+import styles from '../styles.module.scss';
 
 // import { GamesGrid } from '@/widgets/Games/ui/Grid';
 import GameLayout from '@/shared/layouts/game';
@@ -63,6 +63,7 @@ export default function Demo() {
         <div
           className={classNames(styles.games_table, {
             [styles.isPhoneHorizontal]: isMobile && !isPortrait,
+            [styles.isPhone]: isMobile && isPortrait,
           })}
         >
           {!demoUrl || demoUrl == '' ? (
