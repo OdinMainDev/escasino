@@ -18,6 +18,22 @@ export const Footer = ({ isHidden, isPhoneHorizontal }: FooterProps) => {
     return footerLoading();
   }
 
+  if (isHidden && isPhoneHorizontal) {
+    return (
+      <div
+        className={classNames(styles.container, {
+          [styles.isPhoneHorizontal]: isPhoneHorizontal,
+        })}
+      >
+        <div className={styles.footer_container}>
+          <div className={styles.footer}>
+            <ChatIcon />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (isHidden) {
     return (
       <>
@@ -25,6 +41,8 @@ export const Footer = ({ isHidden, isPhoneHorizontal }: FooterProps) => {
       </>
     );
   }
+
+  console.log(isAuth);
   return (
     <div
       className={classNames(styles.container, {

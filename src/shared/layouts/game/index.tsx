@@ -6,6 +6,7 @@ import { PageHeader } from '@/widgets/Header';
 import Footer from '@/widgets/Footer';
 import useOrientation from '@/shared/hooks/useOrientation';
 import classNames from 'classnames';
+import { usePathname } from '@/shared/helpers/navigation';
 
 interface IProps {
   children: ReactNode;
@@ -14,16 +15,20 @@ interface IProps {
 
 const GameLayout = ({ children, gameTitle }: IProps) => {
   const { isAuth } = useAuthProvider();
+  const pathname = usePathname();
   const { isMobile, isPortrait } = useOrientation();
+  const isGamePage = pathname.includes('/play/');
+
+  const isPhoneHorizontal = isMobile && !isPortrait && isGamePage;
   return (
     <div
       className={classNames(styles.container, {
-        [styles.isPhoneHorizontal]: isMobile && !isPortrait,
+        [styles.isPhoneHorizontal]: isPhoneHorizontal,
       })}
     >
-      <PageHeader title={gameTitle} isPhoneHorizontal={isMobile && !isPortrait} />
+      <PageHeader title={gameTitle} isPhoneHorizontal={isPhoneHorizontal} />
       {children}
-      <Footer isHidden={!isAuth} isPhoneHorizontal={isMobile && !isPortrait} />
+      <Footer isHidden={!isAuth} isPhoneHorizontal={isPhoneHorizontal} />
     </div>
   );
 };
