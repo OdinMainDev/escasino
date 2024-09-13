@@ -356,7 +356,7 @@ const Bonuses = () => {
                 </div>
               )
             ) : null}
-            {selectedGame?.id === settings?.bonus.default_game_id && (
+            {selectedGame?.id === settings?.bonus.default_game_id && selectedTab !== 'money' && (
               <div className="mb-[25px]">
                 <BonusesGames games={availGames} />
               </div>

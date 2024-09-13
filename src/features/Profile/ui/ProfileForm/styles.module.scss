@@ -25,7 +25,6 @@
 
 .email_container {
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  padding-bottom: 24px;
   margin-bottom: 24px;
 }
 
@@ -36,16 +35,10 @@
 
 .email_title {
   margin-bottom: 24px;
-  &:last-child {
-    margin-bottom: 0;
-  }
 }
 
 .input {
   margin-bottom: 24px;
-  &:last-child {
-    margin-bottom: 0;
-  }
 }
 
 .email {
@@ -68,9 +61,6 @@
     line-height: 20px;
     width: 100%;
     margin-bottom: 24px;
-    &:last-child {
-      margin-bottom: 0;
-    }
   }
 }
 

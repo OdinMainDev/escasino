@@ -33,8 +33,8 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       },
     ];
     const [selectedBetIndex, setSelectedBetIndex] = useState<number>(0);
-    const [selectedTabs, setSelectedTabs] = useState<ITab[]>([]);
     const [selectedSpinsIndex, setSelectedSpinsIndex] = useState<number>(0);
+    const [selectedTabs, setSelectedTabs] = useState<ITab[]>([]);
     const [betTemplates, setBetTemplates] = useState<IBonusTemplate[]>([]);
     const [filtredBonuses, setFiltredBonuses] = useState<IBonusTemplate[]>([]);
     const [spinsTemplates, setSpinsTemplates] = useState<IBonusTemplate[]>([]);
@@ -74,7 +74,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       } else {
         unSelectMaxValue(selectedTab);
       }
-    }, [selectedBetIndex, betTemplates]);
+    }, [selectedBetIndex]);
 
     useEffect(() => {
       const selectedTab = tabs[0];
@@ -85,7 +85,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       } else {
         unSelectMaxValue(selectedTab);
       }
-    }, [selectedSpinsIndex, spinsTemplates]);
+    }, [selectedSpinsIndex]);
 
     const clearBonusFSSwiper = () => {
       if (betSwiper.current) {
