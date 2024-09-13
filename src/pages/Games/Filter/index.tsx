@@ -17,7 +17,6 @@ const Filter = () => {
   const { categories } = useAppSelector((state) => state.gameCategoriesReducer);
   const { providers } = useAppSelector((state) => state.gameProvidersReducer);
   const [withBonuses, setWithBonuses] = useState<boolean>(getFilters().is_game_avail_for_bonus);
-  const withProviders = import.meta.env.VITE_APP_WITH_PROVIDERS === 'true';
 
   const selectCategory = useCallback((selectedCategory: string) => {
     const category = getFilters().categories.find((item) => item === selectedCategory);
@@ -104,7 +103,7 @@ const Filter = () => {
           <CategoriesList selectCategory={selectCategory} />
         </div>
         <div className={styles.provider}>
-          {withProviders && (
+          {providers && providers?.length > 0 && (
             <>
               {providers && providers.length > 0 ? (
                 <div className={styles.subtitle}>Провайдеры</div>
