@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 
 const useOrientation = (): { isPortrait: boolean; isMobile: boolean } => {
-  const [isPortrait, setIsPortrait] = useState<boolean>(false);
-  const [isMobile, setIsMobile] = useState<boolean>(true);
+  const [isPortrait, setIsPortrait] = useState<boolean>(
+    window.matchMedia('(orientation: portrait)').matches,
+  );
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
     const checkIfMobile = () => {
