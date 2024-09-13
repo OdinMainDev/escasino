@@ -24,9 +24,9 @@
 }
 
 .email_container {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 24px 0;
+  padding-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .user_names {
@@ -68,6 +68,9 @@
     line-height: 20px;
     width: 100%;
     margin-bottom: 24px;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 

@@ -33,7 +33,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       },
     ];
     const [selectedBetIndex, setSelectedBetIndex] = useState<number>(0);
-    const [selectedTab, setSelectedTab] = useState<ITab>(tabs[0]);
+    const [selectedTabs, setSelectedTabs] = useState<ITab[]>([]);
     const [selectedSpinsIndex, setSelectedSpinsIndex] = useState<number>(0);
     const [betTemplates, setBetTemplates] = useState<IBonusTemplate[]>([]);
     const [filtredBonuses, setFiltredBonuses] = useState<IBonusTemplate[]>([]);
@@ -48,24 +48,44 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       };
     });
 
-    const selectMaxValue = (type: string | number) => {
-      console.log('type', type);
-      if (type === 'bet' && betSwiper.current) {
-        const maxIndex = betTemplates.reduce(
-          (maxIdx, currVal, idx, arr) =>
-            currVal.configurator.bet_amount > arr[maxIdx].configurator.bet_amount ? idx : maxIdx,
-          0,
-        );
+    const selectMaxValue = (newTab: ITab) => {
+      if (newTab.value === 'bet' && betSwiper.current) {
+        const maxIndex = betTemplates.length - 1;
         betSwiper.current.swiper?.slideToLoop(maxIndex, 400);
-      } else if (spinsSwiper.current && type === 'fs') {
-        const maxIndex = spinsTemplates.reduce(
-          (maxIdx, currVal, idx, arr) =>
-            currVal.configurator.bet_amount > arr[maxIdx].spins_count ? idx : maxIdx,
-          0,
-        );
+      } else if (spinsSwiper.current && newTab.value === 'fs') {
+        const maxIndex = spinsTemplates.length - 1;
         spinsSwiper.current.swiper?.slideToLoop(maxIndex, 400);
       }
+      if (!selectedTabs.find((item) => item.value === newTab.value)) {
+        setSelectedTabs((prev) => [...prev, newTab]);
+      }
     };
+
+    const unSelectMaxValue = (tab: ITab) => {
+      setSelectedTabs((prev) => prev.filter((item) => item.value !== tab.value));
+    };
+
+    useEffect(() => {
+      const selectedTab = tabs[1];
+      if (betTemplates.length - 1 === selectedBetIndex) {
+        if (!selectedTabs.find((item) => item.value === selectedTab.value)) {
+          setSelectedTabs((prev) => [...prev, selectedTab]);
+        }
+      } else {
+        unSelectMaxValue(selectedTab);
+      }
+    }, [selectedBetIndex, betTemplates]);
+
+    useEffect(() => {
+      const selectedTab = tabs[0];
+      if (spinsTemplates.length - 1 === selectedSpinsIndex) {
+        if (!selectedTabs.find((item) => item.value === selectedTab.value)) {
+          setSelectedTabs((prev) => [...prev, selectedTab]);
+        }
+      } else {
+        unSelectMaxValue(selectedTab);
+      }
+    }, [selectedSpinsIndex, spinsTemplates]);
 
     const clearBonusFSSwiper = () => {
       if (betSwiper.current) {
@@ -156,7 +176,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     useEffect(() => {
       // selectBet(spinsSwiper.current.swiper);
-      selectMaxValue(selectedTab.value);
       if (filtredBonuses.length > 0) {
         fsChangeHandler(filtredBonuses[0].id);
       }
@@ -167,7 +186,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
         const selectedBetTemplate = betTemplates[realIndex];
-        console.log(selectedBetTemplate, realIndex);
         const selectedFsTemplates = removeDuplicatesBySpinsCount(
           filtredBonuses.filter(
             (item) => item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
@@ -229,10 +247,9 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         <div className={styles.settings_tabs}>
           {tabs.map((item, index) => (
             <TabItem
-              selected={item.value === selectedTab.value}
+              selected={!!selectedTabs.find((selected) => selected.value === item.value)}
               onClick={() => {
-                setSelectedTab(item);
-                selectMaxValue(item.value);
+                selectMaxValue(item);
               }}
               key={index}
             >

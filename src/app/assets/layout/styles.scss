@@ -25,6 +25,7 @@ body {
 }
 
 
+
 .desktop-wrapper {
   max-width: var(--desktop-max-width);
   height: 100vh;
@@ -33,4 +34,9 @@ body {
   margin: 0 auto;
   position: relative;
   background-color: var(--primary);
+  scrollbar-width: none;
+  -ms-overflow-style: none; 
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

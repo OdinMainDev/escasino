@@ -196,7 +196,7 @@
   gap: 10px;
   margin-bottom: 25px;
   &::-webkit-scrollbar {
-    height: 0;
+    display: none;
   }
 }
 
