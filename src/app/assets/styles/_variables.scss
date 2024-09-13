@@ -34,6 +34,9 @@ body {
   --tab-secondary: #E8E8E8;
   --tab-thrid: #252525;
   --desktop-max-width: 568px;
+  @media (max-width: 780px) {
+    --desktop-max-width: none;
+  }
 }
 
 // DARK THEME
@@ -73,4 +76,7 @@ body.dark {
 
 
   --desktop-max-width: 568px;
+  @media (max-width: 780px) {
+    --desktop-max-width: none;
+  }
 }
