@@ -218,6 +218,22 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
       </div>
     );
   }
+
+  const onClickGame = (item: IBonusesList, index: number) => {
+    if (!isMain) {
+      if (bonus?.status !== 2) {
+        const findedTemplate = bonus?.bonus_template.find((template) => template.id === item.id);
+        if (findedTemplate) {
+          const findedGames = games?.filter((item) => findedTemplate.game_ids.includes(item.id));
+          setTemplateGames(findedGames || []);
+          setOpenGamesModal(true);
+          setSelectedGame({ index, game_id: item.game_id });
+        }
+      }
+    } else {
+      router.push('/games/details/' + item.game_id);
+    }
+  };
   return (
     <div className={classNames(styles.container, className)}>
       <div className="flex items-center justify-between mb-[16px]">
@@ -265,25 +281,7 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
       </div>
       <div>
         {selectedGamesIds.map((item, index) => (
-          <BonusGame
-            key={index}
-            gameId={item.game_id}
-            onClick={() => {
-              if (bonus?.status !== 2) {
-                const findedTemplate = bonus?.bonus_template.find(
-                  (template) => template.id === item.id,
-                );
-                if (findedTemplate) {
-                  const findedGames = games?.filter((item) =>
-                    findedTemplate.game_ids.includes(item.id),
-                  );
-                  setTemplateGames(findedGames || []);
-                  setOpenGamesModal(true);
-                  setSelectedGame({ index, game_id: item.game_id });
-                }
-              }
-            }}
-          />
+          <BonusGame key={index} gameId={item.game_id} onClick={() => onClickGame(item, index)} />
         ))}
       </div>
       <div className={styles.buttons}>{getButton()}</div>

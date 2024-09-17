@@ -170,16 +170,20 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         .sort((a, b) => a.spins_count - b.spins_count);
 
       setFiltredBonuses(filteredTemplates);
+      if ((uniqueBetTemplates.length > 0, uniqueSpinsTemplates.length > 0)) {
+        const findedTemplate = filteredTemplates.find(
+          (item) =>
+            item.configurator.bet_amount === uniqueBetTemplates[0].configurator.bet_amount &&
+            item.spins_count === uniqueSpinsTemplates[0].spins_count,
+        );
+        if (findedTemplate) {
+          fsChangeHandler(findedTemplate.id);
+        }
+      }
+
       setBetTemplates(uniqueBetTemplates);
       setSpinsTemplates(uniqueSpinsTemplates);
     }, [bonusesTemplates, cartBonuses, gameId, minAmount, maxAmount]);
-
-    useEffect(() => {
-      // selectBet(spinsSwiper.current.swiper);
-      if (filtredBonuses.length > 0) {
-        fsChangeHandler(filtredBonuses[0].id);
-      }
-    }, [filtredBonuses]);
 
     const selectBet = (swiper: SwiperClass | null) => {
       if (swiper) {
