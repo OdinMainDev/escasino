@@ -74,7 +74,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       } else {
         unSelectMaxValue(selectedTab);
       }
-    }, [selectedBetIndex]);
+    }, [selectedBetIndex, spinsTemplates]);
 
     useEffect(() => {
       const selectedTab = tabs[0];
@@ -85,7 +85,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       } else {
         unSelectMaxValue(selectedTab);
       }
-    }, [selectedSpinsIndex]);
+    }, [selectedSpinsIndex, spinsTemplates]);
 
     const clearBonusFSSwiper = () => {
       if (betSwiper.current) {
