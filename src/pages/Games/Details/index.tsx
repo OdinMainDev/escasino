@@ -52,9 +52,7 @@ const Details = () => {
       text: (
         <div>
           <div className="mb-[5px]">
-            {bonuses && bonuses.length > 0
-              ? `У вас есть ${bonuses[0].id} в игре Starburst XXXtreme.`
-              : null}
+            {bonuses && bonuses.length > 0 ? 'У вас есть активный бонус.' : null}
           </div>
           <div>Отыграйте их или откажитесь от бонуса.</div>
         </div>
