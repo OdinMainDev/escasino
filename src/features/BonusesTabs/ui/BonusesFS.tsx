@@ -241,6 +241,12 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       }
     };
 
+    useEffect(() => {
+      if (betSwiper.current) {
+        selectBet(betSwiper.current.swiper);
+      }
+    }, [betTemplates]);
+
     if (betTemplates?.length === 0 && spinsTemplates?.length === 0) {
       return <div className={styles.title}>К сожалению доступные комбинации закончились</div>;
     }
