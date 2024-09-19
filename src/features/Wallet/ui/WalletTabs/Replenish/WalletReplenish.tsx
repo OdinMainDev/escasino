@@ -77,7 +77,7 @@ const WalletReplenish = () => {
     title: 'Внимание!',
     text: (
       <div>
-        <div className="mb-[5px]">У вас есть 209 Free Spins в игре Starburst XXXtreme.</div>
+        <div className="mb-[5px]">У вас есть активный бонус.</div>
         <div>Отыграйте их или откажитесь от бонуса.</div>
       </div>
     ),
@@ -261,9 +261,7 @@ const WalletReplenish = () => {
               title: 'Внимание!',
               text: (
                 <div>
-                  <div className="mb-[5px]">
-                    У вас есть 209 Free Spins в игре Starburst XXXtreme.
-                  </div>
+                  <div className="mb-[5px]">У вас есть активный бонус.</div>
                   <div>Отыграйте их или откажитесь от бонуса.</div>
                 </div>
               ),
