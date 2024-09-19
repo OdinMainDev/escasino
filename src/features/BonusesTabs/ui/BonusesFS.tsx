@@ -24,12 +24,12 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
   ({ bonusesTemplates, fsChangeHandler, gameId, minAmount, maxAmount }, ref) => {
     const tabs: ITab[] = [
       {
-        label: 'Макс FS',
-        value: 'fs',
-      },
-      {
         label: 'Макс ставка',
         value: 'bet',
+      },
+      {
+        label: 'Макс FS',
+        value: 'fs',
       },
     ];
     const [selectedBetIndex, setSelectedBetIndex] = useState<number>(0);
@@ -48,12 +48,11 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       };
     });
 
-    const selectMaxValue = (newTab: ITab) => {
+    const selectMaxValue = (newTab: ITab, templates: IBonusTemplate[]) => {
+      const maxIndex = templates.length - 1;
       if (newTab.value === 'bet' && betSwiper.current) {
-        const maxIndex = betTemplates.length - 1;
         betSwiper.current.swiper?.slideToLoop(maxIndex, 400);
       } else if (spinsSwiper.current && newTab.value === 'fs') {
-        const maxIndex = spinsTemplates.length - 1;
         spinsSwiper.current.swiper?.slideToLoop(maxIndex, 400);
       }
       if (!selectedTabs.find((item) => item.value === newTab.value)) {
@@ -66,7 +65,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     };
 
     useEffect(() => {
-      const selectedTab = tabs[1];
+      const selectedTab = tabs[0];
       if (betTemplates.length - 1 === selectedBetIndex) {
         if (!selectedTabs.find((item) => item.value === selectedTab.value)) {
           setSelectedTabs((prev) => [...prev, selectedTab]);
@@ -74,10 +73,10 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       } else {
         unSelectMaxValue(selectedTab);
       }
-    }, [selectedBetIndex, spinsTemplates]);
+    }, [selectedBetIndex, betTemplates]);
 
     useEffect(() => {
-      const selectedTab = tabs[0];
+      const selectedTab = tabs[1];
       if (spinsTemplates.length - 1 === selectedSpinsIndex) {
         if (!selectedTabs.find((item) => item.value === selectedTab.value)) {
           setSelectedTabs((prev) => [...prev, selectedTab]);
@@ -185,7 +184,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       setSpinsTemplates(uniqueSpinsTemplates);
     }, [bonusesTemplates, cartBonuses, gameId, minAmount, maxAmount]);
 
-    const selectBet = (swiper: SwiperClass | null) => {
+    const selectBet = (swiper: SwiperClass | null, isFirst?: boolean) => {
       if (swiper) {
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
@@ -207,6 +206,9 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
         if (selectedBetTemplate && selectedFsTemplates[mainIndex]) {
           setSpinsTemplates(selectedFsTemplates);
+          if (selectedTabs.find((item) => item.value === 'fs') && !isFirst) {
+            selectMaxValue(tabs[1], selectedFsTemplates);
+          }
           const matchingTemplate = filtredBonuses.find(
             (template) =>
               template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
@@ -243,7 +245,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     useEffect(() => {
       if (betSwiper.current) {
-        selectBet(betSwiper.current.swiper);
+        selectBet(betSwiper.current.swiper, true);
       }
     }, [betTemplates]);
 
@@ -259,7 +261,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             <TabItem
               selected={!!selectedTabs.find((selected) => selected.value === item.value)}
               onClick={() => {
-                selectMaxValue(item);
+                selectMaxValue(item, item.value === 'bet' ? betTemplates : spinsTemplates);
               }}
               key={index}
             >
