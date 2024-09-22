@@ -52,7 +52,7 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
   const getBonusStatus = () => {
     switch (bonus?.status) {
       case 1:
-        return 'Не активный бонус';
+        return 'Неактивный бонус';
       case 2:
         return 'Активный бонус';
       case 3:
