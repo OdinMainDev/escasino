@@ -16,7 +16,7 @@ export const tabs: IBonusTabs[] = [
         value: 2,
       },
       {
-        label: 'Не активные',
+        label: 'Неактивные',
         value: 1,
       },
     ],
