@@ -78,7 +78,7 @@ const WalletReplenish = () => {
     text: (
       <div>
         <div className="mb-[5px]">У вас есть активный бонус.</div>
-        <div>Отыграйте их или откажитесь от бонуса.</div>
+        <div>Отыграйте его или откажитесь от бонуса.</div>
       </div>
     ),
     buttons: [
@@ -262,7 +262,7 @@ const WalletReplenish = () => {
               text: (
                 <div>
                   <div className="mb-[5px]">У вас есть активный бонус.</div>
-                  <div>Отыграйте их или откажитесь от бонуса.</div>
+                  <div>Отыграйте его или откажитесь от бонуса.</div>
                 </div>
               ),
               buttons: [

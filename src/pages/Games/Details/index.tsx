@@ -54,7 +54,7 @@ const Details = () => {
           <div className="mb-[5px]">
             {bonuses && bonuses.length > 0 ? 'У вас есть активный бонус.' : null}
           </div>
-          <div>Отыграйте их или откажитесь от бонуса.</div>
+          <div>Отыграйте его или откажитесь от бонуса.</div>
         </div>
       ),
       buttons: [
