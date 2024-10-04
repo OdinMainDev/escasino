@@ -3,6 +3,7 @@ export interface IGame {
   name: string;
   game_provider: string;
   has_bonus: boolean;
+  has_no_deposit_bonus: boolean;
   desktop_enabled: boolean;
   mobile_enabled: boolean;
   image: string;

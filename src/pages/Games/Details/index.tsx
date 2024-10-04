@@ -26,6 +26,7 @@ const Details = () => {
   const { id } = useParams();
   const { isAuth } = useAuthProvider();
   const router = useRouter();
+  const { noDepositsBonuses } = useAppSelector((state) => state.noDepositBonusesSlice);
   const { doOpenModal, doCloseModals } = useModal();
   const { bonuses } = useAppSelector((state) => state.bonusesSlice);
   const { settings } = useAppSelector((state) => state.settingsReducer);
@@ -147,6 +148,14 @@ const Details = () => {
     }
   };
 
+  const openNoDepositBonus = () => {
+    if (!isAuth) {
+      doOpenModal('login');
+      return;
+    }
+    router.push(`/bonus/nodeposit/${game?.id}`);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header_container}>
@@ -182,9 +191,15 @@ const Details = () => {
         <Button elType="contained" className={styles.button} onClick={openRealPlay}>
           Играть на деньги
         </Button>
-        {!game?.has_bonus ? (
-          ''
-        ) : (
+        {game?.has_no_deposit_bonus && noDepositsBonuses.length > 0 ? (
+          <Button
+            className={classNames(styles.button, styles.button_big)}
+            onClick={openNoDepositBonus}
+          >
+            <Icons icon="settings" />
+            <span>Сконфигурировать бездеп бонус</span>
+          </Button>
+        ) : game?.has_bonus ? (
           <Button
             elType="outlined"
             className={classNames(styles.button, styles.button_big)}
@@ -193,7 +208,7 @@ const Details = () => {
             <Icons icon="settings" />
             <span>Сконфигурировать бонус</span>
           </Button>
-        )}
+        ) : null}
       </div>
       <div className={styles.winnings}>
         <WinningsList />

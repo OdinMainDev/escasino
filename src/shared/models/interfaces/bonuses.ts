@@ -8,6 +8,18 @@ export interface IBonus {
   bonus_template: IBonusTemplate[];
 }
 
+export interface INoDepositBonus {
+  id: number;
+  created_at: number;
+}
+
+export interface INoDepositBonusReq {
+  id: number;
+  bonus_id: number;
+  game_id: number;
+  fid: string;
+}
+
 export interface IBonusData {
   bonuses_list: IBonusesList[];
   is_cancel: boolean;

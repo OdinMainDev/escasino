@@ -8,6 +8,7 @@ import { openPusherModal } from '@/store/slices/pusherSlice';
 import { PropsWithChildren, useEffect } from 'react';
 import { postSetMyActiveBonusApi } from '../api/bonuses/bonusesApi';
 import { getBonuses, resetBonuses } from '@/store/slices/bonusesSlices';
+import { getNodepositBonuses } from '@/store/slices/nodepositSlice';
 
 const PusherModalProvider = ({ children }: PropsWithChildren) => {
   const { settings } = useAppSelector((state) => state.settingsReducer);
@@ -99,6 +100,9 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
       });
       pusher.subscribe(user.pusher_id, 'bonus_complete', () => {
         dispatch(openPusherModal('bonus_complete'));
+      });
+      pusher.subscribe(user.pusher_id, 'do_update_nodeposit_bonuses', () => {
+        void dispatch(getNodepositBonuses());
       });
     }
   }, [dispatch, settings, user?.pusher_id]);

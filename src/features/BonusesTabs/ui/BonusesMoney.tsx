@@ -21,7 +21,6 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const moneySwiper = useRef<SwiperRef>(null);
     const cartBonuses = useAppSelector((state) => state.cartBonusesSlice.bonusesTemplates);
-    // const [filtredBonuses, setFiltredBonuses] = useState<IBonusTemplate[]>([]);
     const [sortedBonuses, setSortedBonuses] = useState<IBonusTemplate[]>([]);
     useImperativeHandle(ref, () => {
       return {

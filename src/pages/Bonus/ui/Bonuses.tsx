@@ -8,7 +8,11 @@ import Button from '@/shared/ui/Button';
 import { useRouter } from '@/shared/helpers/navigation';
 import { TabItem } from '@/entities/TabItem';
 import { getBonusTemplatesApi } from '@/app/api/bonuses/bonusesApi';
-import { IBonusTemplate, ICartBonusTemplate } from '@/shared/models/interfaces/bonuses';
+import {
+  IBonusTemplate,
+  ICartBonusTemplate,
+  INoDepositBonusReq,
+} from '@/shared/models/interfaces/bonuses';
 import { BonusesFS, BonusesGames, BonusesMoney } from '@/features/BonusesTabs';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
@@ -23,12 +27,20 @@ import { v4 as uuidv4 } from 'uuid';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
 import { PageHeader } from '@/widgets/Header';
 import { useTranslation } from 'react-i18next';
+import React from 'react';
+import { getVisitorId } from '@/shared/helpers/getVisitorId';
+import { activeNoDepositBonus } from '@/app/api/bonuses/noDepositBonusesApi';
 
-const Bonuses = () => {
+interface IProps {
+  isNoDeposit?: boolean;
+}
+
+const Bonuses = ({ isNoDeposit }: IProps) => {
   const { id } = useParams();
   const { user } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const { games } = useAppSelector((state) => state.gamesAllSlice);
+  const { noDepositsBonuses } = useAppSelector((state) => state.noDepositBonusesSlice);
   const {
     bonusesTemplates: cartBonuses,
     minAmount: minAmountCart,
@@ -231,6 +243,46 @@ const Bonuses = () => {
     doOpenModal('alert');
   };
 
+  const activeNoDeposit = async () => {
+    if (noDepositsBonuses.length > 0 && selectedTemplate) {
+      try {
+        const fid = await getVisitorId();
+        const data: INoDepositBonusReq = {
+          id: noDepositsBonuses[noDepositsBonuses.length - 1].id,
+          bonus_id: selectedTemplate.id,
+          game_id: Number(id),
+          fid,
+        };
+        await activeNoDepositBonus(data);
+        router.push('/bonus/list');
+        doCloseModals();
+      } catch (e) {
+        /* empty */
+      }
+    } else {
+      doCloseModals();
+    }
+  };
+
+  const selectNoDepositBonus = () => {
+    setAlertModalData({
+      title: 'Вы точно хотите получить именно этот бонус?',
+      buttons: [
+        {
+          text: 'Отмена',
+          type: 'outlined',
+          onClick: doCloseModals,
+        },
+        {
+          text: 'Получить',
+          type: 'contained',
+          onClick: () => void activeNoDeposit(),
+        },
+      ],
+    });
+    doOpenModal('alert');
+  };
+
   const bonusChangeHandler = useCallback(
     (id: number) => {
       const findedTemplate = bonusesTemplates.find((item) => item.id === id);
@@ -268,7 +320,7 @@ const Bonuses = () => {
   useEffect(() => {
     const getBonusesTemplates = async () => {
       try {
-        const { bonusesTemplates } = await getBonusTemplatesApi();
+        const { bonusesTemplates } = await getBonusTemplatesApi(isNoDeposit);
         setBonusesTemplates(bonusesTemplates);
       } catch (e) {
         openErrorModal();
@@ -317,7 +369,24 @@ const Bonuses = () => {
           </div>
         ) : (
           <>
-            {selectedTab !== 'money' ? (
+            {isNoDeposit && selectedGame ? (
+              <div className={styles.game}>
+                {selectedGame.image ? (
+                  <img
+                    src={selectedGame.image}
+                    alt={selectedGame.name}
+                    className={styles.game_image}
+                  />
+                ) : (
+                  <img
+                    src={PlaceholderImage}
+                    alt={selectedGame?.name}
+                    className={styles.game_image}
+                  />
+                )}
+                <div className={styles.game_title}>{selectedGame.name}</div>
+              </div>
+            ) : selectedTab !== 'money' ? (
               selectedGame ? (
                 <div className={styles.game}>
                   {selectedGame.image ? (
@@ -379,7 +448,16 @@ const Bonuses = () => {
                 </>
               )}
 
-              {selectedTab === 'money' ? (
+              {isNoDeposit ? (
+                <BonusesFS
+                  ref={bonusesFS}
+                  bonusesTemplates={bonusesTemplates}
+                  fsChangeHandler={bonusChangeHandler}
+                  gameId={selectedGame ? selectedGame.id : undefined}
+                  minAmount={minAmountCart}
+                  maxAmount={maxAmountCart}
+                />
+              ) : selectedTab === 'money' ? (
                 <BonusesMoney
                   ref={bonusesMoney}
                   moneyChangeHandler={bonusChangeHandler}
@@ -400,45 +478,51 @@ const Bonuses = () => {
             </div>
             <div className={styles.footer}>
               <div className={styles.footer_title}>Рассчитывается на основе настроек бонуса</div>
-              <div className="flex items-center gap-[16px]">
-                <div className={styles.footer_info}>
-                  <div className={styles.footer_label}>
-                    {minAmountCart !== 0 || maxAmountCart !== 0 ? 'Сумма депозита' : ''}
-                  </div>
-                  <div className={styles.footer_value}>
-                    {minAmountCart === 0 && maxAmountCart === 0 ? (
-                      ''
-                    ) : minAmountCart !== maxAmountCart ? (
-                      <>
-                        От {minAmountCart}{' '}
-                        {maxAmountCart !== 0
-                          ? `до ${maxAmountCart} ${user?.balance.currency}`
-                          : null}
-                      </>
-                    ) : (
-                      <>
-                        {minAmountCart} {user?.balance.currency}
-                      </>
-                    )}
-                  </div>
-                </div>
-                <Button className="flex-1 uppercase" onClick={addToBasketOrOpenModal}>
-                  {settings &&
-                  (settings?.bonus.max_bonuses_per_deposit === 1 ||
-                    (selectedTab === 'money' &&
-                      settings?.bonus.max_bonuses_money_per_deposit <=
-                        cartBonuses.filter((item) => item.type === 'money').length) ||
-                    (selectedTab === 'freespins' &&
-                      settings?.bonus.max_bonuses_freespins_per_deposit <=
-                        cartBonuses.filter((item) => item.type === 'freespins').length))
-                    ? 'Перейти к оплате'
-                    : settings?.bonus.max_bonuses_per_deposit === 0
-                      ? 'Добавить'
-                      : settings?.bonus.max_bonuses_per_deposit === cartBonuses.length
-                        ? 'Перейти к оплате'
-                        : 'Добавить'}
+              {isNoDeposit ? (
+                <Button className="flex-1 uppercase w-[100%]" onClick={selectNoDepositBonus}>
+                  Получить бездеп бонус
                 </Button>
-              </div>
+              ) : (
+                <div className="flex items-center gap-[16px]">
+                  <div className={styles.footer_info}>
+                    <div className={styles.footer_label}>
+                      {minAmountCart !== 0 || maxAmountCart !== 0 ? 'Сумма депозита' : ''}
+                    </div>
+                    <div className={styles.footer_value}>
+                      {minAmountCart === 0 && maxAmountCart === 0 ? (
+                        ''
+                      ) : minAmountCart !== maxAmountCart ? (
+                        <>
+                          От {minAmountCart}{' '}
+                          {maxAmountCart !== 0
+                            ? `до ${maxAmountCart} ${user?.balance.currency}`
+                            : null}
+                        </>
+                      ) : (
+                        <>
+                          {minAmountCart} {user?.balance.currency}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <Button className="flex-1 uppercase" onClick={addToBasketOrOpenModal}>
+                    {settings &&
+                    (settings?.bonus.max_bonuses_per_deposit === 1 ||
+                      (selectedTab === 'money' &&
+                        settings?.bonus.max_bonuses_money_per_deposit <=
+                          cartBonuses.filter((item) => item.type === 'money').length) ||
+                      (selectedTab === 'freespins' &&
+                        settings?.bonus.max_bonuses_freespins_per_deposit <=
+                          cartBonuses.filter((item) => item.type === 'freespins').length))
+                      ? 'Перейти к оплате'
+                      : settings?.bonus.max_bonuses_per_deposit === 0
+                        ? 'Добавить'
+                        : settings?.bonus.max_bonuses_per_deposit === cartBonuses.length
+                          ? 'Перейти к оплате'
+                          : 'Добавить'}
+                  </Button>
+                </div>
+              )}
             </div>
           </>
         )}

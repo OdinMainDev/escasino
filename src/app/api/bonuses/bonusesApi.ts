@@ -33,8 +33,13 @@ export interface IResponseBonusesTemplate {
   bonusesTemplates: IBonusTemplate[];
 }
 
-export const getBonusTemplatesApi = async (): Promise<IResponseBonusesTemplate> => {
+export const getBonusTemplatesApi = async (
+  is_no_deposit?: boolean,
+): Promise<IResponseBonusesTemplate> => {
   const { data, status } = await axios.get<{ data: IBonusTemplate[] }>(bonusTemplatesApi(), {
+    params: {
+      is_no_deposit,
+    },
     headers: {
       Authorization: `Bearer: ${Cookies.get('atoken')}`,
       'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',

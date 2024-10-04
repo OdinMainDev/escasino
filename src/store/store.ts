@@ -26,6 +26,7 @@ import bonusesSlices, { IInitialBonuses } from './slices/bonusesSlices';
 import gamesAllSlice, { IInitialGameAll } from './slices/gamesAll';
 import cartBonusesSlice, { IInitialCartBonuses } from './slices/cartBonusesSlice';
 import pusherReducer, { IInitialPusherState } from './slices/pusherSlice';
+import { IInitialNoDeposit, noDepositBonusesSlice } from './slices/nodepositSlice';
 
 interface IReducers {
   settingsReducer: IInitialSettings;
@@ -36,6 +37,7 @@ interface IReducers {
   countriesReducer: IInitialCountries;
   userReducer: IInitialUser;
   gamesAllSlice: IInitialGameAll;
+  noDepositBonusesSlice: IInitialNoDeposit;
   gameCategoriesReducer: IInitialGameCategories;
   gameProvidersReducer: IInitialGameProviders;
   billingGroupsReducer: IInitialBillingGroups;
@@ -55,6 +57,7 @@ const reducers: ReducersMapObject<IReducers> = {
   homeGamesReducer: homeGamesReducer,
   countriesReducer: countriesReducer,
   userReducer: userReducer,
+  noDepositBonusesSlice: noDepositBonusesSlice.reducer,
   gameCategoriesReducer: gameCategoriesReducer,
   gameProvidersReducer: gameProvidersReducer,
   billingGroupsReducer: billingGroupsReducer,
