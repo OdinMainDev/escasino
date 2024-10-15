@@ -58,7 +58,7 @@ export function useRouter() {
   const push = useCallback(
     (pathOrObj: string | IPushData) => {
       let url = '';
-      if (lang && !supportedLangs.includes(lang)) {
+      if (lang && supportedLangs.includes(lang)) {
         url = '/' + lang;
       }
       if (typeof pathOrObj === 'string') {
