@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import styles from './Form.module.scss';
@@ -47,9 +47,13 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
     countries,
   } = useAppSelector((state) => state.countriesReducer);
   const dispatch = useAppDispatch();
-  if (!loadingCountries && !isFinishedCountries) {
-    void dispatch(getCountries());
-  }
+
+  useEffect(() => {
+    if (!loadingCountries && !isFinishedCountries) {
+      void dispatch(getCountries());
+    }
+  }, [dispatch, isFinishedCountries, loadingCountries]);
+
   const formType =
     settings?.auth.register.phone && settings?.auth.register.email
       ? 'full'
