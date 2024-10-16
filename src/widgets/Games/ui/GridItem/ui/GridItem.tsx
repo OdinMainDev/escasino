@@ -16,16 +16,19 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
 
 const GridItem = ({ game, ...otherProps }: IProps) => {
   const router = useRouter();
+  const imagePath = game.system_name
+    ? `${import.meta.env.VITE_IMAGE_PATH}/${game.game_provider}/${import.meta.env.VITE_IMAGE_SIZE}/${game.system_name}.png`
+    : game.image;
   return (
     <div
       {...otherProps}
       className={styles.container}
       onClick={() => router.push(`/games/details/${game.id}`)}
     >
-      {game.image ? (
+      {imagePath ? (
         <LazyLoadImage
           alt={game.name}
-          src={game.image}
+          src={imagePath}
           wrapperClassName={styles.image}
           effect="opacity"
           placeholderSrc={ImgPlaceholder}

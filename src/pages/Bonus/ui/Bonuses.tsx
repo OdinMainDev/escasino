@@ -62,6 +62,11 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   const [alertModalData, setAlertModalData] = useState<IAlert>({});
   const [openGamesModal, setOpenGamesModal] = useState(false);
   const { t } = useTranslation();
+  const imagePath = selectedGame
+    ? selectedGame.system_name
+      ? `${import.meta.env.VITE_IMAGE_PATH}/${selectedGame.game_provider}/${import.meta.env.VITE_IMAGE_SIZE}/${selectedGame.system_name}.png`
+      : selectedGame.image
+    : '';
 
   const getBonusArray = useCallback((settings: ISettings | null) => {
     if (settings) {
@@ -371,12 +376,8 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
           <>
             {isNoDeposit && selectedGame ? (
               <div className={styles.game}>
-                {selectedGame.image ? (
-                  <img
-                    src={selectedGame.image}
-                    alt={selectedGame.name}
-                    className={styles.game_image}
-                  />
+                {imagePath ? (
+                  <img src={imagePath} alt={selectedGame.name} className={styles.game_image} />
                 ) : (
                   <img
                     src={PlaceholderImage}
@@ -389,12 +390,8 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
             ) : selectedTab !== 'money' ? (
               selectedGame ? (
                 <div className={styles.game}>
-                  {selectedGame.image ? (
-                    <img
-                      src={selectedGame.image}
-                      alt={selectedGame.name}
-                      className={styles.game_image}
-                    />
+                  {imagePath ? (
+                    <img src={imagePath} alt={selectedGame.name} className={styles.game_image} />
                   ) : (
                     <img
                       src={PlaceholderImage}

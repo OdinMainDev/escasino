@@ -23,7 +23,9 @@ const ActiveBonus = ({ template }: IProps) => {
       if (game.id != template.game_id) {
         return;
       }
-      image = game.image;
+      image = game.system_name
+        ? `${import.meta.env.VITE_IMAGE_PATH}/${game.game_provider}/${import.meta.env.VITE_IMAGE_SIZE}/${game.system_name}.png`
+        : game.image;
     });
   }
 

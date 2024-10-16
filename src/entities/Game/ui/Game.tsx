@@ -7,10 +7,13 @@ interface IProps extends BaseHTMLAttributes<HTMLElement> {
   game: IGame;
 }
 const Game = ({ game, ...otherProps }: IProps) => {
+  const imagePath = game.system_name
+    ? `${import.meta.env.VITE_IMAGE_PATH}/${game.game_provider}/${import.meta.env.VITE_IMAGE_SIZE}/${game.system_name}.png`
+    : game.image;
   return (
     <div className={styles.container} {...otherProps}>
-      {game.image ? (
-        <img className={styles.img} alt={game.name} src={game.image} />
+      {imagePath ? (
+        <img className={styles.img} alt={game.name} src={imagePath} />
       ) : (
         <img className={styles.img} alt={game.name} src={PlaceholderImage} />
       )}

@@ -10,6 +10,11 @@ interface IProps extends BaseHTMLAttributes<HTMLDivElement> {
 const BonusGame = ({ gameId, onClick }: IProps) => {
   const { games } = useAppSelector((state) => state.gamesAllSlice);
   const [game, setGame] = useState<IGame | null>(null);
+  const imagePath = game
+    ? game.system_name
+      ? `${import.meta.env.VITE_IMAGE_PATH}/${game.game_provider}/${import.meta.env.VITE_IMAGE_SIZE}/${game.system_name}.png`
+      : game.image
+    : '';
 
   useEffect(() => {
     if (gameId !== 0) {
@@ -30,7 +35,7 @@ const BonusGame = ({ gameId, onClick }: IProps) => {
   }
   return (
     <div className={styles.game} onClick={onClick}>
-      <img className={styles.game_img} alt="sw" src={game?.image ? game.image : PlaceholderImage} />
+      <img className={styles.game_img} alt="sw" src={imagePath ? imagePath : PlaceholderImage} />
       <div className="flex flex-col gap-[8px] flex-1">
         <div className={styles.game_subtitle}>{game?.game_provider}</div>
         <div className={styles.game_title}>{game?.name}</div>

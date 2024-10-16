@@ -35,12 +35,19 @@ const Details = () => {
   const [alertData, setAlertData] = useState<IAlert | null>(null);
   const dispatch = useAppDispatch();
   const currentLanguage = useCurrentLanguage();
-
+  const [imagePath, setImagePath] = useState('');
   useEffect(() => {
     if (Number(id) > 0) {
       const getGameById = async () => {
         const data = await getGameApi(Number(id));
         setGame(data?.game);
+        if (data.game) {
+          setImagePath(
+            data.game.system_name
+              ? `${import.meta.env.VITE_IMAGE_PATH}/${data.game.game_provider}/${import.meta.env.VITE_IMAGE_SIZE}/${data.game.system_name}.png`
+              : data.game.image,
+          );
+        }
       };
 
       void getGameById();
@@ -165,10 +172,10 @@ const Details = () => {
             [styles.cover]: gamesHeaderTypeCover,
           })}
         >
-          {game?.image ? (
+          {imagePath ? (
             <img
-              src={game.image}
-              alt={game.name}
+              src={imagePath}
+              alt={game?.name}
               className={classNames(styles.image, {
                 [styles.cover]: gamesHeaderTypeCover,
               })}

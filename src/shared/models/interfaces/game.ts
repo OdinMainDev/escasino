@@ -8,6 +8,7 @@ export interface IGame {
   mobile_enabled: boolean;
   image: string;
   data: IGameData;
+  system_name: string;
 }
 
 export interface IGameData {
