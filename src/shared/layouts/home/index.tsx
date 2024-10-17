@@ -12,7 +12,6 @@ const IndexLayout = ({ children }: IProps) => {
   return (
     <div className={styles.container}>
       <MainHeader />
-
       {children}
       <Footer />
     </div>

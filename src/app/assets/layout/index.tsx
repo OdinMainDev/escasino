@@ -32,6 +32,7 @@ const Layout = () => {
     };
   }, []);
 
+  console.log(import.meta.env.VITE_BACKGROUND_COLOR);
   return (
     <div>
       {/* <div className="device">
@@ -46,7 +47,10 @@ const Layout = () => {
         <div className="device__f"></div>
         <div className="device__g"></div>
       </div> */}
-      <div className="desktop-container">
+      <div
+        className="desktop-container"
+        style={{ backgroundColor: '#' + import.meta.env.VITE_BACKGROUND_COLOR }}
+      >
         <div className={'desktop-wrapper'}>
           <Outlet />
         </div>

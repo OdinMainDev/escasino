@@ -10,7 +10,10 @@ export const withdrawTransactionsApi = () => {
   return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/get/my/withdraw/transactions`;
 };
 
-export const getPaymentTransactions = async (page: number, dates: { start: Date; end: Date }): Promise<IHistoryItem[]> => {
+export const getPaymentTransactions = async (
+  page: number,
+  dates: { start: Date; end: Date },
+): Promise<IHistoryItem[]> => {
   try {
     const startDate = Math.floor(dates.start.getTime() / 1000);
     const endDate = Math.ceil(dates.end.getTime() / 1000);
@@ -34,7 +37,10 @@ export const getPaymentTransactions = async (page: number, dates: { start: Date;
   }
 };
 
-export const getWithdrawTransactions = async (page: number, dates: { start: Date; end: Date }): Promise<IHistoryItem[]> => {
+export const getWithdrawTransactions = async (
+  page: number,
+  dates: { start: Date; end: Date },
+): Promise<IHistoryItem[]> => {
   try {
     const startDate = Math.floor(dates.start.getTime() / 1000);
     const endDate = Math.ceil(dates.end.getTime() / 1000);
