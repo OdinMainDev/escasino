@@ -279,12 +279,13 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
               <SwiperSlide
                 className={classNames(styles.settings_data, {
                   [styles.active]: selectedBetIndex === index,
-                  [styles.blocked]: !bonusesTemplates.find(
-                    (item) =>
-                      item.configurator.bet_amount ===
-                        betTemplates[selectedBetIndex].configurator.bet_amount &&
-                      item.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
-                  ),
+                  [styles.blocked]:
+                    !bonusesTemplates.find(
+                      (item) =>
+                        item.configurator.bet_amount ===
+                          betTemplates[selectedBetIndex].configurator.bet_amount &&
+                        item.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
+                    ) && selectedBetIndex === index,
                 })}
                 key={index}
               >
@@ -324,12 +325,13 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
               <SwiperSlide
                 className={classNames(styles.settings_data, {
                   [styles.active]: selectedSpinsIndex === index,
-                  [styles.blocked]: !bonusesTemplates.find(
-                    (item) =>
-                      item.configurator.bet_amount ===
-                        betTemplates[selectedBetIndex].configurator.bet_amount &&
-                      item.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
-                  ),
+                  [styles.blocked]:
+                    !bonusesTemplates.find(
+                      (item) =>
+                        item.configurator.bet_amount ===
+                          betTemplates[selectedBetIndex].configurator.bet_amount &&
+                        item.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
+                    ) && selectedSpinsIndex === index,
                 })}
                 key={index}
               >

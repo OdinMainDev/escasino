@@ -471,20 +471,22 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
               )}
             </div>
             <div className={styles.footer}>
-              {isError && (
+              {isError ? (
                 <div className={styles.footer_error}>
                   Невозможная комбинация! Попробуйте другой вариант
                 </div>
-              )}
-
-              {!isNoDeposit && (
-                <div className={styles.footer_title}>Рассчитывается на основе настроек бонуса</div>
+              ) : (
+                !isNoDeposit && (
+                  <div className={styles.footer_title}>
+                    Рассчитывается на основе настроек бонуса
+                  </div>
+                )
               )}
 
               {isNoDeposit ? (
                 <Button
                   disabled={isError}
-                  className="flex-1 uppercase w-[100%]"
+                  className="flex-1 uppercase w-[100%] max-h-[47px]"
                   onClick={selectNoDepositBonus}
                 >
                   Получить бездеп бонус
