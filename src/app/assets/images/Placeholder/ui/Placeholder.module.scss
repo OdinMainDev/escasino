@@ -4,12 +4,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #333;
+  background: var(--placeholder-content);
   color: rgba(255, 255, 255, 0.87);
   text-transform: uppercase;
   font-size: 15px;
   font-weight: 600;
   text-align: center;
   padding: 20px;
-  background: url('@/app/assets/images/Placeholder/PlaceholderGame.png') center center/cover no-repeat;
 }

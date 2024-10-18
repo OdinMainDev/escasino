@@ -1,6 +1,5 @@
 import { ICartBonusTemplate } from '@/shared/models/interfaces/bonuses';
 import styles from './ActiveBonus.module.scss';
-import PlaceholderGame from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import Button from '@/shared/ui/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { deleteCartBonusesItem } from '@/store/slices/cartBonusesSlice';
@@ -17,7 +16,7 @@ const ActiveBonus = ({ template }: IProps) => {
       dispatch(deleteCartBonusesItem(template.uuid));
     }
   };
-  let image = PlaceholderGame;
+  let image;
   if (template?.game_id) {
     games?.forEach((game) => {
       if (game.id != template.game_id) {
@@ -30,12 +29,16 @@ const ActiveBonus = ({ template }: IProps) => {
   }
 
   if (template?.meta.image && template?.meta.image != '') {
-    image = template?.meta.image ?? PlaceholderGame;
+    image = template?.meta.image ?? null;
   }
   return (
     <div className={styles.container}>
       <div className="flex gap-[16px] items-center mb-[16px]">
-        <img src={image} alt="" className={styles.image} />
+        {image === null ? (
+          <div className={styles.image_empty}></div>
+        ) : (
+          <img src={image} alt="" className={styles.image} />
+        )}
         <div className={styles.info}>
           {template?.type !== 'money' && (
             <div className={styles.col}>

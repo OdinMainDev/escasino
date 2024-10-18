@@ -6,7 +6,6 @@ import styles from './GridItem.module.scss';
 
 import { useRouter } from '@/shared/helpers/navigation';
 import { PlaceholderGame } from '@/app/assets/images/Placeholder';
-import ImgPlaceholder from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import { IGame } from '@/shared/models/interfaces/game';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
@@ -31,7 +30,6 @@ const GridItem = ({ game, ...otherProps }: IProps) => {
           src={imagePath}
           wrapperClassName={styles.image}
           effect="opacity"
-          placeholderSrc={ImgPlaceholder}
         />
       ) : (
         <PlaceholderGame {...game} />

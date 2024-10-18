@@ -7,10 +7,13 @@
 .image {
   height: 104px;
   width: 104px;
+  &_empty {
+    background: var(--placeholder-content);
+  }
 }
 
 .info {
-  flex:1;
+  flex: 1;
   display: flex;
   gap: 16px;
 }

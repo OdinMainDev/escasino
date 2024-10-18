@@ -2,7 +2,7 @@ import { IGame } from '@/shared/models/interfaces/game';
 import styles from './BonusesItem.module.scss';
 import { BaseHTMLAttributes, useEffect, useState } from 'react';
 import { useAppSelector } from '@/store/hooks/redux';
-import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
+import classNames from 'classnames';
 
 interface IProps extends BaseHTMLAttributes<HTMLDivElement> {
   gameId: number;
@@ -25,7 +25,7 @@ const BonusGame = ({ gameId, onClick }: IProps) => {
   if (!game && gameId === 0) {
     return (
       <div className={styles.game} onClick={onClick}>
-        <img className={styles.game_img} alt="sw" src={PlaceholderImage} />
+        <div className={classNames(styles.game_img, styles.empty)} />
         <div className="flex flex-col gap-[8px] flex-1">
           <div className={styles.game_subtitle}>Выберите игру</div>
           <div className={styles.game_title}>Нажмите чтобы выбрать игру</div>
@@ -35,7 +35,11 @@ const BonusGame = ({ gameId, onClick }: IProps) => {
   }
   return (
     <div className={styles.game} onClick={onClick}>
-      <img className={styles.game_img} alt="sw" src={imagePath ? imagePath : PlaceholderImage} />
+      {imagePath ? (
+        <img className={styles.game_img} alt="sw" src={imagePath} />
+      ) : (
+        <div className={classNames(styles.game_img, styles.empty)} />
+      )}
       <div className="flex flex-col gap-[8px] flex-1">
         <div className={styles.game_subtitle}>{game?.game_provider}</div>
         <div className={styles.game_title}>{game?.name}</div>

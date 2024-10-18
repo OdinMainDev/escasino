@@ -1,6 +1,5 @@
 import { ICartBonusTemplate } from '@/shared/models/interfaces/bonuses';
 import styles from './BonusesTemplateItem.module.scss';
-import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import { BaseHTMLAttributes, useState } from 'react';
 import { useAppDispatch } from '@/store/hooks/redux';
 import { deleteCartBonusesItem } from '@/store/slices/cartBonusesSlice';
@@ -24,7 +23,7 @@ const BonusesTemplateItem = ({ template, games, ...otherProps }: IProps) => {
       const game = games?.find((game) => game.id === template.game_id);
       if (game?.image) return game.image;
     }
-    return PlaceholderImage;
+    return null;
   };
 
   const getGameName = () => {
@@ -75,7 +74,11 @@ const BonusesTemplateItem = ({ template, games, ...otherProps }: IProps) => {
       })}
       {...otherProps}
     >
-      <img className={styles.img} alt={bonusTitle} src={image} />
+      {image === null ? (
+        <div className={styles.img_empty}></div>
+      ) : (
+        <img className={styles.img} alt={bonusTitle} src={image} />
+      )}
       <div className="flex flex-col gap-[8px] flex-1">
         <div className={styles.subtitle}>{bonusTitle}</div>
         <div className={styles.title}>{description}</div>

@@ -8,7 +8,6 @@ import { getGameApi } from '@/app/api/games/getGameById';
 import Icons from '@/shared/ui/Icons';
 import Button from '@/shared/ui/Button';
 import { WinningsList } from '@/widgets/WinningsList';
-import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { useRouter } from '@/shared/helpers/navigation';
 import { useModal } from '@/app/providers/ModalProvider';
@@ -181,9 +180,7 @@ const Details = () => {
               })}
             />
           ) : (
-            <img
-              src={PlaceholderImage}
-              alt={game?.name}
+            <div
               className={classNames(styles.image, {
                 [styles.cover]: gamesHeaderTypeCover,
               })}

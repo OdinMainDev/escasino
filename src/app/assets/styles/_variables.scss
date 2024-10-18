@@ -1,4 +1,3 @@
-
 //LIGHT THEME
 :root {
   --desktop-max-width: 568px;
@@ -8,14 +7,14 @@
   }
 }
 body {
-  --primary: #F5F5F5;
+  --primary: #f5f5f5;
   --secondary: #161616;
 
   --button-primary-color: #252525;
-  --button-secondary-color: #F5F5F5;
+  --button-secondary-color: #f5f5f5;
   --button-border-color: #cfcfcf;
 
-  --block-primary: #E1E1E1;
+  --block-primary: #e1e1e1;
   --block-secondary: #cacaca;
 
   --line-primary: #303030;
@@ -24,30 +23,36 @@ body {
   --text-primary: #252525;
   --text-secondary: #898989;
 
-  --error-primary: #CF6679;
+  --error-primary: #cf6679;
   --error-secondary: #a72929;
-  --success-primary: #8EC690;
-  --warning-primary: #F9B166;
+  --success-primary: #8ec690;
+  --warning-primary: #f9b166;
 
-  --modal-primary: #F5F5F5; 
+  --modal-primary: #f5f5f5;
 
-  --input-primary: #E8E8E8;
-  --input-border-color: #E8E8E8;
+  --input-primary: #e8e8e8;
+  --input-border-color: #e8e8e8;
   --input-placeholder: #898989;
 
-  --select-primary: #E8E8E8; 
+  --select-primary: #e8e8e8;
 
   --tab-primary: #252525;
-  --tab-secondary: #E8E8E8;
+  --tab-secondary: #e8e8e8;
   --tab-thrid: #252525;
+
+  // placeholder-content url or color
+  --placeholder-content: #333;
+  // options #333 or under
+  //url('@/app/assets/images/Placeholder/PlaceholderGame.png') center
+  //  center/cover no-repeat;
 }
 
 // DARK THEME
 body.dark {
   --primary: #161616;
-  --secondary: #F2F2F2;
+  --secondary: #f2f2f2;
 
-  --button-primary-color: #F2F2F2;
+  --button-primary-color: #f2f2f2;
   --button-secondary-color: #161616;
   --button-border-color: #303030;
 
@@ -56,22 +61,22 @@ body.dark {
 
   --line-primary: #303030;
 
-  --label-primary: #A5A5A5;
-  --text-primary: #E2E2E2;
+  --label-primary: #a5a5a5;
+  --text-primary: #e2e2e2;
   --text-secondary: #121212;
 
-  --error-primary: #CF6679;
+  --error-primary: #cf6679;
   --error-secondary: #a72929;
-  --success-primary: #8EC690;
-  --warning-primary: #F9B166;
+  --success-primary: #8ec690;
+  --warning-primary: #f9b166;
 
-  --modal-primary: #1C1C1C; 
+  --modal-primary: #1c1c1c;
 
   --input-primary: #333333;
   --input-border-color: #393939;
-  --input-placeholder: #8E8E8E;
+  --input-placeholder: #8e8e8e;
 
-  --select-primary: #333333; 
+  --select-primary: #333333;
 
   --tab-primary: #000;
   --tab-secondary: #333;

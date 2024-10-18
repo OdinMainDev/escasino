@@ -8,7 +8,9 @@
   position: relative;
   width: 100%;
   height: 100px;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition:
+    transform 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
   cursor: pointer;
   overflow: hidden;
   &.removing {
@@ -29,12 +31,15 @@
   width: 100px;
   right: -100%;
   background-color: var(--error-secondary);
-  transition: right 0.2s ;
+  transition: right 0.2s;
 }
 
 .img {
   width: 60px;
   height: 60px;
+  &_empty {
+    background: var(--placeholder-content);
+  }
 }
 
 .subtitle {

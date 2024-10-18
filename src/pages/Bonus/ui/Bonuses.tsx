@@ -2,7 +2,6 @@ import { useParams } from 'react-router-dom';
 import styles from './Bonuses.module.scss';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { IGame } from '@/shared/models/interfaces/game';
-import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import Loader from '@/shared/ui/Loader';
 import Button from '@/shared/ui/Button';
 import { useRouter } from '@/shared/helpers/navigation';
@@ -30,6 +29,7 @@ import { useTranslation } from 'react-i18next';
 import React from 'react';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { activeNoDepositBonus } from '@/app/api/bonuses/noDepositBonusesApi';
+import classNames from 'classnames';
 
 interface IProps {
   isNoDeposit?: boolean;
@@ -367,6 +367,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
     router.push('/bonus');
   };
 
+  console.log(availGames);
   return (
     <div className={styles.container}>
       <PageHeader
@@ -385,11 +386,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                 {imagePath ? (
                   <img src={imagePath} alt={selectedGame.name} className={styles.game_image} />
                 ) : (
-                  <img
-                    src={PlaceholderImage}
-                    alt={selectedGame?.name}
-                    className={styles.game_image}
-                  />
+                  <div className={classNames(styles.game_image_empty, styles.game_image)} />
                 )}
                 <div className={styles.game_title}>{selectedGame.name}</div>
               </div>
@@ -399,11 +396,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                   {imagePath ? (
                     <img src={imagePath} alt={selectedGame.name} className={styles.game_image} />
                   ) : (
-                    <img
-                      src={PlaceholderImage}
-                      alt={selectedGame?.name}
-                      className={styles.game_image}
-                    />
+                    <div className={classNames(styles.game_image_empty, styles.game_image)} />
                   )}
                   <div className={styles.game_title}>{selectedGame.name}</div>
                   <Button
@@ -416,7 +409,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                 </div>
               ) : (
                 <div className={styles.game}>
-                  <img src={PlaceholderImage} alt="without_game" className={styles.game_image} />
+                  <div className={classNames(styles.game_image_empty, styles.game_image)} />
                   <div className={styles.game_title}>Выберите игру</div>
                   <Button
                     elType="outlined"

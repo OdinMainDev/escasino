@@ -1,7 +1,7 @@
 import { IGame } from '@/shared/models/interfaces/game';
 import styles from './Game.module.scss';
-import PlaceholderImage from '@/app/assets/images/Placeholder/PlaceholderGame.png';
 import { BaseHTMLAttributes } from 'react';
+import classNames from 'classnames';
 
 interface IProps extends BaseHTMLAttributes<HTMLElement> {
   game: IGame;
@@ -15,7 +15,7 @@ const Game = ({ game, ...otherProps }: IProps) => {
       {imagePath ? (
         <img className={styles.img} alt={game.name} src={imagePath} />
       ) : (
-        <img className={styles.img} alt={game.name} src={PlaceholderImage} />
+        <div className={classNames(styles.img, styles.empty)} />
       )}
       <div className="flex flex-col gap-[8px]">
         <div className={styles.subtitle}>{game.game_provider}</div>

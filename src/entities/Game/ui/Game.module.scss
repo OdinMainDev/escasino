@@ -13,6 +13,9 @@
 .img {
   width: 60px;
   height: 60px;
+  &.empty {
+    background: var(--placeholder-content);
+  }
 }
 
 .subtitle {
