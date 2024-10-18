@@ -60,6 +60,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   const bonusesFS = useRef<IBonusFSMethods>(null);
   const bonusesMoney = useRef<IBonusMoneyMethods>(null);
   const [alertModalData, setAlertModalData] = useState<IAlert>({});
+  const [isError, setIsError] = useState(false);
   const [openGamesModal, setOpenGamesModal] = useState(false);
   const { t } = useTranslation();
   const imagePath = selectedGame
@@ -289,7 +290,12 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   };
 
   const bonusChangeHandler = useCallback(
-    (id: number) => {
+    (id: number | undefined) => {
+      if (!id) {
+        setIsError(true);
+        return;
+      }
+      setIsError(false);
       const findedTemplate = bonusesTemplates.find((item) => item.id === id);
       if (findedTemplate) {
         setSelectedTemplate(findedTemplate);
@@ -445,7 +451,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                 </>
               )}
 
-              {isNoDeposit ? (
+              {isNoDeposit || selectedTab === 'freespins' ? (
                 <BonusesFS
                   ref={bonusesFS}
                   bonusesTemplates={bonusesTemplates}
@@ -454,7 +460,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                   minAmount={minAmountCart}
                   maxAmount={maxAmountCart}
                 />
-              ) : selectedTab === 'money' ? (
+              ) : (
                 <BonusesMoney
                   ref={bonusesMoney}
                   moneyChangeHandler={bonusChangeHandler}
@@ -462,21 +468,25 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                   minAmount={minAmountCart}
                   maxAmount={maxAmountCart}
                 />
-              ) : (
-                <BonusesFS
-                  ref={bonusesFS}
-                  bonusesTemplates={bonusesTemplates}
-                  fsChangeHandler={bonusChangeHandler}
-                  gameId={selectedGame ? selectedGame.id : undefined}
-                  minAmount={minAmountCart}
-                  maxAmount={maxAmountCart}
-                />
               )}
             </div>
             <div className={styles.footer}>
-              <div className={styles.footer_title}>Рассчитывается на основе настроек бонуса</div>
+              {isError && (
+                <div className={styles.footer_error}>
+                  Невозможная комбинация! Попробуйте другой вариант
+                </div>
+              )}
+
+              {!isNoDeposit && (
+                <div className={styles.footer_title}>Рассчитывается на основе настроек бонуса</div>
+              )}
+
               {isNoDeposit ? (
-                <Button className="flex-1 uppercase w-[100%]" onClick={selectNoDepositBonus}>
+                <Button
+                  disabled={isError}
+                  className="flex-1 uppercase w-[100%]"
+                  onClick={selectNoDepositBonus}
+                >
                   Получить бездеп бонус
                 </Button>
               ) : (
@@ -502,7 +512,11 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                       )}
                     </div>
                   </div>
-                  <Button className="flex-1 uppercase" onClick={addToBasketOrOpenModal}>
+                  <Button
+                    disabled={isError}
+                    className="flex-1 uppercase"
+                    onClick={addToBasketOrOpenModal}
+                  >
                     {settings &&
                     (settings?.bonus.max_bonuses_per_deposit === 1 ||
                       (selectedTab === 'money' &&

@@ -96,6 +96,11 @@
     height: 200px;
     overflow: hidden;
     position: relative;
+    &.error {
+      &::before {
+        border: 2px solid var(--error-secondary);
+      }
+    }
     &::before {
       content: "";
       pointer-events: none;
@@ -130,4 +135,15 @@
     width: 300px;
     cursor: pointer;
   }
+}
+
+.cross {
+  display: flex;
+  justify-content: center;
+  width: 100px;
+}
+
+
+.blocked {
+  color: var(--error-secondary);
 }

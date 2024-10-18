@@ -4,13 +4,12 @@ import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { useAppSelector } from '@/store/hooks/redux';
-import { removeDuplicatesByBet, removeDuplicatesBySpinsCount } from '../helpers/removeDuplicates';
 import { ITab } from '@/entities/Tabs';
 import { TabItem } from '@/entities/TabItem';
 
 interface IProps {
   bonusesTemplates: IBonusTemplate[];
-  fsChangeHandler: (betTemplateId: number) => void;
+  fsChangeHandler: (betTemplateId: number | undefined) => void;
   gameId?: number;
   minAmount?: number;
   maxAmount?: number;
@@ -36,8 +35,8 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     const [selectedSpinsIndex, setSelectedSpinsIndex] = useState<number>(0);
     const [selectedTabs, setSelectedTabs] = useState<ITab[]>([]);
     const [betTemplates, setBetTemplates] = useState<IBonusTemplate[]>([]);
-    const [filtredBonuses, setFiltredBonuses] = useState<IBonusTemplate[]>([]);
     const [spinsTemplates, setSpinsTemplates] = useState<IBonusTemplate[]>([]);
+
     const cartBonuses = useAppSelector((state) => state.cartBonusesSlice.bonusesTemplates);
     const betSwiper = useRef<SwiperRef>(null);
     const spinsSwiper = useRef<SwiperRef>(null);
@@ -168,7 +167,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         }, [] as IBonusTemplate[])
         .sort((a, b) => a.spins_count - b.spins_count);
 
-      setFiltredBonuses(filteredTemplates);
       if ((uniqueBetTemplates.length > 0, uniqueSpinsTemplates.length > 0)) {
         const findedTemplate = filteredTemplates.find(
           (item) =>
@@ -189,34 +187,18 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
         const selectedBetTemplate = betTemplates[realIndex];
-        const selectedFsTemplates = removeDuplicatesBySpinsCount(
-          filtredBonuses.filter(
-            (item) => item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
-          ),
-        );
-        let mainIndex = 0;
-        if (!selectedFsTemplates[selectedSpinsIndex]) {
-          setSelectedSpinsIndex(0);
-          if (spinsSwiper.current) {
-            spinsSwiper.current.swiper?.slideToLoop(0, 0, false);
-          }
-        } else {
-          mainIndex = selectedSpinsIndex;
-        }
 
-        if (selectedBetTemplate && selectedFsTemplates[mainIndex]) {
-          setSpinsTemplates(selectedFsTemplates);
+        if (selectedBetTemplate && spinsTemplates[selectedSpinsIndex]) {
+          // setUnBlockedFsTemplates(selectedFsTemplates);
           if (selectedTabs.find((item) => item.value === 'fs') && !isFirst) {
-            selectMaxValue(tabs[1], selectedFsTemplates);
+            selectMaxValue(tabs[1], spinsTemplates);
           }
-          const matchingTemplate = filtredBonuses.find(
+          const matchingTemplate = bonusesTemplates.find(
             (template) =>
               template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
-              template.spins_count === selectedFsTemplates[mainIndex].spins_count,
+              template.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
           );
-          if (matchingTemplate) {
-            fsChangeHandler(matchingTemplate.id);
-          }
+          fsChangeHandler(matchingTemplate?.id);
         }
       }
     };
@@ -226,19 +208,15 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         const realIndex = swiper.realIndex;
         setSelectedSpinsIndex(realIndex);
         const selectedFsTemplate = spinsTemplates[realIndex];
-        const selectedBetTemplates = removeDuplicatesByBet(
-          filtredBonuses.filter((item) => item.spins_count === selectedFsTemplate.spins_count),
-        );
-        if (selectedBetTemplates[selectedBetIndex] && selectedFsTemplate) {
-          const matchingTemplate = filtredBonuses.find(
+        if (betTemplates[selectedBetIndex] && selectedFsTemplate) {
+          // setUnBlockedBetTemplates(selectedBetTemplates);
+          const matchingTemplate = bonusesTemplates.find(
             (template) =>
               template.configurator.bet_amount ===
-                selectedBetTemplates[selectedBetIndex].configurator.bet_amount &&
+                betTemplates[selectedBetIndex].configurator.bet_amount &&
               template.spins_count === selectedFsTemplate.spins_count,
           );
-          if (matchingTemplate) {
-            fsChangeHandler(matchingTemplate.id);
-          }
+          fsChangeHandler(matchingTemplate?.id);
         }
       }
     };
@@ -252,7 +230,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     if (betTemplates?.length === 0 && spinsTemplates?.length === 0) {
       return <div className={styles.title}>К сожалению доступные комбинации закончились</div>;
     }
-
     return (
       <div>
         <div className={styles.settings_title}>Настройки бонуса</div>
@@ -275,7 +252,16 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           <div>Кол-во FS</div>
           <div>Сумма бонуса</div>
         </div>
-        <div className={styles.settings_swiper}>
+        <div
+          className={classNames(styles.settings_swiper, {
+            [styles.error]: !bonusesTemplates.find(
+              (item) =>
+                item.configurator.bet_amount ===
+                  betTemplates[selectedBetIndex].configurator.bet_amount &&
+                item.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
+            ),
+          })}
+        >
           <Swiper
             ref={betSwiper}
             spaceBetween={12}
@@ -293,6 +279,12 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
               <SwiperSlide
                 className={classNames(styles.settings_data, {
                   [styles.active]: selectedBetIndex === index,
+                  [styles.blocked]: !bonusesTemplates.find(
+                    (item) =>
+                      item.configurator.bet_amount ===
+                        betTemplates[selectedBetIndex].configurator.bet_amount &&
+                      item.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
+                  ),
                 })}
                 key={index}
               >
@@ -332,6 +324,12 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
               <SwiperSlide
                 className={classNames(styles.settings_data, {
                   [styles.active]: selectedSpinsIndex === index,
+                  [styles.blocked]: !bonusesTemplates.find(
+                    (item) =>
+                      item.configurator.bet_amount ===
+                        betTemplates[selectedBetIndex].configurator.bet_amount &&
+                      item.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
+                  ),
                 })}
                 key={index}
               >
@@ -354,20 +352,45 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
               strokeLinejoin="round"
             />
           </svg>
-          <input
-            className={styles.settings_input}
-            value={
-              betTemplates.length > 0 &&
-              spinsTemplates.length > 0 &&
-              spinsTemplates[selectedSpinsIndex] &&
-              betTemplates[selectedBetIndex]
-                ? betTemplates[selectedBetIndex].configurator.bet_amount *
-                  spinsTemplates[selectedSpinsIndex].spins_count
-                : 0
-            }
-            readOnly
-            disabled
-          />
+          {!bonusesTemplates.find(
+            (item) =>
+              item.configurator.bet_amount ===
+                betTemplates[selectedBetIndex].configurator.bet_amount &&
+              item.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
+          ) ? (
+            <div className={styles.cross}>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 12 12"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11 1L1 11M1 1L11 11"
+                  stroke="var(--error-secondary"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          ) : (
+            <input
+              className={classNames(styles.settings_input)}
+              value={
+                betTemplates.length > 0 &&
+                spinsTemplates.length > 0 &&
+                spinsTemplates[selectedSpinsIndex] &&
+                betTemplates[selectedBetIndex]
+                  ? betTemplates[selectedBetIndex].configurator.bet_amount *
+                    spinsTemplates[selectedSpinsIndex].spins_count
+                  : 0
+              }
+              readOnly
+              disabled
+            />
+          )}
         </div>
       </div>
     );
