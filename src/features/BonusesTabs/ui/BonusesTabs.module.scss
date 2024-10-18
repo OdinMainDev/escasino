@@ -140,7 +140,8 @@
 .cross {
   display: flex;
   justify-content: center;
-  width: 100px;
+  flex: 1;
+  min-width: 0;
 }
 
 
