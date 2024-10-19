@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { useAppSelector } from '@/store/hooks/redux';
 import { ITab } from '@/entities/Tabs';
 import { TabItem } from '@/entities/TabItem';
-import { removeDuplicatesBySpinsCount } from '../helpers/removeDuplicates';
+import { removeDuplicatesByBet, removeDuplicatesBySpinsCount } from '../helpers/removeDuplicates';
 
 interface IProps {
   bonusesTemplates: IBonusTemplate[];
@@ -35,9 +35,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     const [selectedBetIndex, setSelectedBetIndex] = useState<number>(0);
     const [selectedSpinsIndex, setSelectedSpinsIndex] = useState<number>(0);
     const [selectedTabs, setSelectedTabs] = useState<ITab[]>([]);
-    const [uBetTemplates, setUBetTemplates] = useState<IBonusTemplate[]>([]);
-    // const [uSpinsTemplates, setUSpinsTemplates] = useState<IBonusTemplate[]>([]);
-    const [clearedTemplates, setClearedTemplates] = useState<IBonusTemplate[]>([]);
+    const [filtredBonuses, setFiltredBonuses] = useState<IBonusTemplate[]>([]);
     const [betTemplates, setBetTemplates] = useState<IBonusTemplate[]>([]);
     const [spinsTemplates, setSpinsTemplates] = useState<IBonusTemplate[]>([]);
     const isBonusScrollAllTemplates = import.meta.env.VITE_BONUS_SCROLL_TYPE === 'all';
@@ -62,32 +60,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         setSelectedTabs((prev) => [...prev, newTab]);
       }
     };
-
-    const unSelectMaxValue = (tab: ITab) => {
-      setSelectedTabs((prev) => prev.filter((item) => item.value !== tab.value));
-    };
-
-    useEffect(() => {
-      const selectedTab = tabs[0];
-      if (betTemplates.length - 1 === selectedBetIndex) {
-        if (!selectedTabs.find((item) => item.value === selectedTab.value)) {
-          setSelectedTabs((prev) => [...prev, selectedTab]);
-        }
-      } else {
-        unSelectMaxValue(selectedTab);
-      }
-    }, [selectedBetIndex, betTemplates]);
-
-    useEffect(() => {
-      const selectedTab = tabs[1];
-      if (spinsTemplates.length - 1 === selectedSpinsIndex) {
-        if (!selectedTabs.find((item) => item.value === selectedTab.value)) {
-          setSelectedTabs((prev) => [...prev, selectedTab]);
-        }
-      } else {
-        unSelectMaxValue(selectedTab);
-      }
-    }, [selectedSpinsIndex, spinsTemplates]);
 
     const clearBonusFSSwiper = () => {
       if (betSwiper.current) {
@@ -181,50 +153,55 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           fsChangeHandler(findedTemplate.id);
         }
       }
-      setClearedTemplates(filteredTemplates);
-      setUBetTemplates(uniqueBetTemplates);
+      // setUBetTemplates(uniqueBetTemplates);
       // setUSpinsTemplates(uniqueSpinsTemplates);
+      setFiltredBonuses(filteredTemplates);
       setBetTemplates(uniqueBetTemplates);
       setSpinsTemplates(uniqueSpinsTemplates);
     }, [bonusesTemplates, cartBonuses, gameId, minAmount, maxAmount]);
 
-    const selectBet = (swiper: SwiperClass | null, isFirst?: boolean) => {
+    const selectBet = (swiper: SwiperClass | null) => {
       if (swiper) {
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
         const selectedBetTemplate = betTemplates[realIndex];
-        let listFsTemplates = spinsTemplates;
-        let mainIndex = 0;
         let selectedFsTemplates = spinsTemplates;
+        let mainIndex = 0;
         if (!isBonusScrollAllTemplates) {
           selectedFsTemplates = removeDuplicatesBySpinsCount(
-            clearedTemplates.filter(
+            filtredBonuses.filter(
               (item) =>
                 item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
             ),
           );
-          listFsTemplates = selectedFsTemplates;
           setSpinsTemplates(selectedFsTemplates);
-          if (!selectedFsTemplates[selectedSpinsIndex]) {
-            setSelectedSpinsIndex(0);
-            if (spinsSwiper.current) {
-              spinsSwiper.current.swiper?.slideToLoop(0, 0, false);
-            }
-          } else {
+          if (selectedFsTemplates[selectedSpinsIndex]) {
             mainIndex = selectedSpinsIndex;
           }
         }
 
         if (selectedBetTemplate && selectedFsTemplates[mainIndex]) {
-          if (selectedTabs.find((item) => item.value === 'fs') && !isFirst) {
-            selectMaxValue(tabs[1], selectedFsTemplates);
-          }
-          const matchingTemplate = clearedTemplates.find(
+          const matchingTemplate = filtredBonuses.find(
             (template) =>
               template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
-              template.spins_count === listFsTemplates[selectedSpinsIndex]?.spins_count,
+              template.spins_count === selectedFsTemplates[selectedSpinsIndex]?.spins_count,
           );
           fsChangeHandler(matchingTemplate?.id);
+        }
+
+        if (realIndex === betTemplates.length - 1) {
+          if (!selectedTabs.find((tab) => tab.value === 'bet')) {
+            setSelectedTabs((prev) => [...prev, tabs.find((t) => t.value === 'bet')!]);
+          }
+        } else {
+          setSelectedTabs((prev) => prev.filter((tab) => tab.value !== 'bet'));
+        }
+        if (selectedSpinsIndex === selectedFsTemplates.length - 1) {
+          if (!selectedTabs.find((tab) => tab.value === 'fs')) {
+            setSelectedTabs((prev) => [...prev, tabs.find((t) => t.value === 'fs')!]);
+          }
+        } else {
+          setSelectedTabs((prev) => prev.filter((tab) => tab.value !== 'fs'));
         }
       }
     };
@@ -234,21 +211,49 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         const realIndex = swiper.realIndex;
         setSelectedSpinsIndex(realIndex);
         const selectedFsTemplate = spinsTemplates[realIndex];
-        if (uBetTemplates[selectedBetIndex] && selectedFsTemplate) {
-          const matchingTemplate = clearedTemplates.find(
+        let mainIndex = 0;
+        let selectedBetTemplates = betTemplates;
+
+        if (!isBonusScrollAllTemplates) {
+          selectedBetTemplates = removeDuplicatesByBet(
+            filtredBonuses.filter((item) => item.spins_count === selectedFsTemplate.spins_count),
+          );
+          setBetTemplates(selectedBetTemplates);
+          if (selectedBetTemplates[selectedBetIndex]) {
+            mainIndex = selectedSpinsIndex;
+          }
+        }
+
+        if (selectedBetTemplates[mainIndex] && selectedFsTemplate) {
+          const matchingTemplate = filtredBonuses.find(
             (template) =>
               template.configurator.bet_amount ===
-                betTemplates[selectedBetIndex]?.configurator.bet_amount &&
+                selectedBetTemplates[selectedBetIndex]?.configurator.bet_amount &&
               template.spins_count === selectedFsTemplate.spins_count,
           );
           fsChangeHandler(matchingTemplate?.id);
+        }
+
+        if (realIndex === spinsTemplates.length - 1) {
+          if (!selectedTabs.find((tab) => tab.value === 'fs')) {
+            setSelectedTabs((prev) => [...prev, tabs.find((t) => t.value === 'fs')!]);
+          }
+        } else {
+          setSelectedTabs((prev) => prev.filter((tab) => tab.value !== 'fs'));
+        }
+        if (selectedBetIndex === selectedBetTemplates.length - 1) {
+          if (!selectedTabs.find((tab) => tab.value === 'bet')) {
+            setSelectedTabs((prev) => [...prev, tabs.find((t) => t.value === 'bet')!]);
+          }
+        } else {
+          setSelectedTabs((prev) => prev.filter((tab) => tab.value !== 'bet'));
         }
       }
     };
 
     useEffect(() => {
       if (betSwiper.current) {
-        selectBet(betSwiper.current.swiper, true);
+        selectBet(betSwiper.current.swiper);
       }
     }, [betTemplates]);
 

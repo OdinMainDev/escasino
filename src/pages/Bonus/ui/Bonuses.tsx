@@ -292,7 +292,6 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
 
   const bonusChangeHandler = useCallback(
     (id: number | undefined) => {
-      console.log(id);
       if (!id) {
         setIsError(true);
         return;
