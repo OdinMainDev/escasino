@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { useAppSelector } from '@/store/hooks/redux';
 import { ITab } from '@/entities/Tabs';
 import { TabItem } from '@/entities/TabItem';
+import { removeDuplicatesBySpinsCount } from '../helpers/removeDuplicates';
 
 interface IProps {
   bonusesTemplates: IBonusTemplate[];
@@ -34,9 +35,12 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     const [selectedBetIndex, setSelectedBetIndex] = useState<number>(0);
     const [selectedSpinsIndex, setSelectedSpinsIndex] = useState<number>(0);
     const [selectedTabs, setSelectedTabs] = useState<ITab[]>([]);
+    const [uBetTemplates, setUBetTemplates] = useState<IBonusTemplate[]>([]);
+    // const [uSpinsTemplates, setUSpinsTemplates] = useState<IBonusTemplate[]>([]);
+    const [clearedTemplates, setClearedTemplates] = useState<IBonusTemplate[]>([]);
     const [betTemplates, setBetTemplates] = useState<IBonusTemplate[]>([]);
     const [spinsTemplates, setSpinsTemplates] = useState<IBonusTemplate[]>([]);
-
+    const isBonusScrollAllTemplates = import.meta.env.VITE_BONUS_SCROLL_TYPE === 'all';
     const cartBonuses = useAppSelector((state) => state.cartBonusesSlice.bonusesTemplates);
     const betSwiper = useRef<SwiperRef>(null);
     const spinsSwiper = useRef<SwiperRef>(null);
@@ -177,7 +181,9 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           fsChangeHandler(findedTemplate.id);
         }
       }
-
+      setClearedTemplates(filteredTemplates);
+      setUBetTemplates(uniqueBetTemplates);
+      // setUSpinsTemplates(uniqueSpinsTemplates);
       setBetTemplates(uniqueBetTemplates);
       setSpinsTemplates(uniqueSpinsTemplates);
     }, [bonusesTemplates, cartBonuses, gameId, minAmount, maxAmount]);
@@ -187,16 +193,36 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
         const selectedBetTemplate = betTemplates[realIndex];
-
-        if (selectedBetTemplate && spinsTemplates[selectedSpinsIndex]) {
-          // setUnBlockedFsTemplates(selectedFsTemplates);
-          if (selectedTabs.find((item) => item.value === 'fs') && !isFirst) {
-            selectMaxValue(tabs[1], spinsTemplates);
+        let listFsTemplates = spinsTemplates;
+        let mainIndex = 0;
+        let selectedFsTemplates = spinsTemplates;
+        if (!isBonusScrollAllTemplates) {
+          selectedFsTemplates = removeDuplicatesBySpinsCount(
+            clearedTemplates.filter(
+              (item) =>
+                item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
+            ),
+          );
+          listFsTemplates = selectedFsTemplates;
+          setSpinsTemplates(selectedFsTemplates);
+          if (!selectedFsTemplates[selectedSpinsIndex]) {
+            setSelectedSpinsIndex(0);
+            if (spinsSwiper.current) {
+              spinsSwiper.current.swiper?.slideToLoop(0, 0, false);
+            }
+          } else {
+            mainIndex = selectedSpinsIndex;
           }
-          const matchingTemplate = bonusesTemplates.find(
+        }
+
+        if (selectedBetTemplate && selectedFsTemplates[mainIndex]) {
+          if (selectedTabs.find((item) => item.value === 'fs') && !isFirst) {
+            selectMaxValue(tabs[1], selectedFsTemplates);
+          }
+          const matchingTemplate = clearedTemplates.find(
             (template) =>
               template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
-              template.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
+              template.spins_count === listFsTemplates[selectedSpinsIndex]?.spins_count,
           );
           fsChangeHandler(matchingTemplate?.id);
         }
@@ -208,12 +234,11 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         const realIndex = swiper.realIndex;
         setSelectedSpinsIndex(realIndex);
         const selectedFsTemplate = spinsTemplates[realIndex];
-        if (betTemplates[selectedBetIndex] && selectedFsTemplate) {
-          // setUnBlockedBetTemplates(selectedBetTemplates);
-          const matchingTemplate = bonusesTemplates.find(
+        if (uBetTemplates[selectedBetIndex] && selectedFsTemplate) {
+          const matchingTemplate = clearedTemplates.find(
             (template) =>
               template.configurator.bet_amount ===
-                betTemplates[selectedBetIndex].configurator.bet_amount &&
+                betTemplates[selectedBetIndex]?.configurator.bet_amount &&
               template.spins_count === selectedFsTemplate.spins_count,
           );
           fsChangeHandler(matchingTemplate?.id);
@@ -254,12 +279,13 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         </div>
         <div
           className={classNames(styles.settings_swiper, {
-            [styles.error]: !bonusesTemplates.find(
-              (item) =>
-                item.configurator.bet_amount ===
-                  betTemplates[selectedBetIndex].configurator.bet_amount &&
-                item.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
-            ),
+            [styles.error]:
+              !bonusesTemplates.find(
+                (item) =>
+                  item.configurator.bet_amount ===
+                    betTemplates[selectedBetIndex]?.configurator.bet_amount &&
+                  item.spins_count === spinsTemplates[selectedSpinsIndex]?.spins_count,
+              ) && isBonusScrollAllTemplates,
           })}
         >
           <Swiper
@@ -283,9 +309,11 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
                     !bonusesTemplates.find(
                       (item) =>
                         item.configurator.bet_amount ===
-                          betTemplates[selectedBetIndex].configurator.bet_amount &&
-                        item.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
-                    ) && selectedBetIndex === index,
+                          betTemplates[selectedBetIndex]?.configurator.bet_amount &&
+                        item.spins_count === spinsTemplates[selectedSpinsIndex]?.spins_count,
+                    ) &&
+                    selectedBetIndex === index &&
+                    isBonusScrollAllTemplates,
                 })}
                 key={index}
               >
@@ -326,12 +354,14 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
                 className={classNames(styles.settings_data, {
                   [styles.active]: selectedSpinsIndex === index,
                   [styles.blocked]:
+                    isBonusScrollAllTemplates &&
                     !bonusesTemplates.find(
                       (item) =>
                         item.configurator.bet_amount ===
-                          betTemplates[selectedBetIndex].configurator.bet_amount &&
-                        item.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
-                    ) && selectedSpinsIndex === index,
+                          betTemplates[selectedBetIndex]?.configurator.bet_amount &&
+                        item.spins_count === spinsTemplates[selectedSpinsIndex]?.spins_count,
+                    ) &&
+                    selectedSpinsIndex === index,
                 })}
                 key={index}
               >
@@ -354,11 +384,12 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
               strokeLinejoin="round"
             />
           </svg>
-          {!bonusesTemplates.find(
+          {isBonusScrollAllTemplates &&
+          !bonusesTemplates.find(
             (item) =>
               item.configurator.bet_amount ===
-                betTemplates[selectedBetIndex].configurator.bet_amount &&
-              item.spins_count === spinsTemplates[selectedSpinsIndex].spins_count,
+                betTemplates[selectedBetIndex]?.configurator.bet_amount &&
+              item.spins_count === spinsTemplates[selectedSpinsIndex]?.spins_count,
           ) ? (
             <div className={styles.cross}>
               <svg
@@ -385,8 +416,8 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
                 spinsTemplates.length > 0 &&
                 spinsTemplates[selectedSpinsIndex] &&
                 betTemplates[selectedBetIndex]
-                  ? betTemplates[selectedBetIndex].configurator.bet_amount *
-                    spinsTemplates[selectedSpinsIndex].spins_count
+                  ? betTemplates[selectedBetIndex]?.configurator.bet_amount *
+                    spinsTemplates[selectedSpinsIndex]?.spins_count
                   : 0
               }
               readOnly

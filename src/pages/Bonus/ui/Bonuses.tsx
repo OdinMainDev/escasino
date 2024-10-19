@@ -63,6 +63,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   const [isError, setIsError] = useState(false);
   const [openGamesModal, setOpenGamesModal] = useState(false);
   const { t } = useTranslation();
+  const isBonusScrollAllTemplates = import.meta.env.VITE_BONUS_SCROLL_TYPE === 'all';
   const imagePath = selectedGame
     ? selectedGame.system_name
       ? `${import.meta.env.VITE_IMAGE_PATH}/${selectedGame.game_provider}/${import.meta.env.VITE_IMAGE_SIZE}/${selectedGame.system_name}.png`
@@ -291,6 +292,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
 
   const bonusChangeHandler = useCallback(
     (id: number | undefined) => {
+      console.log(id);
       if (!id) {
         setIsError(true);
         return;
@@ -367,7 +369,6 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
     router.push('/bonus');
   };
 
-  console.log(availGames);
   return (
     <div className={styles.container}>
       <PageHeader
@@ -463,8 +464,12 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                 />
               )}
             </div>
-            <div className={styles.footer}>
-              {isError ? (
+            <div
+              className={classNames(styles.footer, {
+                [styles.small]: (!isError || !isBonusScrollAllTemplates) && isNoDeposit,
+              })}
+            >
+              {isError && isBonusScrollAllTemplates ? (
                 <div className={styles.footer_error}>
                   Невозможная комбинация! Попробуйте другой вариант
                 </div>
