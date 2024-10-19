@@ -35,7 +35,7 @@ export interface Balance {
   formatted_balance_bonus: number;
   wager_bonus: Wager;
   wager_payment: Wager;
-  total_wager: Wager;
+  wager_total: Wager;
   formatted_wager: number;
 }
 
