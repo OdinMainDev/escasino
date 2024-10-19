@@ -32,9 +32,21 @@ const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) =>
           </div>
         </div>
         <div className={styles.menu_item}>
-          <div className={styles.label}>Вейджер</div>
+          <div className={styles.label}>Вейджер Бонусный</div>
           <div className={styles.menu_balace}>
-            {user?.balance.formatted_wager || 0} {user?.balance.currency}
+            {user?.balance.wager_bonus.formatted || 0} {user?.balance.currency}
+          </div>
+        </div>
+        <div className={styles.menu_item}>
+          <div className={styles.label}>Вейджер Платежный</div>
+          <div className={styles.menu_balace}>
+            {user?.balance.wager_payment.formatted || 0} {user?.balance.currency}
+          </div>
+        </div>
+        <div className={styles.menu_item}>
+          <div className={styles.label}>Вейджер Тотал</div>
+          <div className={styles.menu_balace}>
+            {user?.balance.total_wager.formatted || 0} {user?.balance.currency}
           </div>
         </div>
         <div className={styles.menu_arrow}>
