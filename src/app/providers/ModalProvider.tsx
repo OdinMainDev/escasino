@@ -29,7 +29,6 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [resetHash, setResetHash] = useState('');
   const [verifyHash, setVerifyHash] = useState('');
   const [changeHash, setChangeHash] = useState('');
-
   const doOpenModal = (name: string) => {
     setIsModalOpen(true);
     setModalName(name);

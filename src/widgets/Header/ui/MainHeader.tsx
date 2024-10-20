@@ -9,6 +9,7 @@ import GoBackButton from '@/shared/ui/GoBackButton';
 import Input from '@/shared/ui/Input';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 import Icons from '@/shared/ui/Icons';
+import { useTranslation } from 'react-i18next';
 
 type HeaderProps = {
   hasNotSearch?: boolean;
@@ -16,6 +17,7 @@ type HeaderProps = {
 };
 
 const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
+  const { t } = useTranslation();
   const { getFilters, countActiveKeys } = useGamesFilters();
   const [filterVal, setFilterVal] = useState<string>(getFilters().query);
   const router = useRouter();
@@ -84,7 +86,7 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
       <GoBackButton className={styles.back} customPath="/" />
       {!hasNotSearch && (
         <Input
-          placeholder="Поиск игры"
+          placeholder={t('findGames')}
           icon={
             <div onClick={clickValue}>
               <Icons icon="search" />

@@ -24,6 +24,7 @@ import { IResponseError } from '@/shared/models/interfaces/misc';
 import { ErrorResponseAsString } from '@/app/api/helpers';
 import { formTypeTypes } from '../../models/types';
 import Tabs from '@/entities/Tabs';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   openRegistration: () => void;
@@ -31,6 +32,7 @@ interface IProps {
 }
 
 const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
+  const { t } = useTranslation();
   const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
   const { isAuth, setAuthenticated } = useAuthProvider();
   const { doCloseModals } = useModal();
@@ -87,7 +89,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
         </div>
       )}
       <div>
-        <div className={styles.title}>Авторизация</div>
+        <div className={styles.title}>{t('enterPersonalOffice')}</div>
 
         <div className="row">
           {formType === 'full' && (
@@ -98,11 +100,11 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
               tabs={[
                 {
                   value: 'email',
-                  label: 'Электронная почта',
+                  label: t('email'),
                 },
                 {
                   value: 'phone',
-                  label: 'Телефон',
+                  label: t('phone'),
                 },
               ]}
             />
@@ -111,7 +113,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
           <div className="tab">
             {(formType === 'full' && selectedType === 'email') || formType === 'email' ? (
               <Input
-                placeholder="Электронная почта"
+                placeholder={t('email')}
                 type="email"
                 containerClassName="mb-[10px]"
                 onChange={(e) => {
@@ -123,12 +125,12 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
                 value={loginData.email}
                 autoComplete={autoCompleteHandler('email')}
                 isError={!!errorData?.errors['email']}
-                message={ErrorResponseAsString('email', 'Введите корректный e-mail', errorData)}
+                message={ErrorResponseAsString('email', t('enterCorrectEmail'), errorData)}
               />
             ) : null}
             {(formType === 'full' && selectedType === 'phone') || formType === 'phone' ? (
               <Input
-                placeholder={'Телефон'}
+                placeholder={t('phone')}
                 type="phone"
                 value={loginData.phone}
                 containerClassName="mb-[10px]"
@@ -141,40 +143,40 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
                     setLoginData((prev) => ({ ...prev, email: '' }));
                   }
                 }}
-                message={ErrorResponseAsString('phone', 'Введите корректный телефон', errorData)}
+                message={ErrorResponseAsString('phone', t('enterCorrectPhone'), errorData)}
               />
             ) : null}
           </div>
-          <div className={styles.input_label}>Будет использоваться как логин для входа</div>
+          <div className={styles.input_label}>{t('willUseAsLogin')}</div>
         </div>
 
         <Input
-          placeholder="Пароль"
+          placeholder={t('password')}
           type="password"
           isError={!!errorData?.errors['password']}
           value={loginData.password}
           containerClassName="mb-[10px]"
           validationFunction={validatePasswordLength}
           autoComplete={autoCompleteHandler('password')}
-          message={ErrorResponseAsString('password', 'Введите корректный пароль', errorData)}
+          message={ErrorResponseAsString('password', t('enterCorrectPassword'), errorData)}
           onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
         />
         <div className={styles.forgot}>
           {hasRemember && (
             <Checkbox
               value={false}
-              label="Запомнить меня"
+              label={t('rememberMe')}
               onChange={(value) => setLoginData((prev) => ({ ...prev, remember: value }))}
             />
           )}
           <div className={styles.forgot_text} onClick={openResetModal}>
-            Забыли пароль?
+            {t('forgotPassword')}
           </div>
         </div>
         {hasSocials ? (
           <div>
             <hr className={styles.linehr} />
-            <div className={styles.subtitle}>Или с помощью социальных сетей</div>
+            <div className={styles.subtitle}>{t('usingSocials')}</div>
             <div className={styles.social}>
               <VK />
               <Telegram />
@@ -199,10 +201,10 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
           className={styles.button}
           onClick={(e) => void sendData(e)}
         >
-          Войти
+          {t('enter')}
         </Button>
         <div className={styles.label}>
-          Все еще нет аккаунта? <span onClick={openRegistration}>Зарегистрироваться</span>
+          {t('notAccount')} <span onClick={openRegistration}>{t('signUp')}</span>
         </div>
       </div>
     </form>

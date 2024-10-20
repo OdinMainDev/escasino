@@ -1,8 +1,10 @@
 import styles from './style.module.scss';
 import { useModal } from '@/app/providers/ModalProvider';
 import Button from '@/shared/ui/Button';
+import { useTranslation } from 'react-i18next';
 
 const FooterAuthButtons = () => {
+  const { t } = useTranslation();
   const { doOpenModal } = useModal();
   const openLogin = () => {
     document.body.classList.add('overflow-hidden');
@@ -17,10 +19,10 @@ const FooterAuthButtons = () => {
   return (
     <div className={styles.container}>
       <Button elType="outlined" className={styles.button} onClick={openLogin}>
-        Войти
+        {t('enter')}
       </Button>
       <Button className={styles.button} onClick={openRegistration}>
-        Регистрация
+        {t('register')}
       </Button>
     </div>
   );
