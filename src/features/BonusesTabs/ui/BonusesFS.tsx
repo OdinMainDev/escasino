@@ -44,6 +44,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     const spinsSwiper = useRef<SwiperRef>(null);
     const isProgrammaticChange = useRef(false);
     const isProgrammaticChangeFS = useRef(false);
+    const [selectedTemplate, setSelectedTemplate] = useState<IBonusTemplate | null>(null);
 
     useImperativeHandle(ref, () => {
       return {
@@ -152,6 +153,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         );
         if (findedTemplate) {
           fsChangeHandler(findedTemplate.id);
+          setSelectedTemplate(findedTemplate ?? null);
         }
       }
       // setUBetTemplates(uniqueBetTemplates);
@@ -187,15 +189,19 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           if (spinsSwiper.current) {
             isProgrammaticChange.current = true;
             spinsSwiper.current.swiper?.slideTo(findedIndex, 400);
+            setTimeout(() => {
+              isProgrammaticChange.current = false;
+            }, 1);
           }
         }
-        if (selectedBetTemplate && selectedFsTemplates[0]) {
+        if (selectedBetTemplate && spinsTemplates[mainIndex]) {
           const matchingTemplate = filtredBonuses.find(
             (template) =>
               template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
-              template.spins_count === selectedFsTemplates[0]?.spins_count,
+              template.spins_count === spinsTemplates[mainIndex]?.spins_count,
           );
           fsChangeHandler(matchingTemplate?.id);
+          setSelectedTemplate(matchingTemplate ?? null);
         }
 
         if (realIndex === betTemplates.length - 1) {
@@ -240,17 +246,20 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           if (betSwiper.current) {
             isProgrammaticChangeFS.current = true;
             betSwiper.current.swiper?.slideTo(findedIndex, 400);
+            setTimeout(() => {
+              isProgrammaticChangeFS.current = false;
+            }, 1);
           }
         }
-
-        if (selectedBetTemplates[0] && selectedFsTemplate) {
+        if (betTemplates[mainIndex] && selectedFsTemplate) {
           const matchingTemplate = filtredBonuses.find(
             (template) =>
               template.configurator.bet_amount ===
-                selectedBetTemplates[0]?.configurator.bet_amount &&
+                betTemplates[mainIndex]?.configurator.bet_amount &&
               template.spins_count === selectedFsTemplate.spins_count,
           );
           fsChangeHandler(matchingTemplate?.id);
+          setSelectedTemplate(matchingTemplate ?? null);
         }
 
         if (realIndex === spinsTemplates.length - 1) {
@@ -436,12 +445,8 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             <input
               className={classNames(styles.settings_input)}
               value={
-                betTemplates.length > 0 &&
-                spinsTemplates.length > 0 &&
-                spinsTemplates[selectedSpinsIndex] &&
-                betTemplates[selectedBetIndex]
-                  ? betTemplates[selectedBetIndex]?.configurator.bet_amount *
-                    spinsTemplates[selectedSpinsIndex]?.spins_count
+                selectedTemplate
+                  ? selectedTemplate.configurator.bet_amount * selectedTemplate.spins_count
                   : 0
               }
               readOnly
