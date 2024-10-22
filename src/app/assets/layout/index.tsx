@@ -32,7 +32,6 @@ const Layout = () => {
     };
   }, []);
 
-  console.log(import.meta.env.VITE_BACKGROUND_COLOR);
   return (
     <div>
       {/* <div className="device">

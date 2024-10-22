@@ -195,6 +195,7 @@ const Details = () => {
         <Button elType="contained" className={styles.button} onClick={openRealPlay}>
           Играть на деньги
         </Button>
+
         {game?.has_no_deposit_bonus && noDepositsBonuses.length > 0 ? (
           <Button
             className={classNames(styles.button, styles.button_big)}

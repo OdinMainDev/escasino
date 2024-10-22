@@ -6,7 +6,6 @@ import { usePathname } from '@/shared/helpers/navigation';
 import { getUser } from '@/store/slices/userSlice';
 import { useAppDispatch } from '@/store/hooks/redux';
 import { useGamesFilters } from './pages/GamesFilter';
-import { useModal } from './ModalProvider';
 import { resetCartBonuses } from '@/store/slices/cartBonusesSlice';
 import { getNodepositBonuses } from '@/store/slices/nodepositSlice';
 
@@ -17,7 +16,6 @@ interface EventDispatcherProviderProps {
 export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = ({ children }) => {
   const pathname = usePathname();
   const { isAuth } = useAuthProvider();
-  const { doCloseModals } = useModal();
   const dispatch = useAppDispatch();
   const { getFilters, setFilters } = useGamesFilters();
 
@@ -81,7 +79,6 @@ export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = (
       newFilters.query = '';
       setFilters(newFilters);
     }
-    doCloseModals();
   }, [pathname, isAuth]);
 
   return children;
