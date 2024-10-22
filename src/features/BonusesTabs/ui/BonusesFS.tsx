@@ -162,11 +162,11 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     const selectBet = (swiper: SwiperClass | null) => {
       if (swiper) {
+        console.log('bet');
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
         const selectedBetTemplate = betTemplates[realIndex];
         let selectedFsTemplates = spinsTemplates;
-        let mainIndex = 0;
         if (!isBonusScrollAllTemplates) {
           selectedFsTemplates = removeDuplicatesBySpinsCount(
             filtredBonuses.filter(
@@ -174,13 +174,15 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
                 item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
             ),
           );
-          setSpinsTemplates(selectedFsTemplates);
-          if (selectedFsTemplates[selectedSpinsIndex]) {
-            mainIndex = selectedSpinsIndex;
+          const findedIndex = spinsTemplates.findIndex(
+            (item) => item.id === selectedFsTemplates[0].id,
+          );
+          if (spinsSwiper.current) {
+            spinsSwiper.current.swiper?.slideTo(findedIndex, 400);
           }
         }
 
-        if (selectedBetTemplate && selectedFsTemplates[mainIndex]) {
+        if (selectedBetTemplate && selectedFsTemplates[selectedSpinsIndex]) {
           const matchingTemplate = filtredBonuses.find(
             (template) =>
               template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
@@ -211,20 +213,21 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         const realIndex = swiper.realIndex;
         setSelectedSpinsIndex(realIndex);
         const selectedFsTemplate = spinsTemplates[realIndex];
-        let mainIndex = 0;
         let selectedBetTemplates = betTemplates;
 
         if (!isBonusScrollAllTemplates) {
           selectedBetTemplates = removeDuplicatesByBet(
             filtredBonuses.filter((item) => item.spins_count === selectedFsTemplate.spins_count),
           );
-          setBetTemplates(selectedBetTemplates);
-          if (selectedBetTemplates[selectedBetIndex]) {
-            mainIndex = selectedSpinsIndex;
+          const findedIndex = betTemplates.findIndex(
+            (item) => item.id === selectedBetTemplates[0].id,
+          );
+          if (betSwiper.current) {
+            betSwiper.current.swiper?.slideTo(findedIndex, 400);
           }
         }
 
-        if (selectedBetTemplates[mainIndex] && selectedFsTemplate) {
+        if (selectedBetTemplates[selectedBetIndex] && selectedFsTemplate) {
           const matchingTemplate = filtredBonuses.find(
             (template) =>
               template.configurator.bet_amount ===
