@@ -42,6 +42,8 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     const cartBonuses = useAppSelector((state) => state.cartBonusesSlice.bonusesTemplates);
     const betSwiper = useRef<SwiperRef>(null);
     const spinsSwiper = useRef<SwiperRef>(null);
+    const isProgrammaticChange = useRef(false);
+    const isProgrammaticChangeFS = useRef(false);
 
     useImperativeHandle(ref, () => {
       return {
@@ -142,7 +144,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           return acc;
         }, [] as IBonusTemplate[])
         .sort((a, b) => a.spins_count - b.spins_count);
-
       if ((uniqueBetTemplates.length > 0, uniqueSpinsTemplates.length > 0)) {
         const findedTemplate = filteredTemplates.find(
           (item) =>
@@ -162,11 +163,15 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     const selectBet = (swiper: SwiperClass | null) => {
       if (swiper) {
-        console.log('bet');
+        if (isProgrammaticChangeFS.current) {
+          isProgrammaticChangeFS.current = false;
+          return;
+        }
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
         const selectedBetTemplate = betTemplates[realIndex];
         let selectedFsTemplates = spinsTemplates;
+        let mainIndex = selectedSpinsIndex;
         if (!isBonusScrollAllTemplates) {
           selectedFsTemplates = removeDuplicatesBySpinsCount(
             filtredBonuses.filter(
@@ -175,18 +180,20 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             ),
           );
           const findedIndex = spinsTemplates.findIndex(
-            (item) => item.id === selectedFsTemplates[0].id,
+            (item) => item.spins_count === selectedFsTemplates[0].spins_count,
           );
+          setSelectedSpinsIndex(findedIndex);
+          mainIndex = findedIndex;
           if (spinsSwiper.current) {
+            isProgrammaticChange.current = true;
             spinsSwiper.current.swiper?.slideTo(findedIndex, 400);
           }
         }
-
-        if (selectedBetTemplate && selectedFsTemplates[selectedSpinsIndex]) {
+        if (selectedBetTemplate && selectedFsTemplates[0]) {
           const matchingTemplate = filtredBonuses.find(
             (template) =>
               template.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
-              template.spins_count === selectedFsTemplates[selectedSpinsIndex]?.spins_count,
+              template.spins_count === selectedFsTemplates[0]?.spins_count,
           );
           fsChangeHandler(matchingTemplate?.id);
         }
@@ -198,7 +205,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         } else {
           setSelectedTabs((prev) => prev.filter((tab) => tab.value !== 'bet'));
         }
-        if (selectedSpinsIndex === selectedFsTemplates.length - 1) {
+        if (mainIndex === spinsTemplates.length - 1) {
           if (!selectedTabs.find((tab) => tab.value === 'fs')) {
             setSelectedTabs((prev) => [...prev, tabs.find((t) => t.value === 'fs')!]);
           }
@@ -210,28 +217,37 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     const selectSpins = (swiper: SwiperClass | null) => {
       if (swiper) {
+        if (isProgrammaticChange.current) {
+          isProgrammaticChange.current = false;
+          return;
+        }
         const realIndex = swiper.realIndex;
         setSelectedSpinsIndex(realIndex);
         const selectedFsTemplate = spinsTemplates[realIndex];
         let selectedBetTemplates = betTemplates;
+        let mainIndex = selectedBetIndex;
 
         if (!isBonusScrollAllTemplates) {
           selectedBetTemplates = removeDuplicatesByBet(
             filtredBonuses.filter((item) => item.spins_count === selectedFsTemplate.spins_count),
           );
           const findedIndex = betTemplates.findIndex(
-            (item) => item.id === selectedBetTemplates[0].id,
+            (item) =>
+              item.configurator.bet_amount === selectedBetTemplates[0].configurator.bet_amount,
           );
+          setSelectedBetIndex(findedIndex);
+          mainIndex = findedIndex;
           if (betSwiper.current) {
+            isProgrammaticChangeFS.current = true;
             betSwiper.current.swiper?.slideTo(findedIndex, 400);
           }
         }
 
-        if (selectedBetTemplates[selectedBetIndex] && selectedFsTemplate) {
+        if (selectedBetTemplates[0] && selectedFsTemplate) {
           const matchingTemplate = filtredBonuses.find(
             (template) =>
               template.configurator.bet_amount ===
-                selectedBetTemplates[selectedBetIndex]?.configurator.bet_amount &&
+                selectedBetTemplates[0]?.configurator.bet_amount &&
               template.spins_count === selectedFsTemplate.spins_count,
           );
           fsChangeHandler(matchingTemplate?.id);
@@ -244,7 +260,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         } else {
           setSelectedTabs((prev) => prev.filter((tab) => tab.value !== 'fs'));
         }
-        if (selectedBetIndex === selectedBetTemplates.length - 1) {
+        if (mainIndex === betTemplates.length - 1) {
           if (!selectedTabs.find((tab) => tab.value === 'bet')) {
             setSelectedTabs((prev) => [...prev, tabs.find((t) => t.value === 'bet')!]);
           }
