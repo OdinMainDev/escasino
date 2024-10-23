@@ -172,26 +172,32 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
         const selectedBetTemplate = betTemplates[realIndex];
-        let selectedFsTemplates = spinsTemplates;
         let mainIndex = selectedSpinsIndex;
         if (!isBonusScrollAllTemplates) {
-          selectedFsTemplates = removeDuplicatesBySpinsCount(
-            filtredBonuses.filter(
-              (item) =>
-                item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
-            ),
+          const combinationExists = filtredBonuses.find(
+            (item) =>
+              item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
+              item.spins_count === spinsTemplates[mainIndex].spins_count,
           );
-          const findedIndex = spinsTemplates.findIndex(
-            (item) => item.spins_count === selectedFsTemplates[0].spins_count,
-          );
-          setSelectedSpinsIndex(findedIndex);
-          mainIndex = findedIndex;
-          if (spinsSwiper.current) {
-            isProgrammaticChange.current = true;
-            spinsSwiper.current.swiper?.slideTo(findedIndex, 400);
-            setTimeout(() => {
-              isProgrammaticChange.current = false;
-            }, 1);
+          if (!combinationExists) {
+            const selectedFsTemplates = removeDuplicatesBySpinsCount(
+              filtredBonuses.filter(
+                (item) =>
+                  item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount,
+              ),
+            );
+            const findedIndex = spinsTemplates.findIndex(
+              (item) => item.spins_count === selectedFsTemplates[0].spins_count,
+            );
+            setSelectedSpinsIndex(findedIndex);
+            mainIndex = findedIndex;
+            if (spinsSwiper.current) {
+              isProgrammaticChange.current = true;
+              spinsSwiper.current.swiper?.slideTo(findedIndex, 400);
+              setTimeout(() => {
+                isProgrammaticChange.current = false;
+              }, 1);
+            }
           }
         }
         if (selectedBetTemplate && spinsTemplates[mainIndex]) {
@@ -230,25 +236,31 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         const realIndex = swiper.realIndex;
         setSelectedSpinsIndex(realIndex);
         const selectedFsTemplate = spinsTemplates[realIndex];
-        let selectedBetTemplates = betTemplates;
         let mainIndex = selectedBetIndex;
-
         if (!isBonusScrollAllTemplates) {
-          selectedBetTemplates = removeDuplicatesByBet(
-            filtredBonuses.filter((item) => item.spins_count === selectedFsTemplate.spins_count),
-          );
-          const findedIndex = betTemplates.findIndex(
+          const combinationExists = filtredBonuses.find(
             (item) =>
-              item.configurator.bet_amount === selectedBetTemplates[0].configurator.bet_amount,
+              item.configurator.bet_amount ===
+                betTemplates[selectedBetIndex].configurator.bet_amount &&
+              item.spins_count === selectedFsTemplate.spins_count,
           );
-          setSelectedBetIndex(findedIndex);
-          mainIndex = findedIndex;
-          if (betSwiper.current) {
-            isProgrammaticChangeFS.current = true;
-            betSwiper.current.swiper?.slideTo(findedIndex, 400);
-            setTimeout(() => {
-              isProgrammaticChangeFS.current = false;
-            }, 1);
+          if (!combinationExists) {
+            const selectedBetTemplates = removeDuplicatesByBet(
+              filtredBonuses.filter((item) => item.spins_count === selectedFsTemplate.spins_count),
+            );
+            const findedIndex = betTemplates.findIndex(
+              (item) =>
+                item.configurator.bet_amount === selectedBetTemplates[0].configurator.bet_amount,
+            );
+            setSelectedBetIndex(findedIndex);
+            mainIndex = findedIndex;
+            if (betSwiper.current) {
+              isProgrammaticChangeFS.current = true;
+              betSwiper.current.swiper?.slideTo(findedIndex, 400);
+              setTimeout(() => {
+                isProgrammaticChangeFS.current = false;
+              }, 1);
+            }
           }
         }
         if (betTemplates[mainIndex] && selectedFsTemplate) {
