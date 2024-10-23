@@ -52,7 +52,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   const [bonusesTemplates, setBonusesTemplates] = useState<IBonusTemplate[]>([]);
   const [availGames, setAvailGames] = useState<IGame[]>([]);
   const { doOpenModal, doCloseModals } = useModal();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState<string>('');
   const [selectedTemplate, setSelectedTemplate] = useState<IBonusTemplate | null>(null);
@@ -99,7 +99,6 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
     }
     setTabs(bonusArray);
     setSelectedTab(bonusArray[0]);
-    setLoading(false);
   }, [settings, getBonusArray]);
 
   const openErrorModal = useCallback(() => {
@@ -332,10 +331,13 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   useEffect(() => {
     const getBonusesTemplates = async () => {
       try {
+        setLoading(true);
         const { bonusesTemplates } = await getBonusTemplatesApi(isNoDeposit);
         setBonusesTemplates(bonusesTemplates);
       } catch (e) {
         openErrorModal();
+      } finally {
+        setLoading(false);
       }
     };
     void getBonusesTemplates();
