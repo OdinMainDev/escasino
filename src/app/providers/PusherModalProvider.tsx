@@ -69,6 +69,9 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
       pusher.subscribe(user.pusher_id, 'payment_receive', () => {
         dispatch(openPusherModal('success-replenish'));
       });
+      pusher.subscribe(user.pusher_id, 'payment_complete', () => {
+        dispatch(openPusherModal('success-replenish'));
+      });
       pusher.subscribe(user.pusher_id, 'lottery_win', () => {
         dispatch(openPusherModal('lottery-ticket'));
       });
