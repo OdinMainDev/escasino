@@ -8,6 +8,7 @@ import Button from '@/shared/ui/Button';
 import Loader from '@/shared/ui/Loader';
 import { BonusesItem } from '@/entities/BonusesItem';
 import { PageHeader } from '@/widgets/Header';
+import PusherService from '@/shared/service/PusherService';
 
 const Profile = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
@@ -17,6 +18,14 @@ const Profile = () => {
   const { unsetAuthenticated } = useAuthProvider();
 
   const logoutHandler = () => {
+    if (settings && settings.pusher.cluster && settings.pusher.key && user?.pusher_id) {
+      const pusher = PusherService.getInstance(settings.pusher.key, settings.pusher.cluster);
+      pusher.disconnect();
+    }
+    const supportDiv = document.getElementById('essupport');
+    if (supportDiv) {
+      supportDiv.setAttribute('data-user-token', '');
+    }
     unsetAuthenticated();
     router.push('/');
   };

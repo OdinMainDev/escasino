@@ -1,6 +1,6 @@
 import { PusherModals } from '@/entities/PusherModals';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
-import { IBonusesList, ISetActiveBonus } from '@/shared/models/interfaces/bonuses';
+import { IBonus, IBonusesList, ISetActiveBonus } from '@/shared/models/interfaces/bonuses';
 import { IBonusPusher } from '@/shared/models/interfaces/pusher/bonus';
 import PusherService from '@/shared/service/PusherService';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
@@ -9,10 +9,12 @@ import { PropsWithChildren, useEffect } from 'react';
 import { postSetMyActiveBonusApi } from '../api/bonuses/bonusesApi';
 import { getBonuses, resetBonuses } from '@/store/slices/bonusesSlices';
 import { getNodepositBonuses } from '@/store/slices/nodepositSlice';
+import { useRouter } from '@/shared/helpers/navigation';
 
 const PusherModalProvider = ({ children }: PropsWithChildren) => {
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const { user } = useAppSelector((state) => state.userReducer);
   const { games } = useAppSelector((state) => state.gamesAllSlice);
 
@@ -106,6 +108,16 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
       });
       pusher.subscribe(user.pusher_id, 'do_update_nodeposit_bonuses', () => {
         void dispatch(getNodepositBonuses());
+      });
+      pusher.subscribe(user.pusher_id, 'do_open_bonus_game', (data) => {
+        const bonusData = data as IBonus;
+        if (bonusData.bonus_template.length > 0) {
+          const gameId = bonusData.bonus_template[0].game_ids[0];
+          router.push(`/play/real/${gameId}`);
+        }
+      });
+      pusher.subscribe(user.pusher_id, 'do_open_profile_bonuses', () => {
+        router.push('/bonus/list');
       });
     }
   }, [dispatch, settings, user?.pusher_id]);

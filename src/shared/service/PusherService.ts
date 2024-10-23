@@ -71,6 +71,15 @@ class PusherService {
       this.currentChannelName = null;
     }
   }
+
+  public disconnect() {
+    Object.keys(this.channels).forEach((channelName) => {
+      this.unsubscribe(channelName);
+    });
+
+    this.pusher.disconnect();
+    console.log('Pusher connection has been disconnected.');
+  }
 }
 
 export default PusherService;

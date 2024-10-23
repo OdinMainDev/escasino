@@ -260,13 +260,27 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
           fid,
         };
         await activeNoDepositBonus(data);
-        router.push('/bonus/list');
-        doCloseModals();
+        setAlertModalData({
+          title: 'Загрузка...',
+          text: <Loader />,
+        });
       } catch (e) {
-        /* empty */
+        setAlertModalData({
+          title: 'Ошибка',
+          text: 'У вас закончились бездепозитные бонусы',
+        });
+        setTimeout(() => {
+          doCloseModals();
+        }, 3000);
       }
     } else {
-      doCloseModals();
+      setAlertModalData({
+        title: 'Ошибка',
+        text: 'У вас закончились бездепозитные бонусы',
+      });
+      setTimeout(() => {
+        doCloseModals();
+      }, 3000);
     }
   };
 
