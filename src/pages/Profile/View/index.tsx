@@ -28,6 +28,7 @@ const Profile = () => {
     }
     unsetAuthenticated();
     router.push('/');
+    window.location.reload();
   };
 
   const IsUserVerified =
