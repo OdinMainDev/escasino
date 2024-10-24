@@ -21,12 +21,14 @@ import {
 } from '@/app/api/auth/doResetSetPassword';
 import { IResponseError } from '@/shared/models/interfaces/misc';
 import { ErrorResponseAsString } from '@/app/api/helpers';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   isPhone: boolean;
 }
 
 const AuthResetSetPassword = ({ isPhone }: IProps) => {
+  const { t } = useTranslation();
   const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
   const { isAuth } = useAuthProvider();
   const { resetHash, doSetResetHash, doOpenModal } = useModal();
@@ -61,33 +63,33 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
         </div>
       )}
       <div>
-        <div className={styles.title}>Код подтверждения</div>
+        <div className={styles.title}>{t('confirmationCode')}</div>
         <Input
-          placeholder={isPhone ? 'Введите код из смс' : 'Введите код отправленный на почту'}
-          isError={!!errorData?.errors['сode']}
+          placeholder={isPhone ? t('codeFromSms') : t('codeFromMail')}
+          isError={typeof errorData?.errors === 'object' && !!errorData?.errors['сode']}
           containerClassName={styles.input}
           validationFunction={() => true}
           value={resetData.code}
-          message={ErrorResponseAsString('сode', 'Проверочный код указан не верно', errorData)}
+          message={ErrorResponseAsString('сode', t('enterCorrectConfirmationCode'), errorData)}
           onChange={(e) => setResetData((prev) => ({ ...prev, code: e.target.value }))}
         />
         <Input
-          placeholder="Пароль"
+          placeholder={t('password')}
           type="password"
-          isError={!!errorData?.errors['password']}
+          isError={typeof errorData?.errors === 'object' && !!errorData?.errors['password']}
           containerClassName={styles.input}
           value={resetData.password}
           validationFunction={validatePasswordLength}
-          message={ErrorResponseAsString('password', 'Введите корректный пароль', errorData)}
+          message={ErrorResponseAsString('password', t('enterCorrectPassword'), errorData)}
           onChange={(e) => setResetData((prev) => ({ ...prev, password: e.target.value }))}
         />
         <Input
-          placeholder="Повторите пароль"
+          placeholder={t('confirmPassword')}
           type="password"
-          isError={!!errorData?.errors['repeat_password']}
+          isError={typeof errorData?.errors === 'object' && !!errorData?.errors['repeat_password']}
           containerClassName={styles.input}
           validationFunction={(value) => validatePasswordMatching(resetData.password, value)}
-          message={ErrorResponseAsString('repeat_password', 'Введите корректный пароль', errorData)}
+          message={ErrorResponseAsString('repeat_password', t('enterCorrectPassword'), errorData)}
           onChange={(e) => setResetData((prev) => ({ ...prev, repeat_password: e.target.value }))}
         />
 
@@ -96,7 +98,7 @@ const AuthResetSetPassword = ({ isPhone }: IProps) => {
           className={styles.button}
           onClick={(e) => void sendData(e)}
         >
-          Сбросить
+          {t('reset')}
         </Button>
       </div>
     </form>

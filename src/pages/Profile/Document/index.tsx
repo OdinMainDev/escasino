@@ -10,8 +10,10 @@ import { useEffect, useState } from 'react';
 import { getVerifications } from './api/historyApi';
 import HistoryItem from './HistoryItem';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const ProfileDocument = () => {
+  const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.userReducer);
   const [verifications, setVerifications] = useState<IVerificationHistoryItem[]>([]);
   const [disabledVerifications, setDisabledVerifications] = useState<string[]>([]);
@@ -62,11 +64,11 @@ const ProfileDocument = () => {
         <div className={styles.back}>
           <GoBackButton />
         </div>
-        <div className="header_title">Документы</div>
+        <div className="header_title">{t('documents')}</div>
       </div>
       <div className={styles.body}>
-        <div className={styles.title}>Вeрификация документов</div>
-        <div className={styles.subtitle}>Добавьте все документы чтобы быть верифицированным</div>
+        <div className={styles.title}>{t('verifactionDocument')}</div>
+        <div className={styles.subtitle}>{t('addDocumentsToVerify')}</div>
         <div className={styles.buttons}>
           <Button
             elType="outlined"
@@ -75,7 +77,7 @@ const ProfileDocument = () => {
             disabled={disabledVerifications.includes('passport')}
           >
             <Icons icon="passport" />
-            Отправьте ваш паспорт
+            {t('sendYourPassword')}
           </Button>
           <Button
             elType="outlined"
@@ -84,7 +86,7 @@ const ProfileDocument = () => {
             disabled={disabledVerifications.includes('card')}
           >
             <Icons icon="card" />
-            Отправьте вашу карту
+            {t('sendYourCard')}
           </Button>
           <Button
             elType="outlined"
@@ -93,7 +95,7 @@ const ProfileDocument = () => {
             disabled={disabledVerifications.includes('something')}
           >
             <Icons icon="document" />
-            Отправьте еще что то
+            {t('sendMore')}
           </Button>
         </div>
         {verifications.map((item, index) => (
@@ -101,7 +103,7 @@ const ProfileDocument = () => {
         ))}
       </div>
       <div className={styles.footer}>
-        Процесс верификации
+        {t('verifyProccess')}
         <div className={styles.progress}>
           <ProgressBar
             progress={

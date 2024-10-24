@@ -9,21 +9,21 @@ export const errorValidator = (error?: IErrorResponse): string => {
       case 'BadAmount':
       case 'BadLimitMinimumAmount':
       case 'BadLimitMaximumAmount':
-        return 'не верно указана сумма выплаты, повторите позже';
+        return 'badAmount';
       case 'BadBalance':
-        return 'у вас недостаточно средств';
+        return 'badBalance';
       case 'HasWager':
-        return 'у вас присутствует вейджер';
+        return 'hasWager';
       case 'HasActiveBonus':
-        return 'у вас есть активный бонус';
+        return 'hasActiveBonus';
       case 'HasAliveBonuses':
-        return 'у вас есть неиспользованные бонусы';
+        return 'hasAliveBonuses';
       default:
-        return 'ошибка платежа, попробуйте позжe';
+        return 'paymentError';
     }
   }
 
-  return 'ошибка платежа, попробуйте позжe';
+  return 'paymentError';
 };
 
 export const validateCardData = (month: number, year: number): boolean => {

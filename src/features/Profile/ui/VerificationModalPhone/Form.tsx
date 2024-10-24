@@ -15,8 +15,10 @@ import {
   sampleIVerifyPhoneConfirmData,
 } from '@/app/api/auth/verification/phoneVerify';
 import { getUser } from '@/store/slices/userSlice';
+import { useTranslation } from 'react-i18next';
 
 const ProfileVerificationPhoneForm = () => {
+  const { t } = useTranslation();
   const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
   const { verifyHash, doSetVerifyHash, doOpenModal } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
@@ -55,19 +57,19 @@ const ProfileVerificationPhoneForm = () => {
         </div>
       )}
       <div>
-        <div className={styles.title}>Подтверждение телефона</div>
+        <div className={styles.title}>{t('phoneConfiramtion')}</div>
         <Input
-          placeholder="Введите код отправленный на ваш номер телефона"
+          placeholder={t('enterCodeFromPhone')}
           type="text"
-          isError={!!errorData?.errors['code']}
+          isError={typeof errorData?.errors === 'object' && !!errorData?.errors['code']}
           containerClassName={styles.input}
           value={verifyData.code}
-          message={ErrorResponseAsString('code', 'Проверочный код указан не верно', errorData)}
+          message={ErrorResponseAsString('code', t('enterCorrectConfirmationCode'), errorData)}
           onChange={(e) => setVerifyData((prev) => ({ ...prev, code: e.target.value }))}
         />
 
         <Button className={styles.button} onClick={(e) => void sendData(e)}>
-          Подтвердить
+          {t('submit')}
         </Button>
       </div>
     </form>

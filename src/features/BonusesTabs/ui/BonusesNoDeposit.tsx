@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { useAppSelector } from '@/store/hooks/redux';
 import { ITab } from '@/entities/Tabs';
 import { TabItem } from '@/entities/TabItem';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   bonusesTemplates: IBonusTemplate[];
@@ -21,9 +22,10 @@ export interface IBonusFSMethods {
 
 const BonusesNoDeposit = forwardRef<IBonusFSMethods, IProps>(
   ({ bonusesTemplates, selectNoDepositBonus, gameId, minAmount, maxAmount }, ref) => {
+    const { t } = useTranslation();
     const tabs: ITab[] = [
       {
-        label: 'Макс FS',
+        label: t('maxFS'),
         value: 'fs',
       },
     ];
@@ -130,12 +132,12 @@ const BonusesNoDeposit = forwardRef<IBonusFSMethods, IProps>(
     };
 
     if (spinsTemplates?.length === 0) {
-      return <div className={styles.title}>К сожалению доступные комбинации закончились</div>;
+      return <div className={styles.title}>{t('combinationsRunOut')}</div>;
     }
 
     return (
       <div>
-        <div className={styles.settings_title}>Настройки бонуса</div>
+        <div className={styles.settings_title}>{t('bonusSettings')}</div>
         <div className={styles.settings_tabs}>
           {tabs.map((item, index) => (
             <TabItem
@@ -151,7 +153,7 @@ const BonusesNoDeposit = forwardRef<IBonusFSMethods, IProps>(
         </div>
 
         <div className={styles.settings_labels}>
-          <div>Кол-во FS</div>
+          <div>{t('FSQuantity')}</div>
         </div>
         <div className={styles.settings_swiper}>
           <Swiper

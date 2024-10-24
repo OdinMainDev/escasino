@@ -6,8 +6,15 @@ import classNames from 'classnames';
 import styles from '../ui/WalletTabs/styles.module.scss';
 import { IPaymentTransaction } from '../models/interfaces';
 import { transactionTypes } from '../models/types';
+import { useTranslation } from 'react-i18next';
 
-export const generateLimitText = (min: number, max: number, currency: string, amount: string) => {
+export const useGenerateLimitText = (
+  min: number,
+  max: number,
+  currency: string,
+  amount: string,
+) => {
+  const { t } = useTranslation();
   const minimum =
     min > 0 ? (
       <div
@@ -15,7 +22,7 @@ export const generateLimitText = (min: number, max: number, currency: string, am
           [styles.error]: amount.length > 0 ? checkAmount(Number(amount), max, min) : false,
         })}
       >
-        Mинимум: {min} {currency}
+        {t('minimum')}: {min} {currency}
       </div>
     ) : null;
   const maximum =
@@ -25,7 +32,7 @@ export const generateLimitText = (min: number, max: number, currency: string, am
           [styles.error]: amount.length > 0 ? checkAmount(Number(amount), max, min) : false,
         })}
       >
-        Максимум: {max} {currency}
+        {t('maximum')}: {max} {currency}
       </div>
     ) : null;
   return (
@@ -36,15 +43,24 @@ export const generateLimitText = (min: number, max: number, currency: string, am
   );
 };
 
-export const generateComissionText = (
+export const useGenerateComissionText = (
   compensate?: IPaymentProviderRules,
   fees?: IPaymentProviderFees,
 ) => {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center justify-between mb-[10px]">
-      {fees && fees?.percent > 0 ? <div>Комиссия {fees?.percent}%</div> : ''}
+      {fees && fees?.percent > 0 ? (
+        <div>
+          {t('fee')} {fees?.percent}%
+        </div>
+      ) : (
+        ''
+      )}
       {compensate?.compensate_commission && (
-        <div>Компенсируем комиссию платежной системы {compensate.without_bonus_wager}%</div>
+        <div>
+          {t('compensateCommissionPaymentSystem')} {compensate.without_bonus_wager}%
+        </div>
       )}
     </div>
   );

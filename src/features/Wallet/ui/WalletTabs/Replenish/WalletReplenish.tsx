@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useRef, useState } from 'react';
 import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
@@ -19,7 +20,7 @@ import {
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
+import { checkAmount, useGenerateLimitText } from '@/features/Wallet/helpers/payment';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 import {
   errorValidator,
@@ -74,22 +75,22 @@ const WalletReplenish = () => {
     minAmount,
   } = useAppSelector((state) => state.cartBonusesSlice);
   const [alertData, setAlertData] = useState<IAlert>({
-    title: 'Внимание!',
+    title: t('attention'),
     text: (
       <div>
-        <div className="mb-[5px]">У вас есть активный бонус.</div>
-        <div>Отыграйте его или откажитесь от бонуса.</div>
+        <div className="mb-[5px]">{t('youHaveActiveBonus')}</div>
+        <div>{t('wagerOrDeclineBonus')}</div>
       </div>
     ),
     buttons: [
       {
         type: 'outlined',
-        text: 'Отказаться',
+        text: t('refuse'),
         onClick: doCloseModals,
       },
       {
         type: 'contained',
-        text: 'Играть',
+        text: t('play'),
         onClick: () => {},
       },
     ],
@@ -234,7 +235,7 @@ const WalletReplenish = () => {
           placeholder={t('paymentForm.' + item.name)}
           message={
             layout[item.name]?.length > 0 && !validateCard(item, layout[item.name], found)
-              ? generateErrorMessages(item.name)
+              ? t(generateErrorMessages(item.name))
               : null
           }
           validationFunction={(value) => {
@@ -258,22 +259,22 @@ const WalletReplenish = () => {
         if (bonuses.length >= settings.bonus.max_avail_bonuses) {
           if (bonuses.find((item) => item.status === 2)) {
             setAlertData({
-              title: 'Внимание!',
+              title: t('attention'),
               text: (
                 <div>
-                  <div className="mb-[5px]">У вас есть активный бонус.</div>
-                  <div>Отыграйте его или откажитесь от бонуса.</div>
+                  <div className="mb-[5px]">{t('youHaveActiveBonus')}</div>
+                  <div>{t('wagerOrDeclineBonus')}</div>
                 </div>
               ),
               buttons: [
                 {
                   type: 'outlined',
-                  text: 'Отказаться',
+                  text: t('refuse'),
                   onClick: doCloseModals,
                 },
                 {
                   type: 'contained',
-                  text: 'Играть',
+                  text: t('play'),
                   onClick: () => {},
                 },
               ],
@@ -281,22 +282,22 @@ const WalletReplenish = () => {
             });
           } else {
             setAlertData({
-              title: 'Внимание!',
+              title: t('attention'),
               text: (
                 <div>
-                  <div className="mb-[5px]">У вас есть не закрытые бонусы</div>
-                  <div>Закройте их или откажитесь от бонуса.</div>
+                  <div className="mb-[5px]">{t('youHaveActiveBonus')}</div>
+                  <div>{t('closeOrDeclineBonus')}</div>
                 </div>
               ),
               buttons: [
                 {
                   type: 'outlined',
-                  text: 'Отказаться',
+                  text: t('refuse'),
                   onClick: doCloseModals,
                 },
                 {
                   type: 'contained',
-                  text: 'Закрыть',
+                  text: t('close'),
                   onClick: () => {},
                 },
               ],
@@ -345,7 +346,7 @@ const WalletReplenish = () => {
             >
               <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
             </svg>
-            Выбранные бонусы
+            {t('selectedBonuses')}
           </Button>
         </>
       );
@@ -553,7 +554,7 @@ const WalletReplenish = () => {
         />
         {selectedProvider && (
           <div className={styles.subtitle}>
-            {generateLimitText(
+            {useGenerateLimitText(
               minAmount > 0 && minAmount > Number(selectedProvider?.conditions.limit_minimum)
                 ? minAmount
                 : Number(selectedProvider?.conditions.limit_minimum),
@@ -605,7 +606,7 @@ const WalletReplenish = () => {
       <SuccessPaymentModal
         isError={isError}
         transaction={transaction}
-        message={isError ? errorValidator(error) : ''}
+        message={isError ? t(errorValidator(error)) : ''}
         isOpen={openModal}
         close={closeModal}
         paymentData={paymentData}

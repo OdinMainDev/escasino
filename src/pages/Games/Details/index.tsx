@@ -19,7 +19,9 @@ import { AlertModal, IAlert } from '@/entities/AlertModal';
 import { deleteCartBonusesItem } from '@/store/slices/cartBonusesSlice';
 import { PageHeader } from '@/widgets/Header';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
+
 import { getBonuses } from '@/store/slices/bonusesSlices';
+import { useTranslation } from 'react-i18next';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
@@ -41,6 +43,7 @@ const Details = () => {
     Number(import.meta.env.VITE_USER_CREATED_AT_LIMIT) >= user?.data.created_at;
   const currentLanguage = useCurrentLanguage();
   const [imagePath, setImagePath] = useState('');
+  const { t } = useTranslation();
   useEffect(() => {
     if (Number(id) > 0) {
       const getGameById = async () => {
@@ -65,24 +68,24 @@ const Details = () => {
 
   const openBonusError = () => {
     setAlertData({
-      title: 'Внимание!',
+      title: t('attention'),
       text: (
         <div>
           <div className="mb-[5px]">
-            {bonuses && bonuses.length > 0 ? 'У вас есть активный бонус.' : null}
+            {bonuses && bonuses.length > 0 ? t('youHaveActiveBonus') : null}
           </div>
-          <div>Отыграйте его или откажитесь от бонуса.</div>
+          <div>{t('wagerOrDeclineBonus')}</div>
         </div>
       ),
       buttons: [
         {
           type: 'outlined',
-          text: 'Отказаться',
+          text: t('cancel'),
           onClick: doCloseModals,
         },
         {
           type: 'contained',
-          text: 'Играть',
+          text: t('play'),
           onClick: () => {},
         },
       ],
@@ -93,26 +96,26 @@ const Details = () => {
 
   const openCartError = () => {
     setAlertData({
-      title: 'Внимание!',
+      title: t('attention'),
       text: (
         <div>
           <div className="mb-[5px]">
             {cartBonuses.length > 0
-              ? `У вас есть бонус под id:${cartBonuses[0].id} вы достигли лимита бонусов`
+              ? `${t('youHaveBonusUnder')} id:${cartBonuses[0].id} ${t('youAchivedLimit')}`
               : null}
           </div>
-          <div>Удалите бонус из корзины чтобы доавить новый</div>
+          <div>{t('deleteBonusFromTrash')}</div>
         </div>
       ),
       buttons: [
         {
           type: 'outlined',
-          text: 'Отмена',
+          text: t('cancel'),
           onClick: doCloseModals,
         },
         {
           type: 'contained',
-          text: 'Удалить',
+          text: t('delete'),
           onClick: () => {
             dispatch(deleteCartBonusesItem(cartBonuses[0].uuid));
             doCloseModals();
@@ -200,10 +203,10 @@ const Details = () => {
       </div>
       <div className={styles.buttons}>
         <Button elType="outlined" className={styles.button} onClick={openDemoPlay}>
-          Демо-игра
+          {t('demoGame')}
         </Button>
         <Button elType="contained" className={styles.button} onClick={openRealPlay}>
-          Играть на деньги
+          {t('playOnMoney')}
         </Button>
 
         {game?.has_no_deposit_bonus && noDepositsBonuses.length > 0 ? (
@@ -213,7 +216,7 @@ const Details = () => {
             onClick={openNoDepositBonus}
           >
             <Icons icon="settings" />
-            <span>Сконфигурировать бездеп бонус</span>
+            <span>{t('configureNoDepositBonus')}</span>
           </Button>
         ) : game?.has_bonus ? (
           <Button
@@ -222,7 +225,7 @@ const Details = () => {
             onClick={openBonus}
           >
             <Icons icon="settings" />
-            <span>Сконфигурировать бонус</span>
+            <span>{t('configureBonus')}</span>
           </Button>
         ) : null}
       </div>

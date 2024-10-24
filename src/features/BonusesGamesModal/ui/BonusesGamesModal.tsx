@@ -6,6 +6,7 @@ import { Game } from '@/entities/Game';
 import Input from '@/shared/ui/Input';
 import { useEffect, useState } from 'react';
 import { useRouter } from '@/shared/helpers/navigation';
+import { useTranslation } from 'react-i18next';
 
 interface IProps extends IModal {
   games: IGame[];
@@ -13,6 +14,7 @@ interface IProps extends IModal {
 }
 
 const BonusesGamesModal = ({ close, isOpen, games, onSelectGame }: IProps) => {
+  const { t } = useTranslation();
   const [allGames, setAllGames] = useState(games);
   const router = useRouter();
 
@@ -42,15 +44,15 @@ const BonusesGamesModal = ({ close, isOpen, games, onSelectGame }: IProps) => {
   return (
     <Modal close={close} isOpen={!!isOpen}>
       <div className={styles.container}>
-        <div className={styles.title}>Выберите игру для бонуса</div>
+        <div className={styles.title}>{t('chooseGameForBonus')}</div>
         <div className={styles.header}>
           <Input
             elType="search"
             onClear={() => {
               setAllGames(games);
             }}
-            onChange={(e) => searchGames(e.target.value.toLowerCase())}
-            placeholder="Поиск игр"
+            onChange={(e) => searchGames(e.target.value)}
+            placeholder={t('findGames')}
           />
         </div>
         <div className={styles.games}>

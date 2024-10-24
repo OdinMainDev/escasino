@@ -3,11 +3,13 @@ import styles from './BonusesItem.module.scss';
 import { BaseHTMLAttributes, useEffect, useState } from 'react';
 import { useAppSelector } from '@/store/hooks/redux';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 interface IProps extends BaseHTMLAttributes<HTMLDivElement> {
   gameId: number;
 }
 const BonusGame = ({ gameId, onClick }: IProps) => {
+  const { t } = useTranslation();
   const { games } = useAppSelector((state) => state.gamesAllSlice);
   const [game, setGame] = useState<IGame | null>(null);
   const imagePath = game
@@ -27,8 +29,8 @@ const BonusGame = ({ gameId, onClick }: IProps) => {
       <div className={styles.game} onClick={onClick}>
         <div className={classNames(styles.game_img, styles.empty)} />
         <div className="flex flex-col gap-[8px] flex-1">
-          <div className={styles.game_subtitle}>Выберите игру</div>
-          <div className={styles.game_title}>Нажмите чтобы выбрать игру</div>
+          <div className={styles.game_subtitle}>{t('chooseGame')}</div>
+          <div className={styles.game_title}>{t('clickToChooseGame')}</div>
         </div>
       </div>
     );

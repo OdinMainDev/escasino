@@ -1,6 +1,7 @@
 import styles from './styles.module.scss';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   tabs: ITab[];
@@ -15,6 +16,7 @@ export interface ITab {
 }
 
 const Tabs = ({ tabs, onChange, value, className }: IProps) => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<string | number | null>(value ?? null);
 
   useEffect(() => {
@@ -38,7 +40,7 @@ const Tabs = ({ tabs, onChange, value, className }: IProps) => {
             [styles.active]: activeTab === item.value,
           })}
         >
-          {item.label}
+          {t(item.label)}
         </div>
       ))}
     </div>

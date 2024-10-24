@@ -21,6 +21,7 @@ import {
   IPaymentProviderLayout,
 } from '@/shared/models/interfaces/paymentProviders';
 import { useAppSelector } from '@/store/hooks/redux';
+import { useTranslation } from 'react-i18next';
 interface IProps {
   close: () => void;
   isOpen: boolean;
@@ -41,6 +42,7 @@ interface IUrlPageProps {
 }
 
 const UrlPage = ({ url, closeModal }: IUrlPageProps) => {
+  const { t } = useTranslation();
   const redirecеt = () => {
     window.open(url, '_blank');
     closeModal();
@@ -50,7 +52,7 @@ const UrlPage = ({ url, closeModal }: IUrlPageProps) => {
     <div className={styles.loader}>
       <div className="w-[100%] h-[100%] flex flex-col items-center justify-center gap-[10px]">
         <Button className="uppercase" onClick={redirecеt}>
-          Нажмите для переадресации
+          {t('clickToRedirect')}
         </Button>
       </div>
     </div>
@@ -96,6 +98,7 @@ const SuccessPaymentModal = ({
   selectedProvider,
   paymentData,
 }: IProps) => {
+  const { t } = useTranslation();
   const svgRef = useRef<HTMLDivElement>(null);
   const { staticSettings } = useAppSelector((state) => state.staticSettingsReducer);
   const [timer, setTimer] = useState<number>(0);
@@ -154,9 +157,9 @@ const SuccessPaymentModal = ({
 
         return (
           <div className={styles.card}>
-            <div className={styles.card_title}>Оплата заказа</div>
+            <div className={styles.card_title}>{t('paymentOrder')}</div>
             <div className={styles.card_subtitle}>
-              Переводите {item.amount} {item.currency} по реквизитам из формы ниже
+              {t('transfer')} {item.amount} {item.currency} {t('detailsFromFormBelow')}
             </div>
             <div className={styles.card_block}>
               <div className="flex items-center justify-between mb-[24px]">
@@ -173,7 +176,7 @@ const SuccessPaymentModal = ({
               >
                 <div className="flex items-center gap-[15px]">
                   <div className="flex-1 w-[100%]">
-                    <div className={styles.card_label}>Адрес</div>
+                    <div className={styles.card_label}>{t('address')}</div>
                     <div className={styles.card_value}>{item.address}</div>
                   </div>
                   <div>
@@ -227,7 +230,9 @@ const SuccessPaymentModal = ({
               </div>
             </div>
             {staticSettings && (
-              <div className={styles.card_subtitle}>Время оплаты: {formatSecondsToTime(timer)}</div>
+              <div className={styles.card_subtitle}>
+                {t('paymentTime')}: {formatSecondsToTime(timer)}
+              </div>
             )}
             {paymentData && (
               <div
@@ -258,9 +263,9 @@ const SuccessPaymentModal = ({
               </div>
             )}
             <Button className="w-[100%] uppercase" onClick={close}>
-              Я оплатил
+              {t('IPaid')}
             </Button>
-            <div className={styles.footer}>Когда средства поступят вы получите уведомление</div>
+            <div className={styles.footer}>{t('notifiedWhenFundsReceived')}</div>
           </div>
         );
       }
@@ -273,9 +278,9 @@ const SuccessPaymentModal = ({
         const item = transaction as IPaymentTransactionRequisites;
         return (
           <div className={styles.card}>
-            <div className={styles.card_title}>Оплата заказа</div>
+            <div className={styles.card_title}>{t('paymentOrder')}</div>
             <div className={styles.card_subtitle}>
-              Переводите {item.amount} {item.currency} по реквизитам из формы ниже
+              {t('transfer')} {item.amount} {item.currency} {t('detailsFromFormBelow')}
             </div>
             <div className={styles.card_block}>
               <div className="flex items-center justify-between mb-[24px]">
@@ -305,7 +310,7 @@ const SuccessPaymentModal = ({
               >
                 <div className="flex items-center gap-[15px]">
                   <div className="flex-1 w-[100%]">
-                    <div className={styles.card_label}>Номер карты</div>
+                    <div className={styles.card_label}>{t('cardNumber')}</div>
                     <div className={styles.card_value}>{item.requisites}</div>
                   </div>
                   <div>
@@ -333,7 +338,7 @@ const SuccessPaymentModal = ({
               >
                 <div className="flex items-center gap-[15px]">
                   <div className="flex-1">
-                    <div className={styles.card_label}>Сумма</div>
+                    <div className={styles.card_label}>{t('sum')}</div>
                     <div className={styles.card_value}>
                       {item.amount} {item.currency}
                     </div>
@@ -359,7 +364,9 @@ const SuccessPaymentModal = ({
               </div>
             </div>
             {staticSettings && (
-              <div className={styles.card_subtitle}>Время оплаты: {formatSecondsToTime(timer)}</div>
+              <div className={styles.card_subtitle}>
+                {t('paymentTime')}: {formatSecondsToTime(timer)}
+              </div>
             )}
             {paymentData && (
               <div
@@ -390,9 +397,9 @@ const SuccessPaymentModal = ({
               </div>
             )}
             <Button className="w-[100%] uppercase" onClick={close}>
-              Я оплатил
+              {t('IPaid')}
             </Button>
-            <div className={styles.footer}>Инструкция как оплатить</div>
+            <div className={styles.footer}>{t('howPayInstruction')}</div>
           </div>
         );
       }
@@ -403,10 +410,10 @@ const SuccessPaymentModal = ({
             <div className={styles.good_info}>
               <img alt="success" src={successIcon} className={styles.success_image} />
               <span className={classNames(styles.good_message, 'text-center')}>
-                Оплата произведена, ожидаем ответа от мерчанта
+                {t('PaymentmMadeWaitingMerchant')}
               </span>
             </div>
-            <Button onClick={close}>Закрыть</Button>
+            <Button onClick={close}>{t('close')}</Button>
           </div>
         );
       }
@@ -433,9 +440,9 @@ const SuccessPaymentModal = ({
             <div className={styles.good_info}>
               <img alt="success" src={successIcon} className={styles.success_image} />
               <span className={styles.good_message}>{message}</span>
-              <span className={styles.good_message_sub}>Желаем вам приятной игры!</span>
+              <span className={styles.good_message_sub}>{t('goodGame')}</span>
             </div>
-            <Button onClick={close}>Вернуться к игре</Button>
+            <Button onClick={close}>{t('backToGame')}</Button>
           </div>
         );
       }

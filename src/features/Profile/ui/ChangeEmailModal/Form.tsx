@@ -15,8 +15,10 @@ import {
   sampleIChangeEmailSendData,
 } from '@/app/api/auth/change/emailChange';
 import { getUser } from '@/store/slices/userSlice';
+import { useTranslation } from 'react-i18next';
 
 const ProfileChangeEmailForm = () => {
+  const { t } = useTranslation();
   const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
   const { changeHash, doSetChangeHash, doOpenModal } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
@@ -53,19 +55,19 @@ const ProfileChangeEmailForm = () => {
         </div>
       )}
       <div>
-        <div className={styles.title}>Смена email</div>
+        <div className={styles.title}>{t('changeEmail')}</div>
         <Input
-          placeholder="Введите код отправленный на вашу старую почту"
+          placeholder={t('enterCodeFromOldEmail')}
           type="text"
-          isError={!!errorData?.errors['code']}
+          isError={typeof errorData?.errors === 'object' && !!errorData?.errors['code']}
           containerClassName={styles.input}
           value={changeData.code}
-          message={ErrorResponseAsString('code', 'Проверочный код указан не верно', errorData)}
+          message={ErrorResponseAsString('code', t('enterCorrectConfirmationCode'), errorData)}
           onChange={(e) => setChangeData((prev) => ({ ...prev, code: e.target.value }))}
         />
 
         <Button className={styles.button} onClick={(e) => void sendData(e)}>
-          Подтвердить
+          {t('submit')}
         </Button>
       </div>
     </form>

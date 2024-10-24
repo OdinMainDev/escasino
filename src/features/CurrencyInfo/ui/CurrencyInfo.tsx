@@ -4,8 +4,10 @@ import { useState } from 'react';
 import styles from './CurrencyInfo.module.scss';
 import { useAppSelector } from '@/store/hooks/redux';
 import useBrowserInfo from '@/shared/hooks/useBrowserInfo';
+import { useTranslation } from 'react-i18next';
 
 const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) => {
+  const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.userReducer);
   const [openBalance, setIsOpenBalance] = useState<boolean>(false);
   const browserInfo = useBrowserInfo();
@@ -20,31 +22,31 @@ const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) =>
     >
       <div className={styles.menu}>
         <div className={styles.menu_item}>
-          <div className={styles.label}>Реальный счет</div>
+          <div className={styles.label}>{t('realAccount')}</div>
           <div className={styles.menu_balace}>
             {user?.balance.formatted_balance_real || 0} {user?.balance.currency}
           </div>
         </div>
         <div className={styles.menu_item}>
-          <div className={styles.label}>Бонусный счет</div>
+          <div className={styles.label}>{t('bonusAccount')}</div>
           <div className={styles.menu_balace}>
             {user?.balance.formatted_balance_bonus || 0} {user?.balance.currency}
           </div>
         </div>
         <div className={styles.menu_item}>
-          <div className={styles.label}>Вейджер Бонусный</div>
+          <div className={styles.label}>{t('wagerBonus')}</div>
           <div className={styles.menu_balace}>
             {user?.balance.wager_bonus.formatted || 0} {user?.balance.currency}
           </div>
         </div>
         <div className={styles.menu_item}>
-          <div className={styles.label}>Вейджер Платежный</div>
+          <div className={styles.label}>{t('wagerPayment')}</div>
           <div className={styles.menu_balace}>
             {user?.balance.wager_payment.formatted || 0} {user?.balance.currency}
           </div>
         </div>
         <div className={styles.menu_item}>
-          <div className={styles.label}>Вейджер Тотал</div>
+          <div className={styles.label}>{t('wagerTotal')}</div>
           <div className={styles.menu_balace}>
             {user?.balance.wager_total.formatted || 0} {user?.balance.currency}
           </div>
@@ -68,7 +70,7 @@ const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) =>
         </div>
       </div>
 
-      <div className={styles.label}>Баланс</div>
+      <div className={styles.label}>{t('balance')}</div>
       <div className={styles.balance}>
         {(user?.balance.formatted_balance_real || 0) + (user?.balance.formatted_balance_bonus || 0)}{' '}
         {user?.balance.currency}

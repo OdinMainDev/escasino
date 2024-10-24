@@ -2,20 +2,20 @@ import { ISelectOption } from '@/shared/ui/Select';
 
 export const genderSelect: ISelectOption[] = [
   {
-    label: 'Выберите пол',
+    label: 'chooseGender',
     value: '',
     disabled: true,
   },
   {
     value: 'male',
-    label: 'Мужчина',
+    label: 'male',
   },
   {
     value: 'female',
-    label: 'Женщина',
+    label: 'female',
   },
   {
     value: 'other',
-    label: 'Не определились?',
+    label: 'other',
   },
 ];

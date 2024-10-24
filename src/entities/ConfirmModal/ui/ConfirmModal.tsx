@@ -4,12 +4,14 @@ import { useModal } from '@/app/providers/ModalProvider';
 import Button from '@/shared/ui/Button';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   close: () => void;
 }
 
 const ModalContent = (props: { modalName: string }) => {
+  const { t } = useTranslation();
   const [activeIcon, setActiveIcon] = useState(false);
   useEffect(() => {
     setTimeout(() => {
@@ -19,7 +21,7 @@ const ModalContent = (props: { modalName: string }) => {
   const generateText = (modalName: string): string | null => {
     switch (modalName) {
       case 'reset-send-complete':
-        return 'Новый пароль отправлен на электронную почту';
+        return t('newPasswordSendMail');
       default:
         return null;
     }
@@ -49,7 +51,7 @@ const ModalContent = (props: { modalName: string }) => {
         </svg>
       </div>
       <div className={styles.text}>{generateText(props.modalName)}</div>
-      <Button>Войти в личный кабинет</Button>
+      <Button>{t('enterPersonalOffice')}</Button>
     </div>
   );
 };

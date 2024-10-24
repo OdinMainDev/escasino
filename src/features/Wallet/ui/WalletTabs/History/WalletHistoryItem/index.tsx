@@ -106,23 +106,23 @@ const WalletHistoryItem = ({
       </div>
       <div className="flex justify-between mb-[10px]">
         <div className={styles.data}>
-          <div className={styles.label}>Дата создания</div>
+          <div className={styles.label}>{t('createdDate')}</div>
           <div className={styles.value}>{dateFormatter(transaction.created_at)}</div>
         </div>
         <div className={styles.data}>
-          <div className={styles.label}>Дата завершения</div>
+          <div className={styles.label}>{t('completionDate')}</div>
           <div className={styles.value}>{dateFormatter(transaction.completed_at)}</div>
         </div>
       </div>
       <div className="flex justify-between mb-[10px]">
         <div className={styles.data}>
-          <div className={styles.label}>Внесенная сумма</div>
+          <div className={styles.label}>{t('enteredSum')}</div>
           <div className={styles.value}>
             {transaction.formatted_amount} {transaction.currency}
           </div>
         </div>
         <div className={styles.data}>
-          <div className={styles.label}>Итоговая сумма</div>
+          <div className={styles.label}>{t('finalSum')}</div>
           <div className={styles.value}>
             {transaction.formatted_total_amount} {transaction.currency}
           </div>
@@ -130,7 +130,7 @@ const WalletHistoryItem = ({
       </div>
       <div className="flex justify-between">
         <div className={styles.data}>
-          <div className={styles.label}>Платежная система</div>
+          <div className={styles.label}>{t('paymentSystem')}</div>
           <div className={styles.value}>
             {provider &&
               provider.meta.texts.find((item) => item.language.toLowerCase() === currentLanguage)
@@ -140,7 +140,7 @@ const WalletHistoryItem = ({
         {transaction.status === 1 && (
           <div className={styles.data}>
             <Button size="s" className="uppercase w-[100%]">
-              перейти к платежу
+              {t('proceedToPayment')}
             </Button>
           </div>
         )}

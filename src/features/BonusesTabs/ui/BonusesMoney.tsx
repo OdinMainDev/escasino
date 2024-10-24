@@ -4,6 +4,7 @@ import { IBonusTemplate } from '@/shared/models/interfaces/bonuses';
 import { useState, forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import { useAppSelector } from '@/store/hooks/redux';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   bonusesTemplates: IBonusTemplate[];
@@ -18,6 +19,7 @@ export interface IBonusMoneyMethods {
 
 const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
   ({ bonusesTemplates, moneyChangeHandler, minAmount, maxAmount }, ref) => {
+    const { t } = useTranslation();
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const moneySwiper = useRef<SwiperRef>(null);
     const cartBonuses = useAppSelector((state) => state.cartBonusesSlice.bonusesTemplates);
@@ -102,13 +104,13 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
     };
 
     if (sortedBonuses?.length === 0) {
-      return <div className={styles.title}>К сожалению доступные комбинации закончились</div>;
+      return <div className={styles.title}>{t('combinationsRunOut')}</div>;
     }
 
     return (
       <div>
         <div className={styles.settings_labels}>
-          <div>% бонуса</div>
+          <div>{t('bonusPercent')}</div>
         </div>
         <div className={styles.settings_swiper}>
           <Swiper

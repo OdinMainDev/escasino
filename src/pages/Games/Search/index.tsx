@@ -11,8 +11,10 @@ import { useQuery } from '@/shared/helpers/navigation';
 import IndexLayout from '@/shared/layouts/home';
 import { isAppDebug } from '@/app/config/app';
 import Loader from '@/shared/ui/Loader';
+import { useTranslation } from 'react-i18next';
 
 export default function Search() {
+  const { t } = useTranslation();
   const [games, setGames] = useState<IGame[] | null>(null);
   const { setFilters, getFilters } = useGamesFilters();
 
@@ -52,7 +54,7 @@ export default function Search() {
           <GamesGrid games={games} />
         ) : (
           <div className={styles.not_found}>
-            {games ? <div>По вашему запросу ничего не найдено</div> : <Loader />}
+            {games ? <div>{t('nothingFoundForRequest')}</div> : <Loader />}
           </div>
         )}
       </div>

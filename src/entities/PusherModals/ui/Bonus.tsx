@@ -5,8 +5,10 @@ import { closePusherModal } from '@/store/slices/pusherSlice';
 import bonusIcon from '../icons/bonus.svg';
 import classNames from 'classnames';
 import Button from '@/shared/ui/Button';
+import { useTranslation } from 'react-i18next';
 
 const Bonus = () => {
+  const { t } = useTranslation();
   const key = 'get-bonus';
   const { openPusherModals } = useAppSelector((state) => state.pusherReducer);
   const dispatch = useAppDispatch();
@@ -20,17 +22,14 @@ const Bonus = () => {
       <div className={styles.bonus}>
         <div className="flex flex-col items-center justify-center flex-1">
           <img src={bonusIcon} className={classNames(styles.replenish_icon, 'mb-[24px]')} />
-          <div className={classNames(styles.title, 'mb-[8px]')}>Поздравляем!</div>
-          <div className={styles.subtitle}>Общий бонус составил</div>
+          <div className={classNames(styles.title, 'mb-[8px]')}>{t('congratulations')}</div>
+          <div className={styles.subtitle}>{t('totalBonusAmount')}</div>
           <div className={styles.value}>1 290 RUB</div>
         </div>
-        <div className={styles.descr}>
-          Для вывода выигрыша вам необходимо сделать минимальный депозит и отыграть общий вейджер
-          х40.
-        </div>
-        <Button className="w-[100%] mt-[40px]">Пополнить баланс</Button>
+        <div className={styles.descr}>{t('toWidthdrawMinDepositAndWager40')}</div>
+        <Button className="w-[100%] mt-[40px]">{t('topUpBalance')}</Button>
         <Button elType="outlined" className="w-[100%] mt-[16px]">
-          Отмена
+          {t('cancel')}
         </Button>
       </div>
     </Modal>

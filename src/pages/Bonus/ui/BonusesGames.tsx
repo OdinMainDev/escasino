@@ -6,7 +6,9 @@ import { useSearchParams } from 'react-router-dom';
 import { IGame } from '@/shared/models/interfaces/game';
 import { getGamesAllApi } from '@/app/api/games/getGamesAll';
 import { PageHeader } from '@/widgets/Header';
+import { useTranslation } from 'react-i18next';
 const BonusesGames = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const [bonusesGames, setBonusesGames] = useState<IGame[]>([]);
   const router = useRouter();
@@ -23,7 +25,7 @@ const BonusesGames = () => {
   }, [searchParams]);
   return (
     <div className={styles.container}>
-      <PageHeader title="Игры бонусов" />
+      <PageHeader title={t('bonusGames')} />
       <div className={styles.games}>
         {bonusesGames.map((item) => (
           <Game

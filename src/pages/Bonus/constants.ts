@@ -3,44 +3,44 @@ import { IBonusTabs } from './models/interface';
 export const tabs: IBonusTabs[] = [
   {
     tab: {
-      label: 'Активные',
+      label: 'actives',
       value: 'false',
     },
     filters: [
       {
-        label: 'Все',
+        label: 'all',
         value: 0,
       },
       {
-        label: 'Активные',
+        label: 'actives',
         value: 2,
       },
       {
-        label: 'Неактивные',
+        label: 'noActives',
         value: 1,
       },
     ],
   },
   {
     tab: {
-      label: 'История',
+      label: 'History',
       value: 'true',
     },
     filters: [
       {
-        label: 'Все',
+        label: 'all',
         value: 0,
       },
       {
-        label: 'Завершенный',
+        label: 'ended',
         value: 3,
       },
       {
-        label: 'Отмененные',
+        label: 'canceled',
         value: 4,
       },
       {
-        label: 'Истекший',
+        label: 'expired',
         value: 5,
       },
     ],

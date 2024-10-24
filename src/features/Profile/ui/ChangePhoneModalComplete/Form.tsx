@@ -1,8 +1,10 @@
 import styles from './Form.module.scss';
 import Button from '@/shared/ui/Button';
 import { useModal } from '@/app/providers/ModalProvider';
+import { useTranslation } from 'react-i18next';
 
 const ProfileChangePhoneCompleteForm = () => {
+  const { t } = useTranslation();
   const { doCloseModals } = useModal();
 
   const sendData = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -12,9 +14,9 @@ const ProfileChangePhoneCompleteForm = () => {
   return (
     <form className={styles.container}>
       <div>
-        <div className={styles.title}>Успешно изменен телефон</div>
+        <div className={styles.title}>{t('emailPhoneSuccessfully')}</div>
         <Button className={styles.button} onClick={sendData}>
-          Закрыть
+          {t('close')}
         </Button>
       </div>
     </form>

@@ -3,14 +3,16 @@ import Loader from '@/shared/ui/Loader';
 import { useAppSelector } from '@/store/hooks/redux';
 import BalanceItem from '@/features/Wallet/ui/BalanceItem';
 import { PageHeader } from '@/widgets/Header';
+import { useTranslation } from 'react-i18next';
 
 const Currencies = () => {
+  const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
 
   return (
     <>
-      <PageHeader title="Счета" />
+      <PageHeader title={t('accounts')} />
       <div className={styles.container}>
         {!user || !settings ? (
           <Loader />
