@@ -7,10 +7,9 @@ import { useEffect, useState } from 'react';
 
 interface IProps extends IModal {
   openLoginModal: () => void;
-  openTextAfterRegister: () => void;
 }
 
-const AuthRegisterModal = ({ close, openLoginModal, openTextAfterRegister }: IProps) => {
+const AuthRegisterModal = ({ close, openLoginModal }: IProps) => {
   const { modalName, isModalOpen } = useModal();
   const [isOpen, setIsOpen] = useState(isModalOpen && modalName == 'register');
 
@@ -21,7 +20,7 @@ const AuthRegisterModal = ({ close, openLoginModal, openTextAfterRegister }: IPr
   return (
     <Modal isOpen={isOpen} close={close}>
       <div className={styles.container}>
-        <Form openLoginModal={openLoginModal} openTextAfterRegister={openTextAfterRegister} />
+        <Form openLoginModal={openLoginModal} />
       </div>
     </Modal>
   );

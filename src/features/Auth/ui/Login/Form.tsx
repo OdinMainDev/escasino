@@ -67,6 +67,10 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
       const fid = await getVisitorId();
       const data = await doLoginApi({ ...loginData, fid });
       setAuthenticated(data.token);
+      const supportDiv = document.getElementById('essupport');
+      if (supportDiv) {
+        supportDiv.setAttribute('data-user-token', data.token);
+      }
       doCloseModals();
       document.body.classList.remove('overflow-hidden');
     } catch (e: unknown) {

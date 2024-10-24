@@ -79,6 +79,21 @@ const ProfileForm = () => {
   useEffect(() => {
     if (user) {
       setUserData(userDataMapper(user));
+      if (!user.data.email_verified_at) {
+        doOpenModal('alert');
+        setAlertData({
+          title: 'Подтвердите адрес\nэлектронной почты',
+          close: doCloseModals,
+          text: 'На адрес вашей электронной почты было отправлено письмо с ссылкой на активацию бездепозитного бонуса.',
+          buttons: [
+            {
+              type: 'contained',
+              text: 'Продолжить',
+              onClick: () => doCloseModals(),
+            },
+          ],
+        });
+      }
     }
   }, [user]);
 
@@ -310,7 +325,7 @@ const ProfileForm = () => {
           {!user?.data.email_verified_at && (
             <div className={styles.email_title}>
               <Icons icon="warning" />
-              {!user?.data.phone_verified_at ? (
+              {!user?.data.email_verified_at ? (
                 <span>
                   Подтвердите адрес электронной почты, чтобы получить бездепозитный бонус.
                 </span>

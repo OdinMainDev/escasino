@@ -31,12 +31,6 @@ const FooterAuthModals = () => {
     doCloseModals();
   };
 
-  const openTextAfterRegister = () => {
-    document.body.classList.add('overflow-hidden');
-    doCloseModals();
-    doOpenModal('text-after-register');
-  };
-
   return (
     <>
       <AuthLoginModal
@@ -44,11 +38,7 @@ const FooterAuthModals = () => {
         openRegistrationModal={openRegistration}
         openResetModal={openReset}
       />
-      <AuthRegisterModal
-        close={closeAll}
-        openLoginModal={openLogin}
-        openTextAfterRegister={openTextAfterRegister}
-      />
+      <AuthRegisterModal close={closeAll} openLoginModal={openLogin} />
       <AuthResetModal close={closeAll} openLoginModal={openLogin} />
       <AuthResetFormSetPasswordModal close={closeAll} />
       <AuthResetSetPasswordCompleteModal close={closeAll} />

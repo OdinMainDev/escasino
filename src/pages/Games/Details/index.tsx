@@ -19,6 +19,7 @@ import { AlertModal, IAlert } from '@/entities/AlertModal';
 import { deleteCartBonusesItem } from '@/store/slices/cartBonusesSlice';
 import { PageHeader } from '@/widgets/Header';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
+import { getBonuses } from '@/store/slices/bonusesSlices';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
@@ -27,12 +28,17 @@ const Details = () => {
   const router = useRouter();
   const { noDepositsBonuses } = useAppSelector((state) => state.noDepositBonusesSlice);
   const { doOpenModal, doCloseModals } = useModal();
-  const { bonuses } = useAppSelector((state) => state.bonusesSlice);
+  const { bonuses, activeBonuses } = useAppSelector((state) => state.bonusesSlice);
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const { user } = useAppSelector((state) => state.userReducer);
   const { bonusesTemplates: cartBonuses } = useAppSelector((state) => state.cartBonusesSlice);
   const [alertData, setAlertData] = useState<IAlert | null>(null);
   const dispatch = useAppDispatch();
+  const isWarning =
+    game?.has_no_deposit_bonus &&
+    noDepositsBonuses.length > 0 &&
+    user?.data.email_verified_at === 0 &&
+    Number(import.meta.env.VITE_USER_CREATED_AT_LIMIT) >= user?.data.created_at;
   const currentLanguage = useCurrentLanguage();
   const [imagePath, setImagePath] = useState('');
   useEffect(() => {
@@ -52,6 +58,10 @@ const Details = () => {
       void getGameById();
     }
   }, [id]);
+
+  useEffect(() => {
+    void dispatch(getBonuses());
+  }, []);
 
   const openBonusError = () => {
     setAlertData({
@@ -198,6 +208,7 @@ const Details = () => {
 
         {game?.has_no_deposit_bonus && noDepositsBonuses.length > 0 ? (
           <Button
+            disabled={isWarning || activeBonuses.length > 0}
             className={classNames(styles.button, styles.button_big)}
             onClick={openNoDepositBonus}
           >
@@ -215,6 +226,20 @@ const Details = () => {
           </Button>
         ) : null}
       </div>
+      {isWarning ||
+        (activeBonuses.length > 0 && (
+          <div className={styles.warning}>
+            <Icons icon="warning" />
+            {isWarning ? (
+              <span>
+                Бездепозитный бонус недоступен, потому что вы не подтвердили адрес электронной
+                почты.
+              </span>
+            ) : (
+              <span>Бездепозитный бонус недоступен, у вас есть активированный бонус</span>
+            )}
+          </div>
+        ))}
       <div className={styles.winnings}>
         <WinningsList />
       </div>

@@ -17,6 +17,21 @@
   }
 }
 
+.warning {
+  padding: 0 16px;
+  display: flex;
+  margin-bottom: 24px;
+  color: var(--error-primary);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  svg {
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+}
+
 .header_container {
   position: relative;
   margin-bottom: 24px;

@@ -27,13 +27,13 @@ import { IResponseError } from '@/shared/models/interfaces/misc';
 import { ErrorResponseAsString } from '@/app/api/helpers';
 import Tabs from '@/entities/Tabs';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from '@/shared/helpers/navigation';
 
 interface IProps {
   openLoginModal: () => void;
-  openTextAfterRegister: () => void;
 }
 
-const AuthRegisterForm = ({ openLoginModal, openTextAfterRegister }: IProps) => {
+const AuthRegisterForm = ({ openLoginModal }: IProps) => {
   const { t } = useTranslation();
   const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
   const { isAuth, setAuthenticated } = useAuthProvider();
@@ -41,7 +41,7 @@ const AuthRegisterForm = ({ openLoginModal, openTextAfterRegister }: IProps) => 
   const [errorData, setErrorData] = useState<IResponseError>();
   const [registerData, setRegisterData] = useState<IRegisterData>(sampleIRegisterData);
   const [selectedType, setSelectedType] = useState('email');
-
+  const router = useRouter();
   const {
     isFinished: isFinishedCountries,
     loading: loadingCountries,
@@ -127,7 +127,11 @@ const AuthRegisterForm = ({ openLoginModal, openTextAfterRegister }: IProps) => 
       }
       const data = await doRegisterApi(postData);
       setAuthenticated(data.token);
-      openTextAfterRegister();
+      const supportDiv = document.getElementById('essupport');
+      if (supportDiv) {
+        supportDiv.setAttribute('data-user-token', data.token);
+      }
+      router.push('/profile/edit');
     } catch (e: unknown) {
       const regError = e as IResponseError;
       const regErrorList = Object.keys(regError.errors);

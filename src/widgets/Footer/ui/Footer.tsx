@@ -7,8 +7,6 @@ import { useAuthProvider } from '@/app/providers/AuthProvider';
 import Loader from '@/shared/ui/Loader';
 import ChatIcon from '@/widgets/Header/ui/ChatIcon';
 import useBrowserInfo from '@/shared/hooks/useBrowserInfo';
-import TextAfterRegisterdModal from '@/features/Auth/ui/TextAfterRegister';
-import { useModal } from '@/app/providers/ModalProvider';
 
 type FooterProps = {
   isHidden?: boolean;
@@ -17,12 +15,7 @@ type FooterProps = {
 
 export const Footer = ({ isHidden, isPhoneHorizontal }: FooterProps) => {
   const { isAuth, loading } = useAuthProvider();
-  const { doCloseModals } = useModal();
   const browserInfo = useBrowserInfo();
-  const closeAll = () => {
-    document.body.classList.remove('overflow-hidden');
-    doCloseModals();
-  };
 
   if (loading) {
     return footerLoading();
@@ -63,7 +56,6 @@ export const Footer = ({ isHidden, isPhoneHorizontal }: FooterProps) => {
         {isAuth ? (
           // Меню если авторизован
           <div className={styles.footer}>
-            <TextAfterRegisterdModal close={closeAll} />
             {isPhoneHorizontal ? <ChatIcon /> : <CurrencyInfo />}
             <div className={styles.icons}>
               <UserIcon />
