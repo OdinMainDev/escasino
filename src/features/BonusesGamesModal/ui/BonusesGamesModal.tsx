@@ -49,7 +49,7 @@ const BonusesGamesModal = ({ close, isOpen, games, onSelectGame }: IProps) => {
             onClear={() => {
               setAllGames(games);
             }}
-            onChange={(e) => searchGames(e.target.value)}
+            onChange={(e) => searchGames(e.target.value.toLowerCase())}
             placeholder="Поиск игр"
           />
         </div>

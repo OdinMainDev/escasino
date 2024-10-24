@@ -1,5 +1,5 @@
 export interface IResponseError {
-  errors: IBasicErrors;
+  errors: IBasicErrors | string;
   success: boolean;
 }
 

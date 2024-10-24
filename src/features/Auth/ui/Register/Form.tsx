@@ -182,8 +182,19 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
                 }
               }}
               containerClassName="mb-[10px]"
-              isError={!!errorData?.errors['email']}
-              message={ErrorResponseAsString('email', t('enterCorrectEmail'), errorData)}
+              isError={
+                (typeof errorData?.errors === 'object' && !!errorData.errors['email' as string]) ||
+                errorData?.errors === 'UserWithSameCredentialsAlreadyExists'
+              }
+              message={
+                errorData?.errors === 'UserWithSameCredentialsAlreadyExists'
+                  ? ErrorResponseAsString(
+                      'UserWithSameCredentialsAlreadyExists',
+                      'Такой пользователь уже существует!',
+                      errorData,
+                    )
+                  : ErrorResponseAsString('email', t('enterCorrectEmail'), errorData)
+              }
             />
           ) : null}
           {(formType === 'full' && selectedType === 'phone') || formType === 'phone' ? (
@@ -198,7 +209,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
               }}
               containerClassName="mb-[10px]"
               validationFunction={validatePhone}
-              isError={!!errorData?.errors['phone']}
+              isError={typeof errorData?.errors === 'object' && !!errorData?.errors['phone']}
               message={ErrorResponseAsString('phone', t('enterCorrectPhone'), errorData)}
             />
           ) : null}
@@ -211,7 +222,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           <Input
             placeholder={t('password')}
             type="password"
-            isError={!!errorData?.errors['password']}
+            isError={typeof errorData?.errors === 'object' && !!errorData?.errors['password']}
             containerClassName={styles.input}
             value={registerData.password}
             validationFunction={validatePasswordLength}
@@ -221,7 +232,9 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           <Input
             placeholder={t('confirmPassword')}
             type="password"
-            isError={!!errorData?.errors['repeat_password']}
+            isError={
+              typeof errorData?.errors === 'object' && !!errorData?.errors['repeat_password']
+            }
             containerClassName={styles.input}
             validationFunction={(value) => validatePasswordMatching(registerData.password, value)}
             message={ErrorResponseAsString('repeat_password', t('enterCorrectPassword'), errorData)}
@@ -233,7 +246,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
       )}
       {currenciesList.length > 1 ? (
         <Select
-          isError={!!errorData?.errors['currency']}
+          isError={typeof errorData?.errors === 'object' && !!errorData?.errors['currency']}
           optionList={currenciesList}
           value={registerData.currency}
           containerClassName={styles.input}
@@ -248,7 +261,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           placeholder={'Username'}
           type={'text'}
           containerClassName={styles.input}
-          isError={!!errorData?.errors['username']}
+          isError={typeof errorData?.errors === 'object' && !!errorData?.errors['username']}
           message={ErrorResponseAsString('username', t('enterCorrectUsername'), errorData)}
           onChange={(e) => setRegisterData((prev) => ({ ...prev, username: e.target.value }))}
         />
@@ -261,7 +274,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             placeholder={t('lastName')}
             type={'text'}
             containerClassName={styles.input}
-            isError={!!errorData?.errors['last_name']}
+            isError={typeof errorData?.errors === 'object' && !!errorData?.errors['last_name']}
             message={ErrorResponseAsString('last_name', t('enterCorrectLastName'), errorData)}
             onChange={(e) => setRegisterData((prev) => ({ ...prev, last_name: e.target.value }))}
           />
@@ -269,7 +282,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             placeholder={t('firstName')}
             type={'text'}
             containerClassName={styles.input}
-            isError={!!errorData?.errors['first_name']}
+            isError={typeof errorData?.errors === 'object' && !!errorData?.errors['first_name']}
             message={ErrorResponseAsString('first_name', t('enterCorrectFirstName'), errorData)}
             onChange={(e) => setRegisterData((prev) => ({ ...prev, first_name: e.target.value }))}
           />
@@ -277,7 +290,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             placeholder={t('fatherName')}
             type={'text'}
             containerClassName={styles.input}
-            isError={!!errorData?.errors['second_name']}
+            isError={typeof errorData?.errors === 'object' && !!errorData?.errors['second_name']}
             message={ErrorResponseAsString('second_name', t('enterCorrectFatherName'), errorData)}
             onChange={(e) => setRegisterData((prev) => ({ ...prev, second_name: e.target.value }))}
           />
@@ -286,7 +299,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
       {hasCity && (
         <div className="tab">
           <Select
-            isError={!!errorData?.errors['country']}
+            isError={typeof errorData?.errors === 'object' && !!errorData?.errors['country']}
             optionList={countriesList}
             value={registerData.country}
             containerClassName={styles.input}
@@ -297,7 +310,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             placeholder={t('city')}
             type={'text'}
             containerClassName={styles.input}
-            isError={!!errorData?.errors['city']}
+            isError={typeof errorData?.errors === 'object' && !!errorData?.errors['city']}
             message={ErrorResponseAsString('city', t('enterCorrectCity'), errorData)}
             onChange={(e) => setRegisterData((prev) => ({ ...prev, city: e.target.value }))}
           />
@@ -309,7 +322,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
           placeholder={t('birthDate')}
           type="datetime-local"
           containerClassName={styles.input}
-          isError={!!errorData?.errors['dob']}
+          isError={typeof errorData?.errors === 'object' && !!errorData?.errors['dob']}
           message={ErrorResponseAsString('dob', t('enterCorrectBirthDate'), errorData)}
           onChange={(e) => {
             const inputDate = new Date(e.target.value);
@@ -326,7 +339,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             placeholder={t('address')}
             type={'text'}
             containerClassName={styles.input}
-            isError={!!errorData?.errors['address']}
+            isError={typeof errorData?.errors === 'object' && !!errorData?.errors['address']}
             message={ErrorResponseAsString('address', t('enterCorrectAddress'), errorData)}
             onChange={(e) => setRegisterData((prev) => ({ ...prev, address: e.target.value }))}
           />
@@ -334,7 +347,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             placeholder={t('mailIndex')}
             type={'text'}
             containerClassName={styles.input}
-            isError={!!errorData?.errors['zip']}
+            isError={typeof errorData?.errors === 'object' && !!errorData?.errors['zip']}
             message={ErrorResponseAsString('zip', t('enterCorrectMailIndex'), errorData)}
             onChange={(e) => setRegisterData((prev) => ({ ...prev, zip: e.target.value }))}
           />
@@ -343,7 +356,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
 
       {hasGender && (
         <Select
-          isError={!!errorData?.errors['gender']}
+          isError={typeof errorData?.errors === 'object' && !!errorData?.errors['gender']}
           optionList={genderSelect}
           value={registerData.gender}
           containerClassName={styles.input}
@@ -363,7 +376,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
 
       <div className={styles.checkbox}>
         <Checkbox
-          isError={!!errorData?.errors['terms']}
+          isError={typeof errorData?.errors === 'object' && !!errorData?.errors['terms']}
           value={registerData.terms}
           label={
             <span>
