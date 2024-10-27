@@ -3,6 +3,7 @@ import styles from './Rules.module.scss';
 import Tabs, { ITab } from '@/entities/Tabs';
 import { useState } from 'react';
 import rulesAndTerms from '../data/rulesAndTerms.json';
+import { useTranslation } from 'react-i18next';
 
 type RuleContent = { [key: string]: string | RuleContent };
 
@@ -16,24 +17,28 @@ interface RulesAndTerms {
 }
 
 const Rules = () => {
+  const { t } = useTranslation();
   const tabs: ITab[] = [
     {
-      label: 'Общие',
+      label: t('common'),
       value: 'main',
     },
     {
-      label: 'Бонусные',
+      label: t('bonusOnes'),
       value: 'bonus',
     },
   ];
   const [selectedTab, setSelectedTab] = useState<ITab>(tabs[0]);
 
   const renderContent = (content: RuleContent) => {
-    return Object.entries(content).map(([key, value]) => {
+    return Object.entries(content).map(([key, value], index) => {
       if (typeof value === 'string') {
+        if (index == 0) {
+          console.log(t(key), t(value));
+        }
         return (
           <div key={key}>
-            <strong>{key}</strong>: {value}
+            <strong>{t(key)}</strong>: {t(value)}
           </div>
         );
       } else {
@@ -56,13 +61,13 @@ const Rules = () => {
 
   return (
     <div className={styles.container}>
-      <PageHeader title="Правила и условия" />
+      <PageHeader title={t('rulesAndConditions')} />
       <Tabs value={selectedTab.value} tabs={tabs} onChange={(value) => setSelectedTab(value)} />
       {selectedTab.value === 'main' ? (
         <div className={styles.content} key="main">
           {mainRules.map(([key, rule]) => (
             <div key={key} style={{ marginBottom: '20px' }}>
-              <h2>{rule.title}</h2>
+              <h2>{t(rule.title)}</h2>
               <div style={{ marginLeft: '20px' }}>{renderContent(rule.content)}</div>
             </div>
           ))}
@@ -71,7 +76,7 @@ const Rules = () => {
         <div className={styles.content} key="bonuses">
           {bonusRules.map(([key, rule]) => (
             <div key={key} style={{ marginBottom: '20px' }}>
-              <h2>{rule.title}</h2>
+              <h2>{t(rule.title)}</h2>
               <div style={{ marginLeft: '20px' }}>{renderContent(rule.content)}</div>
             </div>
           ))}

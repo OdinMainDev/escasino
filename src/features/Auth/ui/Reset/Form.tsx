@@ -17,12 +17,14 @@ import { IResetData, doResetApi, sampleIResetData } from '@/app/api/auth/doReset
 import { IResponseError } from '@/shared/models/interfaces/misc';
 import { ErrorResponseAsString } from '@/app/api/helpers';
 import Tabs from '@/entities/Tabs';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   openLoginModal: () => void;
 }
 
 const AuthResetForm = ({ openLoginModal }: IProps) => {
+  const { t } = useTranslation();
   const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
   const { isAuth } = useAuthProvider();
   const { doSetResetHash, doOpenModal } = useModal();
@@ -70,7 +72,7 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
         </div>
       )}
       <div>
-        <div className={styles.title}>Восстановление пароля</div>
+        <div className={styles.title}>{t('passwordRecovery')}</div>
         <div className="row">
           {formType === 'full' && (
             <Tabs
@@ -80,11 +82,11 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
               tabs={[
                 {
                   value: 'email',
-                  label: 'Электронная почта',
+                  label: t('email'),
                 },
                 {
                   value: 'phone',
-                  label: 'Телефон',
+                  label: t('phone'),
                 },
               ]}
             />
@@ -92,7 +94,7 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
           <div className="tab">
             {(formType === 'full' && selectedType === 'email') || formType === 'email' ? (
               <Input
-                placeholder="Электронная почта"
+                placeholder={t('email')}
                 type="email"
                 onChange={(e) => {
                   setResetData((prev) => ({ ...prev, email: e.target.value }));
@@ -102,16 +104,16 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
                 }}
                 containerClassName={styles.input}
                 autoComplete={autoCompleteHandler('email')}
-                isError={!!errorData?.errors['email']}
-                message={ErrorResponseAsString('email', 'Введите корректный e-mail', errorData)}
+                isError={typeof errorData?.errors === 'object' && !!errorData?.errors['email']}
+                message={ErrorResponseAsString('email', t('enterCorrectEmail'), errorData)}
               />
             ) : null}
             {(formType === 'full' && selectedType === 'phone') || formType === 'phone' ? (
               <Input
-                placeholder={'Телефон'}
+                placeholder={t('phone')}
                 type="phone"
                 containerClassName={styles.input}
-                isError={!!errorData?.errors['phone']}
+                isError={typeof errorData?.errors === 'object' && !!errorData?.errors['phone']}
                 validationFunction={validatePhone}
                 // autoComplete={autoCompleteHandler('phone')}
                 onChangePhone={(value) => {
@@ -120,7 +122,7 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
                     setResetData((prev) => ({ ...prev, email: '' }));
                   }
                 }}
-                message={ErrorResponseAsString('phone', 'Введите корректный телефон', errorData)}
+                message={ErrorResponseAsString('phone', t('enterCorrectPhone'), errorData)}
               />
             ) : null}
           </div>
@@ -140,10 +142,10 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
           className={styles.button}
           onClick={(e) => void sendData(e)}
         >
-          Сбросить
+          {t('reset')}
         </Button>
         <div className={styles.label} onClick={openLoginModal}>
-          Вспомнили аккаунт?
+          {t('rememberAccount')}
         </div>
       </div>
     </form>

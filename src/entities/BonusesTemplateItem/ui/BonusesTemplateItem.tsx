@@ -6,6 +6,7 @@ import { deleteCartBonusesItem } from '@/store/slices/cartBonusesSlice';
 import classNames from 'classnames';
 import { IGame } from '@/shared/models/interfaces/game';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
+import { useTranslation } from 'react-i18next';
 
 interface IProps extends BaseHTMLAttributes<HTMLElement> {
   template: ICartBonusTemplate;
@@ -13,6 +14,7 @@ interface IProps extends BaseHTMLAttributes<HTMLElement> {
 }
 
 const BonusesTemplateItem = ({ template, games, ...otherProps }: IProps) => {
+  const { t } = useTranslation();
   const currentLanguage = useCurrentLanguage();
   const dispatch = useAppDispatch();
   const [removing, setRemoving] = useState(false);
@@ -44,7 +46,7 @@ const BonusesTemplateItem = ({ template, games, ...otherProps }: IProps) => {
       template.meta.texts?.find((item) => item.language.toLowerCase() === currentLanguage)?.value ??
       '';
     if (bonusTitle) return bonusTitle;
-    return template.type === 'freespins' ? 'Freespins бонус' : 'Бонус к депозиту';
+    return template.type === 'freespins' ? t('freespinsBonus') : t('bonusToDeposit');
   };
 
   const getDescription = (gameName: string) => {

@@ -36,6 +36,7 @@ interface IProps {
 }
 
 const Bonuses = ({ isNoDeposit }: IProps) => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const { user } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
@@ -62,7 +63,6 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   const [alertModalData, setAlertModalData] = useState<IAlert>({});
   const [isError, setIsError] = useState(false);
   const [openGamesModal, setOpenGamesModal] = useState(false);
-  const { t } = useTranslation();
   const isBonusScrollAllTemplates = import.meta.env.VITE_BONUS_SCROLL_TYPE === 'all';
   const imagePath = selectedGame
     ? selectedGame.system_name
@@ -103,11 +103,11 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
 
   const openErrorModal = useCallback(() => {
     setAlertModalData({
-      title: 'Ошибка',
-      text: 'Произошла непредвиденная ошибка, повторите попытку позже',
+      title: t('error'),
+      text: t('unexpectedError'),
       buttons: [
         {
-          text: 'Отмена',
+          text: t('cancel'),
           type: 'outlined',
           onClick: doCloseModals,
         },
@@ -118,10 +118,10 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
 
   const openTemplateErrorModal = useCallback(() => {
     setAlertModalData({
-      title: 'Отсутствует такая комбинация',
+      title: t('noSuchCombination'),
       buttons: [
         {
-          text: 'Отмена',
+          text: t('cancel'),
           type: 'outlined',
           onClick: doCloseModals,
         },
@@ -135,21 +135,19 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
       pathname: '/bonus',
     });
     setAlertModalData({
-      title: 'Бонус успешно добавлен',
+      title: t('bonusAddedSuccess'),
       text: (
         <div>
           <img src={successIcon} alt="success added bonus" className="m-auto mb-[24px]" />
           <div className="font-semibold text-2xl text-center mb-[8px]">
-            Бонус успешно добавлен в корзину
+            {t('bonusAddedSuccessInCart')}
           </div>
-          <div className="font-normal text-base text-center mb-[10px]">
-            Желаем вам приятной игры!
-          </div>
+          <div className="font-normal text-base text-center mb-[10px]">{t('goodGame')}</div>
         </div>
       ),
       buttons: [
         {
-          text: 'Закрыть',
+          text: t('close'),
           type: 'contained',
           onClick: () => {
             doCloseModals();
@@ -168,10 +166,10 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
 
       if (totalBonuses > 0 && settings.bonus.max_bonuses_per_deposit == 1) {
         setAlertModalData({
-          title: 'У вас уже выбран бонус',
+          title: t('bonusAlreadySelected'),
           buttons: [
             {
-              text: 'Отмена',
+              text: t('cancel'),
               type: 'outlined',
               onClick: doCloseModals,
             },
@@ -216,10 +214,10 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
     }
 
     setAlertModalData({
-      title: 'Выберите способ оплаты',
+      title: t('selectPaymentWay'),
       buttons: [
         {
-          text: 'Добавить в корзину',
+          text: t('addToCart'),
           type: 'contained',
           onClick: () => {
             if (selectedTemplate) {
@@ -231,7 +229,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
           },
         },
         {
-          text: 'Перейти к оплате',
+          text: t('goToPayment'),
           type: 'outlined',
           onClick: () => {
             if (selectedTemplate) {
@@ -286,15 +284,15 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
 
   const selectNoDepositBonus = () => {
     setAlertModalData({
-      title: 'Вы точно хотите получить именно этот бонус?',
+      title: t('sureThatBonus'),
       buttons: [
         {
-          text: 'Отмена',
+          text: t('cancel'),
           type: 'outlined',
           onClick: doCloseModals,
         },
         {
-          text: 'Получить',
+          text: t('get'),
           type: 'contained',
           onClick: () => void activeNoDeposit(),
         },
@@ -388,7 +386,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
     <div className={styles.container}>
       <PageHeader
         customBackPath={'/' + currentLanguage + '/wallet/deposit/replenish'}
-        title="Собери свой бонус"
+        title={t('collectYourBonus')}
       />
       <div className={styles.content}>
         {loading ? (
@@ -420,19 +418,19 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                     className="w-[100%]"
                     onClick={() => setOpenGamesModal(true)}
                   >
-                    Изменить игру
+                    {t('changeGame')}
                   </Button>
                 </div>
               ) : (
                 <div className={styles.game}>
                   <div className={classNames(styles.game_image_empty, styles.game_image)} />
-                  <div className={styles.game_title}>Выберите игру</div>
+                  <div className={styles.game_title}>{t('chooseGame')}</div>
                   <Button
                     elType="outlined"
                     className="w-[100%] mb-[20px]"
                     onClick={() => setOpenGamesModal(true)}
                   >
-                    Изменить игру
+                    {t('changeGame')}
                   </Button>
                 </div>
               )
@@ -445,7 +443,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
             <div className={styles.settings}>
               {tabs.length > 1 && (
                 <>
-                  <div className={styles.settings_title}>Тип бонуса</div>
+                  <div className={styles.settings_title}>{t('bonusType')}</div>
                   <div className={styles.settings_tabs}>
                     {tabs.map((item, index) => (
                       <TabItem
@@ -485,14 +483,10 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
               })}
             >
               {isError && isBonusScrollAllTemplates ? (
-                <div className={styles.footer_error}>
-                  Невозможная комбинация! Попробуйте другой вариант
-                </div>
+                <div className={styles.footer_error}>{t('impossibleCombination')}</div>
               ) : (
                 !isNoDeposit && (
-                  <div className={styles.footer_title}>
-                    Рассчитывается на основе настроек бонуса
-                  </div>
+                  <div className={styles.footer_title}>{t('calculatedOnBonusSettings')}</div>
                 )
               )}
 
@@ -502,13 +496,13 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                   className="flex-1 uppercase w-[100%] max-h-[47px]"
                   onClick={selectNoDepositBonus}
                 >
-                  Получить бездеп бонус
+                  {t('getNoDepositBonus')}
                 </Button>
               ) : (
                 <div className="flex items-center gap-[16px]">
                   <div className={styles.footer_info}>
                     <div className={styles.footer_label}>
-                      {minAmountCart !== 0 || maxAmountCart !== 0 ? 'Сумма депозита' : ''}
+                      {minAmountCart !== 0 || maxAmountCart !== 0 ? t('depositSum') : ''}
                     </div>
                     <div className={styles.footer_value}>
                       {minAmountCart === 0 && maxAmountCart === 0 ? (
@@ -517,7 +511,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                         <>
                           От {minAmountCart}{' '}
                           {maxAmountCart !== 0
-                            ? `до ${maxAmountCart} ${user?.balance.currency}`
+                            ? `${t('before')} ${maxAmountCart} ${user?.balance.currency}`
                             : null}
                         </>
                       ) : (
@@ -540,12 +534,12 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                       (selectedTab === 'freespins' &&
                         settings?.bonus.max_bonuses_freespins_per_deposit <=
                           cartBonuses.filter((item) => item.type === 'freespins').length))
-                      ? 'Перейти к оплате'
+                      ? t('goToPayment')
                       : settings?.bonus.max_bonuses_per_deposit === 0
-                        ? 'Добавить'
+                        ? t('add')
                         : settings?.bonus.max_bonuses_per_deposit === cartBonuses.length
-                          ? 'Перейти к оплате'
-                          : 'Добавить'}
+                          ? t('goToPayment')
+                          : t('add')}
                   </Button>
                 </div>
               )}

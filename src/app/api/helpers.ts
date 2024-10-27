@@ -4,25 +4,24 @@ export const ErrorResponseAsString = (
   key: string,
   prefix: string,
   data: IResponseError | undefined | null,
-) => {
-  if (data == null) {
-    return '';
-  }
-  if (!data == null) {
-    return '#undefined1';
-  }
-  if (!data.errors) {
-    return '#undefined2';
-  }
-
-  if ((data.errors as unknown as string) === key) {
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-base-to-string
-    return prefix + '(Ошибка: ' + data.errors + ' )';
-  }
-
-  if (!data.errors[key]) {
+): string => {
+  if (!data || !data.errors) {
     return '';
   }
 
-  return prefix + '(Ошибка: ' + data.errors[key].join(', ') + ' )';
+  if (typeof data.errors === 'string') {
+    if (data.errors === key) {
+      return `${prefix}(Ошибка: ${data.errors})`;
+    }
+    return '';
+  }
+
+  const error = data.errors[key];
+  if (!error) {
+    return '';
+  }
+
+  const errorMessage = Array.isArray(error) ? error.join(', ') : error;
+
+  return `${prefix}(Ошибка: ${errorMessage})`;
 };

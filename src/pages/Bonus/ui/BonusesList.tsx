@@ -14,8 +14,10 @@ import { AlertModal } from '@/entities/AlertModal';
 import { useModal } from '@/app/providers/ModalProvider';
 import { PageHeader } from '@/widgets/Header';
 import { getBonuses } from '@/store/slices/bonusesSlices';
+import { useTranslation } from 'react-i18next';
 
 const BonusesList = () => {
+  const { t } = useTranslation();
   const {
     bonuses: storeBonuses,
     loading,
@@ -116,7 +118,7 @@ const BonusesList = () => {
 
   return (
     <div className={styles.container}>
-      <PageHeader title="Спиок бонусов" />
+      <PageHeader title={t('bonusList')} />
       <Tabs
         className={styles.tabs}
         tabs={tabs.map((item) => item.tab)}
@@ -145,27 +147,27 @@ const BonusesList = () => {
         {loading && page === 1 ? (
           <div className={styles.loader}>
             <Loader />
-            <div>Загрузка бонусов...</div>
+            <div>{t('bonusLoading')}</div>
           </div>
         ) : bonuses && bonuses.length > 0 ? (
           bonuses.map((item) => <BonusesItem key={item.id} className="bonuses-list" bonus={item} />)
         ) : (
-          <div className={styles.empty}>У вас нет бонусов</div>
+          <div className={styles.empty}>{t('noHaveBonus')}</div>
         )}
       </div>
       {loading && page > 1 ? <Loader /> : null}
       {activeBonuses.length > 0 && (
         <AlertModal
-          title="Отмените бонус"
+          title={t('cancelBonusPlease')}
           close={doCloseModals}
           buttons={[
             {
-              text: 'Отменить',
+              text: t('cancel'),
               onClick: () => doCloseModals(),
               type: 'outlined',
             },
           ]}
-          text={'Отмените один из активных бонусов прежде чем активировать этот'}
+          text={t('cancelActiveBonusBeforeThis')}
         />
       )}
     </div>

@@ -8,8 +8,10 @@ import classNames from 'classnames';
 import { useRouter } from '@/shared/helpers/navigation';
 import { typeOfPosherModal } from './PusherModals';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const BonusPusher = () => {
+  const { t } = useTranslation();
   const keys: typeOfPosherModal[] = [
     'bonus_receive',
     'bonus_expire',
@@ -47,17 +49,17 @@ const BonusPusher = () => {
     if (filtredModalsKeys.length > 0) {
       switch (filtredModalsKeys[filtredModalsKeys.length - 1]) {
         case 'bonus_receive':
-          return 'Вам был добавлен бонус!!!';
+          return t('bonuseAddedToYou');
         case 'bonus_expire':
-          return 'Время жизни бонуса закончилось!';
+          return t('bounsLifeTimeExpired');
         case 'bonus_cancel':
-          return 'Ваш бонус был отменен!';
+          return t('yourBonusCanceled');
         case 'bonus_complete':
-          return 'Ваш бонус завершен!';
+          return t('yourBonusEnded');
         case 'bonus_scratch_receive':
-          return 'Вам был добавлен бонус скретч карты!';
+          return t('yourBonusScratchAdded');
         case 'bonus_scratch_complete':
-          return 'Ваш бонус скретч был завершен!';
+          return t('yourBonusScratchEnded');
       }
     }
     return;
@@ -67,17 +69,17 @@ const BonusPusher = () => {
     if (filtredModalsKeys.length > 0) {
       switch (filtredModalsKeys[filtredModalsKeys.length - 1]) {
         case 'bonus_receive':
-          return 'Поздравляeм!';
+          return t('congratulations');
         case 'bonus_expire':
-          return 'Бонус истек!';
+          return t('bonusExpire');
         case 'bonus_cancel':
-          return 'Бонус отменен!';
+          return t('bonusCanceled');
         case 'bonus_complete':
-          return 'Бонус завершен!';
+          return t('bonusEnded');
         case 'bonus_scratch_receive':
-          return 'Бонус скретч карты получен!';
+          return t('bonusScratchGained');
         case 'bonus_scratch_complete':
-          return 'Бонус скретч завершен!';
+          return t('bonusScratchEnded');
       }
     }
     return;
@@ -90,10 +92,10 @@ const BonusPusher = () => {
         <div className={classNames(styles.title, 'mb-[8px]')}>{getTitle()}</div>
         <div className={styles.subtitle}>{geSubtitle()}</div>
         <Button className="w-[100%] mt-[32px]" onClick={navigateToBonuses}>
-          Перейти к бонусам
+          {t('goToBonuses')}
         </Button>
         <Button elType="outlined" className="w-[100%] mt-[16px]" onClick={closeModal}>
-          Продолжить
+          {t('continue')}
         </Button>
       </div>
     </Modal>

@@ -1,21 +1,21 @@
-import { IResponseError } from '@/shared/models/interfaces/misc';
+import { IResponseError } from '../models/interfaces/misc';
 
 export const ErrorResponseAsString = (
   key: string,
   prefix: string,
   data: IResponseError | undefined | null,
 ) => {
-  if (data == null) {
+  if (!data || !data.errors) {
     return '';
   }
-  if (!data == null) {
-    return '#undefined1';
-  }
-  if (!data.errors) {
-    return '#undefined2';
-  }
-  if (!data.errors[key]) {
+
+  const error = typeof data.errors === 'object' ? data.errors[key] : '';
+
+  if (!error) {
     return '';
   }
-  return prefix + '(Ошибка: ' + data.errors[key].join(', ') + ' )';
+
+  const errorMessage = Array.isArray(error) ? error.join(', ') : error;
+
+  return `${prefix}(Ошибка: ${errorMessage})`;
 };

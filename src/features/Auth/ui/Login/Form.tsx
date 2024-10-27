@@ -128,7 +128,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
                 }}
                 value={loginData.email}
                 autoComplete={autoCompleteHandler('email')}
-                isError={!!errorData?.errors['email']}
+                isError={typeof errorData?.errors === 'object' && !!errorData?.errors['email']}
                 message={ErrorResponseAsString('email', t('enterCorrectEmail'), errorData)}
               />
             ) : null}
@@ -138,7 +138,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
                 type="phone"
                 value={loginData.phone}
                 containerClassName="mb-[10px]"
-                isError={!!errorData?.errors['phone']}
+                isError={typeof errorData?.errors === 'object' && !!errorData?.errors['phone']}
                 validationFunction={validatePhone}
                 autoComplete={autoCompleteHandler('phone')}
                 onChangePhone={(value) => {
@@ -157,7 +157,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
         <Input
           placeholder={t('password')}
           type="password"
-          isError={!!errorData?.errors['password']}
+          isError={typeof errorData?.errors === 'object' && !!errorData?.errors['password']}
           value={loginData.password}
           containerClassName="mb-[10px]"
           validationFunction={validatePasswordLength}

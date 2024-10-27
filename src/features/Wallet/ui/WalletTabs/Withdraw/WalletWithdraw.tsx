@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useState } from 'react';
 import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
@@ -11,7 +12,7 @@ import { ICreateWithdrawtData, IProviderLayout } from '@/features/Wallet/models/
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
+import { checkAmount, useGenerateLimitText } from '@/features/Wallet/helpers/payment';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 import { IErrorResponse } from '@/shared/models/interfaces/error';
 import { errorValidator } from '@/features/Wallet/helpers/validators';
@@ -129,7 +130,7 @@ const WalletWithdraw = () => {
   return (
     <div className={styles.content}>
       <div className={styles.block}>
-        <div className={styles.title}>Способ оплаты</div>
+        <div className={styles.title}>{t('paymentWay')}</div>
         <div className={styles.slider}>
           {billingLoading ? (
             <div className={styles.slider}>
@@ -169,7 +170,7 @@ const WalletWithdraw = () => {
           )}
         </div>
         {withdrawProviders && withdrawProviders?.length > 0 ? (
-          <div className={styles.title}>Провайдеры</div>
+          <div className={styles.title}>{t('providers')}</div>
         ) : null}
         {selectedProvider?.layout && (
           <div className={styles.selected_provider}>
@@ -189,12 +190,12 @@ const WalletWithdraw = () => {
             <div className="flex items-center justify-between">
               {selectedProvider.conditions.limit_minimum > 0 && (
                 <div className={styles.selected_provider_conditions}>
-                  Минимум: <strong>{selectedProvider.conditions.limit_minimum}</strong>
+                  {t('minimum')}: <strong>{selectedProvider.conditions.limit_minimum}</strong>
                 </div>
               )}
               {selectedProvider.conditions.limit_maximum > 0 && (
                 <div className={styles.selected_provider_conditions}>
-                  Максимум: <strong>{selectedProvider.conditions.limit_maximum}</strong>
+                  {t('maximum')}: <strong>{selectedProvider.conditions.limit_maximum}</strong>
                 </div>
               )}
             </div>
@@ -263,9 +264,9 @@ const WalletWithdraw = () => {
             ))}
           </div>
         ) : null}
-        <div className={styles.title}>Сумма депозита</div>
+        <div className={styles.title}>{t('depositSum')}</div>
         <Input
-          placeholder="Сумма"
+          placeholder={t('sum')}
           type="number"
           className="mb-[12px]"
           value={withdrawData.amount}
@@ -282,7 +283,7 @@ const WalletWithdraw = () => {
         />
         {selectedProvider && (
           <div className={styles.subtitle}>
-            {generateLimitText(
+            {useGenerateLimitText(
               selectedProvider.conditions.limit_minimum,
               selectedProvider.conditions.limit_maximum,
               selectedProvider.currency,
@@ -303,17 +304,17 @@ const WalletWithdraw = () => {
         onClick={() => void handleWithdraw()}
         className={classNames(styles.button, 'uppercase')}
       >
-        Вывести
+        {t('withdraw')}
       </Button>
       {!validateData({
         amount: Number(withdrawData.amount),
         max: Number(selectedProvider?.conditions.limit_maximum),
         min: Number(selectedProvider?.conditions.limit_minimum),
         layout,
-      }) && <div className={styles.error}>Заполните все поля</div>}
+      }) && <div className={styles.error}>{t('fillAllFields')}</div>}
       <SuccessPaymentModal
         isError={isError}
-        message={isError ? errorValidator(error) : 'заявка на вывод успешно подана'}
+        message={isError ? t(errorValidator(error)) : t('withdrawalSuccessfullySubmitted')}
         isOpen={openModal}
         close={closeModal}
         loading={loading}

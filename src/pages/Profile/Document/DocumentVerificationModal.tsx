@@ -8,6 +8,7 @@ import { objectToFormData } from '@/shared/helpers/objectToFormData';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { IResponseError } from '@/shared/models/interfaces/misc';
 import { ErrorResponseAsString } from '@/app/api/helpers';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ interface IProps {
 }
 
 const VerificationModal = ({ isOpen, close, modalType }: IProps) => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [errorData, setErrorData] = useState<IResponseError>();
   const [documentData, setDocumentData] = useState<IDocument>({
@@ -57,7 +59,7 @@ const VerificationModal = ({ isOpen, close, modalType }: IProps) => {
     <Modal isOpen={isOpen} close={close}>
       <div className={styles.container}>
         <div className={styles.body}>
-          <div className={styles.title}>Загрузите документ</div>
+          <div className={styles.title}>{t('loadingDocument')}</div>
           <label className={styles.image_container}>
             <svg
               width="32"
@@ -93,12 +95,12 @@ const VerificationModal = ({ isOpen, close, modalType }: IProps) => {
             </div>
           </label>
           <div className={styles.error}>
-            {ErrorResponseAsString('MaxFilesSent', 'Достигнут лимит отправки', errorData)}
-            {ErrorResponseAsString('TagAlreadyUsed', 'Вы уже отправили этот документ', errorData)}
+            {ErrorResponseAsString('MaxFilesSent', t('limitOfSend'), errorData)}
+            {ErrorResponseAsString('TagAlreadyUsed', t('youSendThisDocument'), errorData)}
           </div>
         </div>
         <Button onClick={() => void sendData()} disabled={loading} loading={loading}>
-          Отправить
+          {t('send')}
         </Button>
       </div>
     </Modal>

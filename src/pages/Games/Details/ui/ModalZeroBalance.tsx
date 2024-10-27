@@ -4,12 +4,14 @@ import { useModal } from '@/app/providers/ModalProvider';
 import Modal from '@/shared/ui/Modal';
 import Button from '@/shared/ui/Button';
 import { useRouter } from '@/shared/helpers/navigation';
+import { useTranslation } from 'react-i18next';
 
 interface IProps extends IModal {
   gameId?: number;
 }
 
 const ModalZeroBalance = ({ close, gameId }: IProps) => {
+  const { t } = useTranslation();
   const { modalName, isModalOpen } = useModal();
   const isOpen = !isModalOpen ? false : modalName == 'play-real-zero-balance';
   const router = useRouter();
@@ -30,13 +32,13 @@ const ModalZeroBalance = ({ close, gameId }: IProps) => {
       <div className={styles.container}>
         <div className={styles.container}>
           <div>
-            <div className={styles.title}>У вас на балансе пусто:(</div>
+            <div className={styles.title}>{t('balanceEmpty')}</div>
             <div className={styles.buttons_container}>
               <Button elType="outlined" className={styles.button} onClick={openGame}>
-                В игру
+                {t('toGame')}
               </Button>
               <Button className={styles.button} onClick={openDeposit}>
-                Пополнить
+                {t('topUpBalance')}
               </Button>
             </div>
           </div>

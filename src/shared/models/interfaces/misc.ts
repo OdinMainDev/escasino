@@ -4,5 +4,5 @@ export interface IResponseError {
 }
 
 export interface IBasicErrors {
-  [key: string]: string[];
+  [key: string]: string[] | string;
 }

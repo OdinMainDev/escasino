@@ -1,6 +1,7 @@
 import { SelectHTMLAttributes } from 'react';
 import styles from './styles.module.scss';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 export interface ISelectOption {
   value: string;
@@ -16,6 +17,7 @@ interface IProps extends SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 const Select = ({ optionList, isError, containerClassName, message, ...otherProps }: IProps) => {
+  const { t } = useTranslation();
   return (
     <div
       className={classNames(styles.wrapper, containerClassName, {
@@ -27,7 +29,7 @@ const Select = ({ optionList, isError, containerClassName, message, ...otherProp
           {optionList &&
             optionList.map((item, index) => (
               <option value={item.value} key={index} disabled={item.disabled}>
-                {item.label}
+                {t(item.label)}
               </option>
             ))}
         </select>

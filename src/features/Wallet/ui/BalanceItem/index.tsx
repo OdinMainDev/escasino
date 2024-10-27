@@ -8,6 +8,7 @@ import { useAppDispatch } from '@/store/hooks/redux';
 import { resetPaymentAllProviders } from '@/store/slices/paymentAllProvidersSlice';
 import { resetWithdrawProviders } from '@/store/slices/withdrawProvidersSlice';
 import { resetWithdrawAllProviders } from '@/store/slices/withdrawAllProvidersSlice';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   currency?: string;
@@ -17,6 +18,7 @@ interface IProps {
 }
 
 const BalanceItem = ({ currency, isChoosen, balanceReal, balanceBonus }: IProps) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const activateBalance = async () => {
@@ -37,13 +39,13 @@ const BalanceItem = ({ currency, isChoosen, balanceReal, balanceBonus }: IProps)
         <thead>
           <tr>
             <th>
-              <div className={styles.label}>Валюта</div>
+              <div className={styles.label}>{t('currency')}</div>
             </th>
             <th>
-              <div className={styles.label}>Доступный баланс(бонусный)</div>
+              <div className={styles.label}>{t('availableBalance')}</div>
             </th>
             <th>
-              <div className={styles.label}>Статус</div>
+              <div className={styles.label}>{t('status')}</div>
             </th>
           </tr>
         </thead>
@@ -65,7 +67,7 @@ const BalanceItem = ({ currency, isChoosen, balanceReal, balanceBonus }: IProps)
               <div>
                 {isChoosen ? (
                   <Button disabled={true} elType="outlined" className={styles.button}>
-                    Активный
+                    {t('active')}
                   </Button>
                 ) : (
                   <Button
@@ -73,7 +75,7 @@ const BalanceItem = ({ currency, isChoosen, balanceReal, balanceBonus }: IProps)
                     elType="contained"
                     className={styles.button}
                   >
-                    {balanceReal == undefined ? 'Добавить' : 'Активировать'}
+                    {balanceReal == undefined ? t('add') : t('activate')}
                   </Button>
                 )}
               </div>

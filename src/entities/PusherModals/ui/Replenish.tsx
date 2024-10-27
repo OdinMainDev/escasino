@@ -5,8 +5,10 @@ import { closePusherModal } from '@/store/slices/pusherSlice';
 import replanishIcon from '../icons/replenish.svg';
 import Button from '@/shared/ui/Button';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 const Replenish = () => {
+  const { t } = useTranslation();
   const key = 'success-replenish';
   const { openPusherModals } = useAppSelector((state) => state.pusherReducer);
   const dispatch = useAppDispatch();
@@ -19,9 +21,9 @@ const Replenish = () => {
     <Modal isOpen={isOpen} close={closeModal}>
       <div className={styles.replenish}>
         <img src={replanishIcon} className={classNames(styles.icon, 'mb-[24px]')} />
-        <div className={classNames(styles.title, 'mb-[8px]')}>Счет успешно пополнен.</div>
-        <div className={styles.subtitle}>Желаем вам приятной игры!</div>
-        <Button className="w-[100%] mt-[32px]">Вернуться к игре</Button>
+        <div className={classNames(styles.title, 'mb-[8px]')}>{t('accountSuccessfullyFunded')}</div>
+        <div className={styles.subtitle}>{t('goodGame')}</div>
+        <Button className="w-[100%] mt-[32px]">{t('backToGame')}</Button>
       </div>
     </Modal>
   );

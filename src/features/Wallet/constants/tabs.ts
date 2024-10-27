@@ -2,26 +2,26 @@ import { ITab } from '@/entities/Tabs';
 
 export const tabs: ITab[] = [
   {
-    label: 'Пополнить',
+    label: 'refill',
     value: 'replenish',
   },
   {
-    label: 'Вывести',
+    label: 'withdraw',
     value: 'withdraw',
   },
   {
-    label: 'История',
+    label: 'History',
     value: 'history',
   },
 ];
 
 export const filterHistory = [
   {
-    label: 'Пополнение',
+    label: 'replenishment',
     value: 'replenish',
   },
   {
-    label: 'Выводы',
+    label: 'withdrawal',
     value: 'withdrawal',
   },
 ];

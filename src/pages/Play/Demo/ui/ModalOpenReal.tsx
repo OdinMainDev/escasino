@@ -5,12 +5,14 @@ import Modal from '@/shared/ui/Modal';
 import Button from '@/shared/ui/Button';
 import { useRouter } from '@/shared/helpers/navigation';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
+import { useTranslation } from 'react-i18next';
 
 interface IProps extends IModal {
   gameId: number;
 }
 
 const ModalOpenReal = ({ close, gameId }: IProps) => {
+  const { t } = useTranslation();
   const { modalName, isModalOpen, doOpenModal } = useModal();
   const { isAuth } = useAuthProvider();
   const isOpen = !isModalOpen ? false : modalName == 'play-demo-open-real';
@@ -27,13 +29,13 @@ const ModalOpenReal = ({ close, gameId }: IProps) => {
       <div className={styles.container}>
         <div className={styles.container}>
           <div>
-            <div className={styles.title}>Не заебался от демо игр?</div>
+            <div className={styles.title}>{t('notFuckedUpDemoGames')}</div>
             <div className={styles.buttons_container}>
               <Button elType="outlined" className={styles.button} onClick={close}>
-                Вернутся
+                {t('return')}
               </Button>
               <Button className={styles.button} onClick={openGame}>
-                В реал
+                {t('toReal')}
               </Button>
             </div>
           </div>

@@ -23,6 +23,7 @@ import { useRouter } from '@/shared/helpers/navigation';
 import { TabItem } from '@/entities/TabItem';
 import BonusGame from './BonusGame';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   bonus: IBonus | null;
@@ -30,6 +31,7 @@ interface IProps {
   className?: string;
 }
 const BonusesItem = ({ bonus, isMain, className }: IProps) => {
+  const { t } = useTranslation();
   const { activeBonuses } = useAppSelector((state) => state.bonusesSlice);
   const [selectedTemplate, setSelectedTemplate] = useState<IBonusTemplate | null>(
     bonus?.bonus_template[0] ?? null,
@@ -52,15 +54,15 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
   const getBonusStatus = () => {
     switch (bonus?.status) {
       case 1:
-        return 'Неактивный бонус';
+        return t('nonActiveBonus');
       case 2:
-        return 'Активный бонус';
+        return t('activeBonus');
       case 3:
-        return 'Завершенный бонус';
+        return t('endedBonus');
       case 4:
-        return 'Отмененный бонус';
+        return t('canceledBonus');
       case 5:
-        return 'Истекший бонус';
+        return t('expiredBonus');
       default:
         return null;
     }
@@ -99,7 +101,7 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
     switch (bonus?.status) {
       case 1:
         if (!selectedGamesIds.find((item) => item.game_id > 0)) {
-          return <Button disabled>Выберите для бонуса игры</Button>;
+          return <Button disabled>{t('chooseBonusForGame')}</Button>;
         }
         return (
           <Button
@@ -107,14 +109,14 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
               void setActiveBonus();
             }}
           >
-            Активировать бонус
+            {t('activateBonus')}
           </Button>
         );
       case 2:
         if (!bonus?.data.is_cancel) {
           return (
             <Button disabled elType="outlined">
-              Бонус нельзя отменить
+              {t('bonusCantCancel')}
             </Button>
           );
         }
@@ -123,7 +125,7 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
             elType="outlined"
             onClick={() => void cancelBonus(bonus?.data.bonuses_list[0].game_id)}
           >
-            Отменить боунс
+            {t('cancelBonus')}
           </Button>
         );
       case 3:
@@ -200,15 +202,15 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
     return (
       <div className={classNames(styles.container, className)}>
         <div className="flex items-center justify-between mb-[70px]">
-          <div className={styles.title}>Активный бонус не выбран</div>
+          <div className={styles.title}>{t('activeBonuseNoSelected')}</div>
           {isMain && (
             <div onClick={() => router.push('/bonus/list')} className={styles.side_url}>
-              история
+              {t('history')}
             </div>
           )}
         </div>
         <div className={styles.buttons}>
-          <Button onClick={() => router.push('/bonus/list')}>Выбрать активный бонус</Button>
+          <Button onClick={() => router.push('/bonus/list')}>{t('chooseActiveBonus')}</Button>
         </div>
         {loading && (
           <div className={styles.loader}>
@@ -240,7 +242,7 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
         <div className={styles.title}>{bonusStatus}</div>
         {isMain && (
           <div onClick={() => router.push('/bonus/list')} className={styles.side_url}>
-            история
+            {t('history')}
           </div>
         )}
       </div>
@@ -251,31 +253,31 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
             key={index}
             onClick={() => selectTemplate(item)}
           >
-            Шаблон #{index + 1}
+            {t('template')} #{index + 1}
           </TabItem>
         ))}
       </div>
       <div className={styles.info}>
         <div className={styles.info_block}>
-          <div className={styles.label}>Бонусный ставка</div>
+          <div className={styles.label}>{t('bonusBet')}</div>
           <div className={styles.value}>
             {selectedTemplate?.configurator.bet_amount} {selectedTemplate?.configurator.currency}
           </div>
         </div>
         <div className={styles.info_block}>
-          <div className={styles.label}>Количество FS</div>
+          <div className={styles.label}>{t('FSQuantity')}</div>
           <div className={styles.value}>{selectedTemplate?.spins_count}</div>
         </div>
         <div className={styles.info_block}>
-          <div className={styles.label}>Максимальная сумма</div>
+          <div className={styles.label}>{t('maxSum')}</div>
           <div className={styles.value}>{selectedTemplate?.bonus_settings.max_amount}</div>
         </div>
         <div className={styles.info_block}>
-          <div className={styles.label}>Минимальная сумма</div>
+          <div className={styles.label}>{t('minSum')}</div>
           <div className={styles.value}>{selectedTemplate?.bonus_settings.min_amount}</div>
         </div>
         <div className={styles.info_block}>
-          <div className={styles.label}>Отыгрыш истекает</div>
+          <div className={styles.label}>{t('wageringExpires')}</div>
           <div className={styles.value}>{bonus ? dateFormatter(bonus?.expired_at) : ''}</div>
         </div>
       </div>

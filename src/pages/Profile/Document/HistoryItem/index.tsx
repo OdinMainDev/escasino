@@ -39,18 +39,18 @@ const HistoryItem = ({ verification }: IProps) => {
       </div>
       <div className="flex justify-between mb-[10px]">
         <div className={styles.data}>
-          <div className={styles.label}>Дата отправки</div>
+          <div className={styles.label}>{t('dateOfShipment')}</div>
           <div className={styles.value}>{dateFormatter(verification.created_at)}</div>
         </div>
         <div className={styles.data}>
-          <div className={styles.label}>Тип документа</div>
+          <div className={styles.label}>{t('documentType')}</div>
           <div className={styles.value}>{verification.tag}</div>
         </div>
       </div>
       {verification.reason != '' && (
         <div className="flex justify-between mb-[10px]">
           <div className={styles.data}>
-            <div className={styles.label}>Причина отказа</div>
+            <div className={styles.label}>{t('reasonRefusal')}</div>
             <div className={styles.value}>{verification.reason}</div>
           </div>
         </div>

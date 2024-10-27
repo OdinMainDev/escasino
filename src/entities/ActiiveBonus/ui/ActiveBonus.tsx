@@ -3,12 +3,14 @@ import styles from './ActiveBonus.module.scss';
 import Button from '@/shared/ui/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { deleteCartBonusesItem } from '@/store/slices/cartBonusesSlice';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   template: ICartBonusTemplate | null;
 }
 
 const ActiveBonus = ({ template }: IProps) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { games } = useAppSelector((state) => state.gamesAllSlice);
   const cancelBonus = () => {
@@ -43,11 +45,11 @@ const ActiveBonus = ({ template }: IProps) => {
           {template?.type !== 'money' && (
             <div className={styles.col}>
               <div>
-                <div className={styles.subtitle}>Ставка</div>
+                <div className={styles.subtitle}>{t('bet')}</div>
                 <div className={styles.value}>{template?.configurator.bet_amount}</div>
               </div>
               <div>
-                <div className={styles.subtitle}>Сумма бонуса</div>
+                <div className={styles.subtitle}>{t('bonusSum')}</div>
                 <div className={styles.value}>{template?.bonus_percent}</div>
               </div>
             </div>
@@ -57,22 +59,22 @@ const ActiveBonus = ({ template }: IProps) => {
             {template?.type !== 'money' ? (
               <>
                 <div>
-                  <div className={styles.subtitle}>Фриспины</div>
+                  <div className={styles.subtitle}>{t('freespins')}</div>
                   <div className={styles.value}>{template?.spins_count}</div>
                 </div>
                 <div>
-                  <div className={styles.subtitle}>Вейджер</div>
+                  <div className={styles.subtitle}>{t('wager')}</div>
                   <div className={styles.value}>X{template?.wager}</div>
                 </div>
               </>
             ) : (
               <>
                 <div>
-                  <div className={styles.subtitle}>Вейджер</div>
+                  <div className={styles.subtitle}>{t('wager')}</div>
                   <div className={styles.subtitle}>X{template.wager}</div>
                 </div>
                 <div>
-                  <div className={styles.subtitle}>% бонуса</div>
+                  <div className={styles.subtitle}>{t('bonusPercent')}</div>
                   <div className={styles.value}>{template.spins_count}%</div>
                 </div>
               </>
@@ -81,7 +83,7 @@ const ActiveBonus = ({ template }: IProps) => {
         </div>
       </div>
       <Button onClick={cancelBonus} className="w-[100%]" elType="outlined" reverseTheme>
-        Отменить бонус
+        {t('cancelBonus')}
       </Button>
     </div>
   );

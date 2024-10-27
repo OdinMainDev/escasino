@@ -15,8 +15,10 @@ import DatePicker from '@/shared/ui/DatePicker';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 import Button from '@/shared/ui/Button';
 import { useAppSelector } from '@/store/hooks/redux';
+import { useTranslation } from 'react-i18next';
 
 const WalletHistory = () => {
+  const { t } = useTranslation();
   const [selectedTab, setSelectedTab] = useState(filterHistory[0]);
   const [selectedPayment, setSelectedPayment] = useState<IPaymentTransaction | null>(null);
   const [transactionLoading, setTransactionLoading] = useState(false);
@@ -107,7 +109,7 @@ const WalletHistory = () => {
           startDate={datePicker.start}
           endDate={datePicker.end}
           onChange={(value) => changeDate(value, datePicker.end)}
-          placeholder="Начало"
+          placeholder={t('start')}
         />
         <DatePicker
           containerClassName="w-[100px]"
@@ -116,7 +118,7 @@ const WalletHistory = () => {
           startDate={datePicker.start}
           endDate={datePicker.end}
           onChange={(value) => changeDate(datePicker.start, value)}
-          placeholder="Конец"
+          placeholder={t('end')}
         />
       </div>
       <div className={styles.tabs}>
@@ -126,7 +128,7 @@ const WalletHistory = () => {
             key={index}
             onClick={() => selectFilter(item)}
           >
-            {item.label}
+            {t(item.label)}
           </TabItem>
         ))}
       </div>
@@ -172,7 +174,7 @@ const WalletHistory = () => {
           className="flex items-center w-[100%] justify-center gap-[10px]"
           onClick={() => addPage(page + 1)}
         >
-          ЕЩЕ
+          {t('MORE')}
           <svg
             width="14"
             height="8"

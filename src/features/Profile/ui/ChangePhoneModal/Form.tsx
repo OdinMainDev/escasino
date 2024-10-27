@@ -15,8 +15,10 @@ import {
   sampleIChangePhoneSendData,
 } from '@/app/api/auth/change/phoneChange';
 import { getUser } from '@/store/slices/userSlice';
+import { useTranslation } from 'react-i18next';
 
 const ProfileChangePhoneForm = () => {
+  const { t } = useTranslation();
   const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
   const { changeHash, doSetChangeHash, doOpenModal } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
@@ -53,19 +55,19 @@ const ProfileChangePhoneForm = () => {
         </div>
       )}
       <div>
-        <div className={styles.title}>Смена номера телефона</div>
+        <div className={styles.title}>{t('changePhoneNumber')}</div>
         <Input
-          placeholder="Введите код отправленный на ваш старый номер телефона"
+          placeholder={t('enterCodeFromOldPhone')}
           type="text"
-          isError={!!errorData?.errors['code']}
+          isError={typeof errorData?.errors === 'object' && !!errorData?.errors['code']}
           containerClassName={styles.input}
           value={changeData.code}
-          message={ErrorResponseAsString('code', 'Проверочный код указан не верно', errorData)}
+          message={ErrorResponseAsString('code', t('enterCorrectConfirmationCode'), errorData)}
           onChange={(e) => setChangeData((prev) => ({ ...prev, code: e.target.value }))}
         />
 
         <Button className={styles.button} onClick={(e) => void sendData(e)}>
-          Подтвердить
+          {t('submit')}
         </Button>
       </div>
     </form>

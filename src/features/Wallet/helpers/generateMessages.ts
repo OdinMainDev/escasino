@@ -1,23 +1,23 @@
 export const generateErrorMessages = (name: string): string => {
   if (name === 'exp_year') {
-    return 'Введите корректную дату';
+    return 'enterCorrectDate';
   }
 
   if (name === 'exp_month') {
-    return 'Введите корректную дату';
+    return 'enterCorrectDate';
   }
 
   if (name === 'cvc') {
-    return 'Введите корректный cvc';
+    return 'enterCorrectCvc';
   }
 
   if (name === 'exp_month') {
-    return 'Введите корректный cvc';
+    return 'enterCorrectCvc';
   }
 
   if (name === 'number') {
-    return 'Введите корректный номер карты';
+    return 'enterCorrectCardNumber';
   }
 
-  return 'Заполитне это поле';
+  return 'fillThisFiled';
 };

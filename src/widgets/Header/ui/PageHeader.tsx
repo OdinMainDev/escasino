@@ -4,6 +4,7 @@ import GoBackButton from '@/shared/ui/GoBackButton';
 import ChatIcon from './ChatIcon';
 import { CurrencyInfo } from '@/features/CurrencyInfo';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   title?: string;
@@ -13,6 +14,7 @@ interface IProps {
   isPhoneHorizontal?: boolean;
 }
 const PageHeader = ({ title, isHover, customBackPath, fixed, isPhoneHorizontal }: IProps) => {
+  const { t } = useTranslation();
   const { isAuth } = useAuthProvider();
   return (
     <div
@@ -23,7 +25,7 @@ const PageHeader = ({ title, isHover, customBackPath, fixed, isPhoneHorizontal }
       })}
     >
       <GoBackButton customPath={customBackPath} />
-      {!isPhoneHorizontal && <div className={styles.title}>{title}</div>}
+      {!isPhoneHorizontal && <div className={styles.title}>{t(title || '')}</div>}
 
       {isPhoneHorizontal ? (
         isAuth ? (

@@ -7,6 +7,7 @@ import { useAppSelector } from '@/store/hooks/redux';
 import { ITab } from '@/entities/Tabs';
 import { TabItem } from '@/entities/TabItem';
 import { removeDuplicatesByBet, removeDuplicatesBySpinsCount } from '../helpers/removeDuplicates';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   bonusesTemplates: IBonusTemplate[];
@@ -22,13 +23,14 @@ export interface IBonusFSMethods {
 
 const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
   ({ bonusesTemplates, fsChangeHandler, gameId, minAmount, maxAmount }, ref) => {
+    const { t } = useTranslation();
     const tabs: ITab[] = [
       {
-        label: 'Макс ставка',
+        label: t('maxBet'),
         value: 'bet',
       },
       {
-        label: 'Макс FS',
+        label: t('maxFS'),
         value: 'fs',
       },
     ];
@@ -298,11 +300,11 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     }, [betTemplates]);
 
     if (betTemplates?.length === 0 && spinsTemplates?.length === 0) {
-      return <div className={styles.title}>К сожалению доступные комбинации закончились</div>;
+      return <div className={styles.title}>{t('combinationsRunOut')}</div>;
     }
     return (
       <div>
-        <div className={styles.settings_title}>Настройки бонуса</div>
+        <div className={styles.settings_title}>{t('bonusSettings')}</div>
         <div className={styles.settings_tabs}>
           {tabs.map((item, index) => (
             <TabItem
@@ -318,9 +320,9 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         </div>
 
         <div className={styles.settings_labels}>
-          <div>Ставка</div>
-          <div>Кол-во FS</div>
-          <div>Сумма бонуса</div>
+          <div>{t('bet')}</div>
+          <div>{t('FSQuantity')}</div>
+          <div>{t('bonusSum')}</div>
         </div>
         <div
           className={classNames(styles.settings_swiper, {

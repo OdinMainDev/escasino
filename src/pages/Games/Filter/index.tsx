@@ -10,8 +10,10 @@ import Switch from '@/shared/ui/Switch';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 import Icons from '@/shared/ui/Icons';
 import { useAppSelector } from '@/store/hooks/redux';
+import { useTranslation } from 'react-i18next';
 
 const Filter = () => {
+  const { t } = useTranslation();
   const { setFilters, getFilters, countActiveKeys } = useGamesFilters();
   const router = useRouter();
   const { categories } = useAppSelector((state) => state.gameCategoriesReducer);
@@ -71,15 +73,15 @@ const Filter = () => {
       <div className={styles.loader_container}>{/* <Loader /> */}</div>
       <div className={styles.container}>
         <div className="flex items-center justify-between">
-          <div className={styles.title}>Фильтр и сортировка</div>
+          <div className={styles.title}>{t('filterAndSort')}</div>
           <div className="cursor-pointer" onClick={router.goBack}>
             <Icons icon="cross" />
           </div>
         </div>
         <div className={styles.bonus}>
           <div className={styles.bonus_info}>
-            <div className={styles.subtitle}>Собери бонус</div>
-            <div className={styles.bonus_subtitle}>Игры с возможностью создать свой бонус</div>
+            <div className={styles.subtitle}>{t('collectBonus')}</div>
+            <div className={styles.bonus_subtitle}>{t('gameWithCreateBonus')}</div>
           </div>
           <div className={styles.bonus_active}>
             <Switch
@@ -98,7 +100,7 @@ const Filter = () => {
         </div>
         <div className={styles.type}>
           {categories && categories.length > 0 ? (
-            <div className={styles.subtitle}>Тип игры</div>
+            <div className={styles.subtitle}>{t('gameType')}</div>
           ) : null}
           <CategoriesList selectCategory={selectCategory} />
         </div>
@@ -106,7 +108,7 @@ const Filter = () => {
           {providers && providers?.length > 0 && (
             <>
               {providers && providers.length > 0 ? (
-                <div className={styles.subtitle}>Провайдеры</div>
+                <div className={styles.subtitle}>{t('providers')}</div>
               ) : null}
               <ProviderList selectProvider={selectProvider} />
             </>
@@ -114,10 +116,10 @@ const Filter = () => {
         </div>
         <div className={styles.footer}>
           <Button elType="outlined" onClick={resetFilter}>
-            Сбросить
+            {t('reset')}
           </Button>
           <Button onClick={applyFilters} disabled={activeKeys === 0}>
-            Применить
+            {t('apply')}
           </Button>
         </div>
       </div>
