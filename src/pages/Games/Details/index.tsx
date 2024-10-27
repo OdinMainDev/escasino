@@ -20,6 +20,7 @@ import { deleteCartBonusesItem } from '@/store/slices/cartBonusesSlice';
 import { PageHeader } from '@/widgets/Header';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
 import { getBonuses } from '@/store/slices/bonusesSlices';
+import { validateUserData, validateUserDataError } from './helpers/validateUserData';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
@@ -34,13 +35,13 @@ const Details = () => {
   const { bonusesTemplates: cartBonuses } = useAppSelector((state) => state.cartBonusesSlice);
   const [alertData, setAlertData] = useState<IAlert | null>(null);
   const dispatch = useAppDispatch();
-  const isWarning =
-    game?.has_no_deposit_bonus &&
-    noDepositsBonuses.length > 0 &&
-    user?.data.email_verified_at === 0 &&
-    Number(import.meta.env.VITE_USER_CREATED_AT_LIMIT) >= user?.data.created_at;
   const currentLanguage = useCurrentLanguage();
   const [imagePath, setImagePath] = useState('');
+  const warningText =
+    game?.has_no_deposit_bonus &&
+    (!isAuth ||
+      (user && settings && !validateUserData(user.data, settings)) ||
+      activeBonuses.length > 0);
   useEffect(() => {
     if (Number(id) > 0) {
       const getGameById = async () => {
@@ -138,12 +139,12 @@ const Details = () => {
       return;
     }
 
-    doOpenModal('login');
+    doOpenModal('register');
   };
 
   const openBonus = () => {
     if (!isAuth) {
-      doOpenModal('login');
+      doOpenModal('register');
       return;
     }
     if (settings) {
@@ -166,7 +167,7 @@ const Details = () => {
 
   const openNoDepositBonus = () => {
     if (!isAuth) {
-      doOpenModal('login');
+      doOpenModal('register');
       return;
     }
     router.push(`/bonus/nodeposit/${game?.id}`);
@@ -206,11 +207,14 @@ const Details = () => {
           Играть на деньги
         </Button>
 
-        {game?.has_no_deposit_bonus && noDepositsBonuses.length > 0 ? (
+        {warningText || noDepositsBonuses.length > 0 ? (
           <Button
-            disabled={isWarning || activeBonuses.length > 0}
+            disabled={
+              activeBonuses.length > 0 ||
+              (!!user && !!settings && !validateUserData(user.data, settings))
+            }
             className={classNames(styles.button, styles.button_big)}
-            onClick={openNoDepositBonus}
+            onClick={() => (isAuth ? openNoDepositBonus() : doOpenModal('register'))}
           >
             <Icons icon="settings" />
             <span>Сконфигурировать бездеп бонус</span>
@@ -226,20 +230,22 @@ const Details = () => {
           </Button>
         ) : null}
       </div>
-      {isWarning ||
-        (activeBonuses.length > 0 && (
-          <div className={styles.warning}>
-            <Icons icon="warning" />
-            {isWarning ? (
-              <span>
-                Бездепозитный бонус недоступен, потому что вы не подтвердили адрес электронной
-                почты.
-              </span>
-            ) : (
-              <span>Бездепозитный бонус недоступен, у вас есть активированный бонус</span>
-            )}
-          </div>
-        ))}
+      {warningText ? (
+        <div className={styles.warning}>
+          <Icons icon="warning" />
+          {!isAuth ? (
+            <span>
+              Бездепозитный бонус недоступен, потому что вы не подтвердили адрес электронной почты.
+            </span>
+          ) : user && settings && !validateUserData(user.data, settings) ? (
+            <span>
+              Бездепозитный бонус недоступен, {validateUserDataError(user.data, settings)}
+            </span>
+          ) : (
+            <span>Бездепозитный бонус недоступен, у вас есть активированный бонус</span>
+          )}
+        </div>
+      ) : null}
       <div className={styles.winnings}>
         <WinningsList />
       </div>

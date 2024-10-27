@@ -3,13 +3,13 @@ export interface IUser {
   email: string;
   phone: string;
   currency: string;
-  data: Data;
+  data: IUserData;
   balance: Balance;
   balances: Balances[];
   pusher_id: string;
 }
 
-export interface Data {
+export interface IUserData {
   first_name: string;
   second_name: string;
   last_name: string;
