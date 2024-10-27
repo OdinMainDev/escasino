@@ -23,7 +23,6 @@ import { IBonusFSMethods } from '@/features/BonusesTabs/ui/BonusesFS';
 import { IBonusMoneyMethods } from '@/features/BonusesTabs/ui/BonusesMoney';
 import { BonusesGamesModal } from '@/features/BonusesGamesModal';
 import { v4 as uuidv4 } from 'uuid';
-import { useCurrentLanguage } from '@/app/providers/LangProvider';
 import { PageHeader } from '@/widgets/Header';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
@@ -48,7 +47,6 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
     maxAmount: maxAmountCart,
   } = useAppSelector((state) => state.cartBonusesSlice);
   const [tabs, setTabs] = useState<string[]>([]);
-  const currentLanguage = useCurrentLanguage();
   const [selectedGame, setSelectedGame] = useState<IGame | null | undefined>(null);
   const [bonusesTemplates, setBonusesTemplates] = useState<IBonusTemplate[]>([]);
   const [availGames, setAvailGames] = useState<IGame[]>([]);
@@ -250,6 +248,10 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   const activeNoDeposit = async () => {
     if (noDepositsBonuses.length > 0 && selectedTemplate) {
       try {
+        setAlertModalData({
+          title: 'Загрузка...',
+          text: <Loader />,
+        });
         const fid = await getVisitorId();
         const data: INoDepositBonusReq = {
           id: noDepositsBonuses[noDepositsBonuses.length - 1].id,
@@ -258,10 +260,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
           fid,
         };
         await activeNoDepositBonus(data);
-        setAlertModalData({
-          title: 'Загрузка...',
-          text: <Loader />,
-        });
+        doCloseModals();
       } catch (e) {
         setAlertModalData({
           title: 'Ошибка',
@@ -384,10 +383,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
 
   return (
     <div className={styles.container}>
-      <PageHeader
-        customBackPath={'/' + currentLanguage + '/wallet/deposit/replenish'}
-        title={t('collectYourBonus')}
-      />
+      <PageHeader title={t('collectYourBonus')} />
       <div className={styles.content}>
         {loading ? (
           <div className={styles.loader}>

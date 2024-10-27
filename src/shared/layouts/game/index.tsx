@@ -11,9 +11,10 @@ import { usePathname } from '@/shared/helpers/navigation';
 interface IProps {
   children: ReactNode;
   gameTitle?: string;
+  customBackPath?: string;
 }
 
-const GameLayout = ({ children, gameTitle }: IProps) => {
+const GameLayout = ({ children, gameTitle, customBackPath }: IProps) => {
   const { isAuth } = useAuthProvider();
   const pathname = usePathname();
   const { isMobile, isPortrait } = useOrientation();
@@ -26,7 +27,11 @@ const GameLayout = ({ children, gameTitle }: IProps) => {
         [styles.isPhoneHorizontal]: isPhoneHorizontal,
       })}
     >
-      <PageHeader title={gameTitle} isPhoneHorizontal={isPhoneHorizontal} />
+      <PageHeader
+        customBackPath={customBackPath}
+        title={gameTitle}
+        isPhoneHorizontal={isPhoneHorizontal}
+      />
       {children}
       <Footer isHidden={!isAuth} isPhoneHorizontal={isPhoneHorizontal} />
     </div>

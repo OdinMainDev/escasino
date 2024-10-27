@@ -31,12 +31,12 @@ export const validateUserDataError = (userData: IUserData, settings: ISettings) 
     return 'потому что вы не добили ваш zip код';
   }
 
-  if (!userData.email_verified_at && settings.profile.has_email) {
-    return 'потому что вы не подтвердили адрес электронной почты';
-  }
-  if (!userData.phone_verified_at && settings.profile.has_phone) {
-    return 'потому что вы не подтвердили номер телефона';
-  }
+  // if (!userData.email_verified_at && settings.profile.has_email) {
+  //   return 'потому что вы не подтвердили адрес электронной почты';
+  // }
+  // if (!userData.phone_verified_at && settings.profile.has_phone) {
+  //   return 'потому что вы не подтвердили номер телефона';
+  // }
 };
 
 export const validateUserData = (userData: IUserData, settings: ISettings) => {
@@ -68,12 +68,12 @@ export const validateUserData = (userData: IUserData, settings: ISettings) => {
     return false;
   }
 
-  if (!userData.email_verified_at && settings.profile.has_email) {
-    return false;
-  }
-  if (!userData.phone_verified_at && settings.profile.has_phone) {
-    return false;
-  }
+  // if (!userData.email_verified_at && settings.profile.has_email) {
+  //   return false;
+  // }
+  // if (!userData.phone_verified_at && settings.profile.has_phone) {
+  //   return false;
+  // }
 
   return true;
 };
