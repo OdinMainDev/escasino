@@ -12,7 +12,7 @@ import { ICreateWithdrawtData, IProviderLayout } from '@/features/Wallet/models/
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { checkAmount, useGenerateLimitText } from '@/features/Wallet/helpers/payment';
+import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 import { IErrorResponse } from '@/shared/models/interfaces/error';
 import { errorValidator } from '@/features/Wallet/helpers/validators';
@@ -283,7 +283,7 @@ const WalletWithdraw = () => {
         />
         {selectedProvider && (
           <div className={styles.subtitle}>
-            {useGenerateLimitText(
+            {generateLimitText(
               selectedProvider.conditions.limit_minimum,
               selectedProvider.conditions.limit_maximum,
               selectedProvider.currency,

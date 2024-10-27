@@ -81,7 +81,8 @@ const ProfileForm = () => {
   useEffect(() => {
     if (user) {
       setUserData(userDataMapper(user));
-      if (!user.data.email_verified_at) {
+      const isFirstRegister = localStorage.getItem('registred');
+      if (!user.data.email_verified_at && isFirstRegister === 'true') {
         doOpenModal('alert');
         setAlertData({
           title: t('confirmEmailAdress'),
@@ -95,6 +96,7 @@ const ProfileForm = () => {
             },
           ],
         });
+        localStorage.removeItem('registred');
       }
     }
   }, [user]);
@@ -213,6 +215,8 @@ const ProfileForm = () => {
   };
 
   const verifyPhone = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
     if (userData.phone == '') {
       doOpenModal('alert');
       setAlertData((prev) => ({
@@ -229,7 +233,6 @@ const ProfileForm = () => {
       }));
       return;
     }
-    e.preventDefault();
     if (userData.phone !== user?.phone) {
       doOpenModal('alert');
       setAlertData((prev) => ({

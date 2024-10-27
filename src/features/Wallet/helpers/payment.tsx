@@ -8,13 +8,7 @@ import { IPaymentTransaction } from '../models/interfaces';
 import { transactionTypes } from '../models/types';
 import { useTranslation } from 'react-i18next';
 
-export const useGenerateLimitText = (
-  min: number,
-  max: number,
-  currency: string,
-  amount: string,
-) => {
-  const { t } = useTranslation();
+export const generateLimitText = (min: number, max: number, currency: string, amount: string) => {
   const minimum =
     min > 0 ? (
       <div
@@ -22,7 +16,7 @@ export const useGenerateLimitText = (
           [styles.error]: amount.length > 0 ? checkAmount(Number(amount), max, min) : false,
         })}
       >
-        {t('minimum')}: {min} {currency}
+        {'minimum'}: {min} {currency}
       </div>
     ) : null;
   const maximum =
@@ -32,7 +26,7 @@ export const useGenerateLimitText = (
           [styles.error]: amount.length > 0 ? checkAmount(Number(amount), max, min) : false,
         })}
       >
-        {t('maximum')}: {max} {currency}
+        {'maximum'}: {max} {currency}
       </div>
     ) : null;
   return (

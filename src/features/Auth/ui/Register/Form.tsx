@@ -132,6 +132,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
         supportDiv.setAttribute('data-user-token', data.token);
       }
       router.push('/profile/edit');
+      localStorage.setItem('registred', 'true');
     } catch (e: unknown) {
       const regError = e as IResponseError;
       const regErrorList = Object.keys(regError.errors);

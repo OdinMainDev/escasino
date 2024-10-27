@@ -64,8 +64,10 @@ const Details = () => {
   }, [id]);
 
   useEffect(() => {
-    void dispatch(getBonuses());
-  }, []);
+    if (isAuth) {
+      void dispatch(getBonuses());
+    }
+  }, [isAuth]);
 
   const openBonusError = () => {
     setAlertData({

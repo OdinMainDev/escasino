@@ -20,7 +20,7 @@ import {
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { checkAmount, useGenerateLimitText } from '@/features/Wallet/helpers/payment';
+import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 import {
   errorValidator,
@@ -131,7 +131,9 @@ const WalletReplenish = () => {
       }),
       {},
     );
+
     setLayout(data);
+
     setSelectedProvider(provider);
   };
 
@@ -252,7 +254,6 @@ const WalletReplenish = () => {
       </div>
     ));
   };
-
   const openBonus = () => {
     if (settings) {
       if (settings.bonus.max_avail_bonuses !== 0 && bonuses) {
@@ -417,7 +418,7 @@ const WalletReplenish = () => {
         {paymentProviders && paymentProviders?.length > 0 ? (
           <div className={styles.title}>Провайдеры</div>
         ) : null}
-        {selectedProvider?.layout && (
+        {selectedProvider && selectedProvider.layout.length > 0 && (
           <div className={styles.selected_provider}>
             <div className="flex items-center justify-between mb-[10px]">
               <div className="flex items-center gap-[10px]">
@@ -554,15 +555,15 @@ const WalletReplenish = () => {
         />
         {selectedProvider && (
           <div className={styles.subtitle}>
-            {useGenerateLimitText(
-              minAmount > 0 && minAmount > Number(selectedProvider?.conditions.limit_minimum)
+            {generateLimitText(
+              minAmount > 0 && minAmount > Number(selectedProvider.conditions.limit_minimum)
                 ? minAmount
-                : Number(selectedProvider?.conditions.limit_minimum),
+                : Number(selectedProvider.conditions.limit_minimum),
               maxAmount > 0 &&
-                (maxAmount < Number(selectedProvider?.conditions.limit_maximum) ||
-                  Number(selectedProvider?.conditions.limit_maximum) == 0)
+                (maxAmount < Number(selectedProvider.conditions.limit_maximum) ||
+                  Number(selectedProvider.conditions.limit_maximum) == 0)
                 ? maxAmount
-                : Number(selectedProvider?.conditions.limit_maximum),
+                : Number(selectedProvider.conditions.limit_maximum),
               selectedProvider.currency,
               amount,
             )}
