@@ -12,13 +12,11 @@ import { useRouter } from '@/shared/helpers/navigation';
 import Loader from '@/shared/ui/Loader';
 import classNames from 'classnames';
 import useOrientation from '@/shared/hooks/useOrientation';
-import { useCurrentLanguage } from '@/app/providers/LangProvider';
 // import { isAppDebug } from '@/app/config/app';
 
 export default function Real() {
   const [loading, setLoading] = useState(false);
   const [realUrl, setRealUrl] = useState<string>('');
-  const currentLanguage = useCurrentLanguage();
   const [headerTitle, setHeaderTitle] = useState<string>('');
   const { isMobile, isPortrait } = useOrientation();
   const { id } = useParams();
@@ -46,10 +44,7 @@ export default function Real() {
   }, []);
 
   return (
-    <GameLayout
-      customBackPath={'/' + currentLanguage + '/games/details/' + id}
-      gameTitle={headerTitle}
-    >
+    <GameLayout customBackPath={'/games/details/' + id} gameTitle={headerTitle}>
       <div
         className={classNames(styles.games_table, {
           [styles.isPhoneHorizontal]: isMobile && !isPortrait,

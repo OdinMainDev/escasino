@@ -10,12 +10,16 @@ import { postSetMyActiveBonusApi } from '../api/bonuses/bonusesApi';
 import { getBonuses, resetBonuses } from '@/store/slices/bonusesSlices';
 import { getNodepositBonuses } from '@/store/slices/nodepositSlice';
 import { useRouter } from '@/shared/helpers/navigation';
+import { useNavigate } from 'react-router-dom';
+import { useCurrentLanguage } from './LangProvider';
 
 const PusherModalProvider = ({ children }: PropsWithChildren) => {
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const currentLanguage = useCurrentLanguage();
   const { user } = useAppSelector((state) => state.userReducer);
+  const navigation = useNavigate();
   const { games } = useAppSelector((state) => state.gamesAllSlice);
 
   useEffect(() => {
@@ -120,7 +124,7 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
             findedIndex = 0;
           }
           const gameId = bonusData.bonus_template[0].game_ids[findedIndex];
-          router.push(`/play/real/${gameId}`);
+          navigation(`/${currentLanguage}/play/real/${gameId}`, { replace: true });
         }
       });
       pusher.subscribe(user.pusher_id, 'do_open_profile_bonuses', () => {
