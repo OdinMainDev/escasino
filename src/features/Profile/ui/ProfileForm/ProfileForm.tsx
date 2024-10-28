@@ -354,16 +354,6 @@ const ProfileForm = () => {
       )}
       {settings?.profile.has_phone && (
         <div className={styles.email_container}>
-          {user?.data.phone_verified_at === 0 && (
-            <div className={styles.email_title}>
-              <Icons icon="warning" />
-              {user?.data.email_verified_at === 0 ? (
-                <span>{t('verifyPhoneToGetNoDepositBonus')}</span>
-              ) : (
-                <span>{t('verifyPhone')}</span>
-              )}
-            </div>
-          )}
           <Input
             type="phone"
             containerClassName={styles.input}
