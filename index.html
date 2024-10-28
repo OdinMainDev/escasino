@@ -14,7 +14,11 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-
+    <script type="module" defer>
+      document
+        .getElementById('essupport')
+        .setAttribute('data-api-token', import.meta.env.VITE_APP_CHAT_API_TOKEN);
+    </script>
     <script src="https://cdn.effective-solution.com/sc/lib/eschat.js" defer></script>
     <div id="essupport" data-api-token="" data-user-token="" data-language="ru"></div>
     <script defer>
@@ -31,8 +35,6 @@
 
         if (supportDiv && userToken) {
           supportDiv.setAttribute('data-user-token', userToken);
-          supportDiv.setAttribute('data-api-token', casinoToken);
-
         }
       }
 
