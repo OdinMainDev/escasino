@@ -1,6 +1,8 @@
 import classNames from 'classnames';
 import { usePathname, useRouter } from '@/shared/helpers/navigation';
 import Icons from '@/shared/ui/Icons';
+import { useNavigate } from 'react-router-dom';
+import { useCurrentLanguage } from '@/app/providers/LangProvider';
 
 interface IProps {
   className?: string;
@@ -10,10 +12,12 @@ interface IProps {
 const GoBackButton = ({ className, customPath }: IProps) => {
   const router = useRouter();
   const pathname = usePathname();
+  const navigation = useNavigate();
+  const currentLanguage = useCurrentLanguage();
 
   const goBack = () => {
     if (customPath) {
-      router.push(customPath);
+      navigation('/' + currentLanguage + customPath, { replace: true });
       return;
     }
     router.goBack();
