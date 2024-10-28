@@ -73,6 +73,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
       }
       doCloseModals();
       document.body.classList.remove('overflow-hidden');
+      window.location.reload();
     } catch (e: unknown) {
       const loginError = e as IResponseError;
       const loginErrorList = Object.keys(loginError.errors);

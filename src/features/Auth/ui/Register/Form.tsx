@@ -133,6 +133,8 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
       }
       router.push('/profile/edit');
       localStorage.setItem('registred', 'true');
+      document.body.classList.remove('overflow-hidden');
+      window.location.reload();
     } catch (e: unknown) {
       const regError = e as IResponseError;
       const regErrorList = Object.keys(regError.errors);
