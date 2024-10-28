@@ -16,12 +16,7 @@
     <script type="module" src="/src/main.tsx"></script>
 
     <script src="https://cdn.effective-solution.com/sc/lib/eschat.js" defer></script>
-    <div id="essupport" data-user-token="" data-language="ru"></div>
-    <script type="module">
-      document
-        .getElementById('essupport')
-        .setAttribute('data-api-token', import.meta.env.VITE_APP_CHAT_API_TOKEN);
-    </script>
+    <div id="essupport" data-api-token="" data-user-token="" data-language="ru"></div>
     <script defer>
       function getCookie(name) {
         let value = '; ' + document.cookie;
@@ -31,10 +26,13 @@
 
       function setUserToken() {
         const userToken = getCookie('atoken');
+        const casinoToken = getCookie('cainoToken');
         const supportDiv = document.getElementById('essupport');
 
         if (supportDiv && userToken) {
           supportDiv.setAttribute('data-user-token', userToken);
+          supportDiv.setAttribute('data-api-token', casinoToken);
+
         }
       }
 

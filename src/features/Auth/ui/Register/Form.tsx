@@ -11,6 +11,7 @@ import {
 
 import Loader from '@/shared/ui/Loader';
 import Input from '@/shared/ui/Input';
+import Cookies from 'js-cookie';
 import Button from '@/shared/ui/Button';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
 import Checkbox from '@/shared/ui/Checkbox';
@@ -127,10 +128,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
       }
       const data = await doRegisterApi(postData);
       setAuthenticated(data.token);
-      const supportDiv = document.getElementById('essupport');
-      if (supportDiv) {
-        supportDiv.setAttribute('data-user-token', data.token);
-      }
+      Cookies.set('cainoToken', import.meta.env.VITE_APP_CHAT_API_TOKEN as string);
       router.push('/profile/edit');
       localStorage.setItem('registred', 'true');
       document.body.classList.remove('overflow-hidden');

@@ -9,7 +9,7 @@ import {
   validatePhone,
 } from '@/features/Auth/helpers/validators';
 import { autoCompleteHandler } from '@/features/Auth/helpers/autoCompleteHandler';
-
+import Cookies from 'js-cookie';
 import Loader from '@/shared/ui/Loader';
 import Input from '@/shared/ui/Input';
 import { ILoginData, doLoginApi, sampleILoginData } from '@/app/api/auth/doLogin';
@@ -67,10 +67,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
       const fid = await getVisitorId();
       const data = await doLoginApi({ ...loginData, fid });
       setAuthenticated(data.token);
-      const supportDiv = document.getElementById('essupport');
-      if (supportDiv) {
-        supportDiv.setAttribute('data-user-token', data.token);
-      }
+      Cookies.set('cainoToken', import.meta.env.VITE_APP_CHAT_API_TOKEN as string);
       doCloseModals();
       document.body.classList.remove('overflow-hidden');
       window.location.reload();
