@@ -6,7 +6,7 @@ export const validateUserDataError = (userData: IUserData, settings: ISettings) 
   if (calculateTimeSinceCreation(userData) <= Number(import.meta.env.VITE_USER_CREATED_AT_LIMIT)) {
     return 'потому что ваш аккаунт создан менее 24 часов назад';
   }
-  // eslint-disable-next-line no-constant-condition
+
   if (!new Date(userData.dob) && settings.profile.has_dob) {
     return 'потому что вы не указали год рождения';
   }
@@ -43,7 +43,6 @@ export const validateUserData = (userData: IUserData, settings: ISettings) => {
   if (calculateTimeSinceCreation(userData) <= Number(import.meta.env.VITE_USER_CREATED_AT_LIMIT)) {
     return false;
   }
-  // eslint-disable-next-line no-constant-condition
   if (!new Date(userData.dob) && settings.profile.has_dob) {
     return false;
   }

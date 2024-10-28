@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useState } from 'react';
 import Button from '@/shared/ui/Button';
 import Input from '@/shared/ui/Input';
