@@ -8,7 +8,14 @@ import { IPaymentTransaction } from '../models/interfaces';
 import { transactionTypes } from '../models/types';
 import { useTranslation } from 'react-i18next';
 
-export const generateLimitText = (min: number, max: number, currency: string, amount: string) => {
+export const useGenerateLimitText = (
+  min: number,
+  max: number,
+  currency: string,
+  amount: string,
+) => {
+  const { t } = useTranslation();
+
   const minimum =
     min > 0 ? (
       <div
@@ -16,9 +23,10 @@ export const generateLimitText = (min: number, max: number, currency: string, am
           [styles.error]: amount.length > 0 ? checkAmount(Number(amount), max, min) : false,
         })}
       >
-        {'minimum'}: {min} {currency}
+        {t('minimum')}: {min} {currency}
       </div>
     ) : null;
+
   const maximum =
     max > 0 ? (
       <div
@@ -26,15 +34,11 @@ export const generateLimitText = (min: number, max: number, currency: string, am
           [styles.error]: amount.length > 0 ? checkAmount(Number(amount), max, min) : false,
         })}
       >
-        {'maximum'}: {max} {currency}
+        {t('maximum')}: {max} {currency}
       </div>
     ) : null;
-  return (
-    <div className="flex items-center justify-between">
-      {minimum}
-      {maximum}
-    </div>
-  );
+
+  return { minimum, maximum };
 };
 
 export const useGenerateComissionText = (

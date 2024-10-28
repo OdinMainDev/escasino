@@ -12,7 +12,7 @@ import { ICreateWithdrawtData, IProviderLayout } from '@/features/Wallet/models/
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
+import { checkAmount } from '@/features/Wallet/helpers/payment';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 import { IErrorResponse } from '@/shared/models/interfaces/error';
 import { errorValidator } from '@/features/Wallet/helpers/validators';
@@ -20,6 +20,7 @@ import { AxiosError } from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
+import LimitTextDisplay from '../LimitTextDisplay/LimitTextDisplay';
 
 interface IValidateData {
   amount: number;
@@ -282,14 +283,12 @@ const WalletWithdraw = () => {
           onChange={(e) => setWithdrawData((prev) => ({ ...prev, amount: e.target.value }))}
         />
         {selectedProvider && (
-          <div className={styles.subtitle}>
-            {generateLimitText(
-              selectedProvider.conditions.limit_minimum,
-              selectedProvider.conditions.limit_maximum,
-              selectedProvider.currency,
-              withdrawData.amount,
-            )}
-          </div>
+          <LimitTextDisplay
+            minAmount={selectedProvider.conditions.limit_minimum}
+            maxAmount={selectedProvider.conditions.limit_maximum}
+            selectedProvider={selectedProvider}
+            amount={withdrawData.amount}
+          />
         )}
       </div>
       <Button

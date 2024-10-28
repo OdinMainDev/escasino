@@ -20,7 +20,7 @@ import {
 import styles from '../styles.module.scss';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { checkAmount, generateLimitText } from '@/features/Wallet/helpers/payment';
+import { checkAmount } from '@/features/Wallet/helpers/payment';
 import SuccessPaymentModal from '../../SuccessPaymentModal';
 import {
   errorValidator,
@@ -40,6 +40,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
 import { resetCartBonuses } from '@/store/slices/cartBonusesSlice';
+import LimitTextDisplay from '../LimitTextDisplay/LimitTextDisplay';
 
 const WalletReplenish = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
@@ -554,20 +555,12 @@ const WalletReplenish = () => {
           onChange={(e) => setAmount(e.target.value)}
         />
         {selectedProvider && (
-          <div className={styles.subtitle}>
-            {generateLimitText(
-              minAmount > 0 && minAmount > Number(selectedProvider.conditions.limit_minimum)
-                ? minAmount
-                : Number(selectedProvider.conditions.limit_minimum),
-              maxAmount > 0 &&
-                (maxAmount < Number(selectedProvider.conditions.limit_maximum) ||
-                  Number(selectedProvider.conditions.limit_maximum) == 0)
-                ? maxAmount
-                : Number(selectedProvider.conditions.limit_maximum),
-              selectedProvider.currency,
-              amount,
-            )}
-          </div>
+          <LimitTextDisplay
+            minAmount={minAmount}
+            maxAmount={maxAmount}
+            selectedProvider={selectedProvider}
+            amount={amount}
+          />
         )}
       </div>
       <Button
