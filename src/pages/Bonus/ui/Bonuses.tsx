@@ -261,6 +261,9 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
         };
         await activeNoDepositBonus(data);
         doCloseModals();
+        if (id) {
+          localStorage.setItem('nodeposit_game_id', id);
+        }
       } catch (e) {
         setAlertModalData({
           title: 'Ошибка',
@@ -399,6 +402,13 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                   <div className={classNames(styles.game_image_empty, styles.game_image)} />
                 )}
                 <div className={styles.game_title}>{selectedGame.name}</div>
+                <Button
+                  elType="outlined"
+                  className="w-[100%]"
+                  onClick={() => setOpenGamesModal(true)}
+                >
+                  {t('changeGame')}
+                </Button>
               </div>
             ) : selectedTab !== 'money' ? (
               selectedGame ? (
@@ -544,6 +554,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
         )}
       </div>
       <BonusesGamesModal
+        isNoDeposit={isNoDeposit}
         games={availGames}
         isOpen={openGamesModal}
         close={() => setOpenGamesModal(false)}

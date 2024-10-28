@@ -22,7 +22,7 @@ export const getNodepositBonuses = createAsyncThunk<
   IResponseData<INoDepositBonus>,
   void,
   { rejectValue: IResponseData<INoDepositBonus> }
->('getMyBonusesApi', async (_, { rejectWithValue }) => {
+>('getMyNoDepositBonusesApi', async (_, { rejectWithValue }) => {
   const data = await getMyNoDepositBonuses();
   if (isAppDebug) {
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));

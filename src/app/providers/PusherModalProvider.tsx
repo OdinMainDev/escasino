@@ -112,7 +112,14 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
       pusher.subscribe(user.pusher_id, 'do_open_bonus_game', (data) => {
         const bonusData = data as IBonus;
         if (bonusData.bonus_template.length > 0) {
-          const gameId = bonusData.bonus_template[0].game_ids[0];
+          const nodepositGameId = localStorage.getItem('nodeposit_game_id');
+          let findedIndex = bonusData.bonus_template[0].game_ids.findIndex(
+            (item) => item === Number(nodepositGameId),
+          );
+          if (findedIndex < 0) {
+            findedIndex = 0;
+          }
+          const gameId = bonusData.bonus_template[0].game_ids[findedIndex];
           router.push(`/play/real/${gameId}`);
         }
       });

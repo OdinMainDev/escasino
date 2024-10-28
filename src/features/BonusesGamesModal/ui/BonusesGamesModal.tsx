@@ -11,9 +11,10 @@ import { useTranslation } from 'react-i18next';
 interface IProps extends IModal {
   games: IGame[];
   onSelectGame?: (game: IGame) => void;
+  isNoDeposit?: boolean;
 }
 
-const BonusesGamesModal = ({ close, isOpen, games, onSelectGame }: IProps) => {
+const BonusesGamesModal = ({ close, isOpen, games, onSelectGame, isNoDeposit }: IProps) => {
   const { t } = useTranslation();
   const [allGames, setAllGames] = useState(games);
   const router = useRouter();
@@ -35,7 +36,11 @@ const BonusesGamesModal = ({ close, isOpen, games, onSelectGame }: IProps) => {
       if (close) {
         close();
       }
-      router.push(`/bonus/${game.id}`);
+      if (isNoDeposit) {
+        router.push(`/bonus/nodeposit/${game.id}`);
+      } else {
+        router.push(`/bonus/${game.id}`);
+      }
     } else {
       onSelectGame(game);
     }
