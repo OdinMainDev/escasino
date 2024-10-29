@@ -11,7 +11,7 @@ export const ErrorResponseAsString = (
 
   if (typeof data.errors === 'string') {
     if (data.errors === key) {
-      return `${prefix}(Ошибка: ${data.errors})`;
+      return `${prefix}(${data.errors})`;
     }
     return '';
   }
@@ -23,5 +23,5 @@ export const ErrorResponseAsString = (
 
   const errorMessage = Array.isArray(error) ? error.join(', ') : error;
 
-  return `${prefix}(Ошибка: ${errorMessage})`;
+  return `${prefix}(${errorMessage})`;
 };

@@ -17,5 +17,5 @@ export const ErrorResponseAsString = (
 
   const errorMessage = Array.isArray(error) ? error.join(', ') : error;
 
-  return `${prefix}(Ошибка: ${errorMessage})`;
+  return `${prefix}(${errorMessage})`;
 };
