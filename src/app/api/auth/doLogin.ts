@@ -1,9 +1,10 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { IAuthRes } from './entity';
 import { handleErrorStatus } from '@/shared/helpers/error';
+import axiosApi from '@/shared/lib/axios';
 
 export const loginApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/login`;
+  return '/api/v1/auth/login';
 };
 
 export interface ILoginData {
@@ -26,11 +27,7 @@ export const sampleILoginData: ILoginData = {
 
 export const doLoginApi = async (loginData: ILoginData): Promise<IAuthRes> => {
   try {
-    const res: AxiosResponse<IAuthRes> = await axios.post(loginApi(), loginData, {
-      headers: {
-        'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-      },
-    });
+    const res: AxiosResponse<IAuthRes> = await axiosApi.post(loginApi(), loginData);
     const data = res.data;
     return data;
   } catch (error) {

@@ -1,9 +1,9 @@
+import axiosApi from '@/shared/lib/axios';
 import { IBasicErrors, IResponseError } from '@/shared/models/interfaces/misc';
-import axios, { AxiosResponse, isAxiosError } from 'axios';
-import Cookies from 'js-cookie';
+import { AxiosResponse, isAxiosError } from 'axios';
 
 export const setUserCurrencyApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/set/my/currency`;
+  return '/api/v1/private/set/my/currency';
 };
 
 export interface IUserCurrency {
@@ -26,15 +26,9 @@ export interface IResponseSetUserCurrency {
 
 export const doSetUserCurrency = async (form: IUserCurrency): Promise<IResponseSetUserCurrency> => {
   try {
-    const res: AxiosResponse<IResponseSetUserCurrency> = await axios.post(
+    const res: AxiosResponse<IResponseSetUserCurrency> = await axiosApi.post(
       setUserCurrencyApi(),
       form,
-      {
-        headers: {
-          Authorization: `Bearer: ${Cookies.get('atoken')}`,
-          'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-        },
-      },
     );
     const data = res.data;
     return data;

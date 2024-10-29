@@ -1,5 +1,5 @@
+import axiosApi from '@/shared/lib/axios';
 import { IGame } from '@/shared/models/interfaces/game';
-import axios from 'axios';
 
 interface JsonResponse {
   data: IGame[];
@@ -20,16 +20,12 @@ export const sampleIFilter: IFilter = {
 };
 
 export const searchGamesApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/public/get/games/search`;
+  return '/api/v1/public/get/games/search';
 };
 
 export const getSearchGamesApi = async (filter: IFilter): Promise<IGame[]> => {
   try {
-    const res = await axios.post(searchGamesApi(), filter, {
-      headers: {
-        'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-      },
-    });
+    const res = await axiosApi.post(searchGamesApi(), filter);
     const { data } = res.data as JsonResponse;
     const games = data;
     return games;

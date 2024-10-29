@@ -1,26 +1,25 @@
+import axiosApi from '@/shared/lib/axios';
 import {
   BonusStatusesType,
   IBonus,
   IBonusTemplate,
   ISetActiveBonus,
 } from '@/shared/models/interfaces/bonuses';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 
 export const bonusTemplatesApi = (): string => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/get/bonus/templates`;
+  return '/api/v1/private/get/bonus/templates';
 };
 
 export const myBonusesApi = (): string => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/get/my/bonuses`;
+  return '/api/v1/private/get/my/bonuses';
 };
 
 export const setMyActiveBonusApi = (): string => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/set/my/active/bonus`;
+  return '/api/v1/private/set/my/active/bonus';
 };
 
 export const setMyActiveBonusCancelApi = (): string => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/set/my/active/bonus/cancel`;
+  return '/api/v1/private/set/my/active/bonus/cancel';
 };
 
 export interface IResponseBonuses {
@@ -36,13 +35,9 @@ export interface IResponseBonusesTemplate {
 export const getBonusTemplatesApi = async (
   is_no_deposit?: boolean,
 ): Promise<IResponseBonusesTemplate> => {
-  const { data, status } = await axios.get<{ data: IBonusTemplate[] }>(bonusTemplatesApi(), {
+  const { data, status } = await axiosApi.get<{ data: IBonusTemplate[] }>(bonusTemplatesApi(), {
     params: {
       is_no_deposit,
-    },
-    headers: {
-      Authorization: `Bearer: ${Cookies.get('atoken')}`,
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
     },
   });
   const resp: IResponseBonusesTemplate = {
@@ -58,15 +53,11 @@ export const getMyBonusesApi = async (
   page?: number,
   bonusStatus?: BonusStatusesType,
 ): Promise<IResponseBonuses> => {
-  const { data, status } = await axios.get<{ data: IBonus[] }>(myBonusesApi(), {
+  const { data, status } = await axiosApi.get<{ data: IBonus[] }>(myBonusesApi(), {
     params: {
       completed,
       page,
       status: bonusStatus,
-    },
-    headers: {
-      Authorization: `Bearer: ${Cookies.get('atoken')}`,
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
     },
   });
   const resp: IResponseBonuses = {
@@ -78,19 +69,9 @@ export const getMyBonusesApi = async (
 };
 
 export const postSetMyActiveBonusApi = (body: ISetActiveBonus) => {
-  return axios.post(setMyActiveBonusApi(), body, {
-    headers: {
-      Authorization: `Bearer: ${Cookies.get('atoken')}`,
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-    },
-  });
+  return axiosApi.post(setMyActiveBonusApi(), body);
 };
 
 export const postSetMyActiveBonusCancelApi = (body: unknown) => {
-  return axios.post(setMyActiveBonusCancelApi(), body, {
-    headers: {
-      Authorization: `Bearer: ${Cookies.get('atoken')}`,
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-    },
-  });
+  return axiosApi.post(setMyActiveBonusCancelApi(), body);
 };

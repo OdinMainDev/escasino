@@ -1,12 +1,12 @@
+import axiosApi from '@/shared/lib/axios';
 import { ISettings, IStaticSettings } from '@/shared/models/interfaces/settings';
-import axios from 'axios';
 
 export const settingsApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/public/get/settings`;
+  return '/api/v1/public/get/settings';
 };
 
 export const staticSettingsApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/public/get/static-settings`;
+  return '/api/v1/public/get/static-settings';
 };
 
 export interface IResponseSettings {
@@ -20,11 +20,7 @@ export interface IResponseStaticSettings {
 }
 
 export const getSettingsApi = async (): Promise<IResponseSettings> => {
-  const { data, status } = await axios.get<{ data: ISettings }>(settingsApi(), {
-    headers: {
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-    },
-  });
+  const { data, status } = await axiosApi.get<{ data: ISettings }>(settingsApi());
   const resp: IResponseSettings = {
     settings: data.data,
     status: status,
@@ -33,11 +29,7 @@ export const getSettingsApi = async (): Promise<IResponseSettings> => {
 };
 
 export const getStaticSettingsApi = async (): Promise<IResponseStaticSettings> => {
-  const { data, status } = await axios.get<{ data: IStaticSettings }>(staticSettingsApi(), {
-    headers: {
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-    },
-  });
+  const { data, status } = await axiosApi.get<{ data: IStaticSettings }>(staticSettingsApi());
   const resp: IResponseStaticSettings = {
     settings: data.data,
     status: status,

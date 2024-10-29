@@ -1,8 +1,8 @@
+import axiosApi from '@/shared/lib/axios';
 import { IGame } from '@/shared/models/interfaces/game';
-import axios from 'axios';
 
 export const homeGamesApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/public/get/games/home`;
+  return '/api/v1/public/get/games/home';
 };
 
 export interface IResponseHomeGames {
@@ -11,11 +11,7 @@ export interface IResponseHomeGames {
 }
 
 export const getHomeGamesApi = async (): Promise<IResponseHomeGames> => {
-  const { data, status } = await axios.get<{ data: IGame[] }>(homeGamesApi(), {
-    headers: {
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-    },
-  });
+  const { data, status } = await axiosApi.get<{ data: IGame[] }>(homeGamesApi());
   const resp: IResponseHomeGames = {
     games: data.data,
     status: status,

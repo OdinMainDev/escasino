@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axiosApi from '@/shared/lib/axios';
 
 export const countriesApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/public/get/countries`;
+  return '/api/v1/public/get/countries';
 };
 
 export interface IResponseCountries {
@@ -10,11 +10,7 @@ export interface IResponseCountries {
 }
 
 export const getCountriesApi = async (): Promise<IResponseCountries> => {
-  const { data, status } = await axios.get<{ data: string[] }>(countriesApi(), {
-    headers: {
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-    },
-  });
+  const { data, status } = await axiosApi.get<{ data: string[] }>(countriesApi());
   const resp: IResponseCountries = {
     countries: data.data,
     status: status,

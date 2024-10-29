@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { IProvider } from '@/shared/models/interfaces/providers';
+import axiosApi from '@/shared/lib/axios';
 
 export const gameProvidersApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/public/get/game-providers`;
+  return '/api/v1/public/get/game-providers';
 };
 
 export interface IResponseGameProviders {
@@ -11,11 +11,7 @@ export interface IResponseGameProviders {
 }
 
 export const getGameProvidersApi = async (): Promise<IResponseGameProviders> => {
-  const { data, status } = await axios.get<{ data: IProvider[] }>(gameProvidersApi(), {
-    headers: {
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-    },
-  });
+  const { data, status } = await axiosApi.get<{ data: IProvider[] }>(gameProvidersApi());
   const resp: IResponseGameProviders = {
     providers: data.data,
     status: status,

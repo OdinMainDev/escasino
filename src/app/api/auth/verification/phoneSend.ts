@@ -1,10 +1,10 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { IAuthHashRes } from '../entity';
-import Cookies from 'js-cookie';
 import { handleErrorStatus } from '@/shared/helpers/error';
+import axiosApi from '@/shared/lib/axios';
 
 export const verifyPhoneSendApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/verification/phone/send`;
+  return '/api/v1/auth/verification/phone/send';
 };
 
 export interface IVerifyPhoneSendData {
@@ -19,12 +19,7 @@ export const doVerifyPhoneSendApi = async (
   resetData: IVerifyPhoneSendData,
 ): Promise<IAuthHashRes> => {
   try {
-    const res: AxiosResponse<IAuthHashRes> = await axios.post(verifyPhoneSendApi(), resetData, {
-      headers: {
-        Authorization: `Bearer: ${Cookies.get('atoken')}`,
-        'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-      },
-    });
+    const res: AxiosResponse<IAuthHashRes> = await axiosApi.post(verifyPhoneSendApi(), resetData);
     const data = res.data;
     return data;
   } catch (error) {

@@ -1,9 +1,8 @@
-import axios from 'axios';
 import { IUser } from '@/shared/models/interfaces/user';
-import Cookies from 'js-cookie';
+import axiosApi from '@/shared/lib/axios';
 
 export const userApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/get/me`;
+  return '/api/v1/private/get/me';
 };
 
 export interface IResponseUser {
@@ -12,12 +11,7 @@ export interface IResponseUser {
 }
 
 export const getUserApi = async (): Promise<IResponseUser> => {
-  const { data, status } = await axios.get<{ data: IUser }>(userApi(), {
-    headers: {
-      Authorization: `Bearer: ${Cookies.get('atoken')}`,
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-    },
-  });
+  const { data, status } = await axiosApi.get<{ data: IUser }>(userApi());
   const resp: IResponseUser = {
     user: data.data,
     status: status,

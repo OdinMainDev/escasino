@@ -1,14 +1,10 @@
-import axios from 'axios';
 import { ISocialsApiRequest } from '../models/api';
+import axiosApi from '@/shared/lib/axios';
 
 export const apiProcessApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/api`;
+  return '/api/v1/auth/api';
 };
 
 export const doApiProcess = async (postData: ISocialsApiRequest) => {
-  return axios.post<{ token: string; success: boolean }>(apiProcessApi(), postData, {
-    headers: {
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-    },
-  });
+  return axiosApi.post<{ token: string; success: boolean }>(apiProcessApi(), postData);
 };

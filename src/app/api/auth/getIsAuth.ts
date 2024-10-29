@@ -1,9 +1,9 @@
 import { handleErrorStatus } from '@/shared/helpers/error';
-import axios from 'axios';
+import axiosApi from '@/shared/lib/axios';
 import Cookies from 'js-cookie';
 
 export const isAuthApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/get/my/auth`;
+  return '/api/v1/private/get/my/auth';
 };
 
 export const getIsAuthApi = async (): Promise<null | boolean> => {
@@ -11,12 +11,7 @@ export const getIsAuthApi = async (): Promise<null | boolean> => {
     if (!Cookies.get('atoken')) {
       return false;
     }
-    const res = await axios.get(isAuthApi(), {
-      headers: {
-        Authorization: `Bearer: ${Cookies.get('atoken')}`,
-        'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-      },
-    });
+    const res = await axiosApi.get(isAuthApi());
     if (res.status === 200) {
       return true;
     }

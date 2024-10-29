@@ -1,9 +1,9 @@
+import axiosApi from '@/shared/lib/axios';
 import { IPlayDemo } from '@/shared/models/interfaces/play';
-import axios, { isAxiosError } from 'axios';
-import Cookies from 'js-cookie';
+import { isAxiosError } from 'axios';
 
 export const demoApi = (isPrivate: boolean) => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/${isPrivate ? 'private' : 'public'}/get/game/demo`;
+  return `/api/v1/${isPrivate ? 'private' : 'public'}/get/game/demo`;
 };
 
 export interface IResponseDemo {
@@ -17,16 +17,7 @@ export const getDemoApi = async (
   isMobile: boolean,
 ): Promise<IResponseDemo> => {
   try {
-    const res = await axios.post(
-      demoApi(isPrivate),
-      { id: id, mobile: isMobile },
-      {
-        headers: {
-          'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-          Authorization: `Bearer: ${Cookies.get('atoken')}`,
-        },
-      },
-    );
+    const res = await axiosApi.post(demoApi(isPrivate), { id: id, mobile: isMobile });
     const resp = res.data as IPlayDemo;
     return {
       url: resp.url,

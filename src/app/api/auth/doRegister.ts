@@ -1,9 +1,10 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { IAuthRes } from './entity';
 import { handleErrorStatus } from '@/shared/helpers/error';
+import axiosApi from '@/shared/lib/axios';
 
 export const registerApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/auth/register`;
+  return '/api/v1/auth/register';
 };
 
 export interface IRegisterData {
@@ -52,11 +53,7 @@ export const sampleIRegisterData: IRegisterData = {
 
 export const doRegisterApi = async (registerData: IRegisterData) => {
   try {
-    const res: AxiosResponse<IAuthRes> = await axios.post(registerApi(), registerData, {
-      headers: {
-        'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-      },
-    });
+    const res: AxiosResponse<IAuthRes> = await axiosApi.post(registerApi(), registerData);
     const data = res.data;
     return data;
   } catch (error) {

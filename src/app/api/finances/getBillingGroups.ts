@@ -1,9 +1,8 @@
-import axios from 'axios';
 import { IBillingGroup } from '@/shared/models/interfaces/billingGroups';
-import Cookies from 'js-cookie';
+import axiosApi from '@/shared/lib/axios';
 
 export const billingGroupsApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/get/billing/groups`;
+  return '/api/v1/private/get/billing/groups';
 };
 
 export interface IResponseBillingGroups {
@@ -12,12 +11,7 @@ export interface IResponseBillingGroups {
 }
 
 export const getBillingGroupsApi = async (): Promise<IResponseBillingGroups> => {
-  const { data, status } = await axios.get<{ data: IBillingGroup[] }>(billingGroupsApi(), {
-    headers: {
-      Authorization: `Bearer: ${Cookies.get('atoken')}`,
-      'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-    },
-  });
+  const { data, status } = await axiosApi.get<{ data: IBillingGroup[] }>(billingGroupsApi());
   const resp: IResponseBillingGroups = {
     billingGroups: data.data,
     status: status,

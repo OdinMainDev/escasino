@@ -1,9 +1,9 @@
+import axiosApi from '@/shared/lib/axios';
 import { IPlayReal } from '@/shared/models/interfaces/play';
-import axios, { isAxiosError } from 'axios';
-import Cookies from 'js-cookie';
+import { isAxiosError } from 'axios';
 
 export const realApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/get/game/real`;
+  return '/api/v1/private/get/game/real';
 };
 
 export interface IResponseReal {
@@ -13,16 +13,7 @@ export interface IResponseReal {
 
 export const getRealApi = async (id: number, isMobile: boolean): Promise<IResponseReal> => {
   try {
-    const res = await axios.post(
-      realApi(),
-      { id: id, mobile: isMobile },
-      {
-        headers: {
-          'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-          Authorization: `Bearer: ${Cookies.get('atoken')}`,
-        },
-      },
-    );
+    const res = await axiosApi.post(realApi(), { id: id, mobile: isMobile });
     const resp = res.data as IPlayReal;
     return {
       url: resp.url,

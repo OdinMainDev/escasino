@@ -1,9 +1,9 @@
+import axiosApi from '@/shared/lib/axios';
 import { IBasicErrors, IResponseError } from '@/shared/models/interfaces/misc';
-import axios, { AxiosResponse, isAxiosError } from 'axios';
-import Cookies from 'js-cookie';
+import { AxiosResponse, isAxiosError } from 'axios';
 
 export const setUserDataApi = () => {
-  return `${import.meta.env.VITE_APP_BASE_DOMAIN}/api/v1/private/set/my/data`;
+  return '/api/v1/private/set/my/data';
 };
 
 export interface IUserData {
@@ -50,12 +50,7 @@ export interface IResponseSetUserData {
 
 export const doSetUserData = async (form: IUserData): Promise<IResponseSetUserData> => {
   try {
-    const res: AxiosResponse<IResponseSetUserData> = await axios.post(setUserDataApi(), form, {
-      headers: {
-        Authorization: `Bearer: ${Cookies.get('atoken')}`,
-        'C-Token': import.meta.env.VITE_APP_CASINO_TOKEN ?? '',
-      },
-    });
+    const res: AxiosResponse<IResponseSetUserData> = await axiosApi.post(setUserDataApi(), form);
     const data = res.data;
     return data;
   } catch (error) {
