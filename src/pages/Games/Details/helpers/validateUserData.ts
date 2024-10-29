@@ -5,31 +5,31 @@ import { calculateTimeSinceCreation } from './calculateTimeSinceCreation';
 export const validateUserDataError = (userData: IUserData, settings: ISettings) => {
   if (calculateTimeSinceCreation(userData) <= Number(import.meta.env.VITE_USER_CREATED_AT_LIMIT)) {
     if (!new Date(userData.dob) && settings.profile.has_dob) {
-      return 'потому что вы не указали год рождения';
+      return 'causeYouDontSpecifiedDob';
     }
 
     if (!userData.first_name && settings.profile.has_first_name) {
-      return 'потому что вы не добавили ваше имя в профиль';
+      return 'causeYouDontAddYourNameToProfile';
     }
 
     if (!userData.last_name && settings.profile.has_last_name) {
-      return 'потому что вы не добавили вашу фамилию';
+      return 'causeYouDontAddYourSecondName';
     }
 
     if (!userData.country && settings.profile.has_country) {
-      return 'потому что вы не добили вашу страну';
+      return 'causeYouDontAddYourCountry';
     }
 
     if (!userData.address && settings.profile.has_address) {
-      return 'потому что вы не добили ваш адрес';
+      return 'causeYouDontAddYourAddress';
     }
 
     if (!userData.zip && settings.profile.has_zip) {
-      return 'потому что вы не добили ваш zip код';
+      return 'causeYouDontAddYourZipCode';
     }
 
     if (!userData.email_verified_at && settings.profile.has_email) {
-      return 'потому что вы не подтвердили адрес электронной почты';
+      return 'causeYouDontConfirmEmail';
     }
   }
 };

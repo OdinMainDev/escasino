@@ -532,7 +532,7 @@ const WalletReplenish = () => {
         ) : null}
         <div className={styles.title}>Сумма депозита</div>
         <Input
-          placeholder="Сумма"
+          placeholder={t('sum')}
           type="number"
           className="mb-[12px]"
           value={amount}
