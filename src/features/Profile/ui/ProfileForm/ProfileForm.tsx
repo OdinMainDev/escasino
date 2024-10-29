@@ -295,7 +295,7 @@ const ProfileForm = () => {
         {settings?.profile.has_first_name && (
           <Input
             containerClassName={styles.input}
-            placeholder="firstName"
+            placeholder={t('firstName')}
             value={userData.first_name}
             onChange={(e) => setUserData((prev) => ({ ...prev, first_name: e.target.value }))}
             disabled={!settings?.profile.user_can_change_data && !!user?.data.first_name}

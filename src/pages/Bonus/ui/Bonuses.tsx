@@ -249,7 +249,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
     if (noDepositsBonuses.length > 0 && selectedTemplate) {
       try {
         setAlertModalData({
-          title: 'Загрузка...',
+          title: t('loading'),
           text: <Loader />,
         });
         const fid = await getVisitorId();
@@ -266,8 +266,8 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
         }
       } catch (e) {
         setAlertModalData({
-          title: 'Ошибка',
-          text: 'У вас закончились бездепозитные бонусы',
+          title: t('error'),
+          text: t('noDepositBonusesEnded'),
         });
         setTimeout(() => {
           doCloseModals();
@@ -275,8 +275,8 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
       }
     } else {
       setAlertModalData({
-        title: 'Ошибка',
-        text: 'У вас закончились бездепозитные бонусы',
+        title: t('error'),
+        text: t('noDepositBonusesEnded'),
       });
       setTimeout(() => {
         doCloseModals();

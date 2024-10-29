@@ -240,14 +240,17 @@ const Details = () => {
           <Icons icon="warning" />
           {!isAuth ? (
             <span>
-              Бездепозитный бонус недоступен, потому что вы не подтвердили адрес электронной почты.
+              {t('noDepositBonusUnavailable')} {t('causeYouDontConfirmEmail')}
             </span>
           ) : user && settings && !validateUserData(user.data, settings) ? (
             <span>
-              Бездепозитный бонус недоступен, {validateUserDataError(user.data, settings)}
+              {t('noDepositBonusUnavailable')}{' '}
+              {t(validateUserDataError(user.data, settings) as unknown as string)}
             </span>
           ) : (
-            <span>Бездепозитный бонус недоступен, у вас есть активированный бонус</span>
+            <span>
+              {t('noDepositBonusUnavailable')} {t('youHaveActiveBonus').toLocaleLowerCase()}
+            </span>
           )}
         </div>
       ) : null}
