@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 import Modal from '@/shared/ui/Modal';
 
 import styles from './styles.module.scss';
@@ -204,7 +205,7 @@ const SuccessPaymentModal = ({
               >
                 <div className="flex items-center gap-[15px]">
                   <div className="flex-1">
-                    <div className={styles.card_label}>Сумма</div>
+                    <div className={styles.card_label}>{t('sum')}</div>
                     <div className={styles.card_value}>
                       {item.amount} {item.currency}
                     </div>
@@ -454,9 +455,9 @@ const SuccessPaymentModal = ({
         <div className={styles.good_info}>
           <img alt="success" src={successIcon} className={styles.success_image} />
           <span className={styles.good_message}>{message}</span>
-          <span className={styles.good_message_sub}>Желаем вам приятной игры!</span>
+          <span className={styles.good_message_sub}>{t('goodGame')}</span>
         </div>
-        <Button onClick={close}>Вернуться к игре</Button>
+        <Button onClick={close}>{t('backToGame')}</Button>
       </div>
     );
   };
@@ -468,7 +469,7 @@ const SuccessPaymentModal = ({
           <div className={styles.error_container}>
             <div className={styles.error}>{message}</div>
             <Button className={styles.button} onClick={close}>
-              Закрыть
+              {t('close')}
             </Button>
           </div>
           {loading && (
@@ -477,7 +478,7 @@ const SuccessPaymentModal = ({
                 <div className="w-[55px] h-[55px]">
                   <Loader />
                 </div>
-                <div className={styles.loader_title}>Обработка платежа...</div>
+                <div className={styles.loader_title}>{t('paymentProcessing')}</div>
               </div>
             </div>
           )}
@@ -495,7 +496,7 @@ const SuccessPaymentModal = ({
               <div className="w-[55px] h-[55px]">
                 <Loader />
               </div>
-              <div className={styles.loader_title}>Обработка платежа...</div>
+              <div className={styles.loader_title}>{t('paymentProcessing')}</div>
             </div>
           </div>
         ) : (

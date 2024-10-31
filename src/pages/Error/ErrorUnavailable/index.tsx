@@ -1,14 +1,16 @@
 import Icons from '@/shared/ui/Icons';
 import styles from './styles.module.scss';
+import { useTranslation } from 'react-i18next';
 
 const ErrorUnavailable = () => {
+  const { t } = useTranslation();
   return (
     <div className={styles.container}>
       <div className={styles.icon}>
         <Icons icon="alert" />
       </div>
-      <div className={styles.subtitle}>Мы скоро вернемся!</div>
-      <div className={styles.title}>Казино находится на ремонте</div>
+      <div className={styles.subtitle}>{t('weWillReturnSoon')}</div>
+      <div className={styles.title}>{t('casinoInRenovation')}</div>
       <svg
         width="333"
         height="154"

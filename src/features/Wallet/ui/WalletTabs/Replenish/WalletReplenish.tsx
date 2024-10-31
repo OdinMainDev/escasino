@@ -375,12 +375,12 @@ const WalletReplenish = () => {
               strokeLinejoin="round"
             />
           </svg>
-          {cartBonuses.length > 0 ? 'Добавить еще бонус' : 'Играть с бонусом'}
+          {cartBonuses.length > 0 ? t('addMoreBonus') : t('playWithBonus')}
         </Button>
       )}
 
       <div className={styles.block}>
-        <div className={styles.title}>Способ оплаты</div>
+        <div className={styles.title}>{t('paymentWay')}</div>
         {billingLoading ? (
           <div className={styles.slider}>
             {Array(3)
@@ -416,7 +416,7 @@ const WalletReplenish = () => {
         )}
 
         {paymentProviders && paymentProviders?.length > 0 ? (
-          <div className={styles.title}>Провайдеры</div>
+          <div className={styles.title}>{t('providers')}</div>
         ) : null}
         {selectedProvider && selectedProvider.layout.length > 0 && (
           <div className={styles.selected_provider}>
@@ -436,7 +436,7 @@ const WalletReplenish = () => {
             <div className="flex items-center justify-between">
               {selectedProvider.conditions.limit_minimum > 0 ? (
                 <div className={styles.selected_provider_conditions}>
-                  Минимум:{' '}
+                  {t('minimum')}:{' '}
                   <strong>
                     {selectedProvider.conditions.limit_minimum} {selectedProvider.currency}
                   </strong>
@@ -446,7 +446,7 @@ const WalletReplenish = () => {
             <div className="flex items-center justify-between">
               {selectedProvider.conditions.limit_maximum > 0 && (
                 <div className={styles.selected_provider_conditions}>
-                  Максимум:{' '}
+                  {t('maximum')}:{' '}
                   <strong>
                     {selectedProvider.conditions.limit_maximum} {selectedProvider.currency}
                   </strong>
@@ -456,7 +456,7 @@ const WalletReplenish = () => {
             <div className="flex items-center justify-between">
               {selectedProvider.fees.fixed > 0 && (
                 <div className={styles.selected_provider_conditions}>
-                  Фиксированная комиссия:{' '}
+                  {t('fixedFee')}:{' '}
                   <strong>
                     {selectedProvider.fees.fixed} {selectedProvider.currency}
                   </strong>
@@ -466,20 +466,20 @@ const WalletReplenish = () => {
             <div className="flex items-center justify-between">
               {selectedProvider.fees.percent > 0 && (
                 <div className={styles.selected_provider_conditions}>
-                  Комиссия: <strong>{selectedProvider.fees.percent}%</strong>
+                  {t('fee')}: <strong>{selectedProvider.fees.percent}%</strong>
                 </div>
               )}
             </div>
             <div className="flex items-center justify-between">
               {selectedProvider.rules.compensate_commission && (
                 <div className={styles.selected_provider_conditions}>
-                  <strong>Мы компенсируем комиссию платежного шлюза</strong>
+                  <strong>{t('reimbursePaymentGatewayFees')}</strong>
                 </div>
               )}
             </div>
             <div className="flex items-center justify-between">
               <div className={styles.selected_provider_conditions}>
-                Вейджер при депозите без бонуса:{' '}
+                {t('wagerDepositWithoutBonus')}:{' '}
                 <strong>{selectedProvider.rules.without_bonus_wager}%</strong>
               </div>
             </div>
@@ -530,7 +530,7 @@ const WalletReplenish = () => {
             {generateLayout(selectedProvider.layout)}
           </div>
         ) : null}
-        <div className={styles.title}>Сумма депозита</div>
+        <div className={styles.title}>{t('depositSum')}</div>
         <Input
           placeholder={t('sum')}
           type="number"
@@ -582,7 +582,7 @@ const WalletReplenish = () => {
         onClick={() => void handlePayment()}
         className={classNames(styles.button, 'uppercase')}
       >
-        Пополнить счет
+        {t('topUpAccount')}
       </Button>
       {!validateData({
         amount: Number(amount),
@@ -595,7 +595,7 @@ const WalletReplenish = () => {
             ? minAmount
             : Number(selectedProvider?.conditions.limit_minimum),
         layout,
-      }) && <div className={styles.error}>Заполните все поля</div>}
+      }) && <div className={styles.error}>{t('fillAllFields')}</div>}
       <SuccessPaymentModal
         isError={isError}
         transaction={transaction}

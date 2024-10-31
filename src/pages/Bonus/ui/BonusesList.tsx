@@ -138,7 +138,7 @@ const BonusesList = () => {
               selected={item.value === selectedFilter.value}
               onClick={() => filterHandler(item)}
             >
-              {item.label}
+              {t(item.label)}
             </TabItem>
           </SwiperSlide>
         ))}

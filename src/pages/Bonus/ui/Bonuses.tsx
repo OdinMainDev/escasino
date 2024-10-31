@@ -515,7 +515,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                         ''
                       ) : minAmountCart !== maxAmountCart ? (
                         <>
-                          От {minAmountCart}{' '}
+                          {t('from')} {minAmountCart}{' '}
                           {maxAmountCart !== 0
                             ? `${t('before')} ${maxAmountCart} ${user?.balance.currency}`
                             : null}

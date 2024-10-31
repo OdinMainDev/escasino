@@ -148,7 +148,7 @@ const Profile = () => {
               ) : null}
               {user?.username ? (
                 <div className={styles.profile_info}>
-                  <div className={styles.profile_label}>Username</div>
+                  <div className={styles.profile_label}>{t('username')}</div>
                   <div className={styles.profile_value}>{user?.username}</div>
                 </div>
               ) : null}
