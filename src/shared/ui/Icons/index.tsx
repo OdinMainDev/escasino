@@ -30,7 +30,7 @@ const Icons = ({ icon }: IProps) => {
       >
         <path
           d="M19 19L13.0001 13M15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8Z"
-          stroke="var(--secondary)"
+          stroke="#E1E1E1"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -311,18 +311,19 @@ const Icons = ({ icon }: IProps) => {
   if (icon === 'filter') {
     return (
       <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
+        width="20"
+        height="14"
+        viewBox="0 0 20 14"
         fill="none"
-        stroke="var(--secondary)"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="feather feather-filter"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+        <path
+          d="M4 7H16M1 1H19M7 13H13"
+          stroke="#E1E1E1"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
     );
   }

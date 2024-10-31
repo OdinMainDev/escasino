@@ -29,6 +29,7 @@ export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   mask?: string | null;
   onChangePhone?: (value: string) => void;
   onClear?: () => void;
+  withoutLabel?: boolean;
 }
 
 const Input = forwardRef<HTMLInputElement, IInputProps>(
@@ -51,6 +52,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
       icon,
       onChangePhone,
       onClear,
+      withoutLabel,
       ...otherProps
     },
     ref,
@@ -76,6 +78,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
       () =>
         classNames(styles.label, styles[elSize], className, {
           [styles.disabled]: disabled && !disabledOpacityOff,
+          [styles.withoutLabel]: withoutLabel,
           [styles.withoutPlaceholder]: !placeholder,
         }),
       [elSize, className, disabled, disabledOpacityOff, placeholder],
@@ -99,7 +102,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
 
       if (elType === 'search') {
         return (
-          <div className={styles.icon}>
+          <div className={styles.search_icon}>
             <Icons icon="search" />
           </div>
         );
@@ -170,7 +173,8 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
               className={inputClass}
               type={type === 'password' ? (isPassword ? 'password' : 'text') : type}
             />
-            <span className={styles.placeholder}>{placeholder}</span>
+            {!withoutLabel && <span className={styles.placeholder}>{placeholder}</span>}
+
             {renderIcon()}
           </label>
           {errorMessage && <div className={styles.message}>{errorMessage}</div>}
@@ -212,31 +216,33 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
             onChange={onChangeHandler}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            placeholder=""
+            placeholder={withoutLabel ? placeholder : ''}
             className={inputClass}
             type={type === 'password' ? (isPassword ? 'password' : 'text') : type}
           />
-          <span className={styles.placeholder}>{placeholder}</span>
-          {value && onClear && (
-            <div className={styles.clear_button} onClick={onClear}>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13 1L1 13M1 1L13 13"
-                  stroke="var(--secondary)"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          )}
-          {renderIcon()}
+          {!withoutLabel && <span className={styles.placeholder}>{placeholder}</span>}
+          <div className={styles.input_icons}>
+            {value && onClear && (
+              <div className={styles.clear_button} onClick={onClear}>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13 1L1 13M1 1L13 13"
+                    stroke="var(--secondary)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            )}
+            {renderIcon()}
+          </div>
         </label>
         {errorMessage && <div className={styles.message}>{errorMessage}</div>}
       </div>

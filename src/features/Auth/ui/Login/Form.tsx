@@ -115,7 +115,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
               <Input
                 placeholder={t('email')}
                 type="email"
-                containerClassName="mb-[10px]"
+                containerClassName="mb-[24px]"
                 onChange={(e) => {
                   setLoginData((prev) => ({ ...prev, email: e.target.value }));
                   if (!isAppDebug) {
@@ -133,7 +133,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
                 placeholder={t('phone')}
                 type="phone"
                 value={loginData.phone}
-                containerClassName="mb-[10px]"
+                containerClassName="mb-[24px]"
                 isError={typeof errorData?.errors === 'object' && !!errorData?.errors['phone']}
                 validationFunction={validatePhone}
                 autoComplete={autoCompleteHandler('phone')}
@@ -147,7 +147,6 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
               />
             ) : null}
           </div>
-          <div className={styles.input_label}>{t('willUseAsLogin')}</div>
         </div>
 
         <Input
@@ -155,7 +154,7 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
           type="password"
           isError={typeof errorData?.errors === 'object' && !!errorData?.errors['password']}
           value={loginData.password}
-          containerClassName="mb-[10px]"
+          containerClassName="mb-[24px]"
           validationFunction={validatePasswordLength}
           autoComplete={autoCompleteHandler('password')}
           message={ErrorResponseAsString('password', t('enterCorrectPassword'), errorData)}

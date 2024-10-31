@@ -86,6 +86,7 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
       <GoBackButton className={styles.back} customPath="/" />
       {!hasNotSearch && (
         <Input
+          withoutLabel
           placeholder={t('findGames')}
           icon={
             <div onClick={clickValue}>

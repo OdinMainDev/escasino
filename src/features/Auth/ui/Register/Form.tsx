@@ -234,6 +234,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             isError={
               typeof errorData?.errors === 'object' && !!errorData?.errors['repeat_password']
             }
+            value={registerData.repeat_password}
             containerClassName={styles.input}
             validationFunction={(value) => validatePasswordMatching(registerData.password, value)}
             message={ErrorResponseAsString('repeat_password', t('enterCorrectPassword'), errorData)}

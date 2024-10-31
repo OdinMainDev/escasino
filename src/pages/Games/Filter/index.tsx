@@ -115,12 +115,14 @@ const Filter = () => {
           )}
         </div>
         <div className={styles.footer}>
-          <Button elType="outlined" onClick={resetFilter}>
-            {t('reset')}
-          </Button>
-          <Button onClick={applyFilters} disabled={activeKeys === 0}>
-            {t('apply')}
-          </Button>
+          <div className={styles.footer_wrapper}>
+            <Button elType="outlined" onClick={resetFilter}>
+              {t('reset')}
+            </Button>
+            <Button onClick={applyFilters} disabled={activeKeys === 0}>
+              {t('apply')}
+            </Button>
+          </div>
         </div>
       </div>
     </>
