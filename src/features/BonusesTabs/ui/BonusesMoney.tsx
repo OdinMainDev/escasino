@@ -84,8 +84,9 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
 
     useEffect(() => {
       if (moneySwiper.current) {
-        moneySwiper.current.swiper?.slideToLoop(0, 0);
-        selectMoney(moneySwiper.current.swiper);
+        const middleIndex = Math.floor(sortedBonuses.length / 2);
+        moneySwiper.current.swiper?.slideTo(middleIndex, 400);
+        setActiveIndex(middleIndex);
       }
       if (sortedBonuses.length > 0) {
         void moneyChangeHandler(sortedBonuses[0].id);
@@ -95,7 +96,6 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
     const selectMoney = (swiper: SwiperClass | null) => {
       if (swiper) {
         const realIndex = swiper?.realIndex;
-
         if (sortedBonuses[realIndex]) {
           moneyChangeHandler(sortedBonuses[realIndex].id);
           setActiveIndex(realIndex);

@@ -53,6 +53,11 @@ body {
   background: var(--primary);
 }
 
+input:disabled {
+  opacity: 1;
+  -webkit-appearance: none; 
+}
+
 .swiper-slide {
   user-select: none;
   -webkit-user-drag: none;

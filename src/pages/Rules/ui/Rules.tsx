@@ -38,13 +38,13 @@ const Rules = () => {
         }
         return (
           <div key={key}>
-            <strong>{t(key)}</strong>: {t(value)}
+            {t(key)}: {t(value)}
           </div>
         );
       } else {
         return (
           <div key={key}>
-            <strong>{key}</strong>
+            <div>{key}</div>
             <div style={{ marginLeft: '20px' }}>{renderContent(value)}</div>
           </div>
         );
@@ -66,18 +66,18 @@ const Rules = () => {
       {selectedTab.value === 'main' ? (
         <div className={styles.content} key="main">
           {mainRules.map(([key, rule]) => (
-            <div key={key} style={{ marginBottom: '20px' }}>
-              <h2>{t(rule.title)}</h2>
-              <div style={{ marginLeft: '20px' }}>{renderContent(rule.content)}</div>
+            <div key={key} style={{ marginBottom: '16px' }}>
+              <h2 className={styles.title}>{t(rule.title)}</h2>
+              <div>{renderContent(rule.content)}</div>
             </div>
           ))}
         </div>
       ) : (
         <div className={styles.content} key="bonuses">
           {bonusRules.map(([key, rule]) => (
-            <div key={key} style={{ marginBottom: '20px' }}>
-              <h2>{t(rule.title)}</h2>
-              <div style={{ marginLeft: '20px' }}>{renderContent(rule.content)}</div>
+            <div key={key} style={{ marginBottom: '16px' }}>
+              <h2 className={styles.title}>{t(rule.title)}</h2>
+              <div>{renderContent(rule.content)}</div>
             </div>
           ))}
         </div>

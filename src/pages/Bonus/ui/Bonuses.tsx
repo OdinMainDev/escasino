@@ -129,9 +129,6 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   }, [doCloseModals, doOpenModal]);
 
   const successBonusAddedModal = useCallback(() => {
-    router.push({
-      pathname: '/bonus',
-    });
     setAlertModalData({
       title: t('bonusAddedSuccess'),
       text: (
@@ -357,23 +354,20 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
     void getBonusesTemplates();
   }, []);
 
-  const clearBonuses = () => {
-    if (bonusesFS.current) {
-      bonusesFS.current.clearBonusFSSwiper();
-    }
-    if (bonusesMoney.current) {
-      bonusesMoney.current.clearBonusMoneySwiper();
-    }
-    setSelectedGame(null);
-    setSelectedTemplate(null);
-  };
+  // const clearBonuses = () => {
+  //   if (bonusesFS.current) {
+  //     bonusesFS.current.clearBonusFSSwiper();
+  //   }
+  //   if (bonusesMoney.current) {
+  //     bonusesMoney.current.clearBonusMoneySwiper();
+  //   }
+  // };
 
   const addToBasket = () => {
     if (!selectedTemplate) {
       openErrorModal();
       return;
     }
-    clearBonuses();
     const data: ICartBonusTemplate = {
       ...selectedTemplate,
       uuid: uuidv4(),
@@ -381,7 +375,6 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
       type: selectedTab as 'freespins' | 'money',
     };
     dispatch(addToCartBonuses(data));
-    router.push('/bonus');
   };
 
   return (

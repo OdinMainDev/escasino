@@ -11,6 +11,7 @@ import { PageHeader } from '@/widgets/Header';
 
 import PusherService from '@/shared/service/PusherService';
 import { useTranslation } from 'react-i18next';
+import Icons from '@/shared/ui/Icons';
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -44,7 +45,7 @@ const Profile = () => {
           : true;
   return (
     <>
-      <PageHeader customBackPath="/" title={t('profile')} />
+      <PageHeader fixed customBackPath="/" title={t('profile')} />
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.block}>
@@ -122,7 +123,7 @@ const Profile = () => {
             <div className={styles.block_header}>
               <div className={styles.title}>{t('personalData')}</div>
               <div onClick={() => router.push('/profile/edit')} className={styles.side_url}>
-                {t('edit').toLocaleLowerCase()}
+                <Icons icon="edit"/>
               </div>
             </div>
             <div className={styles.profile}>

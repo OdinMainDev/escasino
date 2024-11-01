@@ -57,9 +57,9 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     const selectMaxValue = (newTab: ITab, templates: IBonusTemplate[]) => {
       const maxIndex = templates.length - 1;
       if (newTab.value === 'bet' && betSwiper.current) {
-        betSwiper.current.swiper?.slideToLoop(maxIndex, 400);
+        betSwiper.current.swiper?.slideTo(maxIndex, 400);
       } else if (spinsSwiper.current && newTab.value === 'fs') {
-        spinsSwiper.current.swiper?.slideToLoop(maxIndex, 400);
+        spinsSwiper.current.swiper?.slideTo(maxIndex, 400);
       }
       if (!selectedTabs.find((item) => item.value === newTab.value)) {
         setSelectedTabs((prev) => [...prev, newTab]);
@@ -68,10 +68,10 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     const clearBonusFSSwiper = () => {
       if (betSwiper.current) {
-        betSwiper.current.swiper?.slideToLoop(0, 0);
+        betSwiper.current.swiper?.slideTo(0, 0);
       }
       if (spinsSwiper.current) {
-        spinsSwiper.current.swiper?.slideToLoop(0, 0);
+        spinsSwiper.current.swiper?.slideTo(0, 0);
       }
       setSelectedBetIndex(0);
       setSelectedSpinsIndex(0);
@@ -295,7 +295,9 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     useEffect(() => {
       if (betSwiper.current) {
-        selectBet(betSwiper.current.swiper);
+        const middleIndex = Math.floor(betTemplates.length / 2);
+        betSwiper.current.swiper?.slideTo(middleIndex, 400);
+        setSelectedBetIndex(middleIndex);
       }
     }, [betTemplates]);
 

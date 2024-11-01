@@ -18,12 +18,12 @@
 
 .buttons_container {
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
   align-items: center;
   padding: 16px;
   z-index: 4;
   bottom: 0;
-  height: 82px;
   background-color: var(--primary);
   gap: 10px;
   @media (min-width: 375px) {
@@ -33,6 +33,7 @@
 
 .button {
   flex: 1;
+  min-width: 170px;
   font-size: 16px;
   line-height: 24px;
   text-transform: uppercase;

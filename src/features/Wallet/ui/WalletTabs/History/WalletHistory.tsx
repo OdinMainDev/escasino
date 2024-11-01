@@ -107,6 +107,7 @@ const WalletHistory = () => {
           selectsStart
           selected={datePicker.start}
           startDate={datePicker.start}
+          popperClassName={styles.date_popper}
           endDate={datePicker.end}
           onChange={(value) => changeDate(value, datePicker.end)}
           placeholder={t('start')}
@@ -115,6 +116,7 @@ const WalletHistory = () => {
           containerClassName="w-[100px]"
           selectsEnd
           selected={datePicker.end}
+          popperClassName={styles.r_date_popper}
           startDate={datePicker.start}
           endDate={datePicker.end}
           onChange={(value) => changeDate(datePicker.start, value)}

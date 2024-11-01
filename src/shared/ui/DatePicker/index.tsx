@@ -16,6 +16,7 @@ interface IProps {
   placeholder?: string;
   validationTimeout?: number;
   message?: string | null;
+  popperClassName?: string;
   containerClassName?: string;
   validationFunction?: (value: Date) => boolean;
   isError?: boolean;
@@ -37,6 +38,7 @@ const DatePicker = ({
   isError,
   selectsEnd,
   selectsStart,
+  popperClassName,
   startDate,
   endDate,
 }: IProps) => {
@@ -95,6 +97,7 @@ const DatePicker = ({
         </span>
         <ReactDatePicker
           dateFormat="dd-MM-yyyy"
+          popperClassName={classNames(styles.popper, popperClassName)}
           wrapperClassName={classNames(styles.wrapper, styles[elSize])}
           selected={selected}
           dayClassName={(date) => {
