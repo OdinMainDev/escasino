@@ -178,8 +178,8 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         if (!isBonusScrollAllTemplates) {
           const combinationExists = filtredBonuses.find(
             (item) =>
-              item.configurator.bet_amount === selectedBetTemplate.configurator.bet_amount &&
-              item.spins_count === spinsTemplates[mainIndex].spins_count,
+              item.configurator.bet_amount === selectedBetTemplate?.configurator?.bet_amount &&
+              item.spins_count === spinsTemplates[mainIndex]?.spins_count,
           );
           if (!combinationExists) {
             const selectedFsTemplates = removeDuplicatesBySpinsCount(
@@ -243,7 +243,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           const combinationExists = filtredBonuses.find(
             (item) =>
               item.configurator.bet_amount ===
-                betTemplates[selectedBetIndex].configurator.bet_amount &&
+                betTemplates[selectedBetIndex]?.configurator.bet_amount &&
               item.spins_count === selectedFsTemplate.spins_count,
           );
           if (!combinationExists) {
@@ -252,7 +252,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             );
             const findedIndex = betTemplates.findIndex(
               (item) =>
-                item.configurator.bet_amount === selectedBetTemplates[0].configurator.bet_amount,
+                item.configurator.bet_amount === selectedBetTemplates[0]?.configurator.bet_amount,
             );
             setSelectedBetIndex(findedIndex);
             mainIndex = findedIndex;
