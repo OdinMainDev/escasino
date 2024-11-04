@@ -33,7 +33,6 @@ import { Bonuses, BonusesCart, BonusesGames } from '@/pages/Bonus';
 import BonusesProvider from './providers/pages/BonusesProvider';
 import BonusesList from '@/pages/Bonus/ui/BonusesList';
 import { Rules } from '@/pages/Rules';
-import { defaultLanguage } from './config/locales';
 
 const availRoutes: RouteObject[] = [
   {
@@ -236,8 +235,7 @@ const routes: RouteObject[] = [
                 children: availRoutes,
               },
               {
-                index: true,
-                element: <Navigate to={`/${defaultLanguage}`} replace />,
+                children: availRoutes,
               },
               {
                 path: '*',

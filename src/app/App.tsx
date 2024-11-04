@@ -10,30 +10,33 @@ import 'swiper/css';
 import GamesAllProviders from './providers/GamesAllProviders';
 import ThemeProvider from './providers/ThemeProvider';
 import PusherModalProvider from './providers/PusherModalProvider';
+import { UrlHistoryProvider } from './providers/UrlHistoryProvider';
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <StaticSettingsProvider>
-          <SettingsProvider>
-            <GamesAllProviders>
-              <LangProvider>
-                <ModalProvider>
-                  <PusherModalProvider>
-                    <GamesFilterProvider>
-                      {/* EventDispatcherProvider -после него мы не вставляем никакие провайдеры, он завершающий */}
-                      <EventDispatcherProvider>
-                        <Outlet />
-                      </EventDispatcherProvider>
-                    </GamesFilterProvider>
-                  </PusherModalProvider>
-                </ModalProvider>
-              </LangProvider>
-            </GamesAllProviders>
-          </SettingsProvider>
-        </StaticSettingsProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <UrlHistoryProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <StaticSettingsProvider>
+            <SettingsProvider>
+              <GamesAllProviders>
+                <LangProvider>
+                  <ModalProvider>
+                    <PusherModalProvider>
+                      <GamesFilterProvider>
+                        {/* EventDispatcherProvider -после него мы не вставляем никакие провайдеры, он завершающий */}
+                        <EventDispatcherProvider>
+                          <Outlet />
+                        </EventDispatcherProvider>
+                      </GamesFilterProvider>
+                    </PusherModalProvider>
+                  </ModalProvider>
+                </LangProvider>
+              </GamesAllProviders>
+            </SettingsProvider>
+          </StaticSettingsProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </UrlHistoryProvider>
   );
 }
 

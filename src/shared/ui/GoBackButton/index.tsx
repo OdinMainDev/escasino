@@ -1,26 +1,31 @@
 import classNames from 'classnames';
-import { usePathname, useRouter } from '@/shared/helpers/navigation';
+import { usePathname } from '@/shared/helpers/navigation';
 import Icons from '@/shared/ui/Icons';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
+import { removeAllLangsFromUri, useUrlHistory } from '@/app/providers/UrlHistoryProvider';
 
 interface IProps {
   className?: string;
   customPath?: string | undefined;
+  // availPaths?: string[] | undefined;
 }
 
 const GoBackButton = ({ className, customPath }: IProps) => {
-  const router = useRouter();
   const pathname = usePathname();
   const navigation = useNavigate();
   const currentLanguage = useCurrentLanguage();
+  const {history: fullHistory, resaveHistory} = useUrlHistory();
 
   const goBack = () => {
-    if (customPath) {
-      navigation('/' + currentLanguage + customPath, { replace: true });
-      return;
+    if (fullHistory.length > 1) {
+      const historyPath = fullHistory[fullHistory.length - 2];
+      customPath = historyPath;
+      resaveHistory(fullHistory.slice(0, -2));
     }
-    router.goBack();
+    if(customPath == "" || !customPath) customPath = "/";
+    customPath = "/" + currentLanguage + removeAllLangsFromUri(customPath);
+    navigation(customPath, { replace: true });
   };
 
   if (pathname == '/') {

@@ -62,7 +62,7 @@ const ProfileDocument = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.back}>
-          <GoBackButton />
+          <GoBackButton customPath='/profile'/>
         </div>
         <div className="header_title">{t('documents')}</div>
       </div>
