@@ -3,13 +3,17 @@ import { initReactI18next } from 'react-i18next';
 
 import translationEN from '@/app/assets/locales/en/translation.json';
 import translationRU from '@/app/assets/locales/ru/translation.json';
+import rulesTranslations from '@/app/assets/locales/ru/rulesTranslations.json';
 
 const resources = {
   en: {
     translation: translationEN,
   },
   ru: {
-    translation: translationRU,
+    translation: {
+      ...translationRU,
+      ...rulesTranslations,
+    },
   },
 };
 
