@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useCallback, useMemo } from 'react';
 import { defaultLanguages } from '@/app/config/locales';
+import { useTranslation } from 'react-i18next';
 
 interface UseSearchParams {
   get: (name: string) => string | null;
@@ -48,8 +49,11 @@ interface IPushData {
 }
 export function useRouter() {
   const navigate = useNavigate();
-  const { lang } = useParams();
+  const { i18n } = useTranslation();
+  const lang = i18n.language;
+
   const supportedLangs = defaultLanguages;
+
 
   const goBack = () => {
     navigate(-1);
