@@ -23,6 +23,7 @@ import { useCurrentLanguage } from '@/app/providers/LangProvider';
 import { getBonuses } from '@/store/slices/bonusesSlices';
 import { validateUserData, validateUserDataError } from './helpers/validateUserData';
 import { useTranslation } from 'react-i18next';
+import Markdown from 'react-markdown';
 
 const Details = () => {
   const [game, setGame] = useState<IGame | null>(null);
@@ -262,8 +263,9 @@ const Details = () => {
       <div className={styles.description}>
         <div className={styles.description_title}>{game?.name}</div>
         <div className={styles.description_info}>
-          {game &&
-            game.data.texts?.find((item) => item.language.toLowerCase() === currentLanguage)?.value}
+          <Markdown>
+          {game?.data.texts?.find((item) => item.language.toLowerCase() === currentLanguage && item.key === 'description')?.value}
+          </Markdown>
         </div>
       </div>
       <Footer />
