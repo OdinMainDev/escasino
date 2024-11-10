@@ -15,9 +15,11 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
 
 const GridItem = ({ game, ...otherProps }: IProps) => {
   const router = useRouter();
-  const imagePath = game.system_name
-    ? `${import.meta.env.VITE_IMAGE_PATH}/${game.game_provider}/${import.meta.env.VITE_IMAGE_SIZE}/${game.system_name}.png`
-    : game.image;
+  const imagePath = game.image
+    ? game.image
+    : game.system_name
+      ? `${import.meta.env.VITE_IMAGE_PATH}/${game.game_provider}/${import.meta.env.VITE_IMAGE_SIZE}/${game.system_name}.png`
+      : game.image;
   return (
     <div
       {...otherProps}

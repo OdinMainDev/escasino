@@ -52,9 +52,11 @@ const Details = () => {
         setGame(data?.game);
         if (data.game) {
           setImagePath(
-            data.game.system_name
-              ? `${import.meta.env.VITE_IMAGE_PATH}/${data.game.game_provider}/${import.meta.env.VITE_IMAGE_SIZE}/${data.game.system_name}.png`
-              : data.game.image,
+            data.game.image
+              ? data.game.image
+              : data.game.system_name
+                ? `${import.meta.env.VITE_IMAGE_PATH}/${data.game.game_provider}/${import.meta.env.VITE_IMAGE_SIZE}/${data.game.system_name}.png`
+                : data.game.image,
           );
         }
       };
