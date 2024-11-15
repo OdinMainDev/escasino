@@ -34,6 +34,7 @@
 }
 
 .filter {
+  cursor: pointer;
   position: relative;
   &_quantity {
     display: flex;

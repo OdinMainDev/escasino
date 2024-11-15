@@ -7,15 +7,23 @@ import { TopGames } from '@/widgets/Games/ui/TopGames';
 import { GamesGrid } from '@/widgets/Games/ui/Grid';
 import IndexLayout from '@/shared/layouts/home';
 import Loader from '@/shared/ui/Loader';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
-  const { games, loading } = useAppSelector((state) => state.homeGamesReducer);
-  let gamesGrid: IGame[] = games ? games : [];
+  const { games: homeGames, loading } = useAppSelector((state) => state.homeGamesReducer);
+  const [games, setGames] = useState<IGame[]>([]);
+  let gamesGrid: IGame[] = homeGames ? homeGames : [];
   let topGamesGrid: IGame[] = gamesGrid;
   if (themeHasTopGames) {
     topGamesGrid = gamesGrid.slice(0, 20);
     gamesGrid = gamesGrid.slice(20);
   }
+
+  useEffect(() => {
+    if (homeGames) {
+      setGames(homeGames);
+    }
+  }, [homeGames]);
 
   return (
     <IndexLayout>
@@ -33,7 +41,7 @@ export default function Home() {
           </div>
         ) : (
           <div className={styles.games_table}>
-            <GamesGrid games={gamesGrid} />
+            <GamesGrid games={games} />
           </div>
         )}
       </div>

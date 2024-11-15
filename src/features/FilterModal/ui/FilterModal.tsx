@@ -1,18 +1,17 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from '@/shared/helpers/navigation';
-import styles from './styles.module.scss';
+import styles from './FilterModal.module.scss';
 import { useCallback, useState } from 'react';
-// import { IFilter } from '@/app/api/games/getSearchGames';
-import CategoriesList from './ui/CategoriesList';
-import ProviderList from './ui/ProviderList';
+import CategoriesList from './CategoriesList';
+import ProviderList from './ProviderList';
 import Button from '@/shared/ui/Button';
 import Switch from '@/shared/ui/Switch';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
-import Icons from '@/shared/ui/Icons';
 import { useAppSelector } from '@/store/hooks/redux';
 import { useTranslation } from 'react-i18next';
+import Modal from '@/shared/ui/Modal';
+import { IModal } from '@/shared/models/interfaces/modal';
 
-const Filter = () => {
+const FilterModal = ({ isOpen, close }: IModal) => {
   const { t } = useTranslation();
   const { setFilters, getFilters, countActiveKeys } = useGamesFilters();
   const router = useRouter();
@@ -69,14 +68,10 @@ const Filter = () => {
 
   const activeKeys = countActiveKeys(getFilters());
   return (
-    <>
-      <div className={styles.loader_container}>{/* <Loader /> */}</div>
+    <Modal isOpen={isOpen} close={close}>
       <div className={styles.container}>
         <div className="flex items-center justify-between">
           <div className={styles.title}>{t('filterAndSort')}</div>
-          <div className="cursor-pointer" onClick={router.goBack}>
-            <Icons icon="cross" />
-          </div>
         </div>
         <div className={styles.bonus}>
           <div className={styles.bonus_info}>
@@ -125,8 +120,8 @@ const Filter = () => {
           </div>
         </div>
       </div>
-    </>
+    </Modal>
   );
 };
 
-export default Filter;
+export default FilterModal;
