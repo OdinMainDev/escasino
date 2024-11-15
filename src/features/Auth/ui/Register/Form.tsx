@@ -169,7 +169,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             ]}
           />
         )}
-        <div className="tab">
+        <div className="tab flex flex-col	gap-[24px] mb-[4px]">
           {(formType === 'full' && selectedType === 'email') || formType === 'email' ? (
             <Input
               placeholder={t('email')}
@@ -180,7 +180,6 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
                   setRegisterData((prev) => ({ ...prev, phone: '' }));
                 }
               }}
-              containerClassName="mb-[10px]"
               isError={
                 (typeof errorData?.errors === 'object' && !!errorData.errors['email' as string]) ||
                 errorData?.errors === 'UserWithSameCredentialsAlreadyExists'
@@ -206,7 +205,6 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
                   setRegisterData((prev) => ({ ...prev, email: '' }));
                 }
               }}
-              containerClassName="mb-[10px]"
               validationFunction={validatePhone}
               isError={typeof errorData?.errors === 'object' && !!errorData?.errors['phone']}
               message={ErrorResponseAsString('phone', t('enterCorrectPhone'), errorData)}

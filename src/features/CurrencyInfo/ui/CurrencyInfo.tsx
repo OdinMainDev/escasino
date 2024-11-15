@@ -33,7 +33,7 @@ const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) =>
             {user?.balance.formatted_balance_bonus || 0} {user?.balance.currency}
           </div>
         </div>
-        <div className={styles.menu_item}>
+        {/* <div className={styles.menu_item}>
           <div className={styles.label}>{t('wagerBonus')}</div>
           <div className={styles.menu_balace}>
             {user?.balance.wager_bonus.formatted || 0} {user?.balance.currency}
@@ -50,7 +50,7 @@ const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) =>
           <div className={styles.menu_balace}>
             {user?.balance.wager_total.formatted || 0} {user?.balance.currency}
           </div>
-        </div>
+        </div> */}
         <div className={styles.menu_arrow}>
           <svg
             width="14"

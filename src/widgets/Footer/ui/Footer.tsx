@@ -56,9 +56,11 @@ export const Footer = ({ isHidden, isPhoneHorizontal }: FooterProps) => {
         {isAuth ? (
           // Меню если авторизован
           <div className={styles.footer}>
-            {isPhoneHorizontal ? <ChatIcon /> : <CurrencyInfo />}
-            <div className={styles.icons}>
+            <div className="flex items-center justify-center h-[40px] w-[40px]">
               <UserIcon />
+            </div>
+            {isPhoneHorizontal ? <ChatIcon /> : <CurrencyInfo />}
+            <div>
               <Wallet />
             </div>
           </div>

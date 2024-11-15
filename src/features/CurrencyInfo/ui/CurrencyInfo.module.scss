@@ -1,9 +1,10 @@
 .container {
-  background: var(--select-primary);
-  height: 48px;
+  background: var(--input-primary);
+  height: 56px;
   padding: 6px 12px;
   box-sizing: border-box;
   min-width: 180px;
+  width: 100%;
   position: relative;
   border-radius: 4px;
   cursor: pointer;
@@ -50,12 +51,13 @@
 }
 
 .label {
-  color: var(--label-primary);
+  color: var(--input-placeholder);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 16px;
-  letter-spacing: 0.12px;
+  letter-spacing: 0.01em;
+  margin-bottom: 4px;;
 }
 
 .balance {
@@ -86,18 +88,19 @@
   gap: 8px;
   padding: 16px;
   position: absolute;
-  bottom: 60px;
+  bottom: 65px;
   left: 0;
   min-width: inherit;
+  width: 100%;
   border-radius: 4px;
   background: var(--modal-primary);
   &_balace {
     color: var(--text-primary);
     font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
+    font-weight: 600;
     line-height: 20px;
-    letter-spacing: 0.16px;
+    letter-spacing: 0.01em;
+
   }
 
 }

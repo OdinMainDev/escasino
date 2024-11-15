@@ -4,19 +4,19 @@
   &.error {
     .label {
       
-      border: 1px solid var(--error-primary, #CF6679);
+      border: 1px solid var(--error-primary, #DC2626);
       .placeholder {
-        color: var(--error-primary, #CF6679);
+        color: var(--error-primary, #DC2626);
       }
     }
     .phone_input_continer {
-      border: 1px solid var(--error-primary, #CF6679);
+      border: 1px solid var(--error-primary, #DC2626);
       .placeholder {
-        color: var(--error-primary, #CF6679);
+        color: var(--error-primary, #DC2626);
       }
     }
     .message {
-      color: var(--error-primary, #CF6679);
+      color: var(--error-primary, #DC2626);
     }
   }
 }
@@ -51,7 +51,7 @@
     font-size: 16px !important;
     background:  var(--input-primary);
     color: var(--text-primary);
-    font-weight: 500 !important;
+    font-weight: 400 !important;
     border: none !important;
   }
 }
@@ -68,12 +68,32 @@
   &.disabled {
     opacity: 0.5;
   }
+
+  &:focus-within {
+    border: 1px solid var(--active);
+  }
+
+  &.is_search {
+    &:focus-within {
+      border: 1px solid var(--button-border-color);
+      background: var(--button-border-color);
+
+      .search_icon {
+        svg {
+          path {
+            stroke: var(--text-primary)
+          }
+        }
+      }
+    }
+  }
+
 }
 
 
 .m {
-  height: 48px;
-  padding: 16px 16px 3px 16px;
+  height: 56px;
+  padding: 24px 16px 3px 16px;
   &.withoutPlaceholder {
     padding: 0 16px 0 16px;
   }
@@ -95,13 +115,18 @@
   }
 }
 
+.search_icon {
+  margin-right: 19px;
+}
+
 
 .input {
-  height: 20px;
+  height: 24px;
   background-color: transparent;
   color: var(--text-primary);
   font-size: 16px;
-  font-weight: 500;
+  line-height: 24px;
+  font-weight: 400;
   width: 100%;
   outline: none;
   
@@ -124,8 +149,14 @@
 
   &.active + .placeholder {
     transform: translateY(-20px);
-    font-size: 11px;
+    font-size: 12px;
+    line-height: 16px;
   }
+
+  &:focus + .placeholder {
+    color: var(--active)
+  }
+
 
   &_icons {
     display: flex;
@@ -134,7 +165,7 @@
     top: 50%;
     transform: translateY(-50%);
     align-items: center;
-    gap: 16px;
+    gap: 24px;
   }
 
 }
@@ -144,14 +175,15 @@
   transform: translateY(-50%);
   color: var(--input-placeholder);
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
+  line-height: 24px;
   position: absolute;
   pointer-events: none;
   transition: transform 0.2s, font-size 0.2s;
 }
 
 .message {
-  margin-top: 10px;
+  margin-top: 4px;
   color: var(--input-placeholder);
   font-size: 12px;
   font-style: normal;

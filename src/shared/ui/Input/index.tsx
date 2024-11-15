@@ -24,6 +24,7 @@ export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   containerClassName?: string;
   validationTimeout?: number;
   icon?: ReactNode;
+  frontIcon?: ReactNode;
   validationFunction?: (value: string) => boolean;
   disabledOpacityOff?: boolean;
   mask?: string | null;
@@ -80,12 +81,14 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
           [styles.disabled]: disabled && !disabledOpacityOff,
           [styles.withoutLabel]: withoutLabel,
           [styles.withoutPlaceholder]: !placeholder,
+          [styles.is_search]: elType === 'search',
         }),
       [elSize, className, disabled, disabledOpacityOff, placeholder],
     );
 
     const inputClass = classNames(styles.input, {
       [styles.active]: isActive,
+      [styles.is_search]: elType === 'search',
     });
 
     const renderIcon = () => {
@@ -96,14 +99,6 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
         return (
           <div className={styles.icon} onClick={() => setIsPassword((prev) => !prev)}>
             <Icons icon={isPassword ? 'eye-off' : 'eye'} />
-          </div>
-        );
-      }
-
-      if (elType === 'search') {
-        return (
-          <div className={styles.search_icon}>
-            <Icons icon="search" />
           </div>
         );
       }
@@ -208,7 +203,12 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
           [styles.error]: isError || !isValid,
         })}
       >
-        <label className={containerClass}>
+        <label className={classNames(containerClass)}>
+          {elType === 'search' && (
+            <div className={styles.search_icon}>
+              <Icons icon="search" />
+            </div>
+          )}
           <input
             {...otherProps}
             ref={ref}
@@ -233,7 +233,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
                 >
                   <path
                     d="M13 1L1 13M1 1L13 13"
-                    stroke="var(--secondary)"
+                    stroke="var(--input-placeholder)"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"

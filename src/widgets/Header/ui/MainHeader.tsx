@@ -8,7 +8,6 @@ import { usePathname, useRouter } from '@/shared/helpers/navigation';
 import GoBackButton from '@/shared/ui/GoBackButton';
 import Input from '@/shared/ui/Input';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
-import Icons from '@/shared/ui/Icons';
 import { useTranslation } from 'react-i18next';
 
 type HeaderProps = {
@@ -51,17 +50,6 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
     }
   };
 
-  const clickValue = () => {
-    if (filterVal.trim() !== '') {
-      router.push({
-        pathname: '/games/search',
-        query: {
-          query: filterVal,
-        },
-      });
-    }
-  };
-
   const availKeys = countActiveKeys(getFilters());
 
   const onSearchHandler = (value: string) => {
@@ -88,25 +76,21 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
         <Input
           withoutLabel
           placeholder={t('findGames')}
+          elType="search"
           icon={
-            <div onClick={clickValue}>
-              <Icons icon="search" />
+            <div onClick={clickFilter}>
+              <FilterIcon quantity={availKeys} />
             </div>
           }
           onKeyDown={searchGames}
           containerClassName={styles.input}
-          elSize="s"
           value={filterVal}
           onClear={() => setFilterVal('')}
           onChange={(e) => onSearchHandler(e.target.value)}
         />
       )}
-
       {hasTitle && <div className={styles.title}>{hasTitle}</div>}
       <div className={styles.icons_list}>
-        <div className={styles.icon} onClick={clickFilter}>
-          <FilterIcon quantity={availKeys} />
-        </div>
         <ChatIcon />
         <span className="elementor-toggle-icon elementor-toggle-icon-right" aria-hidden="true">
           <span className="elementor-toggle-icon-closed">
