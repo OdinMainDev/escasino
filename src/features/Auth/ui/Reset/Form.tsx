@@ -137,12 +137,14 @@ const AuthResetForm = ({ openLoginModal }: IProps) => {
           />
         )}
 
+        <div className={styles.reset_text}>{t('reset-text')}</div>
+
         <Button
           disabled={!validateResetPassword(resetData)}
           className={styles.button}
           onClick={(e) => void sendData(e)}
         >
-          {t('reset')}
+          {t('continue')}
         </Button>
         <div className={styles.label} onClick={openLoginModal}>
           {t('rememberAccount')}
