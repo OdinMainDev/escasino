@@ -1,4 +1,3 @@
-import GoBackButton from '@/shared/ui/GoBackButton';
 import styles from './styles.module.scss';
 // import { ProgressBar } from '@/entities/ProgressBar';
 import { useAppSelector } from '@/store/hooks/redux';
@@ -9,6 +8,7 @@ import { getVerifications } from './api/historyApi';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import DocumentItem from './DocumentItem';
+import { PageHeader } from '@/widgets/Header';
 
 const ProfileDocument = () => {
   const { t } = useTranslation();
@@ -49,14 +49,8 @@ const ProfileDocument = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.back}>
-          <GoBackButton customPath="/profile" />
-        </div>
-        <div className="header_title">{t('documents')}</div>
-      </div>
+      <PageHeader title={t('documents')} customBackPath="/profile" />
       <div className={styles.body}>
-        <div className={styles.title}>{t('verifactionDocument')}</div>
         <div className={styles.subtitle}>{t('addDocumentsToVerify')}</div>
         <div className={styles.buttons}>
           <DocumentItem
