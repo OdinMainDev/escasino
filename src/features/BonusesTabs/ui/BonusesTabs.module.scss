@@ -101,6 +101,22 @@
         border: 2px solid var(--error-secondary);
       }
     }
+
+    &.success {
+      &::before {
+        border: 2px solid var(--success-primary);
+      }
+
+      .settings_data {
+        &.active {
+          color: var(--success-primary);
+        }
+      }
+
+      .settings_input {
+        color: var(--success-primary);
+      }
+    }
     &::before {
       content: "";
       pointer-events: none;

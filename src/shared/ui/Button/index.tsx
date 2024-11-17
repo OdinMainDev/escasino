@@ -8,7 +8,7 @@ interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   childred?: ReactElement;
   loading?: boolean;
   size?: 'm' | 's';
-  elType?: 'outlined' | 'contained';
+  elType?: 'outlined' | 'contained' | 'dark';
   disabledOpacityOff?: boolean;
   reverseTheme?: boolean;
 }
@@ -32,6 +32,7 @@ const Button = ({
         {
           [styles.contained]: elType === 'contained',
           [styles.outlined]: elType === 'outlined',
+          [styles.dark]: elType === 'dark',
           [styles.disabled]: disabled && !disabledOpacityOff,
           [styles.size_m]: size === 'm',
           [styles.size_s]: size === 's',

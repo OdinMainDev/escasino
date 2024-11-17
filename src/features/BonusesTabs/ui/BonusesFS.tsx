@@ -335,6 +335,12 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
                     betTemplates[selectedBetIndex]?.configurator.bet_amount &&
                   item.spins_count === spinsTemplates[selectedSpinsIndex]?.spins_count,
               ) && isBonusScrollAllTemplates,
+            [styles.success]: bonusesTemplates.find(
+              (item) =>
+                item.configurator.bet_amount ===
+                  betTemplates[selectedBetIndex]?.configurator.bet_amount &&
+                item.spins_count === spinsTemplates[selectedSpinsIndex]?.spins_count,
+            ),
           })}
         >
           <Swiper

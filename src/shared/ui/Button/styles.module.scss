@@ -49,7 +49,6 @@
       }
     }
   }
-
   &.reverse_theme {
     border: 1px solid var(--button-secondary-color);
     color: var(--button-secondary-color);
@@ -71,6 +70,23 @@
     }
   }
 }
+
+.dark {
+  border: 1px solid var(--button-secondary-color);
+  background-color: var(--button-secondary-color);
+  color: var(--button-primary-color);
+  &:hover {
+    background-color: transparent;
+    color: var(--button-secondary-color);
+    svg {
+      path {
+        fill:  transparent;
+        stroke: var(--button-secondary-color);
+      }
+    }
+  }
+}
+
 
 .contained {
   border: 1px solid var(--button-border-color);

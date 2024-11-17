@@ -208,7 +208,7 @@ const Details = () => {
         </div>
       </div>
       <div className={styles.buttons}>
-        <Button elType="outlined" className={styles.button} onClick={openDemoPlay}>
+        <Button elType="dark" className={styles.button} onClick={openDemoPlay}>
           {t('demoGame')}
         </Button>
         <Button elType="contained" className={styles.button} onClick={openRealPlay}>
@@ -217,6 +217,7 @@ const Details = () => {
 
         {warningText || noDepositsBonuses.length > 0 ? (
           <Button
+            elType="outlined"
             disabled={
               activeBonuses.length > 0 ||
               (!!user && !!settings && !validateUserData(user.data, settings))
@@ -264,7 +265,12 @@ const Details = () => {
         <div className={styles.description_title}>{game?.name}</div>
         <div className={styles.description_info}>
           <Markdown>
-          {game?.data.texts?.find((item) => item.language.toLowerCase() === currentLanguage && item.key === 'description')?.value}
+            {
+              game?.data.texts?.find(
+                (item) =>
+                  item.language.toLowerCase() === currentLanguage && item.key === 'description',
+              )?.value
+            }
           </Markdown>
         </div>
       </div>

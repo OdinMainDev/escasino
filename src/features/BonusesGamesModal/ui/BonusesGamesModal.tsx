@@ -2,7 +2,7 @@ import Modal from '@/shared/ui/Modal';
 import styles from './BonusesGamesModal.module.scss';
 import { IModal } from '@/shared/models/interfaces/modal';
 import { IGame } from '@/shared/models/interfaces/game';
-import { Game } from '@/entities/Game';
+import Game from './Game';
 import Input from '@/shared/ui/Input';
 import { useEffect, useState } from 'react';
 import { useRouter } from '@/shared/helpers/navigation';
@@ -17,6 +17,7 @@ interface IProps extends IModal {
 const BonusesGamesModal = ({ close, isOpen, games, onSelectGame, isNoDeposit }: IProps) => {
   const { t } = useTranslation();
   const [allGames, setAllGames] = useState(games);
+  const [search, setSearch] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const BonusesGamesModal = ({ close, isOpen, games, onSelectGame, isNoDeposit }: 
   }, [games]);
 
   const searchGames = (value: string) => {
+    setSearch(value);
     if (value === '') {
       setAllGames(games);
     } else {
@@ -49,15 +51,17 @@ const BonusesGamesModal = ({ close, isOpen, games, onSelectGame, isNoDeposit }: 
   return (
     <Modal close={close} isOpen={!!isOpen}>
       <div className={styles.container}>
-        <div className={styles.title}>{t('chooseGameForBonus')}</div>
         <div className={styles.header}>
+          <div className={styles.title}>{t('chooseGameForBonus')}</div>
           <Input
+            withoutLabel
+            value={search}
+            placeholder={t('findGames')}
             elType="search"
             onClear={() => {
               setAllGames(games);
             }}
             onChange={(e) => searchGames(e.target.value)}
-            placeholder={t('findGames')}
           />
         </div>
         <div className={styles.games}>
