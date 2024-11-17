@@ -6,6 +6,22 @@
   min-height: 100vh;
 }
 
+.document {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background-color: var(--modal-primary);
+  border-radius: 4px;
+  &_title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+  }
+}
+
 .header {
   display: flex;
   align-items: center;

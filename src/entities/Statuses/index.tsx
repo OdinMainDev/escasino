@@ -1,14 +1,13 @@
-import { useTranslation } from 'react-i18next';
 import styles from './styles.module.scss';
 
+export type StatusesType = 'good' | 'bad' | 'middle';
 interface IProps {
-  status: 'verified' | 'not-verified';
+  status: StatusesType;
+  text: string;
 }
 
-const Statuses = ({ status }: IProps) => {
-  const { t } = useTranslation();
-
-  if (status === 'not-verified') {
+const Statuses = ({ status, text }: IProps) => {
+  if (status === 'bad') {
     return (
       <div className={styles.not_verified}>
         <svg
@@ -26,7 +25,30 @@ const Statuses = ({ status }: IProps) => {
           />
         </svg>
 
-        <span>{t('documentNoVerified')}</span>
+        <span>{text}</span>
+      </div>
+    );
+  }
+
+  if (status === 'middle') {
+    return (
+      <div className={styles.middle}>
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M6 12C9.31371 12 12 9.31371 12 6C12 2.68629 9.31371 0 6 0C2.68629 0 0 2.68629 0 6C0 9.31371 2.68629 12 6 12ZM6.6 2.5C6.6 2.16863 6.33137 1.9 6 1.9C5.66863 1.9 5.4 2.16863 5.4 2.5V6C5.4 6.15913 5.46321 6.31174 5.57574 6.42426L8.07574 8.92426C8.31005 9.15858 8.68995 9.15858 8.92426 8.92426C9.15858 8.68995 9.15858 8.31005 8.92426 8.07574L6.6 5.75147V2.5Z"
+            fill="var(--warning-primary)"
+          />
+        </svg>
+
+        <span>{text}</span>
       </div>
     );
   }
@@ -47,7 +69,7 @@ const Statuses = ({ status }: IProps) => {
         />
       </svg>
 
-      <span>{t('playerVerified')}</span>
+      <span>{text}</span>
     </div>
   );
 };

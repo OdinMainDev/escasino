@@ -105,7 +105,7 @@ const Profile = () => {
           {user?.data.documents_verified_at == 0 && (
             <div className={styles.block}>
               <div className={styles.title}>{t('verifactionDocument')}</div>
-              <Statuses status="not-verified" />
+              <Statuses status="bad" text={t('documentNoVerified')} />
               <Button className={styles.button} onClick={() => router.push('/profile/document')}>
                 {t('verify')}
               </Button>
@@ -123,7 +123,10 @@ const Profile = () => {
             <div className={styles.block_header}>
               <div className={styles.title}>{t('personalData')}</div>
             </div>
-            <Statuses status={IsUserVerified ? 'verified' : 'not-verified'} />
+            <Statuses
+              status={IsUserVerified ? 'good' : 'bad'}
+              text={IsUserVerified ? t('playerVerified') : t('documentNoVerified')}
+            />
             <div className={styles.profile}>
               {user?.data.first_name ? (
                 <div className={styles.profile_info}>

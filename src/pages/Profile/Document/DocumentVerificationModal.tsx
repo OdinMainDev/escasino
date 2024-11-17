@@ -14,9 +14,10 @@ interface IProps {
   isOpen: boolean;
   close: () => void;
   modalType: documentType;
+  getData: () => void;
 }
 
-const VerificationModal = ({ isOpen, close, modalType }: IProps) => {
+const VerificationModal = ({ isOpen, close, modalType, getData }: IProps) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [errorData, setErrorData] = useState<IResponseError>();
@@ -41,6 +42,7 @@ const VerificationModal = ({ isOpen, close, modalType }: IProps) => {
         file: null,
         tag: '',
       });
+      getData();
       close();
     } catch (e) {
       setErrorData(e as IResponseError);

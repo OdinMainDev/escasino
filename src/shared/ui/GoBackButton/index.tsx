@@ -15,7 +15,7 @@ const GoBackButton = ({ className, customPath }: IProps) => {
   const pathname = usePathname();
   const navigation = useNavigate();
   const currentLanguage = useCurrentLanguage();
-  const {history: fullHistory, resaveHistory} = useUrlHistory();
+  const { history: fullHistory, resaveHistory } = useUrlHistory();
 
   const goBack = () => {
     if (fullHistory.length > 1) {
@@ -23,8 +23,8 @@ const GoBackButton = ({ className, customPath }: IProps) => {
       customPath = historyPath;
       resaveHistory(fullHistory.slice(0, -2));
     }
-    if(customPath == "" || !customPath) customPath = "/";
-    customPath = "/" + currentLanguage + removeAllLangsFromUri(customPath);
+    if (customPath == '' || !customPath) customPath = '/';
+    customPath = '/' + currentLanguage + removeAllLangsFromUri(customPath);
     navigation(customPath, { replace: true });
   };
 
