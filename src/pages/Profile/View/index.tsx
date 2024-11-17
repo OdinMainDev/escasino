@@ -1,5 +1,3 @@
-import classNames from 'classnames';
-
 import styles from './styles.module.scss';
 import { useAppSelector } from '@/store/hooks/redux';
 import { useRouter } from '@/shared/helpers/navigation';
@@ -11,7 +9,7 @@ import { PageHeader } from '@/widgets/Header';
 
 import PusherService from '@/shared/service/PusherService';
 import { useTranslation } from 'react-i18next';
-import Icons from '@/shared/ui/Icons';
+import Statuses from '@/entities/Statuses';
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -97,21 +95,23 @@ const Profile = () => {
             </div>
           </div>
           <BonusesItem bonus={activeBonuses[0]} isMain />
+          <div className={styles.block}>
+            <div className={styles.title}>{t('rulesAndConditionsCasino')}</div>
+            <div className={styles.subtitle}>{t('rulesAndConditionsMore')}</div>
+            <Button elType="outlined" onClick={() => router.push('/rules')}>
+              {t('read')}
+            </Button>
+          </div>
           {user?.data.documents_verified_at == 0 && (
             <div className={styles.block}>
               <div className={styles.title}>{t('verifactionDocument')}</div>
-              <div
-                className={classNames(styles.profile_verification, {
-                  [styles.is_not_verificated]: true,
-                })}
-              >
-                {t('documentNoVerified')}
-              </div>
-              <div className={styles.buttons}>
-                <Button className={styles.button} onClick={() => router.push('/profile/document')}>
-                  {t('verify')}
-                </Button>
-              </div>
+              <Statuses status="not-verified" />
+              <Button className={styles.button} onClick={() => router.push('/profile/document')}>
+                {t('verify')}
+              </Button>
+              <Button elType="outlined" onClick={() => router.push('/rules')}>
+                {t('rulesAndConditions')}
+              </Button>
             </div>
           )}
           <div className={styles.block}>
@@ -122,10 +122,8 @@ const Profile = () => {
             )}
             <div className={styles.block_header}>
               <div className={styles.title}>{t('personalData')}</div>
-              <div onClick={() => router.push('/profile/edit')} className={styles.side_url}>
-                <Icons icon="edit"/>
-              </div>
             </div>
+            <Statuses status={IsUserVerified ? 'verified' : 'not-verified'} />
             <div className={styles.profile}>
               {user?.data.first_name ? (
                 <div className={styles.profile_info}>
@@ -153,16 +151,14 @@ const Profile = () => {
                   <div className={styles.profile_value}>{user?.username}</div>
                 </div>
               ) : null}
-              <div
-                className={classNames(styles.profile_verification, {
-                  [styles.is_not_verificated]: !IsUserVerified,
-                })}
-              >
-                {IsUserVerified ? t('playerVerified') : t('playerNoVerified')}
-              </div>
             </div>
+            <Button elType="outlined" onClick={() => router.push('/profile/edit')}>
+              {t('edit')}
+            </Button>
           </div>
-          <Button onClick={logoutHandler}>{t('logOut')}</Button>
+          <Button elType="outlined" onClick={logoutHandler}>
+            {t('logOut')}
+          </Button>
         </div>
       </div>
     </>

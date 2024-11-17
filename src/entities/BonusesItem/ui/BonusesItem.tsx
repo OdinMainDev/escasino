@@ -24,6 +24,7 @@ import { TabItem } from '@/entities/TabItem';
 import BonusGame from './BonusGame';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import Icons from '@/shared/ui/Icons';
 
 interface IProps {
   bonus: IBonus | null;
@@ -242,7 +243,7 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
         <div className={styles.title}>{bonusStatus}</div>
         {isMain && (
           <div onClick={() => router.push('/bonus/list')} className={styles.side_url}>
-            {t('history')}
+            <Icons icon="clock" />
           </div>
         )}
       </div>

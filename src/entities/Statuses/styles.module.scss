@@ -1,0 +1,13 @@
+.verified {
+  display: flex;
+  align-items: center;
+  color: var(--success-primary);
+  gap: 10px;
+}
+
+.not_verified {
+  display: flex;
+  align-items: center;
+  color: var(--error-primary);
+  gap: 10px;
+}
