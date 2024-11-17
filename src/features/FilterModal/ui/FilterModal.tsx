@@ -1,60 +1,69 @@
 import { useRouter } from '@/shared/helpers/navigation';
 import styles from './FilterModal.module.scss';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import CategoriesList from './CategoriesList';
 import ProviderList from './ProviderList';
 import Button from '@/shared/ui/Button';
 import Switch from '@/shared/ui/Switch';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
-import { useAppSelector } from '@/store/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { useTranslation } from 'react-i18next';
 import Modal from '@/shared/ui/Modal';
 import { IModal } from '@/shared/models/interfaces/modal';
+import { getGameProviders } from '@/store/slices/gameProvidersSlice';
+import { getGameCategories } from '@/store/slices/gameCategoriesSlice';
 
 const FilterModal = ({ isOpen, close }: IModal) => {
   const { t } = useTranslation();
-  const { setFilters, getFilters, countActiveKeys } = useGamesFilters();
+  const { setFilters, getFilters } = useGamesFilters();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { categories } = useAppSelector((state) => state.gameCategoriesReducer);
   const { providers } = useAppSelector((state) => state.gameProvidersReducer);
+  const [selectedProviders, setSelectedProviders] = useState<string[]>(getFilters().providers);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(getFilters().categories);
   const [withBonuses, setWithBonuses] = useState<boolean>(getFilters().is_game_avail_for_bonus);
 
-  const selectCategory = useCallback((selectedCategory: string) => {
-    const category = getFilters().categories.find((item) => item === selectedCategory);
-    const newFilters = getFilters();
-    if (!category) {
-      if (newFilters) {
-        newFilters.categories = [...newFilters.categories, selectedCategory];
-      }
-      setFilters(newFilters);
-    } else {
-      if (newFilters) {
-        newFilters.categories = newFilters.categories.filter((item) => item !== selectedCategory);
-      }
-      setFilters(newFilters);
-    }
+  useEffect(() => {
+    void dispatch(getGameProviders());
+    void dispatch(getGameCategories());
   }, []);
 
-  const selectProvider = useCallback((selectedProvider: string) => {
-    const provider = getFilters().providers.find((item) => item === selectedProvider);
-    const newFilters = getFilters();
-    if (!provider) {
-      if (newFilters) {
-        newFilters.providers = [...newFilters.providers, selectedProvider];
-      }
-      setFilters(newFilters);
+  useEffect(() => {
+    setSelectedCategories(getFilters().categories);
+  }, [getFilters().categories]);
+
+  const selectCategory = (selectedCategory: string) => {
+    const category = selectedCategories.find((item) => item === selectedCategory);
+    if (!category) {
+      setSelectedCategories((prev) => [...prev, selectedCategory]);
     } else {
-      if (newFilters) {
-        newFilters.providers = newFilters.providers.filter((item) => item !== selectedProvider);
-      }
-      setFilters(newFilters);
+      setSelectedCategories((prev) => prev.filter((item) => item !== selectedCategory));
+    }
+  };
+
+  const selectProvider = useCallback((selectedProvider: string) => {
+    const provider = selectedProviders.find((item) => item === selectedProvider);
+    if (!provider) {
+      setSelectedProviders((prev) => [...prev, selectedProvider]);
+    } else {
+      setSelectedProviders((prev) => prev.filter((item) => item !== selectedProvider));
     }
   }, []);
 
   const applyFilters = () => {
+    const newFilters = getFilters();
     router.push({
       pathname: '/games/search',
+      query: {
+        query: newFilters.query,
+      },
     });
+    newFilters.categories = selectedCategories;
+    newFilters.providers = selectedProviders;
+    newFilters.is_game_avail_for_bonus = withBonuses;
+    setFilters(newFilters);
+    if (close) close();
   };
 
   const resetFilter = () => {
@@ -64,9 +73,11 @@ const FilterModal = ({ isOpen, close }: IModal) => {
     newFilters.is_game_avail_for_bonus = false;
     setFilters(newFilters);
     setWithBonuses(false);
+    setSelectedCategories([]);
+    setSelectedProviders([]);
+    if (close) close();
   };
 
-  const activeKeys = countActiveKeys(getFilters());
   return (
     <Modal isOpen={isOpen} close={close}>
       <div className={styles.container}>
@@ -83,11 +94,6 @@ const FilterModal = ({ isOpen, close }: IModal) => {
               isToggled={withBonuses}
               onToggle={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const val = e.target.checked;
-                const newFilters = getFilters();
-                if (newFilters) {
-                  newFilters.is_game_avail_for_bonus = val;
-                }
-                setFilters(newFilters);
                 setWithBonuses(val);
               }}
             />
@@ -97,7 +103,7 @@ const FilterModal = ({ isOpen, close }: IModal) => {
           {categories && categories.length > 0 ? (
             <div className={styles.subtitle}>{t('gameType')}</div>
           ) : null}
-          <CategoriesList selectCategory={selectCategory} />
+          <CategoriesList selectedCategories={selectedCategories} selectCategory={selectCategory} />
         </div>
         <div className={styles.provider}>
           {providers && providers?.length > 0 && (
@@ -105,7 +111,7 @@ const FilterModal = ({ isOpen, close }: IModal) => {
               {providers && providers.length > 0 ? (
                 <div className={styles.subtitle}>{t('providers')}</div>
               ) : null}
-              <ProviderList selectProvider={selectProvider} />
+              <ProviderList selectedProviders={selectedProviders} selectProvider={selectProvider} />
             </>
           )}
         </div>
@@ -114,7 +120,12 @@ const FilterModal = ({ isOpen, close }: IModal) => {
             <Button elType="outlined" onClick={resetFilter}>
               {t('reset')}
             </Button>
-            <Button onClick={applyFilters} disabled={activeKeys === 0}>
+            <Button
+              onClick={applyFilters}
+              disabled={
+                selectedCategories.length + selectedProviders.length + Number(withBonuses) === 0
+              }
+            >
               {t('apply')}
             </Button>
           </div>

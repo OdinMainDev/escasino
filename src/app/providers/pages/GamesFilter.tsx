@@ -55,8 +55,7 @@ const GamesFilterProvider = ({ children }: IProps) => {
     const quantity =
       newFilters.categories.length +
       newFilters.providers.length +
-      (newFilters.is_game_avail_for_bonus ? 1 : 0) +
-      (newFilters.query.length > 0 ? 1 : 0);
+      (newFilters.is_game_avail_for_bonus ? 1 : 0);
     return quantity;
   };
 

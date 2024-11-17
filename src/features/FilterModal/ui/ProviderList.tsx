@@ -3,15 +3,14 @@ import { memo } from 'react';
 import styles from './ProviderList.module.scss';
 import { useAppSelector } from '@/store/hooks/redux';
 import { TabBlock } from '@/entities/TabBlock';
-import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
 
 interface IProps {
+  selectedProviders: string[];
   selectProvider: (selectedCategory: string) => void;
 }
 
-const ProviderList = memo(({ selectProvider }: IProps) => {
+const ProviderList = memo(({ selectedProviders, selectProvider }: IProps) => {
   const { providers, loading } = useAppSelector((state) => state.gameProvidersReducer);
-  const { getFilters } = useGamesFilters();
   return (
     <div className={styles.container}>
       {loading
@@ -20,7 +19,7 @@ const ProviderList = memo(({ selectProvider }: IProps) => {
             .map((_, index) => <TabBlock skeleton={true} key={index} />)
         : providers?.map((item) => (
             <TabBlock
-              selected={getFilters().providers.includes(item.url)}
+              selected={selectedProviders.includes(item.url)}
               onClick={() => selectProvider(item.url)}
               key={item.url}
               secondary={true}

@@ -1,25 +1,23 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import styles from './styles.module.scss';
 import { IGame } from '@/shared/models/interfaces/game';
 import { IFilter, getSearchGamesApi } from '@/app/api/games/getSearchGames';
 import { GamesGrid } from '@/widgets/Games/ui/Grid';
 import { useGamesFilters } from '@/app/providers/pages/GamesFilter';
-import { useQuery } from '@/shared/helpers/navigation';
+import { useQuery, useRouter } from '@/shared/helpers/navigation';
 import IndexLayout from '@/shared/layouts/home';
 import { isAppDebug } from '@/app/config/app';
 import Loader from '@/shared/ui/Loader';
 import { useTranslation } from 'react-i18next';
+import classNames from 'classnames';
 
 export default function Search() {
   const { t } = useTranslation();
   const [games, setGames] = useState<IGame[] | null>(null);
-  const { setFilters, getFilters } = useGamesFilters();
-
+  const { setFilters, getFilters, countActiveKeys } = useGamesFilters();
+  const router = useRouter();
   const searchParams = useQuery();
-  const location = useLocation();
 
   useEffect(() => {
     if (searchParams.get('query') != undefined || null) {
@@ -43,13 +41,24 @@ export default function Search() {
       }
       setGames(data);
     };
-
     void getGames();
-  }, [location]);
+    if (countActiveKeys(getFilters()) + getFilters().query.length === 0) {
+      router.replace('/');
+    }
+  }, [
+    getFilters().providers,
+    getFilters().categories,
+    getFilters().is_game_avail_for_bonus,
+    getFilters().query,
+  ]);
 
   return (
     <IndexLayout>
-      <div className={styles.games_table}>
+      <div
+        className={classNames(styles.games_table, {
+          [styles.has_categories]: getFilters().categories.length > 0,
+        })}
+      >
         {games && games?.length > 0 ? (
           <GamesGrid games={games} />
         ) : (

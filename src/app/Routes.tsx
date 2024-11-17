@@ -10,8 +10,6 @@ import { Profile, ProfileDocument, ProfileEdit } from '@/pages/Profile';
 import {
   HomeGamesProvider,
   AuthGuardProvider,
-  GameCategoriesProvider,
-  GameProvidersProvider,
   BillingGroupsProvider,
   PaymentProvidersProvider,
   PaymentAllProvidersProvider,
@@ -37,13 +35,9 @@ const availRoutes: RouteObject[] = [
   {
     path: '',
     element: (
-      <GameCategoriesProvider>
-        <GameProvidersProvider>
-          <HomeGamesProvider>
-            <Home />
-          </HomeGamesProvider>
-        </GameProvidersProvider>
-      </GameCategoriesProvider>
+      <HomeGamesProvider>
+        <Home />
+      </HomeGamesProvider>
     ),
   },
   {

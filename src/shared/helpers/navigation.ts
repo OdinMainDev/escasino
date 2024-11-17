@@ -54,9 +54,12 @@ export function useRouter() {
 
   const supportedLangs = defaultLanguages;
 
-
   const goBack = () => {
     navigate(-1);
+  };
+
+  const replace = (pathname: string) => {
+    navigate(`${lang ? '/' + lang : ''}${pathname}`, { replace: true });
   };
 
   const push = useCallback(
@@ -96,5 +99,5 @@ export function useRouter() {
     },
     [navigate],
   );
-  return { push, goBack };
+  return { push, goBack, replace };
 }

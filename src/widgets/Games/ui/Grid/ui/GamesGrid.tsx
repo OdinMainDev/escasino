@@ -10,8 +10,8 @@ const GamesGrid = ({ games }: IProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.table}>
-        {games.map((item) => (
-          <div className={styles.game} key={item.id}>
+        {games.map((item, index) => (
+          <div className={styles.game} key={index}>
             <GridItem game={item} />
           </div>
         ))}
