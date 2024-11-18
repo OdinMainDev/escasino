@@ -1,20 +1,20 @@
 .verified {
+  color: var(--success-primary);
+}
+
+.status {
   display: flex;
   align-items: center;
-  color: var(--success-primary);
   gap: 10px;
+  svg {
+    flex-shrink: 0;
+  }
 }
 
 .not_verified {
-  display: flex;
-  align-items: center;
   color: var(--error-primary);
-  gap: 10px;
 }
 
 .middle {
-  display: flex;
-  align-items: center;
   color: var(--warning-primary);
-  gap: 10px;
 }

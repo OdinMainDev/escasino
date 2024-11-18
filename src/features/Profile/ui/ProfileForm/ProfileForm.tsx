@@ -5,7 +5,6 @@ import { IUserData, doSetUserData, sampleIUserData } from '@/app/api/user/setUse
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import Loader from '@/shared/ui/Loader';
 import Input from '@/shared/ui/Input';
-import Icons from '@/shared/ui/Icons';
 import Button from '@/shared/ui/Button';
 import Select, { ISelectOption } from '@/shared/ui/Select';
 import { genderSelect } from '@/app/constants/genders';
@@ -21,6 +20,7 @@ import { getCountries } from '@/store/slices/countriesSlice';
 import DatePicker from '@/shared/ui/DatePicker';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
 import { useTranslation } from 'react-i18next';
+import Statuses from '@/entities/Statuses';
 
 const ProfileForm = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
@@ -320,14 +320,15 @@ const ProfileForm = () => {
       {settings?.profile.has_email && (
         <div className={styles.email_container}>
           {!user?.data.email_verified_at && (
-            <div className={styles.email_title}>
-              <Icons icon="warning" />
-              {!user?.data.email_verified_at ? (
-                <span>{t('confirmEmailToGetNoDepositBonus')}</span>
-              ) : (
-                <span>{t('verifyEmail')}</span>
-              )}
-            </div>
+            <Statuses
+              className="mb-[24px]"
+              status="bad"
+              text={
+                !user?.data.email_verified_at
+                  ? t('confirmEmailToGetNoDepositBonus')
+                  : t('verifyEmail')
+              }
+            />
           )}
           <Input
             type="email"

@@ -44,11 +44,12 @@
   background:  var(--input-primary);
   border: 1px solid var(--input-border-color);
   border-radius: 4px;
-  height: 48px;
+  height: 56px;
   .phone_input {
     width: 100% !important;
     font-family: "Montserrat", sans-serif !important;
     font-size: 16px !important;
+    list-style: 24px !important;
     background:  var(--input-primary);
     color: var(--text-primary);
     font-weight: 400 !important;

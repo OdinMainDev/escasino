@@ -1,13 +1,13 @@
 .select_container {
   position: relative;
   border-radius: 4px;
-  height: 50px;
+  height: 56px;
   width: 100%;
   display: inline-block;
 }
 
 .select {
-  background: var(--select-primary);
+  background: var(--input-primary);
   width: 100%;
   position: relative;
   border-radius: 4px;

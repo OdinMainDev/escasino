@@ -1,15 +1,17 @@
+import classNames from 'classnames';
 import styles from './styles.module.scss';
 
 export type StatusesType = 'good' | 'bad' | 'middle';
 interface IProps {
   status: StatusesType;
   text: string;
+  className?: string;
 }
 
-const Statuses = ({ status, text }: IProps) => {
+const Statuses = ({ status, text, className }: IProps) => {
   if (status === 'bad') {
     return (
-      <div className={styles.not_verified}>
+      <div className={classNames(styles.status, styles.not_verified, className)}>
         <svg
           width="12"
           height="12"
@@ -32,7 +34,7 @@ const Statuses = ({ status, text }: IProps) => {
 
   if (status === 'middle') {
     return (
-      <div className={styles.middle}>
+      <div className={classNames(styles.status, styles.middle, className)}>
         <svg
           width="12"
           height="12"
@@ -53,7 +55,7 @@ const Statuses = ({ status, text }: IProps) => {
     );
   }
   return (
-    <div className={styles.verified}>
+    <div className={classNames(styles.status, styles.verified, className)}>
       <svg
         width="12"
         height="12"
