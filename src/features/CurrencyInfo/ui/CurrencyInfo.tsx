@@ -71,7 +71,13 @@ const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) =>
             </svg>
             {currentWagerPercent}%
           </div>
-          <ProgressBar className="h-[2px]" progress={currentWagerPercent} />
+          <div className={styles.menu_balace}>
+            {Number(user?.balance.wager_bonus.formatted) +
+              Number(user?.balance.wager_payment.formatted) || 0}{' '}
+            {user?.balance.currency}/{user?.balance.wager_total.formatted || 0}{' '}
+            {user?.balance.currency}
+          </div>
+          <ProgressBar className="h-[2px] mt-[8px]" progress={currentWagerPercent} />
         </div>
         <div className={styles.menu_arrow}>
           <svg
