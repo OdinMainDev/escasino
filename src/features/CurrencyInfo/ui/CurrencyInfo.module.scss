@@ -51,6 +51,9 @@
 }
 
 .label {
+  display: flex;
+  align-items: center; 
+  gap: 8px;
   color: var(--input-placeholder);
   font-size: 12px;
   font-style: normal;

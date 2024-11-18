@@ -5,12 +5,24 @@ import styles from './CurrencyInfo.module.scss';
 import { useAppSelector } from '@/store/hooks/redux';
 import useBrowserInfo from '@/shared/hooks/useBrowserInfo';
 import { useTranslation } from 'react-i18next';
+import { ProgressBar } from '@/entities/ProgressBar';
 
 const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) => {
   const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.userReducer);
   const [openBalance, setIsOpenBalance] = useState<boolean>(false);
   const browserInfo = useBrowserInfo();
+  let currentWagerPercent = user
+    ? Number(
+        (
+          ((user.balance.wager_total.formatted -
+            (user.balance.wager_bonus.formatted + user.balance.wager_payment.formatted)) /
+            user.balance.wager_total.formatted) *
+          100
+        ).toFixed(0),
+      )
+    : 0;
+  currentWagerPercent = Number(currentWagerPercent) > 0 ? currentWagerPercent : 1;
   return (
     <div
       className={classNames(styles.container, {
@@ -33,7 +45,7 @@ const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) =>
             {user?.balance.formatted_balance_bonus || 0} {user?.balance.currency}
           </div>
         </div>
-        {/* <div className={styles.menu_item}>
+        <div className={styles.menu_item}>
           <div className={styles.label}>{t('wagerBonus')}</div>
           <div className={styles.menu_balace}>
             {user?.balance.wager_bonus.formatted || 0} {user?.balance.currency}
@@ -46,11 +58,21 @@ const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) =>
           </div>
         </div>
         <div className={styles.menu_item}>
-          <div className={styles.label}>{t('wagerTotal')}</div>
-          <div className={styles.menu_balace}>
-            {user?.balance.wager_total.formatted || 0} {user?.balance.currency}
+          <div className={styles.label}>
+            {t('wager')}{' '}
+            <svg
+              width="4"
+              height="4"
+              viewBox="0 0 4 4"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="2" cy="2" r="2" fill="#71717A" />
+            </svg>
+            {currentWagerPercent}%
           </div>
-        </div> */}
+          <ProgressBar className="h-[2px]" progress={currentWagerPercent} />
+        </div>
         <div className={styles.menu_arrow}>
           <svg
             width="14"
