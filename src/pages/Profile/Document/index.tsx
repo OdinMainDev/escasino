@@ -2,18 +2,21 @@ import styles from './styles.module.scss';
 // import { ProgressBar } from '@/entities/ProgressBar';
 import { useAppSelector } from '@/store/hooks/redux';
 import VerificationModal from './DocumentVerificationModal';
-import { IVerificationHistoryItem, documentType } from './models';
+import { IDocument, IVerificationHistoryItem, documentType } from './models';
 import { useEffect, useState } from 'react';
 import { getVerifications } from './api/historyApi';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import DocumentItem from './DocumentItem';
 import { PageHeader } from '@/widgets/Header';
+import { objectToFormData } from '@/shared/helpers/objectToFormData';
+import { sendDocument } from '@/app/api/document/documentApi';
 
 const ProfileDocument = () => {
   const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.userReducer);
   const [verifications, setVerifications] = useState<IVerificationHistoryItem[]>([]);
+  const [loading, setLoading] = useState(false);
   // const [disabledVerifications, setDisabledVerifications] = useState<string[]>([]);
   const navigate = useNavigate();
 
@@ -47,6 +50,22 @@ const ProfileDocument = () => {
     void getData();
   }, []);
 
+  const sendData = async (documentData: IDocument) => {
+    try {
+      setLoading(true);
+      const formData = objectToFormData({
+        ...documentData,
+        tag: openModal.modalType,
+      });
+      await sendDocument(formData);
+      await getData();
+    } catch (e) {
+      // setErrorData(e as IResponseError);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <PageHeader title={t('documents')} customBackPath="/profile" />
@@ -55,18 +74,21 @@ const ProfileDocument = () => {
         <div className={styles.buttons}>
           <DocumentItem
             title={t('sendYourPassword')}
+            loading={loading && openModal.modalType === 'passport'}
             verifications={verifications}
             openModalHandler={openModalHandler}
             type="passport"
           />
           <DocumentItem
             title={t('sendYourCard')}
+            loading={loading && openModal.modalType === 'card'}
             verifications={verifications}
             openModalHandler={openModalHandler}
             type="card"
           />
           <DocumentItem
             title={t('sendMore')}
+            loading={loading && openModal.modalType === 'something'}
             verifications={verifications}
             openModalHandler={openModalHandler}
             type="something"
@@ -74,10 +96,9 @@ const ProfileDocument = () => {
         </div>
       </div>
       <VerificationModal
-        getData={() => void getData()}
+        sendData={(data) => void sendData(data)}
         isOpen={openModal.isOpen}
         close={closeModal}
-        modalType={openModal.modalType}
       />
     </div>
   );

@@ -14,13 +14,23 @@
   line-height: 24px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 20px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--input-placeholder);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.01em;
+  margin-bottom: 24px;
 }
 
 .doc_name {
-  font-size: 18px;
-  font-weight: 500;
-  margin-top: 20px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  margin-top: 8px;
   text-align: center;
   text-overflow: ellipsis;
   color: var(--text-primary);
@@ -42,10 +52,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 150px;
-  background: var(--select-primary);
+  height: 104px;
+  border: 1px solid var(--button-border-color);
   width: 100%;
-  margin-bottom: 50px;
+  margin-bottom: 8px;
+  border-radius: 4px;
   input {
     display: none;
   }

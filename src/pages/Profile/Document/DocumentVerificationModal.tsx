@@ -1,60 +1,25 @@
 import Modal from '@/shared/ui/Modal';
 import styles from './DocumentVerificationModal.module.scss';
-import Button from '@/shared/ui/Button';
-import { useState } from 'react';
-import { documentType, IDocument } from './models';
-import { sendDocument } from '@/app/api/document/documentApi';
-import { objectToFormData } from '@/shared/helpers/objectToFormData';
-import { getVisitorId } from '@/shared/helpers/getVisitorId';
-import { IResponseError } from '@/shared/models/interfaces/misc';
-import { ErrorResponseAsString } from '@/app/api/helpers';
+import { IDocument } from './models';
 import { useTranslation } from 'react-i18next';
+import { getVisitorId } from '@/shared/helpers/getVisitorId';
 
 interface IProps {
   isOpen: boolean;
   close: () => void;
-  modalType: documentType;
-  getData: () => void;
+  sendData: (documentData: IDocument) => void;
 }
 
-const VerificationModal = ({ isOpen, close, modalType, getData }: IProps) => {
+const VerificationModal = ({ isOpen, close, sendData }: IProps) => {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(false);
-  const [errorData, setErrorData] = useState<IResponseError>();
-  const [documentData, setDocumentData] = useState<IDocument>({
-    fid: '',
-    file: null,
-    tag: '',
-  });
 
-  const sendData = async () => {
-    try {
-      setLoading(true);
-      const fid = await getVisitorId();
-      const formData = objectToFormData({
-        ...documentData,
-        tag: modalType,
-        fid,
-      });
-      await sendDocument(formData);
-      setDocumentData({
-        fid: '',
-        file: null,
-        tag: '',
-      });
-      getData();
-      close();
-    } catch (e) {
-      setErrorData(e as IResponseError);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      setDocumentData((prev) => ({ ...prev, file: files[0] }));
+      const fid = await getVisitorId();
+      const data: IDocument = { fid, tag: '', file: files[0] };
+      close();
+      sendData(data);
     }
   };
   return (
@@ -62,48 +27,62 @@ const VerificationModal = ({ isOpen, close, modalType, getData }: IProps) => {
       <div className={styles.container}>
         <div className={styles.body}>
           <div className={styles.title}>{t('loadingDocument')}</div>
+          <div className={styles.subtitle}>{t('chooseDocument')}</div>
           <label className={styles.image_container}>
             <svg
-              width="32"
-              height="32"
-              viewBox="0 0 32 32"
-              fill="var(--text-primary)"
+              width="21"
+              height="20"
+              viewBox="0 0 21 20"
+              fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <g clipPath="url(#clip0_3_20)">
-                <path
-                  d="M11.0937 3.4375C10.15 3.56875 9.43125 4.05625 8.95 4.89375C8.79375 5.1625 8.625 5.76875 8.625 6.05V6.24375L5.76875 6.26875C2.6625 6.29375 2.75 6.28125 1.95625 6.66875C1.73125 6.775 1.4125 7.01875 1.11875 7.3125C0.7375 7.6875 0.5875 7.8875 0.3875 8.3125C0.25 8.60625 0.10625 9.0125 0.06875 9.2125C0.01875 9.4625 0 12.1437 0 17.4625C0 23.975 0.01875 25.4125 0.0875 25.7562C0.35625 27.025 1.35625 28.0625 2.71875 28.4812C3.075 28.5875 3.64375 28.5938 16 28.5938C28.1375 28.5938 28.9312 28.5875 29.3062 28.4812C30.4562 28.1687 31.3625 27.3 31.8312 26.0812L31.9687 25.7187L31.9875 17.625C32.0062 8.675 32.0187 9.0625 31.6062 8.2375C31.35 7.71875 30.5437 6.9125 30.0437 6.66875C29.25 6.28125 29.3375 6.29375 26.2375 6.26875L23.3812 6.24375L23.3437 5.95C23.175 4.7375 22.4937 3.925 21.3187 3.5125C21.0687 3.425 20.4562 3.4125 16.25 3.4C13.6187 3.39375 11.3 3.4125 11.0937 3.4375ZM21.0937 5.11875C21.6 5.35 21.75 5.68125 21.75 6.56875C21.75 7.26875 21.8312 7.5375 22.1125 7.73125C22.2687 7.8375 22.5312 7.84375 25.5937 7.875L28.9062 7.90625L29.25 8.06875C29.6875 8.275 30.0375 8.625 30.2437 9.0625L30.4062 9.40625V17.375V25.3437L30.2625 25.7C30.0812 26.1562 29.6625 26.5812 29.2 26.8L28.8437 26.9687H16H3.15625L2.8 26.8C2.33125 26.5812 1.91875 26.15 1.75625 25.7125C1.625 25.375 1.625 25.2937 1.625 17.4375C1.625 9.6125 1.625 9.5 1.75 9.1625C1.91875 8.7125 2.3 8.29375 2.7375 8.08125L3.09375 7.90625L6.40625 7.875C8.8875 7.85 9.75 7.825 9.85625 7.76875C10.1625 7.5875 10.2625 7.35 10.2875 6.66875C10.3062 6.31875 10.3312 5.9375 10.35 5.825C10.3875 5.58125 10.7062 5.2 10.9687 5.0875C11.1187 5.01875 12.1375 5.00625 16 5.00625C20.5687 5 20.8562 5.00625 21.0937 5.11875Z"
-                  fill="var(--text-primary)"
-                />
-                <path
-                  d="M15.4062 9.97501C14.5375 10.0938 14.2 10.1625 13.65 10.3438C12.5062 10.7188 11.5937 11.2875 10.7187 12.1563C9.61247 13.2563 8.90622 14.6125 8.61872 16.1875C8.49997 16.85 8.53122 18.1813 8.68122 18.9125C9.40622 22.4188 12.4 24.8813 15.9375 24.8875C16.8687 24.8875 17.3812 24.8125 18.2187 24.5563C19.6812 24.1063 21.0312 23.1625 21.9437 21.9625C22.8 20.8375 23.2937 19.5563 23.4312 18.1063C23.8 14.2563 21.1187 10.75 17.2875 10.0688C16.875 9.99376 15.6937 9.93126 15.4062 9.97501ZM17.4062 11.8C18.0375 11.9813 18.35 12.1 18.8062 12.35C20.2125 13.125 21.2125 14.4063 21.6687 16.0188C21.8187 16.5563 21.85 18 21.725 18.625C21.425 20.1063 20.5187 21.4563 19.2937 22.2688C18.2687 22.95 17.2125 23.2688 16 23.2688C15.0625 23.2688 14.375 23.125 13.5875 22.7563C11.9562 21.9875 10.95 20.8313 10.4 19.0938C10.2312 18.5625 10.2187 18.4688 10.225 17.4688C10.225 16.4938 10.2375 16.3625 10.3937 15.8563C11.0687 13.6625 12.75 12.1375 14.9562 11.7125C15.5687 11.5938 16.8312 11.6438 17.4062 11.8Z"
-                  fill="var(--text-primary)"
-                />
-                <path
-                  d="M26.2188 10.0562C25.7 10.3 25.3688 10.825 25.3688 11.4062C25.3688 12.5062 26.4688 13.1937 27.475 12.725C28.5813 12.2125 28.5813 10.6 27.475 10.0875C27.0813 9.90622 26.575 9.88747 26.2188 10.0562Z"
-                  fill="var(--text-primary)"
-                />
-              </g>
-              <defs>
-                <clipPath id="clip0_3_20">
-                  <rect width="32" height="32" fill="var(--text-primary)" />
-                </clipPath>
-              </defs>
+              <path
+                d="M14 3.00012L16 5.00012L20 1.00012M10.5 1.00012H5.8C4.11984 1.00012 3.27976 1.00012 2.63803 1.3271C2.07354 1.61472 1.6146 2.07366 1.32698 2.63815C1 3.27989 1 4.11996 1 5.80012V14.2001C1 15.8803 1 16.7204 1.32698 17.3621C1.6146 17.9266 2.07354 18.3855 2.63803 18.6731C3.27976 19.0001 4.11984 19.0001 5.8 19.0001H15C15.93 19.0001 16.395 19.0001 16.7765 18.8979C17.8117 18.6205 18.6204 17.8119 18.8978 16.7766C19 16.3951 19 15.9301 19 15.0001M8.5 6.50012C8.5 7.60469 7.60457 8.50012 6.5 8.50012C5.39543 8.50012 4.5 7.60469 4.5 6.50012C4.5 5.39555 5.39543 4.50012 6.5 4.50012C7.60457 4.50012 8.5 5.39555 8.5 6.50012ZM12.99 9.91827L4.53115 17.6082C4.05536 18.0407 3.81747 18.257 3.79643 18.4443C3.77819 18.6067 3.84045 18.7678 3.96319 18.8757C4.10478 19.0001 4.42628 19.0001 5.06929 19.0001H14.456C15.8951 19.0001 16.6147 19.0001 17.1799 18.7583C17.8894 18.4548 18.4547 17.8896 18.7582 17.18C19 16.6149 19 15.8953 19 14.4561C19 13.9719 19 13.7298 18.9471 13.5043C18.8805 13.2209 18.753 12.9555 18.5733 12.7265C18.4303 12.5443 18.2412 12.3931 17.8631 12.0906L15.0658 9.85278C14.6874 9.55003 14.4982 9.39866 14.2898 9.34523C14.1061 9.29815 13.9129 9.30424 13.7325 9.36281C13.5279 9.42926 13.3486 9.59227 12.99 9.91827Z"
+                stroke="#A1A1AA"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
-
-            <input type="file" onChange={handleFileChange} />
-            <div className={styles.doc_name}>
-              {documentData.file ? documentData.file.name : 'Загрузите фото вашего документа'}
-            </div>
+            <input type="file" onChange={(data) => void handleFileChange(data)} />
+            <div className={styles.doc_name}>{'Выбрать в галерее'}</div>
           </label>
-          <div className={styles.error}>
+          <label className={styles.image_container}>
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 22 22"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1 7.87735C1 7.52703 1 7.35187 1.01462 7.20433C1.1556 5.78139 2.28127 4.65572 3.70421 4.51474C3.85174 4.50012 4.03636 4.50012 4.40558 4.50012C4.54785 4.50012 4.61899 4.50012 4.67939 4.49646C5.45061 4.44976 6.12595 3.963 6.41414 3.24612C6.43671 3.18998 6.45781 3.12669 6.5 3.00012C6.54219 2.87355 6.56329 2.81026 6.58586 2.75412C6.87405 2.03725 7.54939 1.55049 8.32061 1.50378C8.38101 1.50012 8.44772 1.50012 8.58114 1.50012H13.4189C13.5523 1.50012 13.619 1.50012 13.6794 1.50378C14.4506 1.55049 15.126 2.03725 15.4141 2.75412C15.4367 2.81026 15.4578 2.87355 15.5 3.00012C15.5422 3.12669 15.5633 3.18998 15.5859 3.24612C15.874 3.963 16.5494 4.44976 17.3206 4.49646C17.381 4.50012 17.4521 4.50012 17.5944 4.50012C17.9636 4.50012 18.1483 4.50012 18.2958 4.51474C19.7187 4.65572 20.8444 5.78139 20.9854 7.20433C21 7.35187 21 7.52703 21 7.87735V15.7001C21 17.3803 21 18.2204 20.673 18.8621C20.3854 19.4266 19.9265 19.8855 19.362 20.1731C18.7202 20.5001 17.8802 20.5001 16.2 20.5001H5.8C4.11984 20.5001 3.27976 20.5001 2.63803 20.1731C2.07354 19.8855 1.6146 19.4266 1.32698 18.8621C1 18.2204 1 17.3803 1 15.7001V7.87735Z"
+                stroke="#A1A1AA"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M11 16.0001C13.2091 16.0001 15 14.2093 15 12.0001C15 9.79098 13.2091 8.00012 11 8.00012C8.79086 8.00012 7 9.79098 7 12.0001C7 14.2093 8.79086 16.0001 11 16.0001Z"
+                stroke="#A1A1AA"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <input
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={(data) => void handleFileChange(data)}
+            />
+            <div className={styles.doc_name}>{'Сделать фото'}</div>
+          </label>
+          {/* <div className={styles.error}>
             {ErrorResponseAsString('MaxFilesSent', t('limitOfSend'), errorData)}
             {ErrorResponseAsString('TagAlreadyUsed', t('youSendThisDocument'), errorData)}
-          </div>
+          </div> */}
         </div>
-        <Button onClick={() => void sendData()} disabled={loading} loading={loading}>
-          {t('send')}
-        </Button>
       </div>
     </Modal>
   );

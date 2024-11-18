@@ -175,6 +175,8 @@
   "documentType": "Тип документа",
   "reasonRefusal": "Причина отказа",
   "loadingDocument": "Загрузите документ",
+  "chooseDocument": "Приложите или выбери фото из галереи на устройстве",
+  "loading...": "Загружается...",
   "canceledBonus": "Отмененный бонус",
   "expiredBonus": "Истекший бонус",
   "activateBonus": "Активировать бонус",
