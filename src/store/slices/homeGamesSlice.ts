@@ -5,7 +5,7 @@ import { IResponseHomeGames, getHomeGamesApi } from '@/app/api/games/getHomeGame
 import { isAppDebug } from '@/app/config/app';
 
 export interface IInitialHomeGames extends ISlice {
-  games: IGame[] | null;
+  games: IGame[];
   status: number;
 }
 
@@ -13,23 +13,28 @@ const initialState: IInitialHomeGames = {
   isFinished: false,
   loading: false,
   hasError: false,
-  games: null,
+  games: [],
   status: 0,
 };
 
 export const getHomeGames = createAsyncThunk<
   IResponseHomeGames,
-  void,
+  { page?: number } | undefined,
   { rejectValue: IResponseHomeGames }
->('getHomeGamesApi', async (_homeGames, { rejectWithValue }) => {
-  const data = await getHomeGamesApi();
+>('getHomeGamesApi', async (args, { rejectWithValue }) => {
+  const page = args?.page ?? 1;
+
+  const data = await getHomeGamesApi(page);
+
   if (isAppDebug) {
-    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
     await sleep(5000);
   }
-  if (data.status != 200) {
+
+  if (data.status !== 200) {
     return rejectWithValue(data);
   }
+
   return data;
 });
 
@@ -43,15 +48,34 @@ export const homeGamesSlice = createSlice({
     builder.addCase(getHomeGames.fulfilled, (state, action) => {
       ParentFilled(state);
       state.status = action.payload?.status ?? 200;
-      state.games = action.payload?.games ?? null;
+      const newGames = action.payload?.games || [];
+      state.games = [
+        ...state.games,
+        ...newGames.filter(
+          (game) => !state.games.some((existingGame) => existingGame.id === game.id),
+        ),
+      ];
     });
     builder.addCase(getHomeGames.rejected, (state, action) => {
       ParentRejected(state);
-      state.games = action?.payload?.games ?? null;
+      if (action.payload?.games) {
+        state.games = [
+          ...state.games,
+          ...action.payload.games.filter(
+            (game) => !state.games.some((existingGame) => existingGame.id === game.id),
+          ),
+        ];
+      }
       state.status = action?.payload?.status ?? 500;
     });
   },
-  reducers: {},
+  reducers: {
+    setGames: (state, action) => {
+      state.games === action.payload;
+    },
+  },
 });
+
+export const { setGames } = homeGamesSlice.actions;
 
 export default homeGamesSlice.reducer;

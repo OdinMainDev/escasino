@@ -14,9 +14,12 @@ import classNames from 'classnames';
 
 export default function Search() {
   const { t } = useTranslation();
-  const [games, setGames] = useState<IGame[] | null>(null);
+  const [games, setGames] = useState<IGame[]>([]);
   const { setFilters, getFilters, countActiveKeys } = useGamesFilters();
   const router = useRouter();
+  const [page, setPage] = useState(1);
+  const [isLastElement, setIsLastElement] = useState(false);
+  const [loading, setLoading] = useState(false);
   const searchParams = useQuery();
 
   useEffect(() => {
@@ -27,7 +30,8 @@ export default function Search() {
     }
 
     const getGames = async () => {
-      setGames(null);
+      setGames([]);
+      setLoading(true);
       const filter: IFilter = {
         query: getFilters().query,
         providers: getFilters().providers,
@@ -40,6 +44,7 @@ export default function Search() {
         await sleep(5000);
       }
       setGames(data);
+      setLoading(false);
     };
     void getGames();
     if (countActiveKeys(getFilters()) + getFilters().query.length === 0) {
@@ -52,6 +57,24 @@ export default function Search() {
     getFilters().query,
   ]);
 
+  const viewLastElement = async () => {
+    if (!loading && !isLastElement) {
+      const filter: IFilter = {
+        query: getFilters().query,
+        providers: getFilters().providers,
+        categories: getFilters().categories,
+        is_game_avail_for_bonus: getFilters().is_game_avail_for_bonus,
+      };
+      const data = await getSearchGamesApi(filter, page + 1);
+      if (data.length === 0) {
+        setIsLastElement(true);
+        return;
+      }
+      setPage(page + 1);
+      setGames((prev) => [...prev, ...data]);
+    }
+  };
+
   return (
     <IndexLayout>
       <div
@@ -60,12 +83,13 @@ export default function Search() {
         })}
       >
         {games && games?.length > 0 ? (
-          <GamesGrid games={games} />
+          <GamesGrid games={games} viewLastElement={() => void viewLastElement()} />
         ) : (
           <div className={styles.not_found}>
-            {games ? <div>{t('nothingFoundForRequest')}</div> : <Loader />}
+            {games.length === 0 && !loading && <div>{t('nothingFoundForRequest')}</div>}
           </div>
         )}
+        {loading && <Loader />}
       </div>
     </IndexLayout>
   );

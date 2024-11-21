@@ -23,9 +23,13 @@ export const searchGamesApi = () => {
   return '/api/v1/public/get/games/search';
 };
 
-export const getSearchGamesApi = async (filter: IFilter): Promise<IGame[]> => {
+export const getSearchGamesApi = async (filter: IFilter, page?: number): Promise<IGame[]> => {
   try {
-    const res = await axiosApi.post(searchGamesApi(), filter);
+    const res = await axiosApi.post(searchGamesApi(), filter, {
+      params: {
+        page,
+      },
+    });
     const { data } = res.data as JsonResponse;
     const games = data;
     return games;

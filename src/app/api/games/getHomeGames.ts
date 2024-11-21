@@ -10,8 +10,12 @@ export interface IResponseHomeGames {
   status: number | null;
 }
 
-export const getHomeGamesApi = async (): Promise<IResponseHomeGames> => {
-  const { data, status } = await axiosApi.get<{ data: IGame[] }>(homeGamesApi());
+export const getHomeGamesApi = async (page?: number): Promise<IResponseHomeGames> => {
+  const { data, status } = await axiosApi.get<{ data: IGame[] }>(homeGamesApi(), {
+    params: {
+      page: page,
+    },
+  });
   const resp: IResponseHomeGames = {
     games: data.data,
     status: status,
