@@ -113,7 +113,6 @@ const WalletHistory = () => {
           placeholder={t('start')}
         />
         <DatePicker
-          containerClassName="w-[100px]"
           selectsEnd
           selected={datePicker.end}
           popperClassName={styles.r_date_popper}

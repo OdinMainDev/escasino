@@ -123,7 +123,11 @@ const FilterModal = ({ isOpen, close }: IModal) => {
             <Button
               onClick={applyFilters}
               disabled={
-                selectedCategories.length + selectedProviders.length + Number(withBonuses) === 0
+                selectedCategories.length +
+                  selectedProviders.length +
+                  Number(withBonuses) +
+                  getFilters().query.length ===
+                0
               }
             >
               {t('apply')}

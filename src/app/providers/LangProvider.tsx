@@ -15,7 +15,6 @@ const LangProvider = ({ children }: IProps) => {
   useEffect(() => {
     const pathParts = location.pathname.split('/').filter(Boolean);
     const supportedLangs = defaultLanguages;
-    
     if (pathParts[0] && supportedLangs.includes(pathParts[0])) {
       void i18n.changeLanguage(pathParts[0]);
     } else {

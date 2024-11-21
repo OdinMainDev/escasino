@@ -11,11 +11,11 @@ export const activeNoDepositBonusApi = () => {
 };
 
 export const activeNoDepositBonus = async (req: INoDepositBonusReq) => {
-  const { data, status } = await axiosApi.post<IResponseData<INoDepositBonus>>(
+  const { data, status } = await axiosApi.post<IResponseData<INoDepositBonus[]>>(
     activeNoDepositBonusApi(),
     req,
   );
-  const resp: IResponseData<INoDepositBonus> = {
+  const resp: IResponseData<INoDepositBonus[]> = {
     data: data.data,
     status: status,
   };
@@ -23,8 +23,8 @@ export const activeNoDepositBonus = async (req: INoDepositBonusReq) => {
   return resp;
 };
 export const getMyNoDepositBonuses = async () => {
-  const { data, status } = await axiosApi.get<IResponseData<INoDepositBonus>>(nodepositApi());
-  const resp: IResponseData<INoDepositBonus> = {
+  const { data, status } = await axiosApi.get<IResponseData<INoDepositBonus[]>>(nodepositApi());
+  const resp: IResponseData<INoDepositBonus[]> = {
     data: data.data,
     status: status,
   };

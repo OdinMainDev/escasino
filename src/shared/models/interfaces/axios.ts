@@ -1,4 +1,4 @@
 export interface IResponseData<T> {
-  data: T[];
+  data: T;
   status: number;
 }

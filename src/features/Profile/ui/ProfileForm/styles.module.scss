@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: calc(100vh - 160px);
   position: relative;
 }
 
@@ -15,6 +15,9 @@
   background-color: rgba($color: #000, $alpha: 0.7);
 }
 
+.user_names {
+  flex: 1;
+}
 
 .line {
   height: 1px;

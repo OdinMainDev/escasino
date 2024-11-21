@@ -65,18 +65,22 @@ const Rules = () => {
       <Tabs value={selectedTab.value} tabs={tabs} onChange={(value) => setSelectedTab(value)} />
       {selectedTab.value === 'main' ? (
         <div className={styles.content} key="main">
-          {mainRules.map(([key, rule]) => (
+          {mainRules.map(([key, rule], index) => (
             <div key={key} style={{ marginBottom: '16px' }}>
-              <h2 className={styles.title}>{t(rule.title)}</h2>
+              <h2 className={styles.title}>
+                {index + 1}. {t(rule.title)}
+              </h2>
               <div>{renderContent(rule.content)}</div>
             </div>
           ))}
         </div>
       ) : (
         <div className={styles.content} key="bonuses">
-          {bonusRules.map(([key, rule]) => (
+          {bonusRules.map(([key, rule], index) => (
             <div key={key} style={{ marginBottom: '16px' }}>
-              <h2 className={styles.title}>{t(rule.title)}</h2>
+              <h2 className={styles.title}>
+                {index + mainRules.length + 1}. {t(rule.title)}
+              </h2>
               <div>{renderContent(rule.content)}</div>
             </div>
           ))}

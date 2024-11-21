@@ -19,9 +19,9 @@ const initialState: IInitialNoDeposit = {
 };
 
 export const getNodepositBonuses = createAsyncThunk<
-  IResponseData<INoDepositBonus>,
+  IResponseData<INoDepositBonus[]>,
   void,
-  { rejectValue: IResponseData<INoDepositBonus> }
+  { rejectValue: IResponseData<INoDepositBonus[]> }
 >('getMyNoDepositBonusesApi', async (_, { rejectWithValue }) => {
   const data = await getMyNoDepositBonuses();
   if (isAppDebug) {

@@ -70,25 +70,6 @@
     opacity: 0.5;
   }
 
-  &:focus-within {
-    border: 1px solid var(--active);
-  }
-
-  &.is_search {
-    &:focus-within {
-      border: 1px solid var(--button-border-color);
-      background: var(--button-border-color);
-
-      .search_icon {
-        svg {
-          path {
-            stroke: var(--text-primary)
-          }
-        }
-      }
-    }
-  }
-
 }
 
 
