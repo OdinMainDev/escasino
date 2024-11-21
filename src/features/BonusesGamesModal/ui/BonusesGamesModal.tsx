@@ -1,12 +1,13 @@
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useRouter } from '@/shared/helpers/navigation';
+import { getBonusGames } from '../api/bonusGamesApi';
 import Modal from '@/shared/ui/Modal';
+import Input from '@/shared/ui/Input';
+import Game from './Game';
 import styles from './BonusesGamesModal.module.scss';
 import { IModal } from '@/shared/models/interfaces/modal';
 import { IGame } from '@/shared/models/interfaces/game';
-import Game from './Game';
-import Input from '@/shared/ui/Input';
-import { useEffect, useState } from 'react';
-import { useRouter } from '@/shared/helpers/navigation';
-import { useTranslation } from 'react-i18next';
 
 interface IProps extends IModal {
   games: IGame[];
@@ -14,39 +15,60 @@ interface IProps extends IModal {
   isNoDeposit?: boolean;
 }
 
-const BonusesGamesModal = ({ close, isOpen, games, onSelectGame, isNoDeposit }: IProps) => {
+const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit }: IProps) => {
   const { t } = useTranslation();
-  const [allGames, setAllGames] = useState(games);
-  const [search, setSearch] = useState('');
   const router = useRouter();
+  const [allGames, setAllGames] = useState<IGame[]>([]);
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const observer = useRef<IntersectionObserver | null>(null);
+
+  const getGamesHandler = async (currentPage: number) => {
+    try {
+      const { data } = await getBonusGames(currentPage);
+      if (data.length === 0) {
+        setHasMore(false);
+      } else {
+        setAllGames((prevGames) => [...prevGames, ...data]);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   useEffect(() => {
-    setAllGames(games);
-  }, [games]);
+    if (hasMore) {
+      void getGamesHandler(page);
+    }
+  }, [page]);
 
   const searchGames = (value: string) => {
     setSearch(value);
-    if (value === '') {
-      setAllGames(games);
-    } else {
-      setAllGames(games.filter((game) => game.name.toLowerCase().includes(value)));
-    }
   };
 
   const selectGame = (game: IGame) => {
     if (!onSelectGame) {
-      if (close) {
-        close();
-      }
-      if (isNoDeposit) {
-        router.push(`/bonus/nodeposit/${game.id}`);
-      } else {
-        router.push(`/bonus/${game.id}`);
-      }
+      if (close) close();
+      const route = isNoDeposit ? `/bonus/nodeposit/${game.id}` : `/bonus/${game.id}`;
+      router.push(route);
     } else {
       onSelectGame(game);
     }
   };
+
+  const lastGameElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [hasMore],
+  );
 
   return (
     <Modal close={close} isOpen={!!isOpen}>
@@ -58,17 +80,23 @@ const BonusesGamesModal = ({ close, isOpen, games, onSelectGame, isNoDeposit }: 
             value={search}
             placeholder={t('findGames')}
             elType="search"
-            onClear={() => {
-              setAllGames(games);
-            }}
             onChange={(e) => searchGames(e.target.value)}
           />
         </div>
         <div className={styles.games}>
-          {allGames.map((item) => (
-            <Game onClick={() => selectGame(item)} game={item} key={item.id} />
-          ))}
+          {allGames.map((item, index) => {
+            // Если это последний элемент, добавляем реф
+            if (allGames.length === index + 1) {
+              return (
+                <div ref={lastGameElementRef} key={item.id}>
+                  <Game onClick={() => selectGame(item)} game={item} />
+                </div>
+              );
+            }
+            return <Game onClick={() => selectGame(item)} game={item} key={item.id} />;
+          })}
         </div>
+        {!hasMore && <div className={styles.noMoreGames}>{t('noMoreGames')}</div>}
       </div>
     </Modal>
   );
