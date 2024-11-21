@@ -548,7 +548,6 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
       </div>
       <BonusesGamesModal
         isNoDeposit={isNoDeposit}
-        games={availGames}
         isOpen={openGamesModal}
         close={() => setOpenGamesModal(false)}
       />

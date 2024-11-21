@@ -10,12 +10,12 @@ import { IModal } from '@/shared/models/interfaces/modal';
 import { IGame } from '@/shared/models/interfaces/game';
 
 interface IProps extends IModal {
-  games: IGame[];
   onSelectGame?: (game: IGame) => void;
   isNoDeposit?: boolean;
+  bonusId?: number;
 }
 
-const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit }: IProps) => {
+const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit, bonusId }: IProps) => {
   const { t } = useTranslation();
   const router = useRouter();
   const [allGames, setAllGames] = useState<IGame[]>([]);
@@ -26,7 +26,7 @@ const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit }: IProps)
 
   const getGamesHandler = async (currentPage: number) => {
     try {
-      const { data } = await getBonusGames(currentPage);
+      const { data } = await getBonusGames(currentPage, bonusId);
       if (data.length === 0) {
         setHasMore(false);
       } else {

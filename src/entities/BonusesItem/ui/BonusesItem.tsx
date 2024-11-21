@@ -8,7 +8,6 @@ import styles from './BonusesItem.module.scss';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import Button from '@/shared/ui/Button';
 import dateFormatter from '@/shared/helpers/dateFormatter';
-import { IGame } from '@/shared/models/interfaces/game';
 import { BonusesGamesModal } from '@/features/BonusesGamesModal';
 import { useEffect, useState } from 'react';
 import Loader from '@/shared/ui/Loader';
@@ -38,7 +37,6 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
     bonus?.bonus_template[0] ?? null,
   );
   const { games } = useAppSelector((state) => state.gamesAllSlice);
-  const [templateGames, setTemplateGames] = useState<IGame[]>([]);
   const [selectedGamesIds, setSelectedGamesIds] = useState<IBonusesList[]>(
     bonus?.data.bonuses_list.filter((item) => item.type === 'freespins') || [],
   );
@@ -227,8 +225,6 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
       if (bonus?.status !== 2) {
         const findedTemplate = bonus?.bonus_template.find((template) => template.id === item.id);
         if (findedTemplate) {
-          const findedGames = games?.filter((item) => findedTemplate.game_ids.includes(item.id));
-          setTemplateGames(findedGames || []);
           setOpenGamesModal(true);
           setSelectedGame({ index, game_id: item.game_id });
         }
@@ -290,7 +286,7 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
       <div className={styles.buttons}>{getButton()}</div>
       <BonusesGamesModal
         onSelectGame={(game) => updateNumberAtIndex(selectedGame?.index || 0, game.id)}
-        games={templateGames}
+        bonusId={bonus?.id}
         isOpen={openGamesModal}
         close={() => setOpenGamesModal(false)}
       />
