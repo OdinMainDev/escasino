@@ -81,10 +81,11 @@ const DocumentItem = ({ title, verifications, openModalHandler, type, loading }:
           </div>
         </div>
       )}
-
-      <Button elType="outlined" className="w-[100%]" onClick={() => openModalHandler(type)}>
-        {t('upload')}
-      </Button>
+      {Number(verifications.find((item) => item.tag === type)?.status) !== 0 && (
+        <Button elType="outlined" className="w-[100%]" onClick={() => openModalHandler(type)}>
+          {t('upload')}
+        </Button>
+      )}
     </div>
   );
 };

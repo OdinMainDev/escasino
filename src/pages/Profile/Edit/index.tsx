@@ -4,7 +4,7 @@ import ProfileModals from './modals';
 import { PageHeader } from '@/widgets/Header';
 import { useTranslation } from 'react-i18next';
 import Tabs, { ITab } from '@/entities/Tabs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProfilePasswordForm from '@/features/Profile/ui/PasswordForm/ProfilePasswordForm';
 
 const ProfileEdit = () => {
@@ -20,8 +20,14 @@ const ProfileEdit = () => {
     },
   ];
   const [selectedTab, setSelectedTab] = useState<ITab>(tabs[0]);
+
+  useEffect(() => {
+    const newLocal = '.desktop-wrapper ';
+    document.querySelector(newLocal)?.scrollTo(0, 0);
+  }, []);
+
   return (
-    <>
+    <div key="profile_edit">
       <PageHeader customBackPath="/profile" title={t('editProfile')} />
       <Tabs
         tabs={tabs}
@@ -40,7 +46,7 @@ const ProfileEdit = () => {
       )}
 
       <ProfileModals />
-    </>
+    </div>
   );
 };
 

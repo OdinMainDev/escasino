@@ -11,6 +11,8 @@ import { IPasswordData } from '../../models/password';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { changePasswordHandler } from '../../api/password';
 import ProfileResetPasswordModal from './ProfileResetPasswordModal';
+import { AlertModal, IAlert } from '@/entities/AlertModal';
+import { useModal } from '@/app/providers/ModalProvider';
 
 const ProfilePasswordForm = () => {
   const { t } = useTranslation();
@@ -19,6 +21,13 @@ const ProfilePasswordForm = () => {
     fid: '',
     repeat_password: '',
     old_password: '',
+  });
+  const { doOpenModal, doCloseModals } = useModal();
+  const [alertData, setAlertData] = useState<IAlert>({
+    title: '',
+    text: '',
+    buttons: [],
+    close: doCloseModals,
   });
   const [hash, setHash] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -35,8 +44,12 @@ const ProfilePasswordForm = () => {
       };
       setChangePassword(passwordData);
       const data = await changePasswordHandler(passwordData);
-      openModal();
-      setHash(data.hash);
+      if (data?.hash) {
+        openModal();
+        setHash(data.hash);
+      } else {
+        openSuccessAlert();
+      }
       setErrorData(undefined);
     } catch (e) {
       const passwordError = e as IResponseError;
@@ -49,6 +62,21 @@ const ProfilePasswordForm = () => {
     } finally {
       setLoader(false);
     }
+  };
+
+  const openSuccessAlert = () => {
+    doOpenModal('alert');
+    setAlertData({
+      title: t('passwordChangedSuccessfully'),
+      close: doCloseModals,
+      buttons: [
+        {
+          type: 'contained',
+          text: t('continue'),
+          onClick: () => doCloseModals(),
+        },
+      ],
+    });
   };
 
   const openModal = () => {
@@ -101,9 +129,11 @@ const ProfilePasswordForm = () => {
       <ProfileResetPasswordModal
         isOpen={isOpen}
         close={closeModal}
+        openSuccessAlert={openSuccessAlert}
         hash={hash}
         passwordData={changePassword}
       />
+      <AlertModal {...alertData} />
       <Button className={styles.save_button} onClick={(e) => void sendData(e)}>
         {t('save')}
       </Button>

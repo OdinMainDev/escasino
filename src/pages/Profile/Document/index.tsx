@@ -68,7 +68,7 @@ const ProfileDocument = () => {
 
   return (
     <div className={styles.container}>
-      <PageHeader title={t('documents')} customBackPath="/profile" />
+      <PageHeader fixed title={t('documents')} customBackPath="/profile" />
       <div className={styles.body}>
         <div className={styles.subtitle}>{t('addDocumentsToVerify')}</div>
         <div className={styles.buttons}>

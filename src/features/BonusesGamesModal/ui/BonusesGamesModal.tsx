@@ -26,7 +26,8 @@ const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit, bonusId }
 
   const getGamesHandler = async (currentPage: number) => {
     try {
-      const { data } = await getBonusGames(currentPage, bonusId);
+      console.log(isNoDeposit);
+      const { data } = await getBonusGames(currentPage, bonusId, isNoDeposit);
       if (data.length === 0) {
         setHasMore(false);
       } else {

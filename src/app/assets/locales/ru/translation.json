@@ -22,6 +22,7 @@
   "enterCorrectEmail": "Введите корректный e-mail",
   "enterCorrectPhone": "Введите корректный телефон",
   "enterCorrectPassword": "Введите корректный пароль",
+  "passwordChangedSuccessfully": "Пароль успешно изменен!",
   "enterCorrectCurrency": "Введите корректную валюту",
   "enterCorrectUsername": "Введите корректный username",
   "enterCorrectLastName": "Введите фамилию корректно",

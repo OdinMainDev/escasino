@@ -14,7 +14,7 @@ export const changePasswordApi2FA = () => {
 
 export const changePasswordHandler = async (passwordData: IPasswordData) => {
   try {
-    const { data } = await axiosApi.post<IResponseData<{ hash: string }>>(
+    const { data } = await axiosApi.post<IResponseData<{ hash?: string; success: boolean }>>(
       changePasswordApi(),
       passwordData,
     );
@@ -40,7 +40,7 @@ export const changePasswordHandler = async (passwordData: IPasswordData) => {
 
 export const change2FAPasswordHandler = async (passwordData: I2FAPasswordData) => {
   try {
-    const { data } = await axiosApi.post<IResponseData<{ hash: string }>>(
+    const { data } = await axiosApi.post<IResponseData<{ success: boolean }>>(
       changePasswordApi2FA(),
       passwordData,
     );

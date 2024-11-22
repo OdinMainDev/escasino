@@ -14,8 +14,15 @@ import Loader from '@/shared/ui/Loader';
 interface IProps extends IModal {
   passwordData: IPasswordData;
   hash: string;
+  openSuccessAlert: () => void;
 }
-const ProfileResetPasswordModal = ({ isOpen, close, passwordData, hash }: IProps) => {
+const ProfileResetPasswordModal = ({
+  isOpen,
+  close,
+  passwordData,
+  hash,
+  openSuccessAlert,
+}: IProps) => {
   const { t } = useTranslation();
   const [code, setCode] = useState('');
   const [loader, setLoader] = useState(false);
@@ -31,6 +38,7 @@ const ProfileResetPasswordModal = ({ isOpen, close, passwordData, hash }: IProps
       };
       await change2FAPasswordHandler(changeData);
       if (close) close();
+      openSuccessAlert();
     } catch (e) {
       const passwordError = e as IResponseError;
       const loginErrorList = Object.keys(passwordError.errors);
