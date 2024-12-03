@@ -7,7 +7,7 @@ const Wallet = () => {
   const { t } = useTranslation();
   return (
     <>
-      <PageHeader customBackPath="/profile" title={t('wallet')} />
+      <PageHeader title={t('wallet')} />
       <div className={styles.container}>
         <WalletTabs />
       </div>
