@@ -6,7 +6,6 @@ type UrlHistoryContextType = {
   resaveHistory: (history: string[]) => void;
 };
 
-
 const UrlHistoryContext = createContext<UrlHistoryContextType | undefined>(undefined);
 
 interface UrlHistoryProviderProps {
@@ -15,15 +14,15 @@ interface UrlHistoryProviderProps {
 
 export const UrlHistoryProvider: React.FC<UrlHistoryProviderProps> = ({ children }) => {
   const location = useLocation();
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<string[]>(['/']);
 
   useEffect(() => {
-    let lastLoc = "";
+    let lastLoc = '';
     const curLoc = location.pathname;
-    if(history.length > 0) {
-      lastLoc = history[history.length - 1]
+    if (history.length > 0) {
+      lastLoc = history[history.length - 1];
     }
-    if(!areSameRoute(lastLoc, curLoc)){
+    if (!areSameRoute(lastLoc, curLoc)) {
       setHistory((prevHistory) => [...prevHistory, location.pathname]);
     }
   }, [location.pathname]);
@@ -32,9 +31,8 @@ export const UrlHistoryProvider: React.FC<UrlHistoryProviderProps> = ({ children
     setHistory(history);
   };
 
-
   return (
-    <UrlHistoryContext.Provider value={{history, resaveHistory}}>
+    <UrlHistoryContext.Provider value={{ history, resaveHistory }}>
       {children}
     </UrlHistoryContext.Provider>
   );
@@ -48,7 +46,7 @@ export const useUrlHistory = (): UrlHistoryContextType => {
   return context;
 };
 
-export const areSameRoute = (path1: string, path2: string) => {
+export const areSameRoute = (path1: string, path2: string): boolean => {
   const normalizePath = (path: string) => {
     let normalizedPath = path.replace(/^\/[a-z]{2}\//, '/');
     normalizedPath = normalizedPath.replace(/\/$/, '').split('?')[0];
@@ -62,5 +60,5 @@ export const areSameRoute = (path1: string, path2: string) => {
 
 export const removeAllLangsFromUri = (path: string) => {
   path = path.replace(/^\/([a-z]{2}\/)+([a-z]{2})\//, '/$2/');
-  return  path.replace(/^\/[a-z]{2}\//, '/')
+  return path.replace(/^\/[a-z]{2}\//, '/');
 };

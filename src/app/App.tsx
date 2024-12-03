@@ -11,31 +11,34 @@ import GamesAllProviders from './providers/GamesAllProviders';
 import ThemeProvider from './providers/ThemeProvider';
 import PusherModalProvider from './providers/PusherModalProvider';
 import { UrlHistoryProvider } from './providers/UrlHistoryProvider';
+import AffiliateProvider from './providers/AffiliateProvider';
 function App() {
   return (
     <UrlHistoryProvider>
-      <ThemeProvider>
-        <AuthProvider>
-          <StaticSettingsProvider>
-            <SettingsProvider>
-              <GamesAllProviders>
-                <LangProvider>
-                  <ModalProvider>
-                    <PusherModalProvider>
-                      <GamesFilterProvider>
-                        {/* EventDispatcherProvider -после него мы не вставляем никакие провайдеры, он завершающий */}
-                        <EventDispatcherProvider>
-                          <Outlet />
-                        </EventDispatcherProvider>
-                      </GamesFilterProvider>
-                    </PusherModalProvider>
-                  </ModalProvider>
-                </LangProvider>
-              </GamesAllProviders>
-            </SettingsProvider>
-          </StaticSettingsProvider>
-        </AuthProvider>
-      </ThemeProvider>
+      <AffiliateProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <StaticSettingsProvider>
+              <SettingsProvider>
+                <GamesAllProviders>
+                  <LangProvider>
+                    <ModalProvider>
+                      <PusherModalProvider>
+                        <GamesFilterProvider>
+                          {/* EventDispatcherProvider -после него мы не вставляем никакие провайдеры, он завершающий */}
+                          <EventDispatcherProvider>
+                            <Outlet />
+                          </EventDispatcherProvider>
+                        </GamesFilterProvider>
+                      </PusherModalProvider>
+                    </ModalProvider>
+                  </LangProvider>
+                </GamesAllProviders>
+              </SettingsProvider>
+            </StaticSettingsProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </AffiliateProvider>
     </UrlHistoryProvider>
   );
 }

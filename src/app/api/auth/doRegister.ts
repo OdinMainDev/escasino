@@ -27,6 +27,8 @@ export interface IRegisterData {
   promo: boolean;
   fid: string;
   captcha: string;
+  a_hash: string | null;
+  a_cid: string | null;
 }
 
 export const sampleIRegisterData: IRegisterData = {
@@ -49,6 +51,8 @@ export const sampleIRegisterData: IRegisterData = {
   promo: true,
   fid: '',
   captcha: '',
+  a_hash: '',
+  a_cid: '',
 };
 
 export const doRegisterApi = async (registerData: IRegisterData) => {
