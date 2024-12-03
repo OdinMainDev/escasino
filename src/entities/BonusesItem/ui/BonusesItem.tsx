@@ -49,7 +49,6 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
   const { doOpenModal } = useModal();
   const dispatch = useAppDispatch();
   const router = useRouter();
-
   const getBonusStatus = () => {
     switch (bonus?.status) {
       case 1:
@@ -284,12 +283,15 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
         ))}
       </div>
       <div className={styles.buttons}>{getButton()}</div>
-      <BonusesGamesModal
-        onSelectGame={(game) => updateNumberAtIndex(selectedGame?.index || 0, game.id)}
-        bonusId={bonus?.id}
-        isOpen={openGamesModal}
-        close={() => setOpenGamesModal(false)}
-      />
+      {selectedGamesIds.length === 0 && (
+        <BonusesGamesModal
+          onSelectGame={(game) => updateNumberAtIndex(selectedGame?.index || 0, game.id)}
+          bonusId={bonus?.id}
+          isOpen={openGamesModal}
+          close={() => setOpenGamesModal(false)}
+        />
+      )}
+
       {loading && (
         <div className={styles.loader}>
           <Loader />
