@@ -125,6 +125,10 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
       if (currenciesList.length == 1) {
         postData.currency = settings?.currencies[0] ? settings?.currencies[0] : '';
       }
+
+      postData.a_hash = localStorage.getItem('a_hash');
+      postData.a_cid = localStorage.getItem('a_cid');
+
       const data = await doRegisterApi(postData);
       setAuthenticated(data.token);
       router.push('/profile/edit');

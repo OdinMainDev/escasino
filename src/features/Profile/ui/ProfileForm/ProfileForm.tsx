@@ -25,25 +25,8 @@ import Statuses from '@/entities/Statuses';
 const ProfileForm = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
-  // const settings = {
-  //   profile: {
-  //     user_can_change_data: true,
-  //     has_email: true,
-  //     has_phone: true,
-  //     has_username: true,
-  //     has_first_name: true,
-  //     has_second_name: true,
-  //     has_last_name: true,
-  //     has_country: true,
-  //     has_city: true,
-  //     has_address: true,
-  //     has_zip: true,
-  //     has_dob: true,
-  //     has_gender: true,
-  //     has_avatar: true,
-  //     has_promo: true,
-  //   },
-  // };
+
+  const showVerificationPhone = false;
   const { doSetVerifyHash, doSetChangeHash, doOpenModal, doCloseModals } = useModal();
   const { t } = useTranslation();
   const [loader, setLoader] = useState(false);
@@ -366,7 +349,7 @@ const ProfileForm = () => {
             isError={typeof errorData?.errors === 'object' && !!errorData.errors['phone']}
             message={ErrorResponseAsString('phone', t('enterCorrectPassword'), errorData)}
           />
-          {!user?.data.phone_verified_at && (
+          {showVerificationPhone && !user?.data.phone_verified_at && (
             <Button
               elType="outlined"
               className={styles.email_button}

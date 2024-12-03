@@ -28,8 +28,8 @@ const AuthVk = () => {
         const postData: ISocialsVkProcessRequest = {
           fid: fid,
           code: searchParams.get('code') ?? '',
-          a_hash: searchParams.get('a_hash'),
-          a_cid: searchParams.get('a_cid'),
+          a_hash: localStorage.getItem('a_hash'),
+          a_cid: localStorage.getItem('a_cid'),
           return_url: url,
         };
         const { data } = await doSocialsVkProcess(postData);
