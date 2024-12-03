@@ -45,40 +45,32 @@ const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) =>
             {user?.balance.formatted_balance_bonus || 0} {user?.balance.currency}
           </div>
         </div>
-        <div className={styles.menu_item}>
-          <div className={styles.label}>{t('wagerBonus')}</div>
-          <div className={styles.menu_balace}>
-            {user?.balance.wager_bonus.formatted || 0} {user?.balance.currency}
+        {user?.balance.wager_total.formatted ? (
+          <div className={styles.menu_item}>
+            <div className={styles.label}>
+              {t('wager')}{' '}
+              <svg
+                width="4"
+                height="4"
+                viewBox="0 0 4 4"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="2" cy="2" r="2" fill="#71717A" />
+              </svg>
+              {currentWagerPercent}%
+            </div>
+            <div className={styles.menu_balace}>
+              {Number(user?.balance.wager_bonus.formatted) +
+                Number(user?.balance.wager_payment.formatted) || 0}{' '}
+              {user?.balance.currency}/{user?.balance.wager_total.formatted || 0}{' '}
+              {user?.balance.currency}
+            </div>
+            <ProgressBar className="h-[2px] mt-[8px]" progress={currentWagerPercent} />
           </div>
-        </div>
-        <div className={styles.menu_item}>
-          <div className={styles.label}>{t('wagerPayment')}</div>
-          <div className={styles.menu_balace}>
-            {user?.balance.wager_payment.formatted || 0} {user?.balance.currency}
-          </div>
-        </div>
-        <div className={styles.menu_item}>
-          <div className={styles.label}>
-            {t('wager')}{' '}
-            <svg
-              width="4"
-              height="4"
-              viewBox="0 0 4 4"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle cx="2" cy="2" r="2" fill="#71717A" />
-            </svg>
-            {currentWagerPercent}%
-          </div>
-          <div className={styles.menu_balace}>
-            {Number(user?.balance.wager_bonus.formatted) +
-              Number(user?.balance.wager_payment.formatted) || 0}{' '}
-            {user?.balance.currency}/{user?.balance.wager_total.formatted || 0}{' '}
-            {user?.balance.currency}
-          </div>
-          <ProgressBar className="h-[2px] mt-[8px]" progress={currentWagerPercent} />
-        </div>
+        ) : (
+          ''
+        )}
         <div className={styles.menu_arrow}>
           <svg
             width="14"
