@@ -40,6 +40,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   const { user } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const { games } = useAppSelector((state) => state.gamesAllSlice);
+  const hasBonuesSwiper = (import.meta.env.VITE_HAS_BONUS_SWIPER as string) === 'true';
   const { noDepositsBonuses } = useAppSelector((state) => state.noDepositBonusesSlice);
   const {
     bonusesTemplates: cartBonuses,
@@ -67,6 +68,18 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
       ? `${import.meta.env.VITE_IMAGE_PATH}/${selectedGame.game_provider}/${import.meta.env.VITE_IMAGE_SIZE}/${selectedGame.system_name}.png`
       : selectedGame.image
     : '';
+
+  const maxAmountCartRealTime = selectedTemplate
+    ? maxAmountCart > selectedTemplate.bonus_settings.max_amount
+      ? selectedTemplate.bonus_settings.max_amount
+      : maxAmountCart
+    : 0;
+
+  const minAmountCartRealTime = selectedTemplate
+    ? minAmountCart < selectedTemplate.bonus_settings.min_amount
+      ? selectedTemplate.bonus_settings.min_amount
+      : minAmountCart
+    : 0;
 
   const getBonusArray = useCallback((settings: ISettings | null) => {
     if (settings) {
@@ -434,11 +447,13 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                 </div>
               )
             ) : null}
-            {selectedGame?.id === settings?.bonus.default_game_id && selectedTab !== 'money' && (
-              <div className="mb-[25px]">
-                <BonusesGames games={availGames} />
-              </div>
-            )}
+            {hasBonuesSwiper &&
+              selectedGame?.id === settings?.bonus.default_game_id &&
+              selectedTab !== 'money' && (
+                <div className="mb-[25px]">
+                  <BonusesGames games={availGames} />
+                </div>
+              )}
             <div className={styles.settings}>
               {tabs.length > 1 && (
                 <>
@@ -501,21 +516,23 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                 <div className="flex items-center gap-[16px]">
                   <div className={styles.footer_info}>
                     <div className={styles.footer_label}>
-                      {minAmountCart !== 0 || maxAmountCart !== 0 ? t('depositSum') : ''}
+                      {minAmountCartRealTime !== 0 || maxAmountCartRealTime !== 0
+                        ? t('depositSum')
+                        : ''}
                     </div>
                     <div className={styles.footer_value}>
-                      {minAmountCart === 0 && maxAmountCart === 0 ? (
+                      {minAmountCartRealTime === 0 && maxAmountCartRealTime === 0 ? (
                         ''
-                      ) : minAmountCart !== maxAmountCart ? (
+                      ) : minAmountCartRealTime !== maxAmountCartRealTime ? (
                         <>
-                          {t('from')} {minAmountCart}{' '}
-                          {maxAmountCart !== 0
-                            ? `${t('before')} ${maxAmountCart} ${user?.balance.currency}`
+                          {t('from')} {minAmountCartRealTime}{' '}
+                          {maxAmountCartRealTime !== 0
+                            ? `${t('before')} ${maxAmountCartRealTime} ${user?.balance.currency}`
                             : null}
                         </>
                       ) : (
                         <>
-                          {minAmountCart} {user?.balance.currency}
+                          {minAmountCartRealTime} {user?.balance.currency}
                         </>
                       )}
                     </div>

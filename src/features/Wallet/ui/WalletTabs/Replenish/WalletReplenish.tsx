@@ -137,6 +137,8 @@ const WalletReplenish = () => {
     setSelectedProvider(provider);
   };
 
+  console.log(selectedProvider);
+
   const handlePayment = async () => {
     try {
       setLoading(true);
@@ -418,7 +420,7 @@ const WalletReplenish = () => {
         {paymentProviders && paymentProviders?.length > 0 ? (
           <div className={styles.title}>{t('providers')}</div>
         ) : null}
-        {selectedProvider && selectedProvider.layout.length > 0 && (
+        {selectedProvider && (
           <div className={styles.selected_provider}>
             <div className="flex items-center justify-between mb-[10px]">
               <div className="flex items-center gap-[10px]">
