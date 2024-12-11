@@ -137,8 +137,6 @@ const WalletReplenish = () => {
     setSelectedProvider(provider);
   };
 
-  console.log(selectedProvider);
-
   const handlePayment = async () => {
     try {
       setLoading(true);

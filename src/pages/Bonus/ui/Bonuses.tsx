@@ -242,6 +242,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
           onClick: () => {
             if (selectedTemplate) {
               addToBasket();
+              doCloseModals();
               router.push({
                 pathname: '/wallet/deposit/replenish',
               });
