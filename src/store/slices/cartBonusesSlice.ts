@@ -27,10 +27,10 @@ export const cartBonusesSlice = createSlice({
       state.bonusesTemplates = [...state.bonusesTemplates, action.payload];
       const { maxAmount, minAmount } = state.bonusesTemplates.reduce(
         (acc, obj) => {
-          if (obj.bonus_settings.min_amount > acc.maxAmount) {
+          if (obj.bonus_settings.min_amount > acc.minAmount) {
             acc.minAmount = obj.bonus_settings.min_amount;
           }
-          if (obj.bonus_settings.max_amount < acc.minAmount) {
+          if (obj.bonus_settings.max_amount < acc.maxAmount) {
             acc.maxAmount = obj.bonus_settings.max_amount;
           }
           return acc;
@@ -50,10 +50,10 @@ export const cartBonusesSlice = createSlice({
       if (state.bonusesTemplates.length > 0) {
         const { maxAmount, minAmount } = state.bonusesTemplates.reduce(
           (acc, obj) => {
-            if (obj.bonus_settings.min_amount > acc.maxAmount) {
+            if (obj.bonus_settings.min_amount > acc.minAmount) {
               acc.minAmount = obj.bonus_settings.min_amount;
             }
-            if (obj.bonus_settings.max_amount < acc.minAmount) {
+            if (obj.bonus_settings.max_amount < acc.maxAmount) {
               acc.maxAmount = obj.bonus_settings.max_amount;
             }
             return acc;

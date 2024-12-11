@@ -10,6 +10,7 @@ const BonusesCart = () => {
   const { bonusesTemplates } = useAppSelector((state) => state.cartBonusesSlice);
   const { games } = useAppSelector((state) => state.gamesAllSlice);
   const router = useRouter();
+  console.log(bonusesTemplates);
   return (
     <div className={styles.container}>
       <PageHeader customBackPath="/wallet/deposit/replenish" title={t('bonusCart')} />
