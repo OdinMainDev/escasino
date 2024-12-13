@@ -268,7 +268,7 @@ const WalletWithdraw = () => {
         <Input
           placeholder={t('sum')}
           type="number"
-          className="mb-[12px]"
+          wrapperClassName="mb-[12px]"
           value={withdrawData.amount}
           isError={
             withdrawData.amount.length > 0

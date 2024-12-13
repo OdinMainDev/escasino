@@ -23,6 +23,7 @@ export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   message?: ReactNode | string | null;
   containerClassName?: string;
   validationTimeout?: number;
+  wrapperClassName?: string;
   icon?: ReactNode;
   frontIcon?: ReactNode;
   validationFunction?: (value: string) => boolean;
@@ -54,6 +55,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
       onChangePhone,
       onClear,
       withoutLabel,
+      wrapperClassName,
       ...otherProps
     },
     ref,
@@ -203,46 +205,52 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
           [styles.error]: isError || !isValid,
         })}
       >
-        <label className={classNames(containerClass)}>
-          {elType === 'search' && (
-            <div className={styles.search_icon}>
-              <Icons icon="search" />
-            </div>
-          )}
-          <input
-            {...otherProps}
-            ref={ref}
-            value={value}
-            onChange={onChangeHandler}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            placeholder={withoutLabel ? placeholder : ''}
-            className={inputClass}
-            type={type === 'password' ? (isPassword ? 'password' : 'text') : type}
-          />
-          {!withoutLabel && <span className={styles.placeholder}>{placeholder}</span>}
-        </label>
-        <div className={styles.input_icons}>
-          {value && onClear && (
-            <div className={styles.clear_button} onClick={onClear}>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13 1L1 13M1 1L13 13"
-                  stroke="var(--input-placeholder)"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          )}
-          {renderIcon()}
+        <div
+          className={classNames(styles.wrapper, wrapperClassName, {
+            [styles.has_icon]: !!renderIcon(),
+          })}
+        >
+          <label className={classNames(containerClass)}>
+            {elType === 'search' && (
+              <div className={styles.search_icon}>
+                <Icons icon="search" />
+              </div>
+            )}
+            <input
+              {...otherProps}
+              ref={ref}
+              value={value}
+              onChange={onChangeHandler}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              placeholder={withoutLabel ? placeholder : ''}
+              className={inputClass}
+              type={type === 'password' ? (isPassword ? 'password' : 'text') : type}
+            />
+            {!withoutLabel && <span className={styles.placeholder}>{placeholder}</span>}
+          </label>
+          <div className={styles.input_icons}>
+            {value && onClear && (
+              <div className={styles.clear_button} onClick={onClear}>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13 1L1 13M1 1L13 13"
+                    stroke="var(--input-placeholder)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            )}
+            {renderIcon()}
+          </div>
         </div>
         {errorMessage && <div className={styles.message}>{errorMessage}</div>}
       </div>

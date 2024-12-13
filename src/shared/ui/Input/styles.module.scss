@@ -1,7 +1,5 @@
 .container {
   width: 100%;
-  border-radius: 4px;
-  position: relative;
   &.error {
     .label {
       
@@ -37,6 +35,16 @@
   border: none !important;
 }
 
+.wrapper {
+  position: relative;
+  background:  var(--input-primary);
+  border: 1px solid var(--input-border-color);
+  border-radius: 4px;
+  &.has_icon {
+    padding-right: 40px;
+  }
+}
+
 .phone_input_continer {
   display: flex;
   align-items: center;
@@ -64,9 +72,6 @@
   align-items: center;
   position: relative;
   width: 100%;
-  background:  var(--input-primary);
-  border: 1px solid var(--input-border-color);
-  border-radius: 4px;
   &.disabled {
     opacity: 0.5;
   }
