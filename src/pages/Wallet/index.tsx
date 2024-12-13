@@ -7,7 +7,7 @@ const Wallet = () => {
   const { t } = useTranslation();
   return (
     <>
-      <PageHeader title={t('wallet')} />
+      <PageHeader title={t('wallet')} fixed />
       <div className={styles.container}>
         <WalletTabs />
       </div>

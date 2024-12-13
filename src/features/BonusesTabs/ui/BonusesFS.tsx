@@ -15,6 +15,7 @@ interface IProps {
   gameId?: number;
   minAmount?: number;
   maxAmount?: number;
+  isNoDeposit?: boolean;
 }
 
 export interface IBonusFSMethods {
@@ -22,7 +23,7 @@ export interface IBonusFSMethods {
 }
 
 const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
-  ({ bonusesTemplates, fsChangeHandler, gameId, minAmount, maxAmount }, ref) => {
+  ({ bonusesTemplates, fsChangeHandler, gameId, minAmount, maxAmount, isNoDeposit }, ref) => {
     const { t } = useTranslation();
     const tabs: ITab[] = [
       {
@@ -95,7 +96,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       }
 
       // Фильтруем по minAmount, если он указан
-      if (minAmount !== undefined && minAmount > 0) {
+      if (minAmount !== undefined && minAmount > 0 && !isNoDeposit) {
         filteredTemplates = filteredTemplates.filter(
           (template) =>
             template.bonus_settings.min_amount == 0 ||
@@ -104,7 +105,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       }
 
       // Фильтруем по maxAmount, если он указан
-      if (maxAmount !== undefined && maxAmount > 0) {
+      if (maxAmount !== undefined && maxAmount > 0 && !isNoDeposit) {
         filteredTemplates = filteredTemplates.filter(
           (template) =>
             template.bonus_settings.max_amount == 0 ||
@@ -163,7 +164,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
       setFiltredBonuses(filteredTemplates);
       setBetTemplates(uniqueBetTemplates);
       setSpinsTemplates(uniqueSpinsTemplates);
-    }, [bonusesTemplates, cartBonuses, gameId, minAmount, maxAmount]);
+    }, [bonusesTemplates, cartBonuses, gameId, minAmount, maxAmount, isNoDeposit]);
 
     const selectBet = (swiper: SwiperClass | null) => {
       if (swiper) {
@@ -302,7 +303,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     }, [betTemplates]);
 
     if (betTemplates?.length === 0 && spinsTemplates?.length === 0) {
-      return <div className={styles.title}>{t('combinationsRunOut')}</div>;
+      return <div className={styles.combination_empty}>{t('combinationsRunOut')}</div>;
     }
     return (
       <div>

@@ -393,7 +393,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
 
   return (
     <div className={styles.container}>
-      <PageHeader title={t('collectYourBonus')} />
+      <PageHeader fixed title={t('collectYourBonus')} />
       <div className={styles.content}>
         {loading ? (
           <div className={styles.loader}>
@@ -476,6 +476,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
               {isNoDeposit || selectedTab === 'freespins' ? (
                 <BonusesFS
                   ref={bonusesFS}
+                  isNoDeposit={isNoDeposit}
                   bonusesTemplates={bonusesTemplates}
                   fsChangeHandler={bonusChangeHandler}
                   gameId={selectedGame ? selectedGame.id : undefined}

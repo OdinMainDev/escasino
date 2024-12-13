@@ -465,13 +465,28 @@ const SuccessPaymentModal = ({
   if (isError) {
     return (
       <Modal isOpen={isOpen} close={close}>
-        <div className={styles.container}>
-          <div className={styles.error_container}>
-            <div className={styles.error}>{message}</div>
-            <Button className={styles.button} onClick={close}>
-              {t('close')}
-            </Button>
+        <div className={styles.error_container}>
+          <div className="mb-[24px]">
+            <svg
+              width="44"
+              height="44"
+              viewBox="0 0 44 44"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M22 22V14M22 30H22.02M42 22C42 33.0457 33.0457 42 22 42C10.9543 42 2 33.0457 2 22C2 10.9543 10.9543 2 22 2C33.0457 2 42 10.9543 42 22Z"
+                stroke="#DC2626"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
+          <div className={styles.error}>{message}</div>
+          <Button className={styles.button} onClick={close}>
+            {t('close')}
+          </Button>
           {loading && (
             <div className={styles.loader}>
               <div className="w-[100%] h-[100%] flex flex-col items-center justify-center gap-[10px]">

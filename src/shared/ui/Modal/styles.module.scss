@@ -4,7 +4,7 @@
   justify-content: flex-end;
   position: fixed;
   max-width: var(--desktop-max-width);
-  width: 100%;
+  width: calc(100% + 1px);
   top: 0;
   left: 50%;
   transform: translateX(-50%);

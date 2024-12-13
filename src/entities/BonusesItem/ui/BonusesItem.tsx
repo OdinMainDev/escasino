@@ -199,7 +199,7 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
   if (!bonus && isMain) {
     return (
       <div className={classNames(styles.container, className)}>
-        <div className="flex items-center justify-between mb-[70px]">
+        <div className="flex items-center justify-between mb-[25px]">
           <div className={styles.title}>{t('activeBonuseNoSelected')}</div>
           {isMain && (
             <div onClick={() => router.push('/bonus/list')} className={styles.side_url}>

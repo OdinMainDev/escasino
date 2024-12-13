@@ -104,7 +104,7 @@ const BonusesMoney = forwardRef<IBonusMoneyMethods, IProps>(
     };
 
     if (sortedBonuses?.length === 0) {
-      return <div className={styles.title}>{t('combinationsRunOut')}</div>;
+      return <div className={styles.combination_empty}>{t('combinationsRunOut')}</div>;
     }
 
     return (

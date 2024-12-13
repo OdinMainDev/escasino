@@ -109,9 +109,6 @@ const Profile = () => {
               <Button className={styles.button} onClick={() => router.push('/profile/document')}>
                 {t('verify')}
               </Button>
-              <Button elType="outlined" onClick={() => router.push('/rules')}>
-                {t('rulesAndConditions')}
-              </Button>
             </div>
           )}
           <div className={styles.block}>
