@@ -11,9 +11,60 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: var(--game-item)
+  position: relative;
+  z-index: 1;
   // background: url('../images/Placeholder.png') center center/cover no-repeat;
 }
+
+.post_card_skeleton {
+	--skbg: hsl(227deg 13% 50% / 20%);
+  background: var(--game-item);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  padding: 1px;
+
+
+	.post_thumbnail {
+		display: flex;
+		aspect-ratio: 2 / 1;
+		width: 100%;
+		height: 100%;
+		background: var(--skbg);
+	}
+}
+
+.shimmer {
+	position: relative;
+	overflow: hidden;
+
+	&::before {
+		content: "";
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background-image: linear-gradient(
+			-90deg,
+			transparent 8%,
+			rgb(255 255 255 / 28%) 18%,
+			transparent 33%
+		);
+		background-size: 200%;
+		background-attachment: fixed;
+		animation: placeHolderShimmer 2s ease-in-out infinite;
+	}
+}
+
+@keyframes placeHolderShimmer {
+	0% {
+		background-position: 100% 0;
+	}
+
+	100% {
+		background-position: -100% 0;
+	}
+}
+
 
 .image img {
   width: 100%;
