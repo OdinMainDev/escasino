@@ -11,7 +11,11 @@ import { useEffect, useState } from 'react';
 import { getHomeGames, setGames } from '@/store/slices/homeGamesSlice';
 
 export default function Home() {
-  const { games: homeGames, loading } = useAppSelector((state) => state.homeGamesReducer);
+  const {
+    games: homeGames,
+    loading,
+    isLastElement,
+  } = useAppSelector((state) => state.homeGamesReducer);
   let gamesGrid: IGame[] = homeGames ? homeGames : [];
   let topGamesGrid: IGame[] = gamesGrid;
   const [page, setPage] = useState(1);
@@ -28,7 +32,7 @@ export default function Home() {
   }, []);
 
   const viewLastElement = () => {
-    if (!loading) {
+    if (!loading && !isLastElement) {
       void dispatch(getHomeGames({ page: page + 1 }));
       setPage(page + 1);
     }

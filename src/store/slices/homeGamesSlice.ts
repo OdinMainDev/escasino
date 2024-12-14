@@ -7,6 +7,7 @@ import { isAppDebug } from '@/app/config/app';
 export interface IInitialHomeGames extends ISlice {
   games: IGame[];
   status: number;
+  isLastElement: boolean;
 }
 
 const initialState: IInitialHomeGames = {
@@ -15,6 +16,7 @@ const initialState: IInitialHomeGames = {
   hasError: false,
   games: [],
   status: 0,
+  isLastElement: false,
 };
 
 export const getHomeGames = createAsyncThunk<
@@ -49,6 +51,9 @@ export const homeGamesSlice = createSlice({
       ParentFilled(state);
       state.status = action.payload?.status ?? 200;
       const newGames = action.payload?.games || [];
+      if (newGames.length === 0) {
+        state.isLastElement = true;
+      }
       state.games = [
         ...state.games,
         ...newGames.filter(
