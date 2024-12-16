@@ -1,5 +1,4 @@
 import { HTMLAttributes, useState } from 'react';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 import classNames from 'classnames';
 import { useRouter } from '@/shared/helpers/navigation';
 import { PlaceholderGame } from '@/app/assets/images/Placeholder';
@@ -13,7 +12,7 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
 const GridItem = ({ game, ...otherProps }: IProps) => {
   const router = useRouter();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
-
+  const imageEffect = import.meta.env.VITE_IMAGE_EFFECT as string;
   const imagePath = game.image
     ? game.image
     : game.system_name
@@ -33,14 +32,22 @@ const GridItem = ({ game, ...otherProps }: IProps) => {
               <span className={classNames(styles.post_thumbnail, styles.shimmer)}></span>
             </div>
           )}
-
-          <LazyLoadImage
-            alt={game.name}
-            src={imagePath}
-            wrapperClassName={classNames(styles.image, { [styles.hidden]: !isImageLoaded })}
-            effect="opacity"
-            onLoad={() => setIsImageLoaded(true)}
-          />
+          <div
+            className={classNames(styles.image_container, {
+              [styles.slide_in]: imageEffect === 'slide-in',
+              [styles.visible]: isImageLoaded,
+            })}
+          >
+            <img
+              alt={game.name}
+              src={imagePath}
+              loading="lazy"
+              className={styles.image}
+              onLoad={() => {
+                setIsImageLoaded(true);
+              }}
+            />
+          </div>
         </div>
       ) : (
         <PlaceholderGame {...game} />

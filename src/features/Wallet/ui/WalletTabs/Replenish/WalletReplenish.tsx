@@ -234,6 +234,7 @@ const WalletReplenish = () => {
         <Input
           mask={found ? generateMask(item.name) : null}
           value={layout[item.name]}
+          autoComplete="off"
           placeholder={t('paymentForm.' + item.name)}
           message={
             layout[item.name]?.length > 0 && !validateCard(item, layout[item.name], found)
@@ -536,6 +537,7 @@ const WalletReplenish = () => {
           type="number"
           wrapperClassName="mb-[12px]"
           value={amount}
+          autoComplete="off"
           isError={
             amount.length > 0
               ? checkAmount(

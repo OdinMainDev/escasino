@@ -249,6 +249,7 @@ const WalletWithdraw = () => {
                   {t('withdrawForm.' + (item.name || 'undefined'))}
                 </div>
                 <Input
+                  autoComplete="off"
                   value={layout[item.name]}
                   placeholder={t('withdrawForm.' + (item.name || 'undefined'))}
                   type={item.type?.toString()}
@@ -269,6 +270,7 @@ const WalletWithdraw = () => {
           placeholder={t('sum')}
           type="number"
           wrapperClassName="mb-[12px]"
+          autoComplete="off"
           value={withdrawData.amount}
           isError={
             withdrawData.amount.length > 0
