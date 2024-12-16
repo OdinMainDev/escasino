@@ -205,7 +205,6 @@ const WalletReplenish = () => {
 
   const closeModal = () => {
     setOpenModal(false);
-    setIsError(false);
     setError(undefined);
     setTransaction(null);
     setPaymentData(null);
@@ -213,6 +212,9 @@ const WalletReplenish = () => {
     if (intervalIdRef.current) {
       clearInterval(intervalIdRef.current);
     }
+    setTimeout(() => {
+      setIsError(false);
+    }, 100);
   };
 
   const validateCard = (layoutItem: IPaymentProviderLayout, value: string, isFound: boolean) => {

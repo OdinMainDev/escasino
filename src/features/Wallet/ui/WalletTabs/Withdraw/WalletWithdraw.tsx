@@ -121,10 +121,12 @@ const WalletWithdraw = () => {
   };
 
   const closeModal = () => {
-    setIsError(false);
     setError(undefined);
     setOpenModal(false);
     setLoading(false);
+    setTimeout(() => {
+      setIsError(false);
+    }, 100);
   };
 
   return (
