@@ -130,6 +130,9 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
       pusher.subscribe(user.pusher_id, 'do_open_profile_bonuses', () => {
         router.push('/bonus/list');
       });
+      pusher.subscribe(user.pusher_id, 'do_open_nodeposit_configurator', () => {
+        router.push('/bonus/nodeposit');
+      });
     }
   }, [dispatch, settings, user?.pusher_id]);
 
