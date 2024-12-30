@@ -6,7 +6,7 @@ export const bonusGamesApi = (bonusId?: number): string => {
   if (Number(bonusId) > 0) {
     return `/api/v1/private/get/games/bonus/${bonusId}`;
   }
-  return '/api/v1/private/get/games/bonuses';
+  return '/api/v1/private/get/games/bonuses/';
 };
 
 export const noDepositBonusGames = () => {

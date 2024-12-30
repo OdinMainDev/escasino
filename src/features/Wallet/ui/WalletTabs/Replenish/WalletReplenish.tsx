@@ -423,67 +423,50 @@ const WalletReplenish = () => {
         ) : null}
         {selectedProvider && (
           <div className={styles.selected_provider}>
-            <div className="flex items-center justify-between mb-[10px]">
-              <div className="flex items-center gap-[10px]">
-                <img src={selectedProvider.meta.image} className={styles.selected_provider_img} />
-                <div className={styles.selected_provider_title}>
-                  {
-                    selectedProvider.meta.texts.find(
-                      (text) => text.language.toLowerCase() === currentLanguage,
-                    )?.value
-                  }
-                </div>
-              </div>
-              <div className={styles.selected_provider_currency}>{selectedProvider.currency}</div>
-            </div>
-            <div className="flex items-center justify-between">
-              {selectedProvider.conditions.limit_minimum > 0 ? (
-                <div className={styles.selected_provider_conditions}>
-                  {t('minimum')}:{' '}
-                  <strong>
-                    {selectedProvider.conditions.limit_minimum} {selectedProvider.currency}
-                  </strong>
-                </div>
-              ) : null}
-            </div>
             <div className="flex items-center justify-between">
               {selectedProvider.conditions.limit_maximum > 0 && (
-                <div className={styles.selected_provider_conditions}>
-                  {t('maximum')}:{' '}
-                  <strong>
+                <>
+                  <div className={styles.selected_provider_conditions}>{t('sum')}</div>
+                  <div className={styles.selected_provider_value}>
+                    {selectedProvider.conditions.limit_minimum} –{' '}
                     {selectedProvider.conditions.limit_maximum} {selectedProvider.currency}
-                  </strong>
-                </div>
+                  </div>
+                </>
               )}
             </div>
             <div className="flex items-center justify-between">
               {selectedProvider.fees.fixed > 0 && (
-                <div className={styles.selected_provider_conditions}>
-                  {t('fixedFee')}:{' '}
-                  <strong>
+                <>
+                  <div className={styles.selected_provider_conditions}>{t('fixedFee')}</div>
+                  <div className={styles.selected_provider_value}>
                     {selectedProvider.fees.fixed} {selectedProvider.currency}
-                  </strong>
-                </div>
+                  </div>
+                </>
               )}
             </div>
             <div className="flex items-center justify-between">
               {selectedProvider.fees.percent > 0 && (
-                <div className={styles.selected_provider_conditions}>
-                  {t('fee')}: <strong>{selectedProvider.fees.percent}%</strong>
-                </div>
+                <>
+                  <div className={styles.selected_provider_conditions}>{t('fee')}</div>
+                  <div className={styles.selected_provider_value}>
+                    {selectedProvider.fees.percent}%
+                  </div>
+                </>
               )}
             </div>
             <div className="flex items-center justify-between">
               {selectedProvider.rules.compensate_commission && (
                 <div className={styles.selected_provider_conditions}>
-                  <strong>{t('reimbursePaymentGatewayFees')}</strong>
+                  {t('reimbursePaymentGatewayFees')}
                 </div>
               )}
             </div>
             <div className="flex items-center justify-between">
               <div className={styles.selected_provider_conditions}>
-                {t('wagerDepositWithoutBonus')}:{' '}
-                <strong>{selectedProvider.rules.without_bonus_wager}%</strong>
+                {t('wagerDepositWithoutBonus')}
+              </div>
+              <div className={styles.selected_provider_value}>
+                {selectedProvider.rules.without_bonus_wager}%
               </div>
             </div>
           </div>

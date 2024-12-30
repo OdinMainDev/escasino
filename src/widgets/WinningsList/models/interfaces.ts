@@ -1,4 +1,5 @@
 export interface IWinning {
-  title: string;
-  prize: number;
+  currency: string;
+  username: string;
+  win: number;
 }

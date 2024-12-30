@@ -259,7 +259,7 @@ const Details = () => {
         </div>
       ) : null}
       <div className={styles.winnings}>
-        <WinningsList />
+        <WinningsList game_id={Number(id)} />
       </div>
       <div className={styles.description}>
         <div className={styles.description_title}>{game?.name}</div>
