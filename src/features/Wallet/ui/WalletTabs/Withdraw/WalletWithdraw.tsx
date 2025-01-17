@@ -133,76 +133,42 @@ const WalletWithdraw = () => {
     <div className={styles.content}>
       <div className={styles.block}>
         <div className={styles.title}>{t('paymentWay')}</div>
-        <div className={styles.slider}>
-          {billingLoading ? (
-            <div className={styles.slider}>
-              {Array(3)
-                .fill(0)
-                .map((_, index) => (
-                  <TabItem key={index} skeleton />
-                ))}
-            </div>
-          ) : (
-            <Swiper
-              modules={[FreeMode]}
-              slidesPerView="auto"
-              spaceBetween={10}
-              freeMode={true}
-              className={styles.slider}
-            >
-              {billingGroups?.map((item, index) => (
-                <SwiperSlide className="w-auto" key={index}>
-                  <TabItem
-                    className={styles.billing}
-                    selected={item.id === selectedBillingGroup}
-                    onClick={() => handleGroupSelection(item.id)}
-                  >
-                    {item.data.image && (
-                      <img src={item.data.image} className={styles.billing_img} />
-                    )}
-                    {
-                      item.data.texts.find(
-                        (text) => text.language.toLowerCase() === currentLanguage,
-                      )?.value
-                    }
-                  </TabItem>
-                </SwiperSlide>
+        {billingLoading ? (
+          <div className={styles.slider}>
+            {Array(3)
+              .fill(0)
+              .map((_, index) => (
+                <TabItem key={index} skeleton />
               ))}
-            </Swiper>
-          )}
-        </div>
+          </div>
+        ) : (
+          <Swiper
+            modules={[FreeMode]}
+            slidesPerView="auto"
+            spaceBetween={10}
+            freeMode={true}
+            className={styles.slider}
+          >
+            {billingGroups?.map((item, index) => (
+              <SwiperSlide className="w-auto" key={index}>
+                <TabItem
+                  className={styles.billing}
+                  selected={item.id === selectedBillingGroup}
+                  onClick={() => handleGroupSelection(item.id)}
+                >
+                  {item.data.image && <img src={item.data.image} className={styles.billing_img} />}
+                  {
+                    item.data.texts.find((text) => text.language.toLowerCase() === currentLanguage)
+                      ?.value
+                  }
+                </TabItem>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
         {withdrawProviders && withdrawProviders?.length > 0 ? (
           <div className={styles.title}>{t('providers')}</div>
         ) : null}
-        {selectedProvider?.layout && (
-          <div className={styles.selected_provider}>
-            <div className="flex items-center justify-between mb-[10px]">
-              <div className="flex items-center gap-[10px]">
-                <img src={selectedProvider.meta.image} className={styles.selected_provider_img} />
-                <div className={styles.selected_provider_title}>
-                  {
-                    selectedProvider.meta.texts.find(
-                      (text) => text.language.toLowerCase() === currentLanguage,
-                    )?.value
-                  }
-                </div>
-              </div>
-              <div className={styles.selected_provider_currency}>{selectedProvider.currency}</div>
-            </div>
-            <div className="flex items-center justify-between">
-              {selectedProvider.conditions.limit_minimum > 0 && (
-                <div className={styles.selected_provider_conditions}>
-                  {t('minimum')}: <strong>{selectedProvider.conditions.limit_minimum}</strong>
-                </div>
-              )}
-              {selectedProvider.conditions.limit_maximum > 0 && (
-                <div className={styles.selected_provider_conditions}>
-                  {t('maximum')}: <strong>{selectedProvider.conditions.limit_maximum}</strong>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
         <div className={styles.provider}>
           {providersLoading
             ? Array(3)
@@ -239,6 +205,56 @@ const WalletWithdraw = () => {
         </div>
       </div>
       <div className={styles.block}>
+        {selectedProvider && (
+          <div className={styles.selected_provider}>
+            <div className="flex items-center justify-between">
+              {selectedProvider.conditions.limit_maximum > 0 && (
+                <>
+                  <div className={styles.selected_provider_conditions}>{t('sum')}</div>
+                  <div className={styles.selected_provider_value}>
+                    {selectedProvider.conditions.limit_minimum} –{' '}
+                    {selectedProvider.conditions.limit_maximum} {selectedProvider.currency}
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center justify-between">
+              {selectedProvider.fees.fixed > 0 && (
+                <>
+                  <div className={styles.selected_provider_conditions}>{t('fixedFee')}</div>
+                  <div className={styles.selected_provider_value}>
+                    {selectedProvider.fees.fixed} {selectedProvider.currency}
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center justify-between">
+              {selectedProvider.fees.percent > 0 && (
+                <>
+                  <div className={styles.selected_provider_conditions}>{t('fee')}</div>
+                  <div className={styles.selected_provider_value}>
+                    {selectedProvider.fees.percent}%
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="flex items-center justify-between">
+              {selectedProvider.rules.compensate_commission && (
+                <div className={styles.selected_provider_conditions}>
+                  {t('reimbursePaymentGatewayFees')}
+                </div>
+              )}
+            </div>
+            <div className="flex items-center justify-between">
+              <div className={styles.selected_provider_conditions}>
+                {t('wagerDepositWithoutBonus')}
+              </div>
+              <div className={styles.selected_provider_value}>
+                {selectedProvider.rules.without_bonus_wager}%
+              </div>
+            </div>
+          </div>
+        )}
         {selectedProvider && selectedProvider?.layout.length > 0 ? (
           <div
             className={classNames(styles.block_grid, {
@@ -308,12 +324,12 @@ const WalletWithdraw = () => {
       >
         {t('withdraw')}
       </Button>
-      {!validateData({
+      {/* {!validateData({
         amount: Number(withdrawData.amount),
         max: Number(selectedProvider?.conditions.limit_maximum),
         min: Number(selectedProvider?.conditions.limit_minimum),
         layout,
-      }) && <div className={styles.error}>{t('fillAllFields')}</div>}
+      }) && <div className={styles.error}>{t('fillAllFields')}</div>} */}
       <SuccessPaymentModal
         isError={isError}
         message={isError ? t(errorValidator(error)) : t('withdrawalSuccessfullySubmitted')}

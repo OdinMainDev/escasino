@@ -36,4 +36,7 @@ export interface IWithdrawProviderFees {
   percent: number;
 }
 
-export interface IWithdrawProviderRules {}
+export interface IWithdrawProviderRules {
+  compensate_commission: boolean;
+  without_bonus_wager: number;
+}

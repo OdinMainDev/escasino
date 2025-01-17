@@ -421,6 +421,51 @@ const WalletReplenish = () => {
         {paymentProviders && paymentProviders?.length > 0 ? (
           <div className={styles.title}>{t('providers')}</div>
         ) : null}
+        {selectedProvider && selectedProvider?.layout.length > 0 ? (
+          <div
+            className={classNames(styles.block_grid, {
+              [styles.block_line]: selectedProvider.layout.length > 0,
+            })}
+          >
+            {generateLayout(selectedProvider.layout)}
+          </div>
+        ) : null}
+        <div className={styles.provider}>
+          {providersLoading
+            ? Array(3)
+                .fill(0)
+                .map((_, index) => <TabBlock key={index} skeleton />)
+            : paymentProviders
+                ?.filter((provider) => provider.billing_groups.includes(selectedBillingGroup))
+                .map((provider) => (
+                  <TabBlock
+                    key={provider.id}
+                    className={styles.billing}
+                    selected={selectedProvider?.id === provider.id}
+                    onClick={() => handleProviderSelection(provider)}
+                  >
+                    <img src={provider.meta.image} className={styles.provider_img} />
+                  </TabBlock>
+                ))}
+
+          {providersLoading || providersAllLoading
+            ? Array(3)
+                .fill(0)
+                .map((_, index) => <TabBlock key={index} skeleton />)
+            : paymentAllProviders
+                ?.filter((provider) => provider.billing_groups.includes(selectedBillingGroup))
+                ?.filter((provider) => !paymentProviders?.some((p) => p.id === provider.id))
+                .map((provider) => (
+                  <TabBlock
+                    key={provider.id}
+                    className={classNames(styles.billing, styles.billing_disabled)}
+                  >
+                    <img src={provider.meta.image} className={styles.provider_img} />
+                  </TabBlock>
+                ))}
+        </div>
+      </div>
+      <div className={styles.block}>
         {selectedProvider && (
           <div className={styles.selected_provider}>
             <div className="flex items-center justify-between">
@@ -471,51 +516,6 @@ const WalletReplenish = () => {
             </div>
           </div>
         )}
-        <div className={styles.provider}>
-          {providersLoading
-            ? Array(3)
-                .fill(0)
-                .map((_, index) => <TabBlock key={index} skeleton />)
-            : paymentProviders
-                ?.filter((provider) => provider.billing_groups.includes(selectedBillingGroup))
-                .map((provider) => (
-                  <TabBlock
-                    key={provider.id}
-                    className={styles.billing}
-                    selected={selectedProvider?.id === provider.id}
-                    onClick={() => handleProviderSelection(provider)}
-                  >
-                    <img src={provider.meta.image} className={styles.provider_img} />
-                  </TabBlock>
-                ))}
-
-          {providersLoading || providersAllLoading
-            ? Array(3)
-                .fill(0)
-                .map((_, index) => <TabBlock key={index} skeleton />)
-            : paymentAllProviders
-                ?.filter((provider) => provider.billing_groups.includes(selectedBillingGroup))
-                ?.filter((provider) => !paymentProviders?.some((p) => p.id === provider.id))
-                .map((provider) => (
-                  <TabBlock
-                    key={provider.id}
-                    className={classNames(styles.billing, styles.billing_disabled)}
-                  >
-                    <img src={provider.meta.image} className={styles.provider_img} />
-                  </TabBlock>
-                ))}
-        </div>
-      </div>
-      <div className={styles.block}>
-        {selectedProvider && selectedProvider?.layout.length > 0 ? (
-          <div
-            className={classNames(styles.block_grid, {
-              [styles.block_line]: selectedProvider.layout.length > 0,
-            })}
-          >
-            {generateLayout(selectedProvider.layout)}
-          </div>
-        ) : null}
         <div className={styles.title}>{t('depositSum')}</div>
         <Input
           placeholder={t('sum')}
@@ -571,7 +571,7 @@ const WalletReplenish = () => {
       >
         {t('topUpAccount')}
       </Button>
-      {!validateData({
+      {/* {!validateData({
         amount: Number(amount),
         max:
           Number(selectedProvider?.conditions.limit_maximum) > maxAmount && maxAmount !== 0
@@ -582,7 +582,7 @@ const WalletReplenish = () => {
             ? minAmount
             : Number(selectedProvider?.conditions.limit_minimum),
         layout,
-      }) && <div className={styles.error}>{t('fillAllFields')}</div>}
+      }) && <div className={styles.error}>{t('fillAllFields')}</div>} */}
       <SuccessPaymentModal
         isError={isError}
         transaction={transaction}

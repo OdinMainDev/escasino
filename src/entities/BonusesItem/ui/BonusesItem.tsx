@@ -52,15 +52,40 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
   const getBonusStatus = () => {
     switch (bonus?.status) {
       case 1:
-        return t('nonActiveBonus');
+        return (
+          <div className={classNames(styles.bonus_status, styles.error)}>
+            <Icons icon="error" />
+            {t('nonActiveBonus')}
+          </div>
+        );
       case 2:
-        return t('activeBonus');
+        return (
+          <div className={classNames(styles.bonus_status, styles.good)}>
+            <Icons icon="check" />
+            {t('activeBonus')}
+          </div>
+        );
       case 3:
-        return t('endedBonus');
+        return (
+          <div className={classNames(styles.bonus_status, styles.error)}>
+            <Icons icon="error" />
+            {t('endedBonus')}
+          </div>
+        );
       case 4:
-        return t('canceledBonus');
+        return (
+          <div className={classNames(styles.bonus_status, styles.error)}>
+            <Icons icon="error" />
+            {t('canceledBonus')}
+          </div>
+        );
       case 5:
-        return t('expiredBonus');
+        return (
+          <div className={classNames(styles.bonus_status, styles.error)}>
+            <Icons icon="error" />
+            {t('expiredBonus')}
+          </div>
+        );
       default:
         return null;
     }
@@ -242,17 +267,19 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
           </div>
         )}
       </div>
-      <div className={styles.tabs}>
-        {bonus?.bonus_template.map((item, index) => (
-          <TabItem
-            selected={item.id === selectedTemplate?.id}
-            key={index}
-            onClick={() => selectTemplate(item)}
-          >
-            {t('template')} #{index + 1}
-          </TabItem>
-        ))}
-      </div>
+      {bonus?.bonus_template && bonus?.bonus_template.length > 1 && (
+        <div className={styles.tabs}>
+          {bonus?.bonus_template.map((item, index) => (
+            <TabItem
+              selected={item.id === selectedTemplate?.id}
+              key={index}
+              onClick={() => selectTemplate(item)}
+            >
+              {t('template')} #{index + 1}
+            </TabItem>
+          ))}
+        </div>
+      )}
       <div className={styles.info}>
         <div className={styles.info_block}>
           <div className={styles.label}>{t('bonusBet')}</div>
@@ -279,7 +306,12 @@ const BonusesItem = ({ bonus, isMain, className }: IProps) => {
       </div>
       <div>
         {selectedGamesIds.map((item, index) => (
-          <BonusGame key={index} gameId={item.game_id} onClick={() => onClickGame(item, index)} />
+          <BonusGame
+            key={index}
+            className={styles.game_item}
+            gameId={item.game_id}
+            onClick={() => onClickGame(item, index)}
+          />
         ))}
       </div>
       <div className={styles.buttons}>{getButton()}</div>

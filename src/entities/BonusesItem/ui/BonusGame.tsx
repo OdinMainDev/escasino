@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 interface IProps extends BaseHTMLAttributes<HTMLDivElement> {
   gameId: number;
 }
-const BonusGame = ({ gameId, onClick }: IProps) => {
+const BonusGame = ({ gameId, onClick, ...otherProps }: IProps) => {
   const { t } = useTranslation();
   const { games } = useAppSelector((state) => state.gamesAllSlice);
   const [game, setGame] = useState<IGame | null>(null);
@@ -26,7 +26,11 @@ const BonusGame = ({ gameId, onClick }: IProps) => {
 
   if (!game && gameId === 0) {
     return (
-      <div className={styles.game} onClick={onClick}>
+      <div
+        {...otherProps}
+        className={classNames(styles.game, otherProps.className)}
+        onClick={onClick}
+      >
         <div className={classNames(styles.game_img, styles.empty)} />
         <div className="flex flex-col gap-[8px] flex-1">
           <div className={styles.game_subtitle}>{t('chooseGame')}</div>
@@ -36,7 +40,11 @@ const BonusGame = ({ gameId, onClick }: IProps) => {
     );
   }
   return (
-    <div className={styles.game} onClick={onClick}>
+    <div
+      {...otherProps}
+      className={classNames(styles.game, otherProps.className)}
+      onClick={onClick}
+    >
       {imagePath ? (
         <img className={styles.game_img} alt="sw" src={imagePath} />
       ) : (

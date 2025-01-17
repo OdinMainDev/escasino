@@ -408,10 +408,13 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                 ) : (
                   <div className={classNames(styles.game_image_empty, styles.game_image)} />
                 )}
-                <div className={styles.game_title}>{selectedGame.name}</div>
+                <div className={styles.game_title}>
+                  <span>{selectedGame.game_provider}</span>
+                  {selectedGame.name}
+                </div>
                 <Button
                   elType="outlined"
-                  className="w-[100%]"
+                  className={styles.button}
                   onClick={() => setOpenGamesModal(true)}
                 >
                   {t('changeGame')}
@@ -425,10 +428,13 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                   ) : (
                     <div className={classNames(styles.game_image_empty, styles.game_image)} />
                   )}
-                  <div className={styles.game_title}>{selectedGame.name}</div>
+                  <div className={styles.game_title}>
+                    <span>{selectedGame.game_provider}</span>
+                    {selectedGame.name}
+                  </div>
                   <Button
                     elType="outlined"
-                    className="w-[100%]"
+                    className={styles.button}
                     onClick={() => setOpenGamesModal(true)}
                   >
                     {t('changeGame')}
@@ -440,7 +446,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
                   <div className={styles.game_title}>{t('chooseGame')}</div>
                   <Button
                     elType="outlined"
-                    className="w-[100%] mb-[20px]"
+                    className={styles.button}
                     onClick={() => setOpenGamesModal(true)}
                   >
                     {t('changeGame')}

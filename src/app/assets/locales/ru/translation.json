@@ -337,7 +337,8 @@
   "withdrawForm": {
     "undefined": "Имя поля не найдено",
     "bank": "Банк",
-    "address": "Адрес"
+    "address": "Адрес",
+    "number": "Номер карты"
   },
   "historyWalletStatuses": {
     "Created": "Создано",
