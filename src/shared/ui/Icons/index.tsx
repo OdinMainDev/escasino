@@ -414,7 +414,7 @@ const Icons = ({ icon }: IProps) => {
       >
         <path
           d="M15 8H1M1 8L8 15M1 8L8 1"
-          stroke="var(--secondary)"
+          stroke="#A1A1AA"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"

@@ -28,22 +28,29 @@ const ProfileEdit = () => {
 
   return (
     <div key="profile_edit">
-      <PageHeader customBackPath="/profile" title={t('editProfile')} />
-      <Tabs
-        tabs={tabs}
-        value={selectedTab.value}
-        className="mb-[24px]"
-        onChange={(value) => setSelectedTab(value)}
-      />
-      {selectedTab.value === 'about' ? (
-        <div className={styles.container}>
-          <ProfileForm />
-        </div>
-      ) : (
-        <div className={styles.container}>
-          <ProfilePasswordForm />
-        </div>
-      )}
+      {/* Фиксируем весь header + tabs */}
+      <div className="sticky top-0 w-full z-10 bg-[--primary] shadow-md after:content-[''] after:block after:h-[8px] after:w-full after:bg-gradient-to-b after:from-black after:to-transparent">
+        <PageHeader customBackPath="/profile" title={t('editProfile')} />
+        <Tabs
+          tabs={tabs}
+          value={selectedTab.value}
+          className="w-full"
+          onChange={(value) => setSelectedTab(value)}
+        />
+      </div>
+
+      {/* Контент с отступом, чтобы не перекрывался хедером */}
+      <div className="pt-[24px]">
+        {selectedTab.value === 'about' ? (
+          <div className={styles.container}>
+            <ProfileForm />
+          </div>
+        ) : (
+          <div className={styles.container}>
+            <ProfilePasswordForm />
+          </div>
+        )}
+      </div>
 
       <ProfileModals />
     </div>

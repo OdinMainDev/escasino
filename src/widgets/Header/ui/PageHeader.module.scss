@@ -1,14 +1,16 @@
 .header {
   display: flex;
   align-items: center;
-  position: relative;
+  position: sticky; /* Делаем хедер липким */
+  top: 0; /* Фиксируем его вверху */
   z-index: 101;
   justify-content: space-between;
-  padding: 20px 16px 20px 16px;
-  height: 96px;
+  padding: 20px 16px;
   background-color: var(--primary);
   width: 100%;
   max-width: var(--desktop-max-width);
+  transition: all 0.3s ease-in-out; /* Плавный переход для тени */
+
   &.header_cover {
     background-color: rgba(255, 255, 255, 0.7);
   }
@@ -17,6 +19,7 @@
     flex-direction: column;
     height: 100%;
     width: 82px;
+
     .title {
       writing-mode: vertical-rl;
       transform: rotate(180deg);
@@ -24,14 +27,9 @@
   }
 }
 
-.fixed {
-  top: 0;
-  position: fixed;
-}
-
 .title {
   color: var(--text-primary);
   font-weight: 700;
-  font-size: 16px;
-  text-transform: uppercase;
+  font-size: 24px;
+  // text-transform: uppercase;
 }
