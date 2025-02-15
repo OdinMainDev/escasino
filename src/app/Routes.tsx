@@ -30,6 +30,7 @@ import { Bonuses, BonusesCart, BonusesGames } from '@/pages/Bonus';
 import BonusesProvider from './providers/pages/BonusesProvider';
 import BonusesList from '@/pages/Bonus/ui/BonusesList';
 import { Rules } from '@/pages/Rules';
+import NodepositBonusesProvider from './providers/pages/NodepositBonusesProvider';
 
 const availRoutes: RouteObject[] = [
   {
@@ -62,9 +63,9 @@ const availRoutes: RouteObject[] = [
       {
         path: 'nodeposit/:id',
         element: (
-          <BonusesProvider>
+          <NodepositBonusesProvider>
             <Bonuses isNoDeposit />
-          </BonusesProvider>
+          </NodepositBonusesProvider>
         ),
       },
       {
@@ -158,17 +159,19 @@ const availRoutes: RouteObject[] = [
         path: 'deposit/:tab',
         element: (
           <BonusesProvider>
-            <BillingGroupsProvider>
-              <PaymentProvidersProvider>
-                <PaymentAllProvidersProvider>
-                  <WithdrawProvidersProvider>
-                    <WithdrawAllProvidersProvider>
-                      <Wallet />
-                    </WithdrawAllProvidersProvider>
-                  </WithdrawProvidersProvider>
-                </PaymentAllProvidersProvider>
-              </PaymentProvidersProvider>
-            </BillingGroupsProvider>
+            <NodepositBonusesProvider>
+              <BillingGroupsProvider>
+                <PaymentProvidersProvider>
+                  <PaymentAllProvidersProvider>
+                    <WithdrawProvidersProvider>
+                      <WithdrawAllProvidersProvider>
+                        <Wallet />
+                      </WithdrawAllProvidersProvider>
+                    </WithdrawProvidersProvider>
+                  </PaymentAllProvidersProvider>
+                </PaymentProvidersProvider>
+              </BillingGroupsProvider>
+            </NodepositBonusesProvider>
           </BonusesProvider>
         ),
       },
