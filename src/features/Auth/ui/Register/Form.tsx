@@ -4,9 +4,11 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import styles from './Form.module.scss';
 import { FB, OK, Telegram, Twitter, VK } from '../Icons';
 import {
+  validateEmail,
   validatePasswordLength,
   validatePasswordMatching,
   validatePhone,
+  validateRegister
 } from '@/features/Auth/helpers/validators';
 
 import Loader from '@/shared/ui/Loader';
@@ -119,6 +121,13 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
+
+      const isValidRegisterData = validateRegister(registerData, undefined, isFastAuth);
+
+      if (!isValidRegisterData) {
+        return; 
+      }
+      
       setLoader(true);
       const fid = await getVisitorId();
       const postData = { ...registerData, fid };
@@ -178,6 +187,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
             <Input
               placeholder={t('email')}
               type="email"
+              validationFunction={validateEmail}
               onChange={(e) => {
                 setRegisterData((prev) => ({ ...prev, email: e.target.value }));
                 if (!isAppDebug) {

@@ -6,20 +6,22 @@ import { Register } from '@/shared/models/interfaces/settings';
 
 export function validateEmail(email: string): boolean {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  return email.length == 0 || emailRegex.test(email);
+  return emailRegex.test(email);
 }
 
 export function validatePhone(phone: string): boolean {
-  const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-  return phone.length == 0 || phoneRegex.test(phone.trim());
+  const phoneRegex = /^\d{5,}$/; 
+  return phoneRegex.test(phone.trim());
 }
 
+
+
 export const validatePasswordLength = (password: string): boolean => {
-  return password.length == 0 || password.length >= 6;
+  return password.length >= 6;
 };
 
 export const validatePasswordMatching = (password: string, repeat_password: string): boolean => {
-  if (password.trim() === '' || repeat_password.trim() === '') {
+  if (repeat_password.trim() === '') {
     return false;
   }
 
