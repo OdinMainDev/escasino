@@ -7,7 +7,6 @@ import { getUser } from '@/store/slices/userSlice';
 import { useAppDispatch } from '@/store/hooks/redux';
 import { useGamesFilters } from './pages/GamesFilter';
 import { resetCartBonuses } from '@/store/slices/cartBonusesSlice';
-import { getNodepositBonuses } from '@/store/slices/nodepositSlice';
 
 interface EventDispatcherProviderProps {
   children: ReactNode;
@@ -24,7 +23,6 @@ export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = (
   useEffect(() => {
     if (isAuth) {
       void dispatch(getUser());
-      void dispatch(getNodepositBonuses());
     }
     function checkAvailGameFilterPathname(pathname: string) {
       const pathParts = pathname.split('/');
