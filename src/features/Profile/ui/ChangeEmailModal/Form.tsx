@@ -16,6 +16,9 @@ import {
 } from '@/app/api/auth/change/emailChange';
 import { getUser } from '@/store/slices/userSlice';
 import { useTranslation } from 'react-i18next';
+import { getEmailVerificationCode } from '@/shared/helpers/location';
+import { useEffect } from 'react';
+
 
 const ProfileChangeEmailForm = () => {
   const { t } = useTranslation();
@@ -25,6 +28,13 @@ const ProfileChangeEmailForm = () => {
   const [errorData, setErrorData] = useState<IResponseError>();
   const [changeData, setChangeData] = useState<IChangeEmailSendData>(sampleIChangeEmailSendData);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const emailCode = getEmailVerificationCode();
+    if (emailCode) {
+      setChangeData((prev) => ({ ...prev, code: emailCode }));
+    }
+  }, []);
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {

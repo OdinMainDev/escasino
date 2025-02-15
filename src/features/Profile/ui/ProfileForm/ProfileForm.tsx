@@ -21,6 +21,7 @@ import DatePicker from '@/shared/ui/DatePicker';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
 import { useTranslation } from 'react-i18next';
 import Statuses from '@/entities/Statuses';
+import { getEmailVerificationCode } from '@/shared/helpers/location';
 
 const ProfileForm = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
@@ -62,25 +63,36 @@ const ProfileForm = () => {
   }
 
   useEffect(() => {
-    if (user) {
-      setUserData(userDataMapper(user));
-      const isFirstRegister = localStorage.getItem('registred');
-      if (!user.data.email_verified_at && isFirstRegister === 'true') {
-        doOpenModal('alert');
-        setAlertData({
-          title: t('confirmEmailAdress'),
-          close: doCloseModals,
-          text: t('onEmailSendMailWithLink'),
-          buttons: [
-            {
-              type: 'contained',
-              text: t('continue'),
-              onClick: () => doCloseModals(),
-            },
-          ],
-        });
-        localStorage.removeItem('registred');
+    if (!user) return; 
+  
+    const isFirstRegister = localStorage.getItem('registred');
+    setUserData(userDataMapper(user));
+  
+    const showAlert = () => {
+      doOpenModal('alert');
+      setAlertData({
+        title: t('confirmEmailAdress'),
+        close: doCloseModals,
+        text: t('onEmailSendMailWithLink'),
+        buttons: [
+          {
+            type: 'contained',
+            text: t('continue'),
+            onClick: doCloseModals,
+          },
+        ],
+      });
+      localStorage.removeItem('registred');
+    };
+  
+    const handleEmailVerification = () => {
+      if (getEmailVerificationCode()) {
+        doOpenModal('change-email');
       }
+    };
+  
+    if (!user.data.email_verified_at) {
+      isFirstRegister === 'true' ? showAlert() : handleEmailVerification();
     }
   }, [user]);
 
