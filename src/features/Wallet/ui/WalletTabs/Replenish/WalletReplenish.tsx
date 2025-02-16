@@ -418,18 +418,6 @@ const WalletReplenish = () => {
           </Swiper>
         )}
 
-        {paymentProviders && paymentProviders?.length > 0 ? (
-          <div className={styles.title}>{t('providers')}</div>
-        ) : null}
-        {selectedProvider && selectedProvider?.layout.length > 0 ? (
-          <div
-            className={classNames(styles.block_grid, {
-              [styles.block_line]: selectedProvider.layout.length > 0,
-            })}
-          >
-            {generateLayout(selectedProvider.layout)}
-          </div>
-        ) : null}
         <div className={styles.provider}>
           {providersLoading
             ? Array(3)
@@ -516,6 +504,15 @@ const WalletReplenish = () => {
             </div>
           </div>
         )}
+        {selectedProvider && selectedProvider?.layout.length > 0 ? (
+          <div
+            className={classNames(styles.block_grid, {
+              [styles.block_line]: selectedProvider.layout.length > 0,
+            })}
+          >
+            {generateLayout(selectedProvider.layout)}
+          </div>
+        ) : null}
         <div className={styles.title}>{t('depositSum')}</div>
         <Input
           placeholder={t('sum')}
