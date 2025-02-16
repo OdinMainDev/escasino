@@ -12,6 +12,10 @@ import { FilterModal } from '@/features/FilterModal';
 import { TabItem } from '@/entities/TabItem';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
+import { useEffect } from 'react';
+import { getSearchQuery } from '@/shared/helpers/location';
+import { useAppSelector } from '@/store/hooks/redux';
+import { useCurrentLanguage } from '@/app/providers/LangProvider';
 
 type HeaderProps = {
   hasNotSearch?: boolean;
@@ -20,12 +24,29 @@ type HeaderProps = {
 
 const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
   const { t } = useTranslation();
+  const currentLanguage = useCurrentLanguage();
+  const { categories } = useAppSelector((state) => state.gameCategoriesReducer);
+
   const { getFilters, countActiveKeys, setFilters } = useGamesFilters();
+  const [withBonuses] = useState<boolean>(getFilters().is_game_avail_for_bonus);
+
+
   const [filterVal, setFilterVal] = useState<string>(getFilters().query);
   const router = useRouter();
   const pathname = usePathname();
   const [openFilter, setOpenFilter] = useState(false);
   const timer = useRef<null | ReturnType<typeof setTimeout>>(null);
+
+  useEffect(() => {
+
+    const query = getSearchQuery();
+    if (query) {
+      setFilterVal(query);
+    }
+
+
+  }, []);
+
 
   const clickFilter = () => {
     setOpenFilter(true);
@@ -48,7 +69,7 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
     }
   };
 
-  const availKeys = countActiveKeys(getFilters());
+  const availKeys = countActiveKeys(getFilters()) + (getSearchQuery() ? 1 : 0);
 
   const onSearchHandler = (value: string) => {
     setFilterVal(value);
@@ -82,6 +103,35 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
     setFilters({ ...getFilters(), categories: newCatgeories });
   };
 
+  const deleteFilterBonus = () => {
+    getFilters().is_game_avail_for_bonus = false;
+    setFilters({ ...getFilters() })
+  }
+
+
+  const getCategoryName = (categoryUrl: string) => {
+
+    if (!categories){
+      return categoryUrl;
+    }
+
+    const category = categories.find(item => item.url === categoryUrl);
+
+
+    if (category) {
+      const textObj = category.data.texts.find(
+        text => text.language.toLowerCase() === currentLanguage.toLowerCase()
+      );
+
+      if (textObj) {
+        return textObj.value;
+      }    
+
+    }
+
+    return categoryUrl;
+  };
+
   const clearSearch = () => {
     setFilterVal('');
     if (timer.current) {
@@ -101,6 +151,7 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
       }
     }, 1000);
   };
+  console.log(categories);
 
   return (
     <>
@@ -148,7 +199,7 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
             </span>
           </div>
         </div>
-        {getFilters().categories.length > 0 && (
+        {(getFilters().categories.length > 0 || withBonuses) && (
           <Swiper
             modules={[FreeMode]}
             slidesPerView="auto"
@@ -159,7 +210,7 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
             {getFilters().categories.map((item, index) => (
               <SwiperSlide className="w-auto" key={index}>
                 <TabItem className="flex items-center gap-[16px]">
-                  {item}
+                  {getCategoryName(item)}
                   <div onClick={() => deleteFilter(item)}>
                     <svg
                       width="10"
@@ -180,8 +231,33 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
                 </TabItem>
               </SwiperSlide>
             ))}
+            {withBonuses && (
+              <SwiperSlide className="w-auto">
+                <TabItem className="flex items-center gap-[16px]">
+                  {t('collectBonus')}
+                  <div onClick={() => deleteFilterBonus()}>
+                    <svg
+                      width="10"
+                      height="10"
+                      viewBox="0 0 10 10"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M9 1L1 9M1 1L9 9"
+                        stroke="#A1A1AA"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </TabItem>
+              </SwiperSlide>
+            )}
           </Swiper>
         )}
+
       </div>
       <FilterModal isOpen={openFilter} close={closeFilterModal} />
     </>

@@ -1,5 +1,4 @@
 import { memo } from 'react';
-
 import styles from './ProviderList.module.scss';
 import { useAppSelector } from '@/store/hooks/redux';
 import { TabBlock } from '@/entities/TabBlock';

@@ -4,9 +4,12 @@ import React, { ReactNode, useEffect } from 'react';
 import { useAuthProvider } from './AuthProvider';
 import { usePathname } from '@/shared/helpers/navigation';
 import { getUser } from '@/store/slices/userSlice';
+import { setUserMeta } from '@/store/slices/setUserMetsSlice';
 import { useAppDispatch } from '@/store/hooks/redux';
 import { useGamesFilters } from './pages/GamesFilter';
 import { resetCartBonuses } from '@/store/slices/cartBonusesSlice';
+import { getVisitorId } from '@/shared/helpers/getVisitorId';
+import { useCurrentLanguage } from './LangProvider';
 
 interface EventDispatcherProviderProps {
   children: ReactNode;
@@ -14,15 +17,23 @@ interface EventDispatcherProviderProps {
 
 export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = ({ children }) => {
   const pathname = usePathname();
+  const language = useCurrentLanguage();
+
   const { isAuth } = useAuthProvider();
   const dispatch = useAppDispatch();
   const { getFilters, setFilters } = useGamesFilters();
+
+  const handleUserMeta = async () => {
+    const fid = await getVisitorId();
+    void dispatch(setUserMeta({ fid: fid, language: language }));
+  };
 
   // EventDispatcher - миддлвейр для обработки запросов перед страницей
   // если авторизован человек то при каждом обновлении страницы делаем запрос к getMe
   useEffect(() => {
     if (isAuth) {
       void dispatch(getUser());
+      handleUserMeta();
     }
     function checkAvailGameFilterPathname(pathname: string) {
       const pathParts = pathname.split('/');
