@@ -17,9 +17,10 @@
     <script type="module" defer>
       document
         .getElementById('essupport')
-        .setAttribute('data-api-token', import.meta.env.VITE_APP_CHAT_API_TOKEN);
+        .setAttribute('data-api-token', import.meta.env.VITE_APP_CHAT_API_TOKEN)
+        .setAttribute('data-language', import.meta.env.VITE_DEFAULT_LANGUAGE);
     </script>
-    <div id="essupport" data-api-token="" data-user-token="" data-language="ru"></div>
+    <div id="essupport" data-api-token="" data-user-token="" data-language=""></div>
     <script defer>
       function getCookie(name) {
         let value = '; ' + document.cookie;

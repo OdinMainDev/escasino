@@ -8,7 +8,8 @@
 }
 body {
   --primary: #f5f5f5;
-  --secondary: #71717A;
+  --secondary: #161616;
+  --secondary-close: #71717A;
   --button-primary-color: #252525;
   --button-secondary-color: #f5f5f5;
   --button-border-color: #cfcfcf;
@@ -47,7 +48,8 @@ body {
 // DARK THEME
 body.dark {
   --primary: #09090B;
-  --secondary: #71717A;
+  --secondary: #f2f2f2;
+  --secondary-close: #71717A;
   --game-item: #09090B;
   --active: #F4F4F5;
 
