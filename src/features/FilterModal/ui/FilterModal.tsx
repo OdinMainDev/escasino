@@ -91,9 +91,10 @@ const FilterModal = ({ isOpen, close }: IModal) => {
           </div>
           <div className={styles.bonus_active}>
             <Switch
-              isToggled={withBonuses}
+              isToggled={getFilters().is_game_avail_for_bonus}
               onToggle={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const val = e.target.checked;
+                setFilters({ ...getFilters(),  is_game_avail_for_bonus: val})
                 setWithBonuses(val);
               }}
             />

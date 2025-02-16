@@ -17,6 +17,7 @@ import { getSearchQuery } from '@/shared/helpers/location';
 import { useAppSelector } from '@/store/hooks/redux';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
 
+
 type HeaderProps = {
   hasNotSearch?: boolean;
   hasTitle?: string;
@@ -28,9 +29,6 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
   const { categories } = useAppSelector((state) => state.gameCategoriesReducer);
 
   const { getFilters, countActiveKeys, setFilters } = useGamesFilters();
-  const [withBonuses] = useState<boolean>(getFilters().is_game_avail_for_bonus);
-
-
   const [filterVal, setFilterVal] = useState<string>(getFilters().query);
   const router = useRouter();
   const pathname = usePathname();
@@ -104,8 +102,7 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
   };
 
   const deleteFilterBonus = () => {
-    getFilters().is_game_avail_for_bonus = false;
-    setFilters({ ...getFilters() })
+    setFilters({ ...getFilters(),  is_game_avail_for_bonus: false})
   }
 
 
@@ -151,8 +148,6 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
       }
     }, 1000);
   };
-  console.log(categories);
-
   return (
     <>
       <div className={styles.container}>
@@ -199,7 +194,7 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
             </span>
           </div>
         </div>
-        {(getFilters().categories.length > 0 || withBonuses) && (
+        {(getFilters().categories.length > 0 || getFilters().is_game_avail_for_bonus) && (
           <Swiper
             modules={[FreeMode]}
             slidesPerView="auto"
@@ -231,7 +226,7 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
                 </TabItem>
               </SwiperSlide>
             ))}
-            {withBonuses && (
+            {getFilters().is_game_avail_for_bonus && (
               <SwiperSlide className="w-auto">
                 <TabItem className="flex items-center gap-[16px]">
                   {t('collectBonus')}

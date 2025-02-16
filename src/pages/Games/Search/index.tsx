@@ -27,10 +27,12 @@ export default function Search() {
       const newFilters = getFilters();
       newFilters.query = searchParams.get('query') ?? '';
       setFilters(newFilters);
+      setPage(1);
     }
 
     const getGames = async () => {
       setGames([]);
+      setPage(1);
       setLoading(true);
       const filter: IFilter = {
         query: getFilters().query,
@@ -65,12 +67,13 @@ export default function Search() {
         categories: getFilters().categories,
         is_game_avail_for_bonus: getFilters().is_game_avail_for_bonus,
       };
-      const data = await getSearchGamesApi(filter, page + 1);
+      const nextPage = page + 1;
+      const data = await getSearchGamesApi(filter, nextPage);
       if (data.length === 0) {
         setIsLastElement(true);
         return;
       }
-      setPage(page + 1);
+      setPage(nextPage);
       setGames((prev) => [...prev, ...data]);
     }
   };
