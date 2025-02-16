@@ -31,7 +31,8 @@ const FilterModal = ({ isOpen, close }: IModal) => {
 
   useEffect(() => {
     setSelectedCategories(getFilters().categories);
-  }, [getFilters().categories]);
+    setWithBonuses(getFilters().is_game_avail_for_bonus);
+  }, [getFilters().categories, getFilters().is_game_avail_for_bonus]);
 
   const selectCategory = (selectedCategory: string) => {
     const category = selectedCategories.find((item) => item === selectedCategory);
@@ -91,10 +92,9 @@ const FilterModal = ({ isOpen, close }: IModal) => {
           </div>
           <div className={styles.bonus_active}>
             <Switch
-              isToggled={getFilters().is_game_avail_for_bonus}
+              isToggled={withBonuses}
               onToggle={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const val = e.target.checked;
-                setFilters({ ...getFilters(),  is_game_avail_for_bonus: val})
                 setWithBonuses(val);
               }}
             />
