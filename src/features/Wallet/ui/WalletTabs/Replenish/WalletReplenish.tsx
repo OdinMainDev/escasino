@@ -358,6 +358,16 @@ const WalletReplenish = () => {
     return null;
   };
 
+  const getProviderName = () => {
+    if (!selectedProvider) {
+      return '';
+    }
+    return (
+      selectedProvider.meta.texts.find((item) => item.language.toLowerCase() === currentLanguage)
+        ?.value ?? ''
+    );
+  };
+
   return (
     <div className={styles.content}>
       {generateBonusesButtons()}
@@ -457,6 +467,17 @@ const WalletReplenish = () => {
         {selectedProvider && (
           <div className={styles.selected_provider}>
             <div className="flex items-center justify-between">
+              <div className={styles.selected_provider_title}>{getProviderName()}</div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className={styles.selected_provider_conditions}>
+                {t('wagerDepositWithoutBonus')}
+              </div>
+              <div className={styles.selected_provider_value}>
+                {selectedProvider.rules.without_bonus_wager}%
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
               {selectedProvider.conditions.limit_maximum > 0 && (
                 <>
                   <div className={styles.selected_provider_conditions}>{t('sum')}</div>
@@ -493,14 +514,6 @@ const WalletReplenish = () => {
                   {t('reimbursePaymentGatewayFees')}
                 </div>
               )}
-            </div>
-            <div className="flex items-center justify-between">
-              <div className={styles.selected_provider_conditions}>
-                {t('wagerDepositWithoutBonus')}
-              </div>
-              <div className={styles.selected_provider_value}>
-                {selectedProvider.rules.without_bonus_wager}%
-              </div>
             </div>
           </div>
         )}
