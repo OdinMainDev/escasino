@@ -3,7 +3,7 @@ import { IBasicErrors, IResponseError } from '@/shared/models/interfaces/misc';
 import { AxiosResponse, isAxiosError } from 'axios';
 
 export const setUserMetaApi = () => {
-  return '/api/v1/private/set/my/currency';
+  return '/api/v1/private/set/my/meta';
 };
 
 export interface IUserMeta {
