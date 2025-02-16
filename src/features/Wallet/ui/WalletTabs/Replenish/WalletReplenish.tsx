@@ -97,6 +97,22 @@ const WalletReplenish = () => {
     close: doCloseModals,
   });
 
+  const showCVCAlert = () => {
+    doOpenModal('alert');
+    setAlertData({
+      title: t('cvc'),
+      close: doCloseModals,
+      text: t('cvc'),
+      buttons: [
+        {
+          type: 'contained',
+          text: t('continue'),
+          onClick: doCloseModals,
+        },
+      ],
+    });
+  };
+
   useEffect(() => {
     if (billingGroups && billingGroups.length > 0) {
       const firstBillingGroup = billingGroups[0].id;
@@ -247,13 +263,19 @@ const WalletReplenish = () => {
             return validateCard(item, value, found);
           }}
           type={item.type?.toString()}
-          onChange={(e) =>
+          onChange={(e) => {
             setLayout((prev) => ({
               ...prev,
               [item.name]: e.target.value,
             }))
-          }
+          }}
         />
+
+        {item.name === 'cvc' && (
+        <button className={classNames(item.className)} type="button" onClick={showCVCAlert}>
+            Что такое код
+        </button>
+      )}
       </div>
     ));
   };
