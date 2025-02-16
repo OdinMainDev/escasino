@@ -530,7 +530,7 @@ const WalletReplenish = () => {
         <Input
           placeholder={t('sum')}
           type="number"
-          wrapperClassName="mb-[12px]"
+          wrapperClassName="h-[56px] mb-[12px]"
           value={amount}
           autoComplete="off"
           isError={

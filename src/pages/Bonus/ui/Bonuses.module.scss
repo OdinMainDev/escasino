@@ -2,7 +2,6 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 96px 0;
 }
 
 .header {
@@ -26,7 +25,7 @@
 .game {
   display: grid;
   grid-template-columns: 104px 1fr;  /* Две колонки */
-  grid-template-rows: auto 40px; 
+  grid-template-rows: auto 40px;
   gap: 16px;
   margin-bottom: 32px;
   background-color: var(--modal-primary);
