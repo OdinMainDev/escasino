@@ -8,7 +8,7 @@ import {
   validatePasswordLength,
   validatePasswordMatching,
   validatePhone,
-  validateRegister
+  validateRegister,
 } from '@/features/Auth/helpers/validators';
 
 import Loader from '@/shared/ui/Loader';
@@ -110,7 +110,9 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
   if (countries.length == 0) {
     countriesList = [{ value: '', label: t('countriesLoading'), disabled: true }];
   } else if (countries.length == 1) {
-    countriesList = [{ value: countries[0], label: countries[0], disabled: false }];
+    countriesList = [
+      { value: countries[0], label: t('countries_names.' + countries[0]), disabled: false },
+    ];
   } else {
     countriesList = [
       { value: '', label: t('yourCountry'), disabled: true },
@@ -125,9 +127,9 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
       const isValidRegisterData = validateRegister(registerData, undefined, isFastAuth);
 
       if (!isValidRegisterData) {
-        return; 
+        return;
       }
-      
+
       setLoader(true);
       const fid = await getVisitorId();
       const postData = { ...registerData, fid };

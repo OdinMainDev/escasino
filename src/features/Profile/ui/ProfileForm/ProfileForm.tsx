@@ -58,16 +58,16 @@ const ProfileForm = () => {
   } else {
     countriesList = [
       { value: '', label: t('yourCountry'), disabled: true },
-      ...countries.map((item) => ({ label: item, value: item })),
+      ...countries.map((item) => ({ label: t('countries_names.' + item), value: item })),
     ];
   }
 
   useEffect(() => {
-    if (!user) return; 
-  
+    if (!user) return;
+
     const isFirstRegister = localStorage.getItem('registred');
     setUserData(userDataMapper(user));
-  
+
     const showAlert = () => {
       doOpenModal('alert');
       setAlertData({
@@ -84,13 +84,13 @@ const ProfileForm = () => {
       });
       localStorage.removeItem('registred');
     };
-  
+
     const handleEmailVerification = () => {
       if (getEmailVerificationCode()) {
         doOpenModal('change-email');
       }
     };
-  
+
     if (!user.data.email_verified_at) {
       isFirstRegister === 'true' ? showAlert() : handleEmailVerification();
     }
