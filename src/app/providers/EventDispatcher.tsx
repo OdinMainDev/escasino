@@ -25,7 +25,7 @@ export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = (
 
   const handleUserMeta = async () => {
     const fid = await getVisitorId();
-    void dispatch(setUserMeta({ fid: fid, language: language }));
+    void dispatch(setUserMeta({ fid: fid, language: language.toUpperCase() }));
   };
 
   // EventDispatcher - миддлвейр для обработки запросов перед страницей
@@ -33,7 +33,7 @@ export const EventDispatcherProvider: React.FC<EventDispatcherProviderProps> = (
   useEffect(() => {
     if (isAuth) {
       void dispatch(getUser());
-      handleUserMeta();
+      void handleUserMeta();
     }
     function checkAvailGameFilterPathname(pathname: string) {
       const pathParts = pathname.split('/');
