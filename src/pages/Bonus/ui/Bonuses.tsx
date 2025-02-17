@@ -99,7 +99,6 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
     return ['freespins', 'money'];
   }, []);
 
-
   useEffect(() => {
     if (!settings) return;
 
@@ -333,7 +332,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
 
   useEffect(() => {
     void dispatch(fetchBonusGames({ bonusId: undefined }));
-  }, []); 
+  }, []);
 
   useEffect(() => {
     if (id && allGames && allGames.length > 0) {
@@ -360,7 +359,6 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   }, [id, allGames, bonusesTemplates]);
 
   useEffect(() => {
-
     const getBonusesTemplates = async () => {
       try {
         setLoading(true);
