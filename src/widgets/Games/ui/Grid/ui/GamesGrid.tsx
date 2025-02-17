@@ -17,7 +17,7 @@ const GamesGrid = ({ games, viewLastElement }: IProps) => {
           viewLastElement?.();
         }
       },
-      { threshold: 1.0 }
+      { threshold: 1.0 },
     );
 
     const currentRef = lastElementRef.current;
