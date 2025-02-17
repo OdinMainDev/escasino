@@ -104,9 +104,9 @@ const WalletReplenish = () => {
   const showCVCAlert = () => {
     doOpenModal('alert');
     setAlertData({
-      title: t('cvc'),
+      title: t('cvc_modal_title'),
       close: doCloseModals,
-      text: t('cvc'),
+      text: t('cvc_modal_text'),
       buttons: [
         {
           type: 'contained',
@@ -117,14 +117,11 @@ const WalletReplenish = () => {
     });
   };
 
-
-
   useEffect(() => {
-    const filtered = billingGroups?.filter((billingGroup) =>
-      paymentProviders?.some((provider) =>
-        provider.billing_groups.includes(billingGroup.id)
-      )
-    ) ?? [];
+    const filtered =
+      billingGroups?.filter((billingGroup) =>
+        paymentProviders?.some((provider) => provider.billing_groups.includes(billingGroup.id)),
+      ) ?? [];
 
     setFilteredBillingGroups(filtered);
 

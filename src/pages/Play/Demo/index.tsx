@@ -50,7 +50,7 @@ export default function Demo() {
       () => {
         doOpenModal('play-demo-open-real');
       },
-      isAppDebug ? 10000 : 90000,
+      isAppDebug ? 5000 : 5000,
     );
 
     void getDemo();

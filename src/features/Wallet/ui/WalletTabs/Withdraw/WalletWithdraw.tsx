@@ -55,12 +55,10 @@ const WalletWithdraw = () => {
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-
-    const filtered = billingGroups?.filter((billingGroup) =>
-      withdrawProviders?.some((provider) =>
-        provider.billing_groups.includes(billingGroup.id)
-      )
-    ) ?? [];
+    const filtered =
+      billingGroups?.filter((billingGroup) =>
+        withdrawProviders?.some((provider) => provider.billing_groups.includes(billingGroup.id)),
+      ) ?? [];
 
     setFilteredBillingGroups(filtered);
 
