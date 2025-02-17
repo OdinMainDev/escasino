@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from '@/shared/helpers/navigation';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
@@ -33,11 +33,10 @@ const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit, bonusId }
   const searchGames = (value: string) => {
     setSearch(value);
   };
-  
-  const filteredGames = allGames.filter((game) =>
-    game.name.toLowerCase().includes(search.toLowerCase())
-  );
 
+  const filteredGames = allGames.filter((game) =>
+    game.name.toLowerCase().includes(search.toLowerCase()),
+  );
 
   const selectGame = (game: IGame) => {
     if (!onSelectGame) {
@@ -63,7 +62,7 @@ const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit, bonusId }
           />
         </div>
         <div className={styles.games}>
-          {filteredGames.map((item, index) => {
+          {filteredGames.map((item) => {
             // Если это последний элемент, добавляем реф
             return <Game onClick={() => selectGame(item)} game={item} key={item.id} />;
           })}

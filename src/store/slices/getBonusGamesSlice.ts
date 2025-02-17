@@ -6,12 +6,12 @@ import { getBonusGames } from '@/pages/Bonus/api/bonusGamesApi';
 
 export interface IBonusGamesProvider extends ISlice {
   allGames: IGame[];
-  bonusId: number | null;  
+  bonusId: number | null;
 }
 
 const initialState: IBonusGamesProvider = {
   allGames: [],
-  bonusId: null,  
+  bonusId: null,
   isFinished: false,
   loading: false,
   hasError: false,
@@ -44,14 +44,13 @@ const bonusGamesSlice = createSlice({
     builder.addCase(fetchBonusGames.fulfilled, (state, action) => {
       ParentFilled(state);
       state.loading = false;
-      state.bonusId = action.meta.arg.bonusId || null; 
+      state.bonusId = action.meta.arg.bonusId || null;
 
       state.isFinished = true;
 
       if (action.payload.data.length !== 0) {
         state.allGames = [...action.payload.data];
       }
-
     });
     builder.addCase(fetchBonusGames.rejected, (state) => {
       ParentRejected(state);
