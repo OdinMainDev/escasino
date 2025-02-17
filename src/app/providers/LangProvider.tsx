@@ -17,7 +17,7 @@ const LangProvider = ({ children }: IProps) => {
     const pathParts = location.pathname.split('/').filter(Boolean);
     const supportedLangs = defaultLanguages;
     const lang = pathParts[0];
-  
+
     if (pathParts[0] && supportedLangs.includes(pathParts[0])) {
       void i18n.changeLanguage(pathParts[0]);
     } else {
@@ -25,7 +25,7 @@ const LangProvider = ({ children }: IProps) => {
     }
 
     const upperLang = lang.toLocaleUpperCase();
-  
+
     if (upperLang && axiosApi.defaults.headers.common['C-Language'] !== upperLang) {
       axiosApi.defaults.headers.common['C-Language'] = upperLang;
     }
