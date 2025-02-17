@@ -276,7 +276,7 @@ const Details = () => {
       </div>
       <Footer />
       <AlertModal {...alertData} />
-      <ModalZeroBalance close={doCloseModals} gameId={game?.id} />
+      {game && <ModalZeroBalance close={doCloseModals} gameId={game.id} />}
     </div>
   );
 };
