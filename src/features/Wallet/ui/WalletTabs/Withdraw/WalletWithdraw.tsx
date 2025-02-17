@@ -290,7 +290,7 @@ const WalletWithdraw = () => {
             ))}
           </div>
         ) : null}
-        <div className={styles.title}>{t('depositSum')}</div>
+        <div className={styles.title}>{t('withdrawSum')}</div>
         <Input
           placeholder={t('sum')}
           type="number"
