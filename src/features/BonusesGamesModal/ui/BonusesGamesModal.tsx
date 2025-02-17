@@ -1,13 +1,14 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from '@/shared/helpers/navigation';
-import { getBonusGames } from '../api/bonusGamesApi';
+import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import Modal from '@/shared/ui/Modal';
 import Input from '@/shared/ui/Input';
 import Game from './Game';
 import styles from './BonusesGamesModal.module.scss';
 import { IModal } from '@/shared/models/interfaces/modal';
 import { IGame } from '@/shared/models/interfaces/game';
+import { fetchBonusGames } from '@/store/slices/getBonusGamesSlice';
 
 interface IProps extends IModal {
   onSelectGame?: (game: IGame) => void;
@@ -18,35 +19,24 @@ interface IProps extends IModal {
 const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit, bonusId }: IProps) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const [allGames, setAllGames] = useState<IGame[]>([]);
   const [search, setSearch] = useState('');
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const observer = useRef<IntersectionObserver | null>(null);
+  const dispatch = useAppDispatch();
 
-  const getGamesHandler = async (currentPage: number) => {
-    try {
-      console.log(isNoDeposit);
-      const { data } = await getBonusGames(currentPage, bonusId, isNoDeposit);
-      if (data.length === 0) {
-        setHasMore(false);
-      } else {
-        setAllGames((prevGames) => [...prevGames, ...data]);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const { allGames } = useAppSelector((state) => state.fetchBonusGames);
 
   useEffect(() => {
-    if (hasMore) {
-      void getGamesHandler(page);
-    }
-  }, [page]);
+    if (bonusId != undefined)
+      void dispatch(fetchBonusGames({ bonusId: bonusId }));
+
+  }, [bonusId]);
 
   const searchGames = (value: string) => {
     setSearch(value);
   };
+
+  const filteredGames = allGames.filter((game) =>
+    game.name.toLowerCase().includes(search.toLowerCase()),
+  );
 
   const selectGame = (game: IGame) => {
     if (!onSelectGame) {
@@ -57,19 +47,6 @@ const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit, bonusId }
       onSelectGame(game);
     }
   };
-
-  const lastGameElementRef = useCallback(
-    (node: HTMLDivElement) => {
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          setPage((prevPage) => prevPage + 1);
-        }
-      });
-      if (node) observer.current.observe(node);
-    },
-    [hasMore],
-  );
 
   return (
     <Modal close={close} isOpen={!!isOpen}>
@@ -85,19 +62,12 @@ const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit, bonusId }
           />
         </div>
         <div className={styles.games}>
-          {allGames.map((item, index) => {
+          {filteredGames.map((item) => {
             // Если это последний элемент, добавляем реф
-            if (allGames.length === index + 1) {
-              return (
-                <div ref={lastGameElementRef} key={item.id}>
-                  <Game onClick={() => selectGame(item)} game={item} />
-                </div>
-              );
-            }
             return <Game onClick={() => selectGame(item)} game={item} key={item.id} />;
           })}
         </div>
-        {!hasMore && <div className={styles.noMoreGames}>{t('noMoreGames')}</div>}
+        {<div className={styles.noMoreGames}>{t('noMoreGames')}</div>}
       </div>
     </Modal>
   );

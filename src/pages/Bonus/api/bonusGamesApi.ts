@@ -14,17 +14,13 @@ export const noDepositBonusGames = () => {
 };
 
 export const getBonusGames = async (
-  page?: number,
   bonusId?: number,
   isNoDeposit?: boolean,
 ): Promise<IResponseData<IGame[]>> => {
-  console.log(isNoDeposit);
   const { data, status } = await axiosApi.get<{ data: IGame[] }>(
     isNoDeposit ? noDepositBonusGames() : bonusGamesApi(bonusId),
     {
-      params: {
-        page,
-      },
+      params: {},
     },
   );
   const resp: IResponseData<IGame[]> = {

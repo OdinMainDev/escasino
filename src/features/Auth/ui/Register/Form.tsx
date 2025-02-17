@@ -43,6 +43,7 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
   const [errorData, setErrorData] = useState<IResponseError>();
   const [registerData, setRegisterData] = useState<IRegisterData>(sampleIRegisterData);
   const [selectedType, setSelectedType] = useState('email');
+
   const router = useRouter();
   const {
     isFinished: isFinishedCountries,
@@ -125,8 +126,18 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
       e.preventDefault();
 
       const isValidRegisterData = validateRegister(registerData, undefined, isFastAuth);
-
       if (!isValidRegisterData) {
+
+        if (!registerData.terms) {
+          
+          setErrorData((prev) => ({
+            success: false, 
+            errors: {
+              ...(typeof prev?.errors === 'object' ? prev.errors : {}), 
+              terms: 'acceptTerm', 
+            },
+          }));
+        }
         return;
       }
 

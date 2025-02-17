@@ -20,7 +20,6 @@ const NodepositBonusesProvider = ({ children }: IProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-
     if (!bonusesIsFinished && !bonusesLoading && isAuth) {
       void dispatch(getNodepositBonuses());
     }

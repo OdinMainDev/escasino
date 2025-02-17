@@ -17,7 +17,6 @@ import { getSearchQuery } from '@/shared/helpers/location';
 import { useAppSelector } from '@/store/hooks/redux';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
 
-
 type HeaderProps = {
   hasNotSearch?: boolean;
   hasTitle?: string;
@@ -36,15 +35,11 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
   const timer = useRef<null | ReturnType<typeof setTimeout>>(null);
 
   useEffect(() => {
-
     const query = getSearchQuery();
     if (query) {
       setFilterVal(query);
     }
-
-
   }, []);
-
 
   const clickFilter = () => {
     setOpenFilter(true);
@@ -102,28 +97,24 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
   };
 
   const deleteFilterBonus = () => {
-    setFilters({ ...getFilters(),  is_game_avail_for_bonus: false})
-  }
-
+    setFilters({ ...getFilters(), is_game_avail_for_bonus: false });
+  };
 
   const getCategoryName = (categoryUrl: string) => {
-
-    if (!categories){
+    if (!categories) {
       return categoryUrl;
     }
 
-    const category = categories.find(item => item.url === categoryUrl);
-
+    const category = categories.find((item) => item.url === categoryUrl);
 
     if (category) {
       const textObj = category.data.texts.find(
-        text => text.language.toLowerCase() === currentLanguage.toLowerCase()
+        (text) => text.language.toLowerCase() === currentLanguage.toLowerCase(),
       );
 
       if (textObj) {
         return textObj.value;
-      }    
-
+      }
     }
 
     return categoryUrl;
@@ -229,7 +220,7 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
             {getFilters().is_game_avail_for_bonus && (
               <SwiperSlide className="w-auto">
                 <TabItem className="flex items-center gap-[16px]">
-                  {t('collectBonus')}
+                  {t('collectBonusFilter')}
                   <div onClick={() => deleteFilterBonus()}>
                     <svg
                       width="10"
@@ -252,7 +243,6 @@ const MainHeader = ({ hasNotSearch, hasTitle }: HeaderProps) => {
             )}
           </Swiper>
         )}
-
       </div>
       <FilterModal isOpen={openFilter} close={closeFilterModal} />
     </>
