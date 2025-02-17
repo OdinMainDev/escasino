@@ -25,7 +25,7 @@ const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit, bonusId }
   const { allGames } = useAppSelector((state) => state.fetchBonusGames);
 
   useEffect(() => {
-    if (bonusId)
+    if (bonusId != undefined)
       void dispatch(fetchBonusGames({ bonusId: bonusId }));
 
   }, [bonusId]);
