@@ -29,6 +29,7 @@ import React from 'react';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import { activeNoDepositBonus } from '@/app/api/bonuses/noDepositBonusesApi';
 import classNames from 'classnames';
+import { fetchBonusGames } from '@/store/slices/getBonusGamesSlice';
 
 interface IProps {
   isNoDeposit?: boolean;
@@ -39,7 +40,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   const { id } = useParams();
   const { user } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
-  const { games } = useAppSelector((state) => state.gamesAllSlice);
+  const { allGames } = useAppSelector((state) => state.fetchBonusGames);
   const hasBonuesSwiper = (import.meta.env.VITE_HAS_BONUS_SWIPER as string) === 'true';
   const { noDepositsBonuses } = useAppSelector((state) => state.noDepositBonusesSlice);
   const {
@@ -97,6 +98,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
     }
     return ['freespins', 'money'];
   }, []);
+
 
   useEffect(() => {
     if (!settings) return;
@@ -330,17 +332,21 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   );
 
   useEffect(() => {
-    if (id && games && games.length > 0) {
-      const game = games.find((item) => item.id.toString() === id);
+    void dispatch(fetchBonusGames({ bonusId: undefined }));
+  }, []); 
+
+  useEffect(() => {
+    if (id && allGames && allGames.length > 0) {
+      const game = allGames.find((item) => item.id.toString() === id);
       setSelectedGame(game);
-    } else if (games && games.length > 0 && settings?.bonus) {
-      const game = games.find((item) => item.id === settings.bonus.default_game_id);
+    } else if (allGames && allGames.length > 0 && settings?.bonus) {
+      const game = allGames.find((item) => item.id === settings.bonus.default_game_id);
       setSelectedGame(game);
     } else {
       setSelectedGame(null);
     }
 
-    if (games) {
+    if (allGames) {
       let gameIds: number[] = [];
       bonusesTemplates.forEach((item) => {
         if (item.game_ids) {
@@ -348,12 +354,13 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
         }
       });
       gameIds = Array.from(new Set(gameIds));
-      const availGameIds = games.filter((item) => gameIds.includes(item.id));
+      const availGameIds = allGames.filter((item) => gameIds.includes(item.id));
       setAvailGames(availGameIds);
     }
-  }, [id, games, bonusesTemplates]);
+  }, [id, allGames, bonusesTemplates]);
 
   useEffect(() => {
+
     const getBonusesTemplates = async () => {
       try {
         setLoading(true);

@@ -28,6 +28,7 @@ import cartBonusesSlice, { IInitialCartBonuses } from './slices/cartBonusesSlice
 import pusherReducer, { IInitialPusherState } from './slices/pusherSlice';
 import { IInitialNoDeposit, noDepositBonusesSlice } from './slices/nodepositSlice';
 import setUserMeta, { IInitialUserMeta } from './slices/setUserMetsSlice';
+import fetchBonusGames, { IBonusGamesProvider  } from './slices/getBonusGamesSlice';
 
 interface IReducers {
   settingsReducer: IInitialSettings;
@@ -48,6 +49,7 @@ interface IReducers {
   withdrawAllProvidersSlice: IInitialWithdrawAllProviders;
   pusherReducer: IInitialPusherState;
   setUserMeta: IInitialUserMeta;
+  fetchBonusGames: IBonusGamesProvider;
 }
 
 const reducers: ReducersMapObject<IReducers> = {
@@ -69,6 +71,7 @@ const reducers: ReducersMapObject<IReducers> = {
   withdrawAllProvidersSlice: withdrawAllProvidersSlice,
   pusherReducer,
   setUserMeta: setUserMeta,
+  fetchBonusGames: fetchBonusGames
 };
 
 const rootReducers = combineReducers(reducers);

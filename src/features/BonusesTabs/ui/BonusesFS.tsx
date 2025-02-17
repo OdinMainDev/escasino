@@ -295,6 +295,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     };
 
     useEffect(() => {
+
       if (betSwiper.current) {
         const middleIndex = Math.floor(betTemplates.length / 2);
         betSwiper.current.swiper?.slideTo(middleIndex, 400);
@@ -402,8 +403,8 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
             className={styles.settings_params}
             lazyPreloadPrevNext={2}
             loop={false}
-            direction="vertical"
             onSlideChange={(swiper) => selectSpins(swiper)}
+            direction="vertical"
           >
             {spinsTemplates.map((item, index) => (
               <SwiperSlide
