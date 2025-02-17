@@ -53,8 +53,8 @@
     border: 1px solid var(--button-secondary-color);
     color: var(--text-primary);
     &:hover {
-      background-color: var(--button-secondary-color);
-      color: var(--button-primary-color);
+      background-color: var(--button-primary-color);
+      color: var(--button-secondary-color);
       svg {
         path {
           fill:  transparent;

@@ -30,7 +30,8 @@ const Profile = () => {
     }
     unsetAuthenticated();
     router.push('/');
-    window.location.reload();
+    // window.location.reload();
+    window.reloadChat();
   };
 
   const IsUserVerified =

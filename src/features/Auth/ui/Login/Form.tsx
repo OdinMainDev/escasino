@@ -68,7 +68,8 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
       setAuthenticated(data.token);
       doCloseModals();
       document.body.classList.remove('overflow-hidden');
-      window.location.reload();
+      // window.location.reload();
+      window.reloadChat();
     } catch (e: unknown) {
       const loginError = e as IResponseError;
       const loginErrorList = Object.keys(loginError.errors);
