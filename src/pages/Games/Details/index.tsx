@@ -140,7 +140,7 @@ const Details = () => {
   const openRealPlay = () => {
     if (isAuth) {
       if (user?.balance.balance_bonus == 0 && user?.balance.balance_real == 0) {
-        doOpenModal('play-real-zero-balance');
+        doOpenModal('alert');
         return;
       }
       router.push('/play/real/' + id);
