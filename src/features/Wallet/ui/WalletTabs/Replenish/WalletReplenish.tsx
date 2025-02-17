@@ -251,7 +251,6 @@ const WalletReplenish = () => {
         {item.name !== '' && <div className={styles.title}>{t('paymentForm.' + item.name)}</div>}
         {item.name !== '' ? (
           <Input
-            className="h-[56px] mb-[12px]"
             mask={found ? generateMask(item.name) : null}
             value={layout[item.name]}
             autoComplete="off"
@@ -396,8 +395,9 @@ const WalletReplenish = () => {
     if (item.className.includes('cvc_hint')) {
       return (
         <button className={classNames(item.className)} type="button" onClick={showCVCAlert}>
-          Что такое код
-        </button>
+          Что такое код безопасности?
+      </button>
+
       );
     }
     return '';
@@ -565,7 +565,6 @@ const WalletReplenish = () => {
         <Input
           placeholder={t('sum')}
           type="number"
-          wrapperClassName="h-[56px] mb-[12px]"
           value={amount}
           autoComplete="off"
           isError={

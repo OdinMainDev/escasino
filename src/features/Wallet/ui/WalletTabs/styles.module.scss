@@ -187,8 +187,8 @@
   overflow-x: auto;
   gap: 10px;
   margin-bottom: 25px;
-  scrollbar-width: none; 
-  -ms-overflow-style: none; 
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -206,7 +206,27 @@
     color: var(--secondary);;
     opacity: 0.8;
   }
-
-
 }
 
+:global(.cvc_hint) {
+  display: flex;
+  align-items: flex-start; /* Выравнивание по левому краю */
+  justify-content: flex-start; /* Убираем центрирование */
+  text-align: left; /* Текст тоже выравниваем влево */
+  padding-top: 42px;
+}
+
+:global(.cvc_hint button) {
+  font-family: Montserrat, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.5px;
+  text-decoration: underline solid 1px;
+  text-decoration-offset: 3px;
+  color: #e5e7eb;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
