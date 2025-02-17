@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import styles from './styles.module.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IUserData, doSetUserData, sampleIUserData } from '@/app/api/user/setUserData';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
 import Loader from '@/shared/ui/Loader';
@@ -33,6 +33,8 @@ const ProfileForm = () => {
   const [loader, setLoader] = useState(false);
   const [userData, setUserData] = useState<IUserData>(sampleIUserData);
   const [errorData, setErrorData] = useState<IResponseError>();
+  const [hasChanges, setHasChanges] = useState(false);
+
   const [alertData, setAlertData] = useState<IAlert>({
     title: '',
     text: '',
@@ -62,11 +64,28 @@ const ProfileForm = () => {
     ];
   }
 
+  const userStorageJsonRef = useRef<string | null>(null);
+
+  const hasDataChanged = (userStorageJson: string | null) => {
+    if (userStorageJson) {
+      return JSON.stringify(userData) !== userStorageJson;
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    setHasChanges(hasDataChanged(userStorageJsonRef.current));
+  }, [userData]);
+
   useEffect(() => {
     if (!user) return;
 
     const isFirstRegister = localStorage.getItem('registred');
-    setUserData(userDataMapper(user));
+    var storageUserMap = userDataMapper(user);
+
+    userStorageJsonRef.current = JSON.stringify(storageUserMap);
+
+    setUserData(storageUserMap);
 
     const showAlert = () => {
       doOpenModal('alert');
@@ -380,7 +399,7 @@ const ProfileForm = () => {
           selected={new Date(userData.dob)}
           onChange={(date) => {
             if (date) {
-              setUserData((prev) => ({ ...prev, dob: date.getTime() }));
+            setUserData((prev) => ({ ...prev, dob: date.getTime() }));
             }
           }}
           isError={typeof errorData?.errors === 'object' && !!errorData.errors['dob']}
@@ -467,9 +486,14 @@ const ProfileForm = () => {
         </div>
       )}
       <AlertModal {...alertData} />
-      <Button className={styles.save_button} onClick={(e) => void sendData(e)}>
+
+      <Button
+        className={`${styles.save_button} ${hasChanges ? styles.has_changes : ''}`}
+        onClick={(e) => void sendData(e)}
+      >
         {t('save')}
       </Button>
+
     </form>
   );
 };
