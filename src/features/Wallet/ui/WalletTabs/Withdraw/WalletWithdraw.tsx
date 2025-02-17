@@ -20,6 +20,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
 import LimitTextDisplay from '../LimitTextDisplay/LimitTextDisplay';
+import { IBillingGroup } from '@/shared/models/interfaces/billingGroups';
 
 interface IValidateData {
   amount: number;
@@ -38,6 +39,7 @@ const WalletWithdraw = () => {
   const { withdrawAllProviders, loading: providersAllLoading } = useAppSelector(
     (state) => state.withdrawAllProvidersSlice,
   );
+  const [filteredBillingGroups, setFilteredBillingGroups] = useState<IBillingGroup[]>([]);
   const { t } = useTranslation();
   const currentLanguage = useCurrentLanguage();
   const [selectedBillingGroup, setSelectedBillingGroup] = useState<number>(-1);
@@ -53,8 +55,17 @@ const WalletWithdraw = () => {
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-    if (billingGroups && billingGroups.length > 0) {
-      const firstBillingGroup = billingGroups[0].id;
+
+    const filtered = billingGroups?.filter((billingGroup) =>
+      withdrawProviders?.some((provider) =>
+        provider.billing_groups.includes(billingGroup.id)
+      )
+    ) ?? [];
+
+    setFilteredBillingGroups(filtered);
+
+    if (filtered.length > 0) {
+      const firstBillingGroup = filtered[0].id;
       setSelectedBillingGroup(firstBillingGroup);
 
       const initialProvider = withdrawProviders?.find((provider) =>
@@ -159,7 +170,7 @@ const WalletWithdraw = () => {
             freeMode={true}
             className={styles.slider}
           >
-            {billingGroups?.map((item, index) => (
+            {filteredBillingGroups?.map((item, index) => (
               <SwiperSlide className="w-auto" key={index}>
                 <TabItem
                   className={styles.billing}

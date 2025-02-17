@@ -40,6 +40,7 @@ import { FreeMode } from 'swiper/modules';
 import { useCurrentLanguage } from '@/app/providers/LangProvider';
 import { resetCartBonuses } from '@/store/slices/cartBonusesSlice';
 import LimitTextDisplay from '../LimitTextDisplay/LimitTextDisplay';
+import { IBillingGroup } from '@/shared/models/interfaces/billingGroups';
 
 const WalletReplenish = () => {
   const { billingGroups, loading: billingLoading } = useAppSelector(
@@ -51,6 +52,9 @@ const WalletReplenish = () => {
   const { paymentAllProviders, loading: providersAllLoading } = useAppSelector(
     (state) => state.paymentAllProvidersSlice,
   );
+
+  const [filteredBillingGroups, setFilteredBillingGroups] = useState<IBillingGroup[]>([]);
+
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const currentLanguage = useCurrentLanguage();
@@ -113,9 +117,19 @@ const WalletReplenish = () => {
     });
   };
 
+
+
   useEffect(() => {
-    if (billingGroups && billingGroups.length > 0) {
-      const firstBillingGroup = billingGroups[0].id;
+    const filtered = billingGroups?.filter((billingGroup) =>
+      paymentProviders?.some((provider) =>
+        provider.billing_groups.includes(billingGroup.id)
+      )
+    ) ?? [];
+
+    setFilteredBillingGroups(filtered);
+
+    if (filtered.length > 0) {
+      const firstBillingGroup = filtered[0].id;
       setSelectedBillingGroup(firstBillingGroup);
 
       const initialProvider = paymentProviders?.find((provider) =>
@@ -447,7 +461,7 @@ const WalletReplenish = () => {
             freeMode={true}
             className={styles.slider}
           >
-            {billingGroups?.map((item, index) => (
+            {filteredBillingGroups?.map((item, index) => (
               <SwiperSlide className="w-auto" key={index}>
                 <TabItem
                   className={styles.billing}
