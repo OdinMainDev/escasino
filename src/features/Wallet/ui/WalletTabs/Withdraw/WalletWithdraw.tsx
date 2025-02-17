@@ -327,7 +327,7 @@ const WalletWithdraw = () => {
           }) || loading
         }
         onClick={() => void handleWithdraw()}
-        className={classNames(styles.button, 'uppercase')}
+        className={classNames(styles.button)}
       >
         {t('withdraw')}
       </Button>

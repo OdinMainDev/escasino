@@ -613,7 +613,7 @@ const WalletReplenish = () => {
           }) || loading
         }
         onClick={() => void handlePayment()}
-        className={classNames(styles.button, 'uppercase')}
+        className={classNames(styles.button)}
       >
         {t('topUpAccount')}
       </Button>

@@ -1,5 +1,6 @@
 .container {
   display: flex;
+
   min-height: 70px;
   min-width: 120px;
   position: relative;
@@ -18,7 +19,7 @@
   &.selected {
     color: var(--tab-primary);
     background: var(--secondary);
-    
+
     img {
       filter: invert(100%);
     }
