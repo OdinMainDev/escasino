@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
@@ -28,6 +29,12 @@ import { useTranslation } from 'react-i18next';
 interface IProps {
   openRegistration: () => void;
   openResetModal: () => void;
+}
+
+declare global {
+  interface Window {
+    reloadChat: () => void;
+  }
 }
 
 const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
@@ -69,7 +76,9 @@ const AuthLoginForm = ({ openRegistration, openResetModal }: IProps) => {
       doCloseModals();
       document.body.classList.remove('overflow-hidden');
       // window.location.reload();
-      window.reloadChat();
+      if (window.reloadChat) {
+        window.reloadChat();
+      }
     } catch (e: unknown) {
       const loginError = e as IResponseError;
       const loginErrorList = Object.keys(loginError.errors);
