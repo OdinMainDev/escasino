@@ -33,6 +33,7 @@ const ActiveBonus = ({ template }: IProps) => {
   if (template?.meta.image && template?.meta.image != '') {
     image = template?.meta.image ?? null;
   }
+
   return (
     <div className={styles.container}>
       <div className="flex gap-[16px] items-center mb-[16px]">

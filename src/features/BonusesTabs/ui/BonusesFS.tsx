@@ -172,6 +172,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           isProgrammaticChangeFS.current = false;
           return;
         }
+        
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
         const selectedBetTemplate = betTemplates[realIndex];
@@ -301,6 +302,13 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         betSwiper.current.swiper?.slideTo(middleIndex, 400);
         setSelectedBetIndex(middleIndex);
       }
+
+      if (spinsSwiper.current) {
+        const middleIndex = Math.floor(spinsTemplates.length / 2);
+        spinsSwiper.current.swiper?.slideTo(middleIndex, 400);
+        setSelectedSpinsIndex(middleIndex);
+      }
+
     }, [betTemplates]);
 
     if (betTemplates?.length === 0 && spinsTemplates?.length === 0) {

@@ -387,6 +387,11 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
       openErrorModal();
       return;
     }
+
+    if (!selectedTemplate.meta.image) {
+      selectedTemplate.meta.image = imagePath;
+    }
+
     const data: ICartBonusTemplate = {
       ...selectedTemplate,
       uuid: uuidv4(),

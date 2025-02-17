@@ -379,7 +379,9 @@ const ProfileForm = () => {
           containerClassName={styles.input}
           selected={new Date(userData.dob)}
           onChange={(date) => {
-            setUserData((prev) => ({ ...prev, dob: date.getTime() }));
+            if (date) {
+              setUserData((prev) => ({ ...prev, dob: date.getTime() }));
+            }
           }}
           isError={typeof errorData?.errors === 'object' && !!errorData.errors['dob']}
           message={ErrorResponseAsString('dob', t('enterCorrectBirthDate'), errorData)}
