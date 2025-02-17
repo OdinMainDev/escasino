@@ -48,7 +48,7 @@ const ModalZeroBalance = ({ close, gameId }: IProps) => {
     close: doCloseModals,
   });
 
-  return <AlertModal {...alertData} />
+  return <AlertModal {...alertData} />;
 };
 
 export default ModalZeroBalance;
