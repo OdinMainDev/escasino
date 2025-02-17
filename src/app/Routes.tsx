@@ -48,7 +48,9 @@ const availRoutes: RouteObject[] = [
         index: true,
         element: (
           <BonusesProvider>
-            <Bonuses />
+            <NodepositBonusesProvider>
+              <Bonuses />
+            </NodepositBonusesProvider>
           </BonusesProvider>
         ),
       },
@@ -56,23 +58,29 @@ const availRoutes: RouteObject[] = [
         path: ':id',
         element: (
           <BonusesProvider>
-            <Bonuses />
+            <NodepositBonusesProvider>
+              <Bonuses />
+            </NodepositBonusesProvider>
           </BonusesProvider>
         ),
       },
       {
         path: 'nodeposit/:id',
         element: (
-          <NodepositBonusesProvider>
-            <Bonuses isNoDeposit />
-          </NodepositBonusesProvider>
+          <BonusesProvider>
+            <NodepositBonusesProvider>
+              <Bonuses isNoDeposit />
+            </NodepositBonusesProvider>
+          </BonusesProvider>
         ),
       },
       {
         path: 'list',
         element: (
           <BonusesProvider>
-            <BonusesList />
+            <NodepositBonusesProvider>
+              <BonusesList />
+            </NodepositBonusesProvider>
           </BonusesProvider>
         ),
       },
@@ -91,7 +99,11 @@ const availRoutes: RouteObject[] = [
     children: [
       {
         path: 'details/:id',
-        element: <Details />,
+        element: (
+          <NodepositBonusesProvider>
+            <Details />
+          </NodepositBonusesProvider>
+        ),
       },
       {
         path: 'search',
@@ -133,7 +145,9 @@ const availRoutes: RouteObject[] = [
         index: true,
         element: (
           <BonusesProvider>
-            <Profile />
+            <NodepositBonusesProvider>
+              <Profile />
+            </NodepositBonusesProvider>
           </BonusesProvider>
         ),
       },
@@ -159,17 +173,19 @@ const availRoutes: RouteObject[] = [
         path: 'deposit/:tab',
         element: (
           <BonusesProvider>
-            <BillingGroupsProvider>
-              <PaymentProvidersProvider>
-                <PaymentAllProvidersProvider>
-                  <WithdrawProvidersProvider>
-                    <WithdrawAllProvidersProvider>
-                      <Wallet />
-                    </WithdrawAllProvidersProvider>
-                  </WithdrawProvidersProvider>
-                </PaymentAllProvidersProvider>
-              </PaymentProvidersProvider>
-            </BillingGroupsProvider>
+            <NodepositBonusesProvider>
+              <BillingGroupsProvider>
+                <PaymentProvidersProvider>
+                  <PaymentAllProvidersProvider>
+                    <WithdrawProvidersProvider>
+                      <WithdrawAllProvidersProvider>
+                        <Wallet />
+                      </WithdrawAllProvidersProvider>
+                    </WithdrawProvidersProvider>
+                  </PaymentAllProvidersProvider>
+                </PaymentProvidersProvider>
+              </BillingGroupsProvider>
+            </NodepositBonusesProvider>
           </BonusesProvider>
         ),
       },

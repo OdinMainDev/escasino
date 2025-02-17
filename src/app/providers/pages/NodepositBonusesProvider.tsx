@@ -13,7 +13,7 @@ const NodepositBonusesProvider = ({ children }: IProps) => {
     isFinished: bonusesIsFinished,
     loading: bonusesLoading,
     hasError: bonusesHasError,
-  } = useAppSelector((state) => state.bonusesSlice);
+  } = useAppSelector((state) => state.noDepositBonusesSlice);
 
   const { isAuth } = useAuthProvider();
 
