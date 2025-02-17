@@ -326,18 +326,29 @@
   "reset-text": "На указанный адрес электронной почты будет отправлен код подтверждения, который необходимо ввести на следующем шаге.",
   "paymentForm": {
     "undefined": "Имя поля не найдено",
-    "bank": "Банк",
+    "bank": "Название банка",
+    "bank_placeholder": "Сбербанк",
     "address": "Адрес",
-    "number": "Номер карты",
-    "exp_month": "Месяц",
-    "exp_year": "Год",
-    "cvc": "Код безопасности"
+    "number": "Данные карты",
+    "number_placeholder": "Номер карты",
+    "exp_month": "Срок действия",
+    "exp_month_placeholder": "Месяц",
+    "exp_year": "",
+    "exp_year_placeholder": "Год",
+    "cvc": "Код безопасности",
+    "cvc_placeholder": "CVV/CVC-код"
   },
   "withdrawForm": {
     "undefined": "Имя поля не найдено",
-    "bank": "Банк",
     "address": "Адрес",
-    "number": "Номер карты"
+    "number": "Данные карты",
+    "number_placeholder": "Номер карты",
+    "phone": "Ваш номер",
+    "phone_placeholder": "Укажите номер привязанный к банку",
+    "bank_name": "Название банка",
+    "bank_name_placeholder": "Сбербанк",
+    "to_address": "Ваш кошелек",
+    "to_address_placeholder": "Укажите адрес вашего кошелька"
   },
   "historyWalletStatuses": {
     "Created": "Создано",
@@ -357,5 +368,6 @@
       "money": "Бонусный баланс"
     }
   },
-  "collectBonusFilter": "Создай свой бонус"
+  "collectBonusFilter": "Создай свой бонус",
+  "withdrawSum": "Сумма выплаты"
 }

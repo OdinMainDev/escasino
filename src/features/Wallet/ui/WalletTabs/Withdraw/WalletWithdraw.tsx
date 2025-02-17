@@ -129,6 +129,16 @@ const WalletWithdraw = () => {
     }, 100);
   };
 
+  const getProviderName = () => {
+    if (!selectedProvider) {
+      return '';
+    }
+    return (
+      selectedProvider.meta.texts.find((item) => item.language.toLowerCase() === currentLanguage)
+        ?.value ?? ''
+    );
+  };
+
   return (
     <div className={styles.content}>
       <div className={styles.block}>
@@ -208,6 +218,18 @@ const WalletWithdraw = () => {
         {selectedProvider && (
           <div className={styles.selected_provider}>
             <div className="flex items-center justify-between">
+              <div className={styles.selected_provider_title}>{getProviderName()}</div>
+            </div>
+            <div className="flex items-center justify-between">
+              {selectedProvider.conditions.limit_minimum > 0 &&
+                selectedProvider.conditions.limit_maximum == 0 && (
+                  <>
+                    <div className={styles.selected_provider_conditions}>{t('sum')}</div>
+                    <div className={styles.selected_provider_value}>
+                      {selectedProvider.conditions.limit_minimum} – ∞ {selectedProvider.currency}
+                    </div>
+                  </>
+                )}
               {selectedProvider.conditions.limit_maximum > 0 && (
                 <>
                   <div className={styles.selected_provider_conditions}>{t('sum')}</div>
@@ -238,21 +260,6 @@ const WalletWithdraw = () => {
                 </>
               )}
             </div>
-            <div className="flex items-center justify-between">
-              {selectedProvider.rules.compensate_commission && (
-                <div className={styles.selected_provider_conditions}>
-                  {t('reimbursePaymentGatewayFees')}
-                </div>
-              )}
-            </div>
-            <div className="flex items-center justify-between">
-              <div className={styles.selected_provider_conditions}>
-                {t('wagerDepositWithoutBonus')}
-              </div>
-              <div className={styles.selected_provider_value}>
-                {selectedProvider.rules.without_bonus_wager}%
-              </div>
-            </div>
           </div>
         )}
         {selectedProvider && selectedProvider?.layout.length > 0 ? (
@@ -269,7 +276,7 @@ const WalletWithdraw = () => {
                 <Input
                   autoComplete="off"
                   value={layout[item.name]}
-                  placeholder={t('withdrawForm.' + (item.name || 'undefined'))}
+                  placeholder={t('withdrawForm.' + (item.name || 'undefined') + '_placeholder')}
                   type={item.type?.toString()}
                   isError={layout[item.name]?.length > 0 && !layout[item.name]}
                   onChange={(e) =>
