@@ -159,19 +159,17 @@ const availRoutes: RouteObject[] = [
         path: 'deposit/:tab',
         element: (
           <BonusesProvider>
-            <NodepositBonusesProvider>
-              <BillingGroupsProvider>
-                <PaymentProvidersProvider>
-                  <PaymentAllProvidersProvider>
-                    <WithdrawProvidersProvider>
-                      <WithdrawAllProvidersProvider>
-                        <Wallet />
-                      </WithdrawAllProvidersProvider>
-                    </WithdrawProvidersProvider>
-                  </PaymentAllProvidersProvider>
-                </PaymentProvidersProvider>
-              </BillingGroupsProvider>
-            </NodepositBonusesProvider>
+            <BillingGroupsProvider>
+              <PaymentProvidersProvider>
+                <PaymentAllProvidersProvider>
+                  <WithdrawProvidersProvider>
+                    <WithdrawAllProvidersProvider>
+                      <Wallet />
+                    </WithdrawAllProvidersProvider>
+                  </WithdrawProvidersProvider>
+                </PaymentAllProvidersProvider>
+              </PaymentProvidersProvider>
+            </BillingGroupsProvider>
           </BonusesProvider>
         ),
       },

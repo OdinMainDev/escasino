@@ -26,7 +26,7 @@ const NodepositBonusesProvider = ({ children }: IProps) => {
     if (bonusesIsFinished && bonusesHasError) {
       navigate('/error/unavailable');
     }
-  }, [bonusesIsFinished, bonusesLoading, bonusesHasError, dispatch, navigate]);
+  }, [bonusesIsFinished, bonusesLoading, bonusesHasError, isAuth, dispatch, navigate]);
 
   return children;
 };
