@@ -248,35 +248,33 @@ const WalletReplenish = () => {
 
     return selectedLayout.map((item, index) => (
       <div className={classNames(item.className)} key={index}>
-        <div className={styles.title}>{t('paymentForm.' + item.name)}</div>
-        <Input
-          className="h-[56px] mb-[12px]"
-          mask={found ? generateMask(item.name) : null}
-          value={layout[item.name]}
-          autoComplete="off"
-          placeholder={t('paymentForm.' + item.name)}
-          message={
-            layout[item.name]?.length > 0 && !validateCard(item, layout[item.name], found)
-              ? t(generateErrorMessages(item.name))
-              : null
-          }
-          validationFunction={(value) => {
-            return validateCard(item, value, found);
-          }}
-          type={item.type?.toString()}
-          onChange={(e) => {
-            setLayout((prev) => ({
-              ...prev,
-              [item.name]: e.target.value,
-            }))
-          }}
-        />
-
-        {item.name === 'cvc' && (
-        <button className={classNames(item.className)} type="button" onClick={showCVCAlert}>
-            Что такое код
-        </button>
-      )}
+        {item.name !== '' && <div className={styles.title}>{t('paymentForm.' + item.name)}</div>}
+        {item.name !== '' ? (
+          <Input
+            className="h-[56px] mb-[12px]"
+            mask={found ? generateMask(item.name) : null}
+            value={layout[item.name]}
+            autoComplete="off"
+            placeholder={t('paymentForm.' + item.name)}
+            message={
+              layout[item.name]?.length > 0 && !validateCard(item, layout[item.name], found)
+                ? t(generateErrorMessages(item.name))
+                : null
+            }
+            validationFunction={(value) => {
+              return validateCard(item, value, found);
+            }}
+            type={item.type?.toString()}
+            onChange={(e) => {
+              setLayout((prev) => ({
+                ...prev,
+                [item.name]: e.target.value,
+              }));
+            }}
+          />
+        ) : (
+          getAdditionalField(item)
+        )}
       </div>
     ));
   };
@@ -389,6 +387,20 @@ const WalletReplenish = () => {
       selectedProvider.meta.texts.find((item) => item.language.toLowerCase() === currentLanguage)
         ?.value ?? ''
     );
+  };
+
+  const getAdditionalField = (item: IPaymentProviderLayout) => {
+    if (!item || !item.className) {
+      return '';
+    }
+    if (item.className.includes('cvc_hint')) {
+      return (
+        <button className={classNames(item.className)} type="button" onClick={showCVCAlert}>
+          Что такое код
+        </button>
+      );
+    }
+    return '';
   };
 
   return (
