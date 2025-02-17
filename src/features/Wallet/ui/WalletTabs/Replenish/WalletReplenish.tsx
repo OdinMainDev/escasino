@@ -250,6 +250,7 @@ const WalletReplenish = () => {
       <div className={classNames(item.className)} key={index}>
         <div className={styles.title}>{t('paymentForm.' + item.name)}</div>
         <Input
+          className="h-[56px] mb-[12px]"
           mask={found ? generateMask(item.name) : null}
           value={layout[item.name]}
           autoComplete="off"
