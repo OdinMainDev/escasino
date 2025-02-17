@@ -51,7 +51,9 @@ const ActiveBonus = ({ template }: IProps) => {
               </div>
               <div>
                 <div className={styles.subtitle}>{t('bonusSum')}</div>
-                <div className={styles.value}>{template?.bonus_percent}</div>
+                <div className={styles.value}>
+                  {(template?.spins_count ?? 1) * (template?.configurator.bet_amount ?? 0)}
+                </div>
               </div>
             </div>
           )}

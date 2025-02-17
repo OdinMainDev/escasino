@@ -248,13 +248,16 @@ const WalletReplenish = () => {
 
     return selectedLayout.map((item, index) => (
       <div className={classNames(item.className)} key={index}>
-        {item.name !== '' && <div className={styles.title}>{t('paymentForm.' + item.name)}</div>}
+        {item.name !== '' && (
+          <div className={styles.title}>{t('paymentForm.' + item.name)} &#8203;</div>
+        )}
         {item.name !== '' ? (
           <Input
             mask={found ? generateMask(item.name) : null}
+            className={styles.inputContainer}
             value={layout[item.name]}
             autoComplete="off"
-            placeholder={t('paymentForm.' + item.name)}
+            placeholder={t('paymentForm.' + item.name + '_placeholder')}
             message={
               layout[item.name]?.length > 0 && !validateCard(item, layout[item.name], found)
                 ? t(generateErrorMessages(item.name))
@@ -396,8 +399,7 @@ const WalletReplenish = () => {
       return (
         <button className={classNames(item.className)} type="button" onClick={showCVCAlert}>
           Что такое код безопасности?
-      </button>
-
+        </button>
       );
     }
     return '';
