@@ -30,7 +30,13 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   margin-bottom: 24px;
 }
-
+.has_changes {
+  font-size: 16px;
+  line-height: 24px;
+  text-transform: uppercase;
+  width: 100%;
+  margin-bottom: 24px;
+}
 .user_names {
 
 }
@@ -77,4 +83,32 @@
 
 .checkbox {
   margin-bottom: 24px;
+}
+
+.has_changes {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 1;
+  visibility: visible;
+  // padding: 0 16px;
+  max-width: calc(100% - 32px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+}
+
+.has_changes.animated {
+  animation: slideDown 0.3s ease-in-out;
 }
