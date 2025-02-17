@@ -24,7 +24,7 @@ const LangProvider = ({ children }: IProps) => {
       void i18n.changeLanguage(defaultLanguage);
     }
 
-    const upperLang = lang.toLocaleUpperCase();
+    const upperLang = lang ? lang.toUpperCase() : defaultLanguage.toUpperCase();
 
     if (upperLang && axiosApi.defaults.headers.common['C-Language'] !== upperLang) {
       axiosApi.defaults.headers.common['C-Language'] = upperLang;

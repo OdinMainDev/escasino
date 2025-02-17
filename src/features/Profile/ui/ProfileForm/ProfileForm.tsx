@@ -21,7 +21,7 @@ import DatePicker from '@/shared/ui/DatePicker';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
 import { useTranslation } from 'react-i18next';
 import Statuses from '@/entities/Statuses';
-import { getEmailVerificationCode } from '@/shared/helpers/location';
+import { getEmailVerificationCode, getEmailVerificationHash } from '@/shared/helpers/location';
 
 const ProfileForm = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
@@ -81,7 +81,7 @@ const ProfileForm = () => {
     if (!user) return;
 
     const isFirstRegister = localStorage.getItem('registred');
-    var storageUserMap = userDataMapper(user);
+    const storageUserMap = userDataMapper(user);
 
     userStorageJsonRef.current = JSON.stringify(storageUserMap);
 
@@ -105,7 +105,7 @@ const ProfileForm = () => {
     };
 
     const handleEmailVerification = () => {
-      if (getEmailVerificationCode()) {
+      if (getEmailVerificationCode() && getEmailVerificationHash()) {
         doOpenModal('change-email');
       }
     };
@@ -399,7 +399,7 @@ const ProfileForm = () => {
           selected={new Date(userData.dob)}
           onChange={(date) => {
             if (date) {
-            setUserData((prev) => ({ ...prev, dob: date.getTime() }));
+              setUserData((prev) => ({ ...prev, dob: date.getTime() }));
             }
           }}
           isError={typeof errorData?.errors === 'object' && !!errorData.errors['dob']}
@@ -493,7 +493,6 @@ const ProfileForm = () => {
       >
         {t('save')}
       </Button>
-
     </form>
   );
 };

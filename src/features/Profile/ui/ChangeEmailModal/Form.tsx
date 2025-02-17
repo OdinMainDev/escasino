@@ -16,9 +16,8 @@ import {
 } from '@/app/api/auth/change/emailChange';
 import { getUser } from '@/store/slices/userSlice';
 import { useTranslation } from 'react-i18next';
-import { getEmailVerificationCode } from '@/shared/helpers/location';
+import { getEmailVerificationCode, getEmailVerificationHash } from '@/shared/helpers/location';
 import { useEffect } from 'react';
-
 
 const ProfileChangeEmailForm = () => {
   const { t } = useTranslation();
@@ -31,8 +30,9 @@ const ProfileChangeEmailForm = () => {
 
   useEffect(() => {
     const emailCode = getEmailVerificationCode();
-    if (emailCode) {
-      setChangeData((prev) => ({ ...prev, code: emailCode }));
+    const emailHash = getEmailVerificationHash();
+    if (emailCode && emailHash) {
+      setChangeData((prev) => ({ ...prev, code: emailCode, hash: emailHash }));
     }
   }, []);
 
