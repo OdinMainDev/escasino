@@ -178,6 +178,7 @@ const Details = () => {
       doOpenModal('register');
       return;
     }
+
     router.push(`/bonus/nodeposit/${game?.id}`);
   };
 

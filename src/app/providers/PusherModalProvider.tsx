@@ -131,6 +131,7 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
         router.push('/bonus/list');
       });
       pusher.subscribe(user.pusher_id, 'do_open_nodeposit_configurator', () => {
+
         router.push('/bonus/nodeposit/' + settings.bonus.default_game_id.toString());
       });
     }

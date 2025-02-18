@@ -65,7 +65,7 @@ const availRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'nodeposit/:id',
+        path: 'nodeposit/:id?',
         element: (
           <BonusesProvider>
             <NodepositBonusesProvider>

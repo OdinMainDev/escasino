@@ -148,6 +148,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           return acc;
         }, [] as IBonusTemplate[])
         .sort((a, b) => a.spins_count - b.spins_count);
+
       if ((uniqueBetTemplates.length > 0, uniqueSpinsTemplates.length > 0)) {
         const findedTemplate = filteredTemplates.find(
           (item) =>
@@ -297,16 +298,25 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
 
     useEffect(() => {
 
-      if (betSwiper.current) {
-        const middleIndex = Math.floor(betTemplates.length / 2);
-        betSwiper.current.swiper?.slideTo(middleIndex, 400);
-        setSelectedBetIndex(middleIndex);
-      }
+      if (betSwiper.current && spinsSwiper.current) {
+        const middleBetIndex = Math.floor(betTemplates.length / 2);
+        betSwiper.current.swiper?.slideTo(middleBetIndex, 400);
+        setSelectedBetIndex(middleBetIndex);
 
-      if (spinsSwiper.current) {
-        const middleIndex = Math.floor(spinsTemplates.length / 2);
-        spinsSwiper.current.swiper?.slideTo(middleIndex, 400);
-        setSelectedSpinsIndex(middleIndex);
+        const middleSpinsIndex = Math.floor(spinsTemplates.length / 2);
+        spinsSwiper.current.swiper?.slideTo(middleSpinsIndex, 400);
+        setSelectedSpinsIndex(middleSpinsIndex);
+
+        const findedBonus = filtredBonuses.find(
+          (item) =>
+            item.configurator.bet_amount === betTemplates[middleBetIndex].configurator.bet_amount &&
+            item.spins_count === spinsTemplates[middleSpinsIndex].spins_count
+        );
+
+        if (findedBonus) {
+          setSelectedTemplate(findedBonus);
+        }
+
       }
 
     }, [betTemplates]);

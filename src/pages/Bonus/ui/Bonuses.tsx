@@ -100,9 +100,19 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   }, []);
 
   useEffect(() => {
+
+
     if (!settings) return;
 
     const bonusArray = getBonusArray(settings);
+
+    if (isNoDeposit && bonusArray.length === 0) {
+      router.push({
+        pathname: '/',
+      });
+      return;
+    }
+
     if (bonusArray.length === 0) {
       router.push({
         pathname: '/wallet/deposit/replenish',

@@ -39,6 +39,7 @@ const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit, bonusId }
   const selectGame = (game: IGame) => {
     if (!onSelectGame) {
       if (close) close();
+
       const route = isNoDeposit ? `/bonus/nodeposit/${game.id}` : `/bonus/${game.id}`;
       router.push(route);
     } else {
