@@ -399,6 +399,20 @@ const ProfileForm = () => {
           selected={new Date(userData.dob)}
           onChange={(date) => {
             if (date) {
+              setErrorData((prev) => {
+                if (prev?.errors && typeof prev.errors === 'object') {
+                  const updatedErrors = { ...prev.errors };
+                  delete updatedErrors.dob;
+                  return {
+                    errors: updatedErrors, 
+                    success: prev?.success ?? false, 
+                  };
+                }
+                return {
+                  errors: prev?.errors || '', 
+                  success: prev?.success ?? false, 
+                };
+              });
               setUserData((prev) => ({ ...prev, dob: date.getTime() }));
             }
           }}
@@ -406,19 +420,6 @@ const ProfileForm = () => {
           message={ErrorResponseAsString('dob', t('enterCorrectBirthDate'), errorData)}
           placeholder={t('birthDate')}
         />
-        // <Input
-        //   placeholder="Дата рождения"
-        //   type="datepicker"
-        //   containerClassName={styles.input}
-        //   value={userData.dob}
-        //   disabled={!settings?.profile.user_can_change_data && !!user?.data.dob}
-        //   readOnly={!settings?.profile.user_can_change_data && !!user?.data.dob}
-        //   onChange={(e) => {
-        //     setUserData((prev) => ({ ...prev, dob: e.target.value }));
-        //   }}
-        //   isError={!!errorData?.errors['dob']}
-        //   message={ErrorResponseAsString('dob', 'Введите корректный dob', errorData)}
-        // />
       )}
       {settings?.profile.has_gender && (
         <Select
