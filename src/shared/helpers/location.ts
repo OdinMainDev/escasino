@@ -12,3 +12,8 @@ export const getEmailVerificationHash = () => {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get('setEmailHash');
 };
+
+export const removeAllGets = () => {
+    const newUrl = window.location.pathname;
+    window.history.replaceState({}, "", newUrl);
+};

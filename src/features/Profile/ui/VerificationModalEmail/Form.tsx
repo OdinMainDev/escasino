@@ -4,7 +4,7 @@ import { useModal } from '@/app/providers/ModalProvider';
 import Input from '@/shared/ui/Input';
 import Loader from '@/shared/ui/Loader';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IResponseError } from '@/shared/models/interfaces/misc';
 
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
@@ -16,6 +16,7 @@ import {
 } from '@/app/api/auth/verification/emailVerify';
 import { getUser } from '@/store/slices/userSlice';
 import { useTranslation } from 'react-i18next';
+import { getEmailVerificationCode, getEmailVerificationHash, removeAllGets } from '@/shared/helpers/location';
 
 const ProfileVerificationEmailForm = () => {
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ const ProfileVerificationEmailForm = () => {
       e.preventDefault();
       setLoader(true);
       const fid = await getVisitorId();
-      await doVerifyEmailConfirmApi({ ...verifyData, hash: verifyHash, fid });
+      await doVerifyEmailConfirmApi({ ...verifyData, fid });
       doSetVerifyHash('');
       doOpenModal('verification-email-complete');
       void dispatch(getUser());
@@ -48,7 +49,16 @@ const ProfileVerificationEmailForm = () => {
       setLoader(false);
     }
   };
+  useEffect(() => {
+    const emailCode = getEmailVerificationCode();
+    const emailHash = getEmailVerificationHash();
 
+    if (emailCode && emailHash) {
+      setVerifyData((prev) => ({ ...prev, code: emailCode, hash: emailHash }));
+      removeAllGets();
+    }
+
+  }, []);
   return (
     <form className={styles.container}>
       {(loader || loadingSettings || !settings) && (

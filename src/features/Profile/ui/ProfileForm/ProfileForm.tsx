@@ -106,7 +106,7 @@ const ProfileForm = () => {
 
     const handleEmailVerification = () => {
       if (getEmailVerificationCode() && getEmailVerificationHash()) {
-        doOpenModal('change-email');
+        doOpenModal('verification-email');
       }
     };
 
