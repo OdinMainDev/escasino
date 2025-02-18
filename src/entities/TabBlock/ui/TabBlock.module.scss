@@ -1,9 +1,33 @@
+// .container {
+//   display: flex;
+//   flex: 1 1 auto; /* По умолчанию карточки не растягиваются */
+//   min-width: 120px;
+//   max-width: 100%;
+//   min-height: 70px;
+//   position: relative;
+//   padding: 17px 28px;
+//   box-sizing: border-box;
+//   align-items: center;
+//   justify-content: center;
+//   background: var(--tab-secondary);
+//   border-radius: 2px;
+//   font-size: 12px;
+//   font-weight: 600;
+//   color: var(--tab-secondary);
+//   cursor: pointer;
+//   transition: all 0.3s ease-in-out;
+//
+//
+// }
+//
+
+
 .container {
   display: flex;
-
+  flex: 0 0 auto; /* Базовые стили без растягивания */
+  min-width: 150px;
+  max-width: 100%;
   min-height: 70px;
-  min-width: 120px;
-  position: relative;
   padding: 17px 28px;
   box-sizing: border-box;
   align-items: center;
@@ -14,7 +38,7 @@
   font-weight: 600;
   color: var(--tab-secondary);
   cursor: pointer;
-
+  transition: all 0.3s ease-in-out;
 
   &.selected {
     color: var(--tab-primary);
@@ -26,6 +50,10 @@
   }
 }
 
+.container:first-child:nth-last-child(n+3),
+.container:first-child:nth-last-child(n+3) ~ .container {
+  flex: 1 1 calc(33.333% - 16px);
+}
 
 .skeleton {
   flex-shrink: 0;
