@@ -25,9 +25,7 @@ const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit, bonusId }
   const { allGames } = useAppSelector((state) => state.fetchBonusGames);
 
   useEffect(() => {
-    if (bonusId != undefined)
-      void dispatch(fetchBonusGames({ bonusId: bonusId }));
-
+    if (bonusId != undefined) void dispatch(fetchBonusGames({ bonusId: bonusId }));
   }, [bonusId]);
 
   const searchGames = (value: string) => {
@@ -41,6 +39,7 @@ const BonusesGamesModal = ({ close, isOpen, onSelectGame, isNoDeposit, bonusId }
   const selectGame = (game: IGame) => {
     if (!onSelectGame) {
       if (close) close();
+
       const route = isNoDeposit ? `/bonus/nodeposit/${game.id}` : `/bonus/${game.id}`;
       router.push(route);
     } else {

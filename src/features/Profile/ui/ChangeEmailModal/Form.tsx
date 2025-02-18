@@ -16,14 +16,13 @@ import {
 } from '@/app/api/auth/change/emailChange';
 import { getUser } from '@/store/slices/userSlice';
 import { useTranslation } from 'react-i18next';
-import { getEmailVerificationCode } from '@/shared/helpers/location';
+import { getEmailVerificationCode, getEmailVerificationHash } from '@/shared/helpers/location';
 import { useEffect } from 'react';
-
 
 const ProfileChangeEmailForm = () => {
   const { t } = useTranslation();
   const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
-  const { changeHash, doSetChangeHash, doOpenModal } = useModal();
+  const { doOpenModal } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IResponseError>();
   const [changeData, setChangeData] = useState<IChangeEmailSendData>(sampleIChangeEmailSendData);
@@ -31,8 +30,10 @@ const ProfileChangeEmailForm = () => {
 
   useEffect(() => {
     const emailCode = getEmailVerificationCode();
-    if (emailCode) {
-      setChangeData((prev) => ({ ...prev, code: emailCode }));
+    const emailHash = getEmailVerificationHash();
+    console.log(emailHash);
+    if (emailCode && emailHash) {
+      setChangeData((prev) => ({ ...prev, code: emailCode, hash: emailHash }));
     }
   }, []);
 
@@ -41,8 +42,7 @@ const ProfileChangeEmailForm = () => {
       e.preventDefault();
       setLoader(true);
       const fid = await getVisitorId();
-      await doChangeEmailSendApi({ ...changeData, hash: changeHash, fid });
-      doSetChangeHash('');
+      await doChangeEmailSendApi({ ...changeData, fid });
       doOpenModal('change-email-complete');
       void dispatch(getUser());
     } catch (e: unknown) {

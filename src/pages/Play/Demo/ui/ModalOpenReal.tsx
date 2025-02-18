@@ -1,11 +1,10 @@
 import { IModal } from '@/shared/models/interfaces/modal';
-import styles from './ModalOpenReal.module.scss';
 import { useModal } from '@/app/providers/ModalProvider';
-import Modal from '@/shared/ui/Modal';
-import Button from '@/shared/ui/Button';
 import { useRouter } from '@/shared/helpers/navigation';
 import { useAuthProvider } from '@/app/providers/AuthProvider';
 import { useTranslation } from 'react-i18next';
+import { AlertModal, IAlert } from '@/entities/AlertModal';
+import { useState } from 'react';
 
 interface IProps extends IModal {
   gameId: number;
@@ -13,9 +12,10 @@ interface IProps extends IModal {
 
 const ModalOpenReal = ({ close, gameId }: IProps) => {
   const { t } = useTranslation();
-  const { modalName, isModalOpen, doOpenModal } = useModal();
+  const { doOpenModal } = useModal();
   const { isAuth } = useAuthProvider();
-  const isOpen = !isModalOpen ? false : modalName == 'play-demo-open-real';
+  const { doCloseModals } = useModal();
+  
   const router = useRouter();
   const openGame = () => {
     if (!isAuth) {
@@ -24,25 +24,30 @@ const ModalOpenReal = ({ close, gameId }: IProps) => {
     }
     router.push('/play/real/' + gameId?.toString());
   };
-  return (
-    <Modal isOpen={isOpen}>
-      <div className={styles.container}>
-        <div className={styles.container}>
-          <div>
-            <div className={styles.title}>{t('notFuckedUpDemoGames')}</div>
-            <div className={styles.buttons_container}>
-              <Button elType="outlined" className={styles.button} onClick={close}>
-                {t('return')}
-              </Button>
-              <Button className={styles.button} onClick={openGame}>
-                {t('toReal')}
-              </Button>
-            </div>
-          </div>
-        </div>
+
+  const [alertData] = useState<IAlert>({
+    title: t('attention'),
+    text: (
+      <div>
+        <div className="mb-[5px]">{t('notFuckedUpDemoGames')}</div>
       </div>
-    </Modal>
-  );
+    ),
+    buttons: [
+      {
+        type: 'outlined',
+        text: t('return'),
+        onClick: () => close?.(),
+      },
+      {
+        type: 'contained',
+        text: t('toReal'),
+        onClick: openGame,
+      },
+    ],
+    close: doCloseModals,
+  });
+
+  return <AlertModal {...alertData} />
 };
 
 export default ModalOpenReal;

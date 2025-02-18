@@ -1,10 +1,9 @@
 import { IModal } from '@/shared/models/interfaces/modal';
-import styles from './ModalZerobalance.module.scss';
 import { useModal } from '@/app/providers/ModalProvider';
-import Modal from '@/shared/ui/Modal';
-import Button from '@/shared/ui/Button';
 import { useRouter } from '@/shared/helpers/navigation';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { AlertModal, IAlert } from '@/entities/AlertModal';
 
 interface IProps extends IModal {
   gameId?: number;
@@ -12,8 +11,7 @@ interface IProps extends IModal {
 
 const ModalZeroBalance = ({ close, gameId }: IProps) => {
   const { t } = useTranslation();
-  const { modalName, isModalOpen } = useModal();
-  const isOpen = !isModalOpen ? false : modalName == 'play-real-zero-balance';
+  const { doCloseModals } = useModal();
   const router = useRouter();
   const openGame = () => {
     if (close) {
@@ -27,25 +25,30 @@ const ModalZeroBalance = ({ close, gameId }: IProps) => {
     }
     router.push('/wallet/deposit');
   };
-  return (
-    <Modal isOpen={isOpen} close={close}>
-      <div className={styles.container}>
-        <div className={styles.container}>
-          <div>
-            <div className={styles.title}>{t('balanceEmpty')}</div>
-            <div className={styles.buttons_container}>
-              <Button elType="outlined" className={styles.button} onClick={openGame}>
-                {t('toGame')}
-              </Button>
-              <Button className={styles.button} onClick={openDeposit}>
-                {t('topUpBalance')}
-              </Button>
-            </div>
-          </div>
-        </div>
+
+  const [alertData] = useState<IAlert>({
+    title: t('attention'),
+    text: (
+      <div>
+        <div className="mb-[5px]">{t('balanceEmpty')}</div>
       </div>
-    </Modal>
-  );
+    ),
+    buttons: [
+      {
+        type: 'outlined',
+        text: t('toGame'),
+        onClick: openGame,
+      },
+      {
+        type: 'contained',
+        text: t('topUpBalance'),
+        onClick: openDeposit,
+      },
+    ],
+    close: doCloseModals,
+  });
+
+  return <AlertModal {...alertData} />;
 };
 
 export default ModalZeroBalance;

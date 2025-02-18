@@ -28,8 +28,6 @@ const ProfileVerificationEmailForm = () => {
     sampleIVerifyEmailConfirmData,
   );
 
- 
-
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();

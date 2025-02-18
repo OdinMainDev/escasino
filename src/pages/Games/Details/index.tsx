@@ -140,7 +140,7 @@ const Details = () => {
   const openRealPlay = () => {
     if (isAuth) {
       if (user?.balance.balance_bonus == 0 && user?.balance.balance_real == 0) {
-        doOpenModal('play-real-zero-balance');
+        doOpenModal('alert');
         return;
       }
       router.push('/play/real/' + id);
@@ -178,6 +178,7 @@ const Details = () => {
       doOpenModal('register');
       return;
     }
+
     router.push(`/bonus/nodeposit/${game?.id}`);
   };
 
@@ -276,7 +277,7 @@ const Details = () => {
       </div>
       <Footer />
       <AlertModal {...alertData} />
-      <ModalZeroBalance close={doCloseModals} gameId={game?.id} />
+      {game && <ModalZeroBalance close={doCloseModals} gameId={game.id} />}
     </div>
   );
 };
