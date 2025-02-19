@@ -4,6 +4,8 @@ import Modal from '@/shared/ui/Modal';
 import { closePusherModal } from '@/store/slices/pusherSlice';
 import Button from '@/shared/ui/Button';
 import bonusAddedIcon from '../icons/lottery.svg';
+import bonusScratchReceiveIcon from '../icons/bonusScratchReceive.svg';
+import bonusScratchCompleteIcon from '../icons/bonusScratchComplete.svg';
 import classNames from 'classnames';
 import { useRouter } from '@/shared/helpers/navigation';
 import { typeOfPosherModal } from './PusherModals';
@@ -45,58 +47,166 @@ const BonusPusher = () => {
     closeModal();
   };
 
-  const geSubtitle = () => {
-    if (filtredModalsKeys.length > 0) {
-      switch (filtredModalsKeys[filtredModalsKeys.length - 1]) {
-        case 'bonus_receive':
-          return t('bonuseAddedToYou');
-        case 'bonus_expire':
-          return t('bounsLifeTimeExpired');
-        case 'bonus_cancel':
-          return t('yourBonusCanceled');
-        case 'bonus_complete':
-          return t('yourBonusEnded');
-        case 'bonus_scratch_receive':
-          return t('yourBonusScratchAdded');
-        case 'bonus_scratch_complete':
-          return t('yourBonusScratchEnded');
-      }
-    }
-    return;
+  const modalType = filtredModalsKeys.length > 0 ? filtredModalsKeys[filtredModalsKeys.length - 1] : null;
+
+  interface ModalClasses {
+    icon: string;
+    title: string;
+    subtitle: string;
+    modal: string;
+    buttons: string;
+  }
+
+  interface ModalConfig {
+    title: string;
+    subtitle: string;
+    icon: string;
+    classes: ModalClasses;
+    buttons: {
+      primary: string;
+      secondary: string;
+    };
+  }
+
+  const modalConfig: { [key in typeOfPosherModal]?: ModalConfig } = {
+    bonus_receive: {
+      title: t('congratulations'),
+      subtitle: t('bonuseAddedToYou'),
+      icon: bonusAddedIcon,
+      classes: {
+        icon: styles.icon,
+        title: styles.title,
+        subtitle: styles.subtitle,
+        modal: styles.lottery,
+        buttons: styles.buttons,
+      },
+      buttons: {
+        primary: t('continue'),
+        secondary: t('goToBonuses')
+      },
+    },
+    bonus_expire: {
+      title: t('bonusExpire'),
+      subtitle: t('bounsLifeTimeExpired'),
+      icon: bonusAddedIcon,
+      classes: {
+        icon: styles.icon,
+        title: styles.title,
+        subtitle: styles.subtitle,
+        modal: styles.lottery,
+        buttons: styles.buttons,
+      },
+      buttons: {
+        primary: t('continue'),
+        secondary: t('goToBonuses')
+      },
+    },
+    bonus_cancel: {
+      title: t('bonusCanceled'),
+      subtitle: t('yourBonusCanceled'),
+      icon: bonusAddedIcon,
+      classes: {
+        icon: styles.icon,
+        title: styles.title,
+        subtitle: styles.subtitle,
+        modal: styles.lottery,
+        buttons: styles.buttons,
+      },
+      buttons: {
+        primary: t('continue'),
+        secondary: t('goToBonuses')
+      },
+    },
+    bonus_complete: {
+      title: t('bonusEnded'),
+      subtitle: t('yourBonusEnded'),
+      icon: bonusAddedIcon,
+      classes: {
+        icon: styles.icon,
+        title: styles.title,
+        subtitle: styles.subtitle,
+        modal: styles.lottery,
+        buttons: styles.buttons,
+      },
+      buttons: {
+        primary: t('continue'),
+        secondary: t('goToBonuses')
+      },
+    },
+    bonus_scratch_receive: {
+      title: t('bonusScratchGained'),
+      subtitle: t('yourBonusScratchAdded'),
+      icon: bonusAddedIcon,
+      classes: {
+        icon: styles.scratchReceiveIcon,
+        title: styles.title,
+        subtitle: styles.subtitle,
+        modal: styles.lottery,
+        buttons: styles.buttons,
+      },
+      buttons: {
+        primary: t('continue'),
+        secondary: t('goToBonuses')
+      },
+    },
+    bonus_scratch_complete: {
+      title: t('bonusScratchEnded'),
+      subtitle: t('yourBonusScratchEnded'),
+      icon: bonusScratchCompleteIcon,
+      classes: {
+        icon: styles.scratchCompleteIcon,
+        title: styles.title,
+        subtitle: styles.subtitle,
+        modal: styles.bonus,
+        buttons: styles.bon_buttons
+      },
+      buttons: {
+        primary: t('continue'),
+        secondary: t('goToBonuses')
+      },
+    },
   };
 
-  const getTitle = () => {
-    if (filtredModalsKeys.length > 0) {
-      switch (filtredModalsKeys[filtredModalsKeys.length - 1]) {
-        case 'bonus_receive':
-          return t('congratulations');
-        case 'bonus_expire':
-          return t('bonusExpire');
-        case 'bonus_cancel':
-          return t('bonusCanceled');
-        case 'bonus_complete':
-          return t('bonusEnded');
-        case 'bonus_scratch_receive':
-          return t('bonusScratchGained');
-        case 'bonus_scratch_complete':
-          return t('bonusScratchEnded');
-      }
-    }
-    return;
-  };
+  // default config
+  const currentConfig: ModalConfig = modalType && modalConfig[modalType]
+    ? modalConfig[modalType]!
+    : {
+        title: '',
+        subtitle: '',
+        icon: bonusAddedIcon,
+        classes: {
+          icon: styles.icon,
+          title: styles.title,
+          subtitle: styles.subtitle,
+          modal: styles.lottery,
+          buttons: styles.buttons,
+        },
+        buttons: {
+          primary: t('continue'),
+          secondary: t('goToBonuses')
+        },
+      };
 
   return (
     <Modal isOpen={isOpen} close={closeModal}>
-      <div className={styles.lottery}>
-        <img src={bonusAddedIcon} className={classNames(styles.icon, 'mb-[24px]')} />
-        <div className={classNames(styles.title, 'mb-[8px]')}>{getTitle()}</div>
-        <div className={styles.subtitle}>{geSubtitle()}</div>
-        <div className={styles.buttons}>
+      <div className={currentConfig.classes.modal}>
+        <img
+          src={currentConfig.icon}
+          className={classNames(currentConfig.classes.icon, 'mb-[24px]')}
+          alt="modal icon"
+        />
+        <div className={classNames(currentConfig.classes.title, 'mb-[8px]')}>
+          {currentConfig.title}
+        </div>
+        <div className={currentConfig.classes.subtitle}>
+          {currentConfig.subtitle}
+        </div>
+        <div className={currentConfig.classes.buttons}>
+          <Button elType="outlined" className="w-[100%] mt-[32px]" onClick={closeModal}>
+            {currentConfig.buttons.primary}
+            </Button>
           <Button className="w-[100%] mt-[32px]" onClick={navigateToBonuses}>
-            {t('goToBonuses')}
-          </Button>
-          <Button elType="outlined" className="w-[100%] mt-[16px]" onClick={closeModal}>
-            {t('continue')}
+            {currentConfig.buttons.secondary}
           </Button>
         </div>
       </div>
