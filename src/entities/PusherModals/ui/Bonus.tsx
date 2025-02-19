@@ -12,7 +12,7 @@ const Bonus = () => {
   const key = 'get-bonus';
   const { openPusherModals } = useAppSelector((state) => state.pusherReducer);
   const dispatch = useAppDispatch();
-  const isOpen = !!openPusherModals.find((item) => item === key);
+  const isOpen = !!openPusherModals.find((item) => item.type === key);
   const closeModal = () => {
     dispatch(closePusherModal(key));
   };

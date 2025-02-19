@@ -24,13 +24,13 @@ const BonusPusher = () => {
     'do_update_active_bonuses',
   ];
   const { openPusherModals } = useAppSelector((state) => state.pusherReducer);
-  const filtredModalsKeys = openPusherModals.filter((item) => keys.includes(item));
+  const filtredModalsKeys = openPusherModals.filter((item) => keys.includes(item.type));
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    setIsOpen(!!openPusherModals.find((item) => keys.includes(item)));
+    setIsOpen(!!openPusherModals.find((item) => keys.includes(item.type)));
   }, [openPusherModals]);
 
   const closeModal = () => {
@@ -42,12 +42,27 @@ const BonusPusher = () => {
     }
   };
 
+  const openBonusGame = () => {
+    closeModal();
+    if (!filtredModalsKeys.length) {
+      return;
+    }
+    const args = filtredModalsKeys[filtredModalsKeys.length - 1].data;
+
+    if (!args) {
+      return;
+    }
+
+    var bonusGame = args.bonus;
+    router.push(`/play/real/${bonusGame }`);
+  };
+
   const navigateToBonuses = () => {
     router.push('/bonus/list');
     closeModal();
   };
 
-  const modalType = filtredModalsKeys.length > 0 ? filtredModalsKeys[filtredModalsKeys.length - 1] : null;
+  const modalType = filtredModalsKeys.length > 0 ? filtredModalsKeys[filtredModalsKeys.length - 1].type : null;
 
   interface ModalClasses {
     icon: string;
@@ -202,7 +217,7 @@ const BonusPusher = () => {
           {currentConfig.subtitle}
         </div>
         <div className={currentConfig.classes.buttons}>
-          <Button elType="outlined" className="w-[100%] mt-[32px]" onClick={closeModal}>
+          <Button elType="outlined" className="w-[100%] mt-[32px]" onClick={openBonusGame}>
             {currentConfig.buttons.primary}
             </Button>
           <Button className="w-[100%] mt-[32px]" onClick={navigateToBonuses}>

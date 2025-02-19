@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import styles from './PusherModals.module.scss';
 import Modal from '@/shared/ui/Modal';
-import { closePusherModal } from '@/store/slices/pusherSlice';
+import { closePusherModalByType } from '@/store/slices/pusherSlice';
 import Button from '@/shared/ui/Button';
 import lotteryIcon from '../icons/lottery.svg';
 import classNames from 'classnames';
@@ -12,10 +12,10 @@ const Lottery = () => {
   const key = 'lottery-ticket';
   const { openPusherModals } = useAppSelector((state) => state.pusherReducer);
   const dispatch = useAppDispatch();
-  const isOpen = !!openPusherModals.find((item) => item === key);
+  const isOpen = !!openPusherModals.find((item) => item.type === key);
 
   const closeModal = () => {
-    dispatch(closePusherModal(key));
+    dispatch(closePusherModalByType(key));
   };
 
   return (

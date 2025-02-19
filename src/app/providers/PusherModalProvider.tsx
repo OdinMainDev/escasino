@@ -114,8 +114,12 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
         dispatch(resetBonuses());
       });
       pusher.subscribe(user.pusher_id, 'bonus_scratch_receive', (data) => {
-        dispatch(openPusherModal('bonus_scratch_receive'));
-        console.log(data);
+        const bonus = data as IBonusPusher;
+
+        dispatch(openPusherModal({ type: 'bonus_scratch_receive', data: 
+          { bonus: bonus.data.bonuses_list[0].game_id } 
+        }));
+
       });
       pusher.subscribe(user.pusher_id, 'bonus_scratch_complete', (data) => {
         dispatch(openPusherModal('bonus_scratch_complete'));
