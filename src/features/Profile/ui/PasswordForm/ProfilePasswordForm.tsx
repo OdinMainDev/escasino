@@ -1,5 +1,5 @@
 import styles from './styles.module.scss';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Loader from '@/shared/ui/Loader';
 import Input from '@/shared/ui/Input';
 import Button from '@/shared/ui/Button';
@@ -33,6 +33,13 @@ const ProfilePasswordForm = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [errorData, setErrorData] = useState<IResponseError>();
+  const [hasChanges, setHasChanges] = useState(false);
+
+  useEffect(() => {
+    const isChanged = Object.values(changePassword).some(value => value !== '');
+    setHasChanges(isChanged);
+  }, [changePassword]);
+
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
@@ -134,7 +141,8 @@ const ProfilePasswordForm = () => {
         passwordData={changePassword}
       />
       <AlertModal {...alertData} />
-      <Button className={styles.save_button} onClick={(e) => void sendData(e)}>
+      <Button 
+        className={`${styles.save_button} ${hasChanges ? styles.has_changes : ''}`} onClick={(e) => void sendData(e)}>
         {t('save')}
       </Button>
     </form>

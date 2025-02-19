@@ -43,6 +43,8 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   const { allGames } = useAppSelector((state) => state.fetchBonusGames);
   const hasBonuesSwiper = (import.meta.env.VITE_HAS_BONUS_SWIPER as string) === 'true';
   const { noDepositsBonuses } = useAppSelector((state) => state.noDepositBonusesSlice);
+  const noDepositIsFinished = useAppSelector((state) => state.noDepositBonusesSlice.isFinished);
+
   const {
     bonusesTemplates: cartBonuses,
     minAmount: minAmountCart,
@@ -100,7 +102,16 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   }, []);
 
   useEffect(() => {
+    if (!noDepositsBonuses.length &&  noDepositIsFinished) {
+      router.push({
+        pathname: '/',
+      });
+      return;
+      
+    }
+  }, [noDepositIsFinished]);
 
+  useEffect(() => {
 
     if (!settings) return;
 
@@ -415,7 +426,7 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
     <div className={styles.container}>
       <PageHeader fixed title={t('collectYourBonus')} />
       <div className={styles.content}>
-        {loading ? (
+        {loading || !noDepositIsFinished ? (
           <div className={styles.loader}>
             <Loader />
           </div>

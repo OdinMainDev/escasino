@@ -107,7 +107,7 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
             findedIndex = 0;
           }
           const gameId = bonusData.bonus_template[0].game_ids[findedIndex];
-          router.push(`/${currentLanguage}/play/real/${gameId}`);
+          router.push(`/play/real/${gameId}`);
         }
       });
       pusher.subscribe(user.pusher_id, 'do_open_profile_bonuses', () => {
