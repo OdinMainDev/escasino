@@ -1,20 +1,15 @@
 import '@/app/assets/styles/global.scss';
 import './styles.scss';
-import styles from '@/features/Profile/ui/ProfileForm/styles.module.scss';
 import './preloader.scss';
 import { Outlet } from 'react-router-dom';
 import useOrientation from '@/shared/hooks/useOrientation';
 import { usePathname } from '@/shared/helpers/navigation';
-import { useEffect, useState } from 'react';
-import Loader from '@/shared/ui/Loader';
-import { usePusherModelProvider } from '@/app/providers/PusherModalProvider';
+import { useEffect } from 'react';
 
 const Layout = () => {
   const { isMobile, isPortrait } = useOrientation();
   const pathname = usePathname();
   const isGamePage = pathname.includes('/play/');
-
-  const { isLoadedPusherProvider } = usePusherModelProvider(); 
 
   useEffect(() => {
     const body = document.documentElement;
@@ -56,17 +51,7 @@ const Layout = () => {
         style={{ backgroundColor: '#' + import.meta.env.VITE_BACKGROUND_COLOR }}
       >
         <div className={'desktop-wrapper'}>
-
-        {isLoadedPusherProvider ? (
-          <div>
-            <Outlet />
-          </div>
-        ) : (
-          <div className={styles.loading}>
-            <Loader />
-          </div>
-        )}
-
+          <Outlet />
         </div>
       </div>
     </div>
