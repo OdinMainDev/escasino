@@ -49,6 +49,7 @@ const ProfileVerificationEmailForm = () => {
       setLoader(false);
     }
   };
+
   useEffect(() => {
     const emailCode = getEmailVerificationCode();
     const emailHash = getEmailVerificationHash();

@@ -21,7 +21,8 @@ import DatePicker from '@/shared/ui/DatePicker';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
 import { useTranslation } from 'react-i18next';
 import Statuses from '@/entities/Statuses';
-import { getEmailVerificationCode, getEmailVerificationHash } from '@/shared/helpers/location';
+import { getEmailVerificationCode, getEmailVerificationHash, removeAllGets } from '@/shared/helpers/location';
+import { doVerifyEmailConfirmApi } from '@/app/api/auth/verification/emailVerify';
 
 const ProfileForm = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
@@ -34,11 +35,11 @@ const ProfileForm = () => {
   const [userData, setUserData] = useState<IUserData>(sampleIUserData);
   const [errorData, setErrorData] = useState<IResponseError>();
   const [hasChanges, setHasChanges] = useState(false);
-  const isFirstRender = useRef(true); // Флаг для отслеживания первого рендера
+  const isFirstRender = useRef(true); 
 
   useEffect(() => {
     if (isFirstRender.current) {
-      isFirstRender.current = false; // После первого рендера сбрасываем флаг
+      isFirstRender.current = false; 
       return;
     }
 
@@ -110,9 +111,42 @@ const ProfileForm = () => {
       localStorage.removeItem('registred');
     };
 
+    const verifCode = getEmailVerificationCode();
+    const verifHash = getEmailVerificationHash();
+
+    const sendDataVerifEmail = async () => {
+      try {
+        
+        setLoader(true);
+        const fid = await getVisitorId();
+        const verifyData = {
+          fid: fid,
+          code: verifCode ?? '',
+          hash: verifHash ?? ''
+        };
+
+        await doVerifyEmailConfirmApi({ ...verifyData });
+        doSetVerifyHash('');
+        doOpenModal('verification-email-complete');
+        void dispatch(getUser());
+      } catch (e: unknown) {
+        const errors = e as IResponseError;
+        const errorList = Object.keys(errors.errors);
+        if (!Array.isArray(errorList)) {
+          return;
+        }
+        setErrorData(errors);
+      } finally {
+        setLoader(false);
+      }
+    };
+
     const handleEmailVerification = () => {
-      if (getEmailVerificationCode() && getEmailVerificationHash()) {
-        doOpenModal('verification-email');
+      if (verifCode && verifHash) {
+        (async () => {
+          await sendDataVerifEmail();
+          removeAllGets();
+        })();
       }
     };
 
@@ -120,6 +154,7 @@ const ProfileForm = () => {
       isFirstRegister === 'true' ? showAlert() : handleEmailVerification();
     }
   }, [user]);
+  
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
@@ -204,6 +239,22 @@ const ProfileForm = () => {
     }
   };
 
+  const showEmailSendedAlert = () => {
+    doOpenModal('alert');
+    setAlertData({
+      title: t('confirmEmailAdress'),
+      close: doCloseModals,
+      text: t('onEmailSendMailWithLink'),
+      buttons: [
+        {
+          type: 'contained',
+          text: t('continue'),
+          onClick: doCloseModals,
+        },
+      ],
+    });
+  };
+
   const sendVerifyEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
@@ -211,7 +262,9 @@ const ProfileForm = () => {
       const fid = await getVisitorId();
       const data = await doVerifyEmailSendApi({ fid });
       doSetVerifyHash(data.hash);
-      doOpenModal('verification-email');
+
+      showEmailSendedAlert();
+
     } catch (e: unknown) {
       /* empty */
     } finally {
