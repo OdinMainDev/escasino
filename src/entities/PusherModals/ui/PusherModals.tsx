@@ -1,6 +1,5 @@
 import Replenish from './Replenish';
 import Lottery from './Lottery';
-import Bonus from './Bonus';
 import BonusPusher from './BonusPusher';
 
 export type typeOfPosherModal =
@@ -21,7 +20,6 @@ const PusherModals = () => {
     <>
       <Lottery />
       <Replenish />
-      <Bonus />
       <BonusPusher />
     </>
   );

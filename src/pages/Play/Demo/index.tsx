@@ -27,6 +27,7 @@ export default function Demo() {
   const { isMobile, isPortrait } = useOrientation();
 
   useEffect(() => {
+    if (localStorage.getItem('demoModalShown')) return;
     const getDemo = async () => {
       const isMobile = true;
       const data = await getDemoApi(Number(id), isAuth, isMobile);
@@ -48,13 +49,17 @@ export default function Demo() {
 
     setTimeout(
       () => {
+        localStorage.setItem('modalShown', 'true');
         doOpenModal('alert');
       },
-      isAppDebug ? 5000 : 5000,
+      isAppDebug ? 15000 : 15000,
     );
 
     void getDemo();
     void getHeader();
+    return () => {
+      localStorage.removeItem('modalShown');
+    };
   }, []);
 
   return (

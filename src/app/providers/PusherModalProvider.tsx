@@ -152,7 +152,6 @@ const PusherModalProvider = () => {
       });
     }
 
-    console.log();
     if (!isAuth && !loading) {
       setIsLoadedPusherProvider(true);
     }

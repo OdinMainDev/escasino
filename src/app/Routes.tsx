@@ -228,10 +228,10 @@ const routes: RouteObject[] = [
     element: <App />,
     children: [
       {
-        element: <Layout />,
+        element: <PusherModalProvider />,
         children: [
           {
-            element: <PusherModalProvider />,
+            element: <Layout />,
             children: [
               {
                 element: <GlobalModals />,

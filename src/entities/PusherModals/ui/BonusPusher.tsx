@@ -46,7 +46,7 @@ const BonusPusher = () => {
   };
 
   const openBonusGame = () => {
-    closeModal();
+    // closeModal();
     if (!filtredModalsKeys.length) {
       return;
     }
@@ -61,8 +61,13 @@ const BonusPusher = () => {
   };
 
   const navigateToBonuses = () => {
-    router.push('/bonus/list');
     closeModal();
+    router.push('/bonus/list');
+  };
+
+  const navigateToDeposit = () => {
+    closeModal();
+    router.push('/wallet/deposit/replenish');
   };
 
   const modalType =
@@ -84,6 +89,8 @@ const BonusPusher = () => {
     buttons: {
       primary: string;
       secondary: string;
+      primary_fn: () => void;
+      secondary_fn: () => void;
     };
   }
 
@@ -102,6 +109,8 @@ const BonusPusher = () => {
       buttons: {
         primary: t('continue'),
         secondary: t('goToBonuses'),
+        primary_fn: closeModal,
+        secondary_fn: navigateToBonuses,
       },
     },
     bonus_expire: {
@@ -118,6 +127,8 @@ const BonusPusher = () => {
       buttons: {
         primary: t('continue'),
         secondary: t('goToBonuses'),
+        primary_fn: closeModal,
+        secondary_fn: navigateToBonuses,
       },
     },
     bonus_cancel: {
@@ -134,6 +145,8 @@ const BonusPusher = () => {
       buttons: {
         primary: t('continue'),
         secondary: t('goToBonuses'),
+        primary_fn: closeModal,
+        secondary_fn: navigateToBonuses,
       },
     },
     bonus_complete: {
@@ -150,6 +163,8 @@ const BonusPusher = () => {
       buttons: {
         primary: t('continue'),
         secondary: t('goToBonuses'),
+        primary_fn: closeModal,
+        secondary_fn: navigateToBonuses,
       },
     },
     bonus_scratch_receive: {
@@ -165,7 +180,9 @@ const BonusPusher = () => {
       },
       buttons: {
         primary: t('continue'),
-        secondary: t('goToBonuses'),
+        secondary: t('pickUpYourTicket2'),
+        primary_fn: closeModal,
+        secondary_fn: openBonusGame,
       },
     },
     bonus_scratch_complete: {
@@ -181,7 +198,9 @@ const BonusPusher = () => {
       },
       buttons: {
         primary: t('continue'),
-        secondary: t('goToBonuses'),
+        secondary: t('topUpBalance'),
+        primary_fn: closeModal,
+        secondary_fn: navigateToDeposit,
       },
     },
   };
@@ -204,6 +223,8 @@ const BonusPusher = () => {
           buttons: {
             primary: t('continue'),
             secondary: t('goToBonuses'),
+            primary_fn: closeModal,
+            secondary_fn: navigateToBonuses,
           },
         };
 
@@ -220,10 +241,14 @@ const BonusPusher = () => {
         </div>
         <div className={currentConfig.classes.subtitle}>{currentConfig.subtitle}</div>
         <div className={currentConfig.classes.buttons}>
-          <Button elType="outlined" className="w-[100%] mt-[32px]" onClick={openBonusGame}>
+          <Button
+            elType="outlined"
+            className="w-[100%] mt-[32px]"
+            onClick={currentConfig.buttons.primary_fn}
+          >
             {currentConfig.buttons.primary}
           </Button>
-          <Button className="w-[100%] mt-[32px]" onClick={navigateToBonuses}>
+          <Button className="w-[100%] mt-[32px]" onClick={currentConfig.buttons.secondary_fn}>
             {currentConfig.buttons.secondary}
           </Button>
         </div>

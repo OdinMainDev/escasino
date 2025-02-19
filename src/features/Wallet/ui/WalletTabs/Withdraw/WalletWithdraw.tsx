@@ -151,7 +151,7 @@ const WalletWithdraw = () => {
   return (
     <div className={styles.content}>
       <div className={styles.block}>
-        <div className={styles.title}>{t('paymentWay')}</div>
+        <div className={styles.title}>{t('depositWay')}</div>
         {billingLoading ? (
           <div className={styles.slider}>
             {Array(3)
@@ -185,9 +185,6 @@ const WalletWithdraw = () => {
             ))}
           </Swiper>
         )}
-        {withdrawProviders && withdrawProviders?.length > 0 ? (
-          <div className={styles.title}>{t('providers')}</div>
-        ) : null}
         <div className={styles.provider}>
           {providersLoading
             ? Array(3)
