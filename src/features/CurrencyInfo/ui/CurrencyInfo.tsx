@@ -6,6 +6,8 @@ import { useAppSelector } from '@/store/hooks/redux';
 import useBrowserInfo from '@/shared/hooks/useBrowserInfo';
 import { useTranslation } from 'react-i18next';
 import { ProgressBar } from '@/entities/ProgressBar';
+import Decimal from 'decimal.js';
+import { IUser } from '@/shared/models/interfaces/user';
 
 const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) => {
   const { t } = useTranslation();
@@ -23,6 +25,22 @@ const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) =>
       )
     : 0;
   currentWagerPercent = Number(currentWagerPercent) > 0 ? currentWagerPercent : 1;
+
+  const getFullBalance = function (user: IUser | null) {
+    const balanceReal = new Decimal(user?.balance.formatted_balance_real || 0);
+    const balanceBonus = new Decimal(user?.balance.formatted_balance_bonus || 0);
+
+    const sum = balanceReal.plus(balanceBonus);
+    return sum.toString();
+  };
+
+  const getFullWager = function (user: IUser | null) {
+    const wagerBonus = new Decimal(user?.balance.wager_bonus.formatted || 0);
+    const wagerPayment = new Decimal(user?.balance.wager_payment.formatted || 0);
+
+    const sum = wagerBonus.plus(wagerPayment);
+    return sum.toString();
+  };
   return (
     <div
       className={classNames(styles.container, {
@@ -61,10 +79,8 @@ const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) =>
               {currentWagerPercent}%
             </div>
             <div className={styles.menu_balace}>
-              {Number(user?.balance.wager_bonus.formatted) +
-                Number(user?.balance.wager_payment.formatted) || 0}{' '}
-              {user?.balance.currency}/{user?.balance.wager_total.formatted || 0}{' '}
-              {user?.balance.currency}
+              {getFullWager(user)} {user?.balance.currency}/
+              {user?.balance.wager_total.formatted || 0} {user?.balance.currency}
             </div>
             <ProgressBar className="h-[2px] mt-[8px]" progress={currentWagerPercent} />
           </div>
@@ -92,8 +108,7 @@ const CurrencyInfo = ({ isPhoneHorizontal }: { isPhoneHorizontal?: boolean }) =>
 
       <div className={styles.label}>{t('balance')}</div>
       <div className={styles.balance}>
-        {(user?.balance.formatted_balance_real || 0) + (user?.balance.formatted_balance_bonus || 0)}{' '}
-        {user?.balance.currency}
+        {getFullBalance(user)} {user?.balance.currency}
       </div>
       <div className={styles.arrow}>
         <svg

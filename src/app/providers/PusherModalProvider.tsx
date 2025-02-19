@@ -136,8 +136,9 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
         router.push('/bonus/nodeposit/' + settings.bonus.default_game_id.toString());
       });
 
-      setIsLoadedPusherProvider(true);
-
+      if (pusher.isConnected()) {
+        setIsLoadedPusherProvider(true);
+      }
     }
   }, [dispatch, settings, user?.pusher_id]);
 

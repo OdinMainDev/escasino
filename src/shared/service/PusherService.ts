@@ -80,6 +80,13 @@ class PusherService {
     this.pusher.disconnect();
     console.log('Pusher connection has been disconnected.');
   }
+
+  public isConnected() {
+    if (!this.pusher) {
+      return false;
+    }
+    return this.pusher.connection.state === 'connected';
+  }
 }
 
 export default PusherService;
