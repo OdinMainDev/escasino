@@ -35,18 +35,17 @@ const WinningsList = ({ game_id }: IProps) => {
       <Swiper
         modules={[Pagination, Navigation, Autoplay]}
         spaceBetween={8}
-        slidesPerView={3}
-        grabCursor={true}
+        grabCursor={true} 
         autoplay={{ delay: 3000, disableOnInteraction: false }}
         loop={winnings.length > 3}
         speed={1000}
+        centeredSlides={false} // Отключаем центрирование (иначе левый слайд уходит в центр)
         breakpoints={{
-          480: {
-            slidesPerView: 2,
-          },
-          380: {
-            slidesPerView: 2,
-          },
+          700: { slidesPerView: (600 + 8) / (140 + 8) }, // ≈ 4.85
+          600: { slidesPerView: (600 + 8) / (140 + 8) }, // ≈ 4.23
+          500: { slidesPerView: (500 + 8) / (140 + 8) }, // ≈ 3.61
+          400: { slidesPerView: (400 + 8) / (140 + 8) }, // ≈ 2.99
+          300: { slidesPerView: (300 + 8) / (140 + 8) }, // ≈ 2.37
         }}
       >
         {winnings.map((item, index) => (

@@ -6,7 +6,7 @@ const WinningsItem = (winning: IWinning) => {
     <div className={styles.container}>
       <div className={styles.title}>{winning.username}</div>
       <div className={styles.prize}>
-        {winning.win} {winning.currency}
+        {Number(winning.win).toLocaleString('ru-RU')} {winning.currency}
       </div>
     </div>
   );

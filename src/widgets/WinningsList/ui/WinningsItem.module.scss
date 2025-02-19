@@ -1,27 +1,44 @@
 .container {
-  min-width: 140px;
+  min-width: 120px;
+  max-width: 140px;
   padding: 12px 16px;
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.05) 100%), #121212;
-  display: flex;
+  background: #18181B;
+  // display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  // justify-content: space-between;
   border-radius: 4px;
+  // height: 72px;
+  gap: 8px;
 }
+
+.swiper-slide {
+  width: auto !important;  /* Позволяет адаптироваться */
+  max-width: 140px !important; /* Жестко ограничиваем ширину */
+  flex-shrink: 0; /* Запрещаем уменьшаться */
+}
+
+
+.swiper-wrapper {
+  display: flex !important;
+  width: max-content !important;
+}
+
 
 .title {
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 16px;
-  color: #FFF;
+  color: #A1A1AA;
   opacity: 0.6;
   margin-bottom: 8px;
 }
 
 .prize {
-  font-size: 16px;
-  font-style: normal;
+  font-family: Montserrat;
   font-weight: 400;
-  line-height: 20px;
-  color: #FFF;;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 1%;
+  color: #fafafa;
 }
