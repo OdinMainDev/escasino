@@ -10,7 +10,6 @@ import { postSetMyActiveBonusApi } from '../api/bonuses/bonusesApi';
 import { getBonuses, resetBonuses } from '@/store/slices/bonusesSlices';
 import { getNodepositBonuses } from '@/store/slices/nodepositSlice';
 import { useRouter } from '@/shared/helpers/navigation';
-import { useNavigate } from 'react-router-dom';
 import { useCurrentLanguage } from './LangProvider';
 
 const PusherModalProvider = ({ children }: PropsWithChildren) => {
@@ -19,7 +18,6 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   const currentLanguage = useCurrentLanguage();
   const { user } = useAppSelector((state) => state.userReducer);
-  const navigation = useNavigate();
 
   function getRandomGameId(arr: number[]): number {
     if (arr.length === 1) {

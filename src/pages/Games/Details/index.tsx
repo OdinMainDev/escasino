@@ -42,9 +42,7 @@ const Details = () => {
   const [imagePath, setImagePath] = useState('');
   const warningText =
     game?.has_no_deposit_bonus &&
-    (!isAuth ||
-      (user && settings && !validateUserData(user.data, settings)) ||
-      activeBonuses.length > 0);
+    (!isAuth || (user && settings && !validateUserData(user.data, settings)));
   const { t } = useTranslation();
   useEffect(() => {
     if (Number(id) > 0) {
