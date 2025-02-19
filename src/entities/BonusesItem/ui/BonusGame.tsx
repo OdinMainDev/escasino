@@ -13,6 +13,7 @@ const BonusGame = ({ gameId, onClick, ...otherProps }: IProps) => {
   const { t } = useTranslation();
   const { allGames } = useAppSelector((state) => state.fetchBonusGames);
   const  allGamesFetched  = useAppSelector((state) => state.fetchBonusGames.isFinished);
+  const  allGamesLoading  = useAppSelector((state) => state.fetchBonusGames.loading);
   const dispatch = useAppDispatch();
 
   const [game, setGame] = useState<IGame | null>(null);
@@ -23,7 +24,7 @@ const BonusGame = ({ gameId, onClick, ...otherProps }: IProps) => {
     : '';
 
   useEffect(() => {
-    if (!allGamesFetched) {
+    if (!allGamesFetched && !allGamesLoading) {
       void dispatch(fetchBonusGames({ bonusId: undefined }));
     }
   }, []);
