@@ -13,6 +13,7 @@ import { getNodepositBonuses } from '@/store/slices/nodepositSlice';
 import { useRouter } from '@/shared/helpers/navigation';
 import Loader from '@/shared/ui/Loader';
 import { Outlet } from 'react-router-dom';
+import { useAuthProvider } from './AuthProvider';
 
 interface PusherProviderContextType {
   isLoadedPusherProvider: boolean;
@@ -36,6 +37,8 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   const { user } = useAppSelector((state) => state.userReducer);
   const [isLoadedPusherProvider, setIsLoadedPusherProvider] = useState<boolean>(false);
+
+  const { isAuth, loading } = useAuthProvider();
 
   function getRandomGameId(arr: number[]): number {
     if (arr.length === 1) {
@@ -146,11 +149,15 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
         router.push('/bonus/nodeposit/' + settings.bonus.default_game_id.toString());
       });
 
-      return () => {
-        setIsLoadedPusherProvider(false);
-      };
     }
-  }, [dispatch, settings, user?.pusher_id]);
+
+    console.log();
+    if (!isAuth && !loading) {
+        setIsLoadedPusherProvider(true);
+    }
+
+
+  }, [dispatch, settings, user?.pusher_id, loading, isAuth]);
 
   return (
     <PusherModalContext.Provider value={{ isLoadedPusherProvider }}>
