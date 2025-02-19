@@ -34,6 +34,16 @@ const ProfileForm = () => {
   const [userData, setUserData] = useState<IUserData>(sampleIUserData);
   const [errorData, setErrorData] = useState<IResponseError>();
   const [hasChanges, setHasChanges] = useState(false);
+  const isFirstRender = useRef(true); // Флаг для отслеживания первого рендера
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false; // После первого рендера сбрасываем флаг
+      return;
+    }
+
+    setHasChanges(hasDataChanged(userStorageJsonRef.current));
+  }, [userData]);
 
   const [alertData, setAlertData] = useState<IAlert>({
     title: '',
@@ -72,10 +82,6 @@ const ProfileForm = () => {
     }
     return true;
   };
-
-  useEffect(() => {
-    setHasChanges(hasDataChanged(userStorageJsonRef.current));
-  }, [userData]);
 
   useEffect(() => {
     if (!user) return;
@@ -404,13 +410,13 @@ const ProfileForm = () => {
                   const updatedErrors = { ...prev.errors };
                   delete updatedErrors.dob;
                   return {
-                    errors: updatedErrors, 
-                    success: prev?.success ?? false, 
+                    errors: updatedErrors,
+                    success: prev?.success ?? false,
                   };
                 }
                 return {
-                  errors: prev?.errors || '', 
-                  success: prev?.success ?? false, 
+                  errors: prev?.errors || '',
+                  success: prev?.success ?? false,
                 };
               });
               setUserData((prev) => ({ ...prev, dob: date.getTime() }));

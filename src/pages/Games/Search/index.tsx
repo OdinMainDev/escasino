@@ -82,7 +82,7 @@ export default function Search() {
     <IndexLayout>
       <div
         className={classNames(styles.games_table, {
-          [styles.has_categories]: getFilters().categories.length > 0,
+          [styles.has_categories]: getFilters().categories.length > 0 || getFilters().is_game_avail_for_bonus,
         })}
       >
         {games && games?.length > 0 ? (

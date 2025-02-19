@@ -37,10 +37,6 @@
   width: 100%;
   margin-bottom: 24px;
 }
-.user_names {
-
-}
-
 
 .email_title {
   margin-bottom: 24px;
@@ -73,42 +69,62 @@
   }
 }
 
-.save_button {
-  font-size: 16px;
-  line-height: 24px;
-  text-transform: uppercase;
-  width: 100%;
-  margin-bottom: 24px;
+.checkbox {
+  margin-bottom: 24px
 }
 
 .checkbox {
   margin-bottom: 24px;
 }
 
-.has_changes {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 1;
-  visibility: visible;
-  // padding: 0 16px;
-  max-width: calc(100% - 32px);
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+.save_button {
+  font-size: 16px;
+  line-height: 24px;
+  text-transform: uppercase;
+  width: 100%;       /* Кнопка будет ровно по ширине родителя */
+  margin-bottom: 24px;
 }
 
-
-@keyframes slideDown {
-  from {
+/* Для экранов меньше или равно 660px */
+@media (max-width: 660px) {
+  .checkbox {
+    padding-bottom: 80px;
+  }
+  .save_button {
+    visibility: hidden;
+  }
+  .has_changes {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    visibility: visible;
+    max-width: calc(100% - 32px);
+    transition: opacity 0.5s ease-in-out;
+    will-change: opacity;
+    animation: fadeIn 0.5s ease-in-out;
   }
-  to {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
-  }
-}
 
-.has_changes.animated {
-  animation: slideDown 0.3s ease-in-out;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  .has_changes.animated {
+    animation: fadeOut 0.5s ease-in-out;
+  }
 }
