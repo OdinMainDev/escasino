@@ -249,16 +249,7 @@ const WalletWithdraw = () => {
                 </>
               )}
             </div>
-            <div className="flex items-center justify-between">
-              {selectedProvider.fees.fixed > 0 && (
-                <>
-                  <div className={styles.selected_provider_conditions}>{t('fixedFee')}</div>
-                  <div className={styles.selected_provider_value}>
-                    {selectedProvider.fees.fixed} {selectedProvider.currency}
-                  </div>
-                </>
-              )}
-            </div>
+
             <div className="flex items-center justify-between">
               {selectedProvider.fees.percent > 0 && (
                 <>
@@ -300,6 +291,14 @@ const WalletWithdraw = () => {
           </div>
         ) : null}
         <div className={styles.title}>{t('withdrawSum')}</div>
+        {selectedProvider && (
+          <LimitTextDisplay
+            minAmount={selectedProvider.conditions.limit_minimum}
+            maxAmount={selectedProvider.conditions.limit_maximum}
+            selectedProvider={selectedProvider}
+            amount={withdrawData.amount}
+          />
+        )}
         <Input
           placeholder={t('sum')}
           type="number"
@@ -317,14 +316,6 @@ const WalletWithdraw = () => {
           }
           onChange={(e) => setWithdrawData((prev) => ({ ...prev, amount: e.target.value }))}
         />
-        {selectedProvider && (
-          <LimitTextDisplay
-            minAmount={selectedProvider.conditions.limit_minimum}
-            maxAmount={selectedProvider.conditions.limit_maximum}
-            selectedProvider={selectedProvider}
-            amount={withdrawData.amount}
-          />
-        )}
       </div>
       <Button
         disabled={

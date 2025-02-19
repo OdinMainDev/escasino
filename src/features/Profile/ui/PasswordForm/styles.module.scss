@@ -49,3 +49,73 @@
   white-space: pre;
   text-wrap: wrap;
 }
+
+.bg_mobile {
+  visibility: hidden;
+  display:none;
+}
+/* Для экранов меньше или равно 660px */
+@media (max-width: 660px) {
+  .save_button {
+    visibility: hidden;
+    display:none;
+  }
+
+  .has_changes {
+    position: fixed;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 1;
+    display:block;
+    visibility: visible;
+    max-width: calc(100% - 32px);
+    transition: opacity 0.5s ease-in-out;
+    will-change: opacity;
+    animation: fadeIn 0.5s ease-in-out;
+    z-index: 11;
+  }
+
+  .container:has(> .save_button.has_changes) .checkbox {
+      padding-bottom: 80px;
+  }
+
+  .container:has(> .save_button.has_changes) .bg_mobile {
+      visibility: visible;
+      display: block;
+      position: fixed;
+      bottom: -1px;
+      left: 50%;
+      z-index: 10;
+      transform: translateX(-50%);
+      width: 100%;
+      transition: opacity 0.5s ease-in-out;
+      will-change: opacity;
+      animation: fadeIn 0.5s ease-in-out;
+      background-color: #000;
+      padding-bottom: 30px;
+  }
+
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  .has_changes.animated {
+    animation: fadeOut 0.5s ease-in-out;
+  }
+}

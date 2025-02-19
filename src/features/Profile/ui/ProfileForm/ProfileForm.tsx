@@ -495,11 +495,15 @@ const ProfileForm = () => {
       <AlertModal {...alertData} />
 
       <Button
-        className={`${styles.save_button} ${hasChanges ? styles.has_changes : ''}`}
+        className={`
+          ${styles.save_button}
+          ${hasChanges ? styles.has_changes : ''}
+        `}
         onClick={(e) => void sendData(e)}
       >
         {t('save')}
       </Button>
+      <div className={styles.bg_mobile}></div>
     </form>
   );
 };
