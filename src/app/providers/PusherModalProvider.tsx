@@ -5,19 +5,35 @@ import { IBonusPusher } from '@/shared/models/interfaces/pusher/bonus';
 import PusherService from '@/shared/service/PusherService';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { openPusherModal } from '@/store/slices/pusherSlice';
-import { PropsWithChildren, useEffect } from 'react';
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { postSetMyActiveBonusApi } from '../api/bonuses/bonusesApi';
 import { getBonuses, resetBonuses } from '@/store/slices/bonusesSlices';
 import { getNodepositBonuses } from '@/store/slices/nodepositSlice';
 import { useRouter } from '@/shared/helpers/navigation';
-import { useCurrentLanguage } from './LangProvider';
+
+interface PusherProviderContextType {
+  isLoadedPusherProvider: boolean;
+}
+
+const PusherModalContext = createContext<PusherProviderContextType>({
+  isLoadedPusherProvider: false,
+});
+
+export const usePusherModelProvider = (): PusherProviderContextType => {
+  const context = useContext(PusherModalContext);
+  if (context === undefined) {
+    throw new Error('usePusherModelProvider must be used within a PusherModalProvider');
+  }
+  return context;
+};
 
 const PusherModalProvider = ({ children }: PropsWithChildren) => {
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const currentLanguage = useCurrentLanguage();
   const { user } = useAppSelector((state) => state.userReducer);
+  const [isLoadedPusherProvider, setIsLoadedPusherProvider] = useState<boolean>(false);
+
 
   function getRandomGameId(arr: number[]): number {
     if (arr.length === 1) {
@@ -113,17 +129,23 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
       pusher.subscribe(user.pusher_id, 'do_open_profile_bonuses', () => {
         router.push('/bonus/list');
       });
+
       pusher.subscribe(user.pusher_id, 'do_open_nodeposit_configurator', () => {
         router.push('/bonus/nodeposit/' + settings.bonus.default_game_id.toString());
       });
+
+      setIsLoadedPusherProvider(true);
+
     }
   }, [dispatch, settings, user?.pusher_id]);
 
   return (
-    <div>
-      <PusherModals />
-      {children}
-    </div>
+    <PusherModalContext.Provider value={{ isLoadedPusherProvider }}>
+      <div>
+        <PusherModals />
+        {children}
+      </div>
+    </PusherModalContext.Provider>
   );
 };
 
