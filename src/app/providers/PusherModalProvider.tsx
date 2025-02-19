@@ -36,8 +36,6 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   const { user } = useAppSelector((state) => state.userReducer);
   const [isLoadedPusherProvider, setIsLoadedPusherProvider] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
 
   function getRandomGameId(arr: number[]): number {
     if (arr.length === 1) {
@@ -46,13 +44,6 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
     const randomIndex = Math.floor(Math.random() * arr.length);
     return arr[randomIndex];
   }
-  useEffect(() => {
-    console.log(isLoadedPusherProvider);
-    if (isLoadedPusherProvider) {
-      setIsLoading(false);
-    }
-
-  }, [dispatch, settings, user?.pusher_id, isLoadedPusherProvider]);
 
   useEffect(() => {
     const addActiveBonus = async (bonus: IBonusPusher) => {
