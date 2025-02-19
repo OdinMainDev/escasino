@@ -3,7 +3,7 @@ import styles from './PusherModals.module.scss';
 import Modal from '@/shared/ui/Modal';
 import { closePusherModal } from '@/store/slices/pusherSlice';
 import Button from '@/shared/ui/Button';
-import bonusAddedIcon from '../icons/add_bonus.svg';
+import bonusAddedIcon from '../icons/lottery.svg';
 import classNames from 'classnames';
 import { useRouter } from '@/shared/helpers/navigation';
 import { typeOfPosherModal } from './PusherModals';
@@ -91,12 +91,14 @@ const BonusPusher = () => {
         <img src={bonusAddedIcon} className={classNames(styles.icon, 'mb-[24px]')} />
         <div className={classNames(styles.title, 'mb-[8px]')}>{getTitle()}</div>
         <div className={styles.subtitle}>{geSubtitle()}</div>
-        <Button className="w-[100%] mt-[32px]" onClick={navigateToBonuses}>
-          {t('goToBonuses')}
-        </Button>
-        <Button elType="outlined" className="w-[100%] mt-[16px]" onClick={closeModal}>
-          {t('continue')}
-        </Button>
+        <div className={styles.buttons}>
+          <Button className="w-[100%] mt-[32px]" onClick={navigateToBonuses}>
+            {t('goToBonuses')}
+          </Button>
+          <Button elType="outlined" className="w-[100%] mt-[16px]" onClick={closeModal}>
+            {t('continue')}
+          </Button>
+        </div>
       </div>
     </Modal>
   );
