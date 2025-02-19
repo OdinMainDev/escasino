@@ -1,6 +1,6 @@
 import { PusherModals } from '@/entities/PusherModals';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
-import { IBonus, IBonusesList, ISetActiveBonus } from '@/shared/models/interfaces/bonuses';
+import { IBonus, ISetActiveBonus } from '@/shared/models/interfaces/bonuses';
 import { IBonusPusher } from '@/shared/models/interfaces/pusher/bonus';
 import PusherService from '@/shared/service/PusherService';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
@@ -10,7 +10,6 @@ import { postSetMyActiveBonusApi } from '../api/bonuses/bonusesApi';
 import { getBonuses, resetBonuses } from '@/store/slices/bonusesSlices';
 import { getNodepositBonuses } from '@/store/slices/nodepositSlice';
 import { useRouter } from '@/shared/helpers/navigation';
-import { useNavigate } from 'react-router-dom';
 import { useCurrentLanguage } from './LangProvider';
 
 const PusherModalProvider = ({ children }: PropsWithChildren) => {
@@ -19,50 +18,34 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   const currentLanguage = useCurrentLanguage();
   const { user } = useAppSelector((state) => state.userReducer);
-  const navigation = useNavigate();
-  const { games } = useAppSelector((state) => state.gamesAllSlice);
+
+  function getRandomGameId(arr: number[]): number {
+    if (arr.length === 1) {
+      return arr[0];
+    }
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    return arr[randomIndex];
+  }
 
   useEffect(() => {
-    const updateNumberAtIndex = (games: IBonusesList[], index: number, game_id: number) => {
-      const newNumbers = [...games];
-      newNumbers[index] = { ...newNumbers[index], game_id };
-      return newNumbers;
-    };
     const addActiveBonus = async (bonus: IBonusPusher) => {
       try {
         const freeSpinsBonuses = bonus.data.bonuses_list.filter(
           (item) => item.type === 'freespins',
         );
         const fid = await getVisitorId();
-        let data: ISetActiveBonus = {
+        const data: ISetActiveBonus = {
           id: bonus.id,
           game_ids: freeSpinsBonuses.map((item) => item.game_id),
           fid,
         };
-        if (freeSpinsBonuses.filter((item) => item.game_id === 0).length > 0) {
-          freeSpinsBonuses.forEach((item, index) => {
-            if (bonus?.status !== 2) {
-              const findedTemplate = bonus?.bonus_template.find(
-                (template) => template.id === item.id,
-              );
-              if (findedTemplate) {
-                const findedGames = games?.filter((item) =>
-                  findedTemplate.game_ids.includes(item.id),
-                );
-                if (findedGames && findedGames.length === 1) {
-                  data = {
-                    id: bonus.id,
-                    game_ids: updateNumberAtIndex(
-                      freeSpinsBonuses,
-                      index,
-                      findedGames[index].id,
-                    ).map((item) => item.game_id),
-                    fid,
-                  };
-                }
-              }
-            }
-          });
+        for (let index = 0; index < data.game_ids.length; index++) {
+          const choosenGameId = data.game_ids[index];
+          if (choosenGameId != 0) {
+            continue;
+          }
+          const template = bonus.bonus_template[index];
+          data.game_ids[index] = getRandomGameId(template.game_ids);
         }
         await postSetMyActiveBonusApi(data);
         void dispatch(getBonuses());
@@ -124,14 +107,13 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
             findedIndex = 0;
           }
           const gameId = bonusData.bonus_template[0].game_ids[findedIndex];
-          navigation(`/${currentLanguage}/play/real/${gameId}`, { replace: true });
+          router.push(`/${currentLanguage}/play/real/${gameId}`);
         }
       });
       pusher.subscribe(user.pusher_id, 'do_open_profile_bonuses', () => {
         router.push('/bonus/list');
       });
       pusher.subscribe(user.pusher_id, 'do_open_nodeposit_configurator', () => {
-
         router.push('/bonus/nodeposit/' + settings.bonus.default_game_id.toString());
       });
     }
