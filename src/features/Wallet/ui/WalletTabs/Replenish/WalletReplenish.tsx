@@ -605,7 +605,7 @@ const WalletReplenish = () => {
           }
           onChange={(e) => setAmount(e.target.value)}
         />
-    </div>
+      </div>
       <Button
         disabled={
           !validateData({

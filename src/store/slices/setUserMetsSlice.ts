@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ISlice, ParentFilled, ParentPending, ParentRejected } from './slices';
-import { IResponseSetUserMeta, doSetUserMeta, IUserMeta} from '@/app/api/user/setUserMets';
-
+import { IResponseSetUserMeta, doSetUserMeta, IUserMeta } from '@/app/api/user/setUserMets';
 
 export interface IInitialUserMeta extends ISlice {
   userMeta: IUserMeta | null;

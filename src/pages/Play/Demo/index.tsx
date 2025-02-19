@@ -27,7 +27,6 @@ export default function Demo() {
   const { isMobile, isPortrait } = useOrientation();
 
   useEffect(() => {
-
     const getDemo = async () => {
       const isMobile = true;
       const data = await getDemoApi(Number(id), isAuth, isMobile);

@@ -6,7 +6,7 @@ import { IBonusPusher } from '@/shared/models/interfaces/pusher/bonus';
 import PusherService from '@/shared/service/PusherService';
 import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import { openPusherModal } from '@/store/slices/pusherSlice';
-import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { postSetMyActiveBonusApi } from '../api/bonuses/bonusesApi';
 import { getBonuses, resetBonuses } from '@/store/slices/bonusesSlices';
 import { getNodepositBonuses } from '@/store/slices/nodepositSlice';
@@ -31,7 +31,7 @@ export const usePusherModelProvider = (): PusherProviderContextType => {
   return context;
 };
 
-const PusherModalProvider = ({ children }: PropsWithChildren) => {
+const PusherModalProvider = () => {
   const { settings } = useAppSelector((state) => state.settingsReducer);
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -47,9 +47,6 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
     const randomIndex = Math.floor(Math.random() * arr.length);
     return arr[randomIndex];
   }
-  useEffect(() => {
-
-  }, [dispatch, settings, user?.pusher_id]);
 
   useEffect(() => {
     const addActiveBonus = async (bonus: IBonusPusher) => {
@@ -80,11 +77,10 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
     if (settings && settings.pusher.cluster && settings.pusher.key && user?.pusher_id) {
       const pusher = PusherService.getInstance(settings.pusher.key, settings.pusher.cluster);
 
-       const handleConnected = () => {
+      const handleConnected = () => {
         setIsLoadedPusherProvider(true);
       };
       pusher.onConnected(handleConnected);
-
 
       pusher.subscribe(user.pusher_id, 'payment_receive', () => {
         dispatch(openPusherModal('success-replenish'));
@@ -116,10 +112,12 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
       pusher.subscribe(user.pusher_id, 'bonus_scratch_receive', (data) => {
         const bonus = data as IBonusPusher;
 
-        dispatch(openPusherModal({ type: 'bonus_scratch_receive', data: 
-          { bonus: bonus.data.bonuses_list[0].game_id } 
-        }));
-
+        dispatch(
+          openPusherModal({
+            type: 'bonus_scratch_receive',
+            data: { bonus: bonus.data.bonuses_list[0].game_id },
+          }),
+        );
       });
       pusher.subscribe(user.pusher_id, 'bonus_scratch_complete', (data) => {
         dispatch(openPusherModal('bonus_scratch_complete'));
@@ -152,15 +150,12 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
       pusher.subscribe(user.pusher_id, 'do_open_nodeposit_configurator', () => {
         router.push('/bonus/nodeposit/' + settings.bonus.default_game_id.toString());
       });
-
     }
 
     console.log();
     if (!isAuth && !loading) {
-        setIsLoadedPusherProvider(true);
+      setIsLoadedPusherProvider(true);
     }
-
-
   }, [dispatch, settings, user?.pusher_id, loading, isAuth]);
 
   return (

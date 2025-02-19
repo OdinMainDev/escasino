@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface ModalData {
   type: typeOfPosherModal;
-  data?: any;  
+  data?: any;
 }
 
 export interface IInitialPusherState {
@@ -20,34 +20,25 @@ const pusherSlice = createSlice({
   reducers: {
     openPusherModal: (
       state: IInitialPusherState,
-      action: PayloadAction<typeOfPosherModal | ModalData> 
+      action: PayloadAction<typeOfPosherModal | ModalData>,
     ) => {
       const modalData: ModalData =
-        typeof action.payload === 'string'
-          ? { type: action.payload }
-          : action.payload;
+        typeof action.payload === 'string' ? { type: action.payload } : action.payload;
 
       state.openPusherModals.push(modalData);
     },
     closePusherModalByType: (
       state: IInitialPusherState,
-      action: PayloadAction<typeOfPosherModal>
+      action: PayloadAction<typeOfPosherModal>,
     ) => {
-      const index = state.openPusherModals.findIndex(
-        (modal) => modal.type === action.type
-      );
+      const index = state.openPusherModals.findIndex((modal) => modal.type === action.type);
       if (index !== -1) {
         state.openPusherModals.splice(index, 1);
       }
     },
 
-    closePusherModal: (
-      state: IInitialPusherState,
-      action: PayloadAction<ModalData>
-    ) => {
-      const index = state.openPusherModals.findIndex(
-        (modal) => modal.type === action.type
-      );
+    closePusherModal: (state: IInitialPusherState, action: PayloadAction<ModalData>) => {
+      const index = state.openPusherModals.findIndex((modal) => modal.type === action.type);
       if (index !== -1) {
         state.openPusherModals.splice(index, 1);
       }

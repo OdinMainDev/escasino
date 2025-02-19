@@ -9,7 +9,6 @@ import StaticSettingsProvider from './providers/StaticSettingsProvider';
 import 'swiper/css';
 import GamesAllProviders from './providers/GamesAllProviders';
 import ThemeProvider from './providers/ThemeProvider';
-import PusherModalProvider from './providers/PusherModalProvider';
 import { UrlHistoryProvider } from './providers/UrlHistoryProvider';
 import AffiliateProvider from './providers/AffiliateProvider';
 
@@ -24,12 +23,12 @@ function App() {
                 <GamesAllProviders>
                   <LangProvider>
                     <ModalProvider>
-                        <GamesFilterProvider>
-                          {/* EventDispatcherProvider -после него мы не вставляем никакие провайдеры, он завершающий */}
-                          <EventDispatcherProvider>
-                            <Outlet />
-                          </EventDispatcherProvider>
-                        </GamesFilterProvider>
+                      <GamesFilterProvider>
+                        {/* EventDispatcherProvider -после него мы не вставляем никакие провайдеры, он завершающий */}
+                        <EventDispatcherProvider>
+                          <Outlet />
+                        </EventDispatcherProvider>
+                      </GamesFilterProvider>
                     </ModalProvider>
                   </LangProvider>
                 </GamesAllProviders>

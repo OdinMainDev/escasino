@@ -14,6 +14,6 @@ export const getEmailVerificationHash = () => {
 };
 
 export const removeAllGets = () => {
-    const newUrl = window.location.pathname;
-    window.history.replaceState({}, "", newUrl);
+  const newUrl = window.location.pathname;
+  window.history.replaceState({}, '', newUrl);
 };

@@ -127,14 +127,12 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
 
       const isValidRegisterData = validateRegister(registerData, undefined, isFastAuth);
       if (!isValidRegisterData) {
-
         if (!registerData.terms) {
-          
           setErrorData((prev) => ({
-            success: false, 
+            success: false,
             errors: {
-              ...(typeof prev?.errors === 'object' ? prev.errors : {}), 
-              terms: 'acceptTerm', 
+              ...(typeof prev?.errors === 'object' ? prev.errors : {}),
+              terms: 'acceptTerm',
             },
           }));
         }
@@ -157,7 +155,6 @@ const AuthRegisterForm = ({ openLoginModal }: IProps) => {
       localStorage.setItem('registred', 'true');
       document.body.classList.remove('overflow-hidden');
       window.reloadChat();
-      
     } catch (e: unknown) {
       const regError = e as IResponseError;
       const regErrorList = Object.keys(regError.errors);

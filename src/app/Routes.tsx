@@ -238,9 +238,7 @@ const routes: RouteObject[] = [
                 children: [
                   {
                     path: '/:lang',
-                    element: (
-                      <LanguageGuard />
-                    ),
+                    element: <LanguageGuard />,
                     children: availRoutes,
                   },
                   {

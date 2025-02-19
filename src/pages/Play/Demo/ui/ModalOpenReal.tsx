@@ -15,7 +15,6 @@ const ModalOpenReal = ({ close, gameId }: IProps) => {
   const { doOpenModal } = useModal();
   const { isAuth } = useAuthProvider();
   const { doCloseModals } = useModal();
-  
   const router = useRouter();
   const openGame = () => {
     if (!isAuth) {
@@ -47,7 +46,7 @@ const ModalOpenReal = ({ close, gameId }: IProps) => {
     close: doCloseModals,
   });
 
-  return <AlertModal {...alertData} />
+  return <AlertModal {...alertData} />;
 };
 
 export default ModalOpenReal;

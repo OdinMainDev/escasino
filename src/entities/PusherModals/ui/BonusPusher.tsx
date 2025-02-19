@@ -4,13 +4,16 @@ import Modal from '@/shared/ui/Modal';
 import { closePusherModal } from '@/store/slices/pusherSlice';
 import Button from '@/shared/ui/Button';
 import bonusAddedIcon from '../icons/lottery.svg';
-import bonusScratchReceiveIcon from '../icons/bonusScratchReceive.svg';
 import bonusScratchCompleteIcon from '../icons/bonusScratchComplete.svg';
 import classNames from 'classnames';
 import { useRouter } from '@/shared/helpers/navigation';
 import { typeOfPosherModal } from './PusherModals';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+interface IPusherArgs {
+  bonus: number;
+}
 
 const BonusPusher = () => {
   const { t } = useTranslation();
@@ -47,14 +50,14 @@ const BonusPusher = () => {
     if (!filtredModalsKeys.length) {
       return;
     }
-    const args = filtredModalsKeys[filtredModalsKeys.length - 1].data;
+    const args = filtredModalsKeys[filtredModalsKeys.length - 1].data as IPusherArgs;
 
     if (!args) {
       return;
     }
 
-    var bonusGame = args.bonus;
-    router.push(`/play/real/${bonusGame }`);
+    const bonusGame = args.bonus;
+    router.push(`/play/real/${bonusGame}`);
   };
 
   const navigateToBonuses = () => {
@@ -62,7 +65,8 @@ const BonusPusher = () => {
     closeModal();
   };
 
-  const modalType = filtredModalsKeys.length > 0 ? filtredModalsKeys[filtredModalsKeys.length - 1].type : null;
+  const modalType =
+    filtredModalsKeys.length > 0 ? filtredModalsKeys[filtredModalsKeys.length - 1].type : null;
 
   interface ModalClasses {
     icon: string;
@@ -97,7 +101,7 @@ const BonusPusher = () => {
       },
       buttons: {
         primary: t('continue'),
-        secondary: t('goToBonuses')
+        secondary: t('goToBonuses'),
       },
     },
     bonus_expire: {
@@ -113,7 +117,7 @@ const BonusPusher = () => {
       },
       buttons: {
         primary: t('continue'),
-        secondary: t('goToBonuses')
+        secondary: t('goToBonuses'),
       },
     },
     bonus_cancel: {
@@ -129,7 +133,7 @@ const BonusPusher = () => {
       },
       buttons: {
         primary: t('continue'),
-        secondary: t('goToBonuses')
+        secondary: t('goToBonuses'),
       },
     },
     bonus_complete: {
@@ -145,7 +149,7 @@ const BonusPusher = () => {
       },
       buttons: {
         primary: t('continue'),
-        secondary: t('goToBonuses')
+        secondary: t('goToBonuses'),
       },
     },
     bonus_scratch_receive: {
@@ -161,7 +165,7 @@ const BonusPusher = () => {
       },
       buttons: {
         primary: t('continue'),
-        secondary: t('goToBonuses')
+        secondary: t('goToBonuses'),
       },
     },
     bonus_scratch_complete: {
@@ -173,34 +177,35 @@ const BonusPusher = () => {
         title: styles.title,
         subtitle: styles.subtitle,
         modal: styles.bonus,
-        buttons: styles.bon_buttons
+        buttons: styles.bon_buttons,
       },
       buttons: {
         primary: t('continue'),
-        secondary: t('goToBonuses')
+        secondary: t('goToBonuses'),
       },
     },
   };
 
   // default config
-  const currentConfig: ModalConfig = modalType && modalConfig[modalType]
-    ? modalConfig[modalType]!
-    : {
-        title: '',
-        subtitle: '',
-        icon: bonusAddedIcon,
-        classes: {
-          icon: styles.icon,
-          title: styles.title,
-          subtitle: styles.subtitle,
-          modal: styles.lottery,
-          buttons: styles.buttons,
-        },
-        buttons: {
-          primary: t('continue'),
-          secondary: t('goToBonuses')
-        },
-      };
+  const currentConfig: ModalConfig =
+    modalType && modalConfig[modalType]
+      ? modalConfig[modalType]!
+      : {
+          title: '',
+          subtitle: '',
+          icon: bonusAddedIcon,
+          classes: {
+            icon: styles.icon,
+            title: styles.title,
+            subtitle: styles.subtitle,
+            modal: styles.lottery,
+            buttons: styles.buttons,
+          },
+          buttons: {
+            primary: t('continue'),
+            secondary: t('goToBonuses'),
+          },
+        };
 
   return (
     <Modal isOpen={isOpen} close={closeModal}>
@@ -213,13 +218,11 @@ const BonusPusher = () => {
         <div className={classNames(currentConfig.classes.title, 'mb-[8px]')}>
           {currentConfig.title}
         </div>
-        <div className={currentConfig.classes.subtitle}>
-          {currentConfig.subtitle}
-        </div>
+        <div className={currentConfig.classes.subtitle}>{currentConfig.subtitle}</div>
         <div className={currentConfig.classes.buttons}>
           <Button elType="outlined" className="w-[100%] mt-[32px]" onClick={openBonusGame}>
             {currentConfig.buttons.primary}
-            </Button>
+          </Button>
           <Button className="w-[100%] mt-[32px]" onClick={navigateToBonuses}>
             {currentConfig.buttons.secondary}
           </Button>

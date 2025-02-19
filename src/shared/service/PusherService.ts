@@ -12,7 +12,6 @@ class PusherService {
       cluster: cluster,
     });
 
-
     this.pusher.connection.bind('error', (err: { error: { data?: { code: number } } }) => {
       console.error('Pusher connection error:', err);
       if (err.error.data && err.error.data.code === 4004) {
@@ -31,7 +30,6 @@ class PusherService {
     this.pusher.connection.bind('connected', () => {
       this.connectedCallbacks.forEach((callback) => callback());
     });
-
   }
 
   public onConnected(callback: () => void) {

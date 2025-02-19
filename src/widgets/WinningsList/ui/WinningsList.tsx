@@ -35,7 +35,7 @@ const WinningsList = ({ game_id }: IProps) => {
       <Swiper
         modules={[Pagination, Navigation, Autoplay]}
         spaceBetween={8}
-        grabCursor={true} 
+        grabCursor={true}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
         loop={winnings.length > 3}
         speed={1000}

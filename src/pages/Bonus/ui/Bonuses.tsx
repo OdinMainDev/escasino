@@ -102,17 +102,15 @@ const Bonuses = ({ isNoDeposit }: IProps) => {
   }, []);
 
   useEffect(() => {
-    if (!noDepositsBonuses.length &&  noDepositIsFinished && isNoDeposit) {
+    if (!noDepositsBonuses.length && noDepositIsFinished && isNoDeposit) {
       router.push({
         pathname: '/',
       });
       return;
-      
     }
   }, [noDepositIsFinished]);
 
   useEffect(() => {
-
     if (!settings) return;
 
     const bonusArray = getBonusArray(settings);

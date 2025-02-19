@@ -16,12 +16,16 @@ import {
 } from '@/app/api/auth/verification/emailVerify';
 import { getUser } from '@/store/slices/userSlice';
 import { useTranslation } from 'react-i18next';
-import { getEmailVerificationCode, getEmailVerificationHash, removeAllGets } from '@/shared/helpers/location';
+import {
+  getEmailVerificationCode,
+  getEmailVerificationHash,
+  removeAllGets,
+} from '@/shared/helpers/location';
 
 const ProfileVerificationEmailForm = () => {
   const { t } = useTranslation();
   const { settings, loading: loadingSettings } = useAppSelector((state) => state.settingsReducer);
-  const { verifyHash, doSetVerifyHash, doOpenModal } = useModal();
+  const { doSetVerifyHash, doOpenModal } = useModal();
   const [loader, setLoader] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IResponseError>();
   const dispatch = useAppDispatch();
@@ -58,7 +62,6 @@ const ProfileVerificationEmailForm = () => {
       setVerifyData((prev) => ({ ...prev, code: emailCode, hash: emailHash }));
       removeAllGets();
     }
-
   }, []);
   return (
     <form className={styles.container}>

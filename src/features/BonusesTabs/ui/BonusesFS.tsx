@@ -173,7 +173,7 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
           isProgrammaticChangeFS.current = false;
           return;
         }
-        
+
         const realIndex = swiper.realIndex;
         setSelectedBetIndex(realIndex);
         const selectedBetTemplate = betTemplates[realIndex];
@@ -297,7 +297,6 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
     };
 
     useEffect(() => {
-
       if (betSwiper.current && spinsSwiper.current) {
         const middleBetIndex = Math.floor(betTemplates.length / 2);
         betSwiper.current.swiper?.slideTo(middleBetIndex, 400);
@@ -310,15 +309,13 @@ const BonusesFS = forwardRef<IBonusFSMethods, IProps>(
         const findedBonus = filtredBonuses.find(
           (item) =>
             item.configurator.bet_amount === betTemplates[middleBetIndex].configurator.bet_amount &&
-            item.spins_count === spinsTemplates[middleSpinsIndex].spins_count
+            item.spins_count === spinsTemplates[middleSpinsIndex].spins_count,
         );
 
         if (findedBonus) {
           setSelectedTemplate(findedBonus);
         }
-
       }
-
     }, [betTemplates]);
 
     if (betTemplates?.length === 0 && spinsTemplates?.length === 0) {

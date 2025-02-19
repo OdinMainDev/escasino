@@ -21,13 +21,16 @@ import DatePicker from '@/shared/ui/DatePicker';
 import { AlertModal, IAlert } from '@/entities/AlertModal';
 import { useTranslation } from 'react-i18next';
 import Statuses from '@/entities/Statuses';
-import { getEmailVerificationCode, getEmailVerificationHash, removeAllGets } from '@/shared/helpers/location';
+import {
+  getEmailVerificationCode,
+  getEmailVerificationHash,
+  removeAllGets,
+} from '@/shared/helpers/location';
 import { doVerifyEmailConfirmApi } from '@/app/api/auth/verification/emailVerify';
 
 const ProfileForm = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
-
 
   const showVerificationPhone = false;
   const { doSetVerifyHash, doSetChangeHash, doOpenModal, doCloseModals } = useModal();
@@ -36,12 +39,11 @@ const ProfileForm = () => {
   const [userData, setUserData] = useState<IUserData>(sampleIUserData);
   const [errorData, setErrorData] = useState<IResponseError>();
   const [hasChanges, setHasChanges] = useState(false);
-  const isFirstRender = useRef(true); 
-
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
     if (isFirstRender.current) {
-      isFirstRender.current = false; 
+      isFirstRender.current = false;
       return;
     }
 
@@ -118,13 +120,12 @@ const ProfileForm = () => {
 
     const sendDataVerifEmail = async () => {
       try {
-        
         setLoader(true);
         const fid = await getVisitorId();
         const verifyData = {
           fid: fid,
           code: verifCode ?? '',
-          hash: verifHash ?? ''
+          hash: verifHash ?? '',
         };
 
         await doVerifyEmailConfirmApi({ ...verifyData });
@@ -145,7 +146,7 @@ const ProfileForm = () => {
 
     const handleEmailVerification = () => {
       if (verifCode && verifHash) {
-        (async () => {
+        void (async () => {
           await sendDataVerifEmail();
           removeAllGets();
         })();
@@ -156,7 +157,6 @@ const ProfileForm = () => {
       isFirstRegister === 'true' ? showAlert() : handleEmailVerification();
     }
   }, [user]);
-  
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
@@ -244,9 +244,9 @@ const ProfileForm = () => {
   const showEmailSendedAlert = () => {
     doOpenModal('alert');
     setAlertData({
-      title: t('confirmEmailAdress'),
+      title: t('verificationEmailSendTitle'),
       close: doCloseModals,
-      text: t('onEmailSendMailWithLink'),
+      text: t('verificationEmailSendText'),
       buttons: [
         {
           type: 'contained',
@@ -266,7 +266,6 @@ const ProfileForm = () => {
       doSetVerifyHash(data.hash);
 
       showEmailSendedAlert();
-
     } catch (e: unknown) {
       /* empty */
     } finally {
