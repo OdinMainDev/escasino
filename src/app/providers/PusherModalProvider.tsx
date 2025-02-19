@@ -44,6 +44,9 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
     const randomIndex = Math.floor(Math.random() * arr.length);
     return arr[randomIndex];
   }
+  useEffect(() => {
+
+  }, [dispatch, settings, user?.pusher_id]);
 
   useEffect(() => {
     const addActiveBonus = async (bonus: IBonusPusher) => {
@@ -73,6 +76,13 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
     };
     if (settings && settings.pusher.cluster && settings.pusher.key && user?.pusher_id) {
       const pusher = PusherService.getInstance(settings.pusher.key, settings.pusher.cluster);
+
+       const handleConnected = () => {
+        setIsLoadedPusherProvider(true);
+      };
+      pusher.onConnected(handleConnected);
+
+
       pusher.subscribe(user.pusher_id, 'payment_receive', () => {
         dispatch(openPusherModal('success-replenish'));
       });
@@ -136,9 +146,9 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
         router.push('/bonus/nodeposit/' + settings.bonus.default_game_id.toString());
       });
 
-      if (pusher.isConnected()) {
-        setIsLoadedPusherProvider(true);
-      }
+      return () => {
+        setIsLoadedPusherProvider(false);
+      };
     }
   }, [dispatch, settings, user?.pusher_id]);
 
