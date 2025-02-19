@@ -23,7 +23,6 @@ import { useTranslation } from 'react-i18next';
 import Statuses from '@/entities/Statuses';
 import { getEmailVerificationCode, getEmailVerificationHash, removeAllGets } from '@/shared/helpers/location';
 import { doVerifyEmailConfirmApi } from '@/app/api/auth/verification/emailVerify';
-import { usePusherModelProvider } from '@/app/providers/PusherModalProvider';
 
 const ProfileForm = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
@@ -39,7 +38,6 @@ const ProfileForm = () => {
   const [hasChanges, setHasChanges] = useState(false);
   const isFirstRender = useRef(true); 
 
-  const { isLoadedPusherProvider } = usePusherModelProvider(); 
 
   useEffect(() => {
     if (isFirstRender.current) {
