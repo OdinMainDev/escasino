@@ -23,10 +23,12 @@ import { useTranslation } from 'react-i18next';
 import Statuses from '@/entities/Statuses';
 import { getEmailVerificationCode, getEmailVerificationHash, removeAllGets } from '@/shared/helpers/location';
 import { doVerifyEmailConfirmApi } from '@/app/api/auth/verification/emailVerify';
+import { usePusherModelProvider } from '@/app/providers/PusherModalProvider';
 
 const ProfileForm = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
   const { settings } = useAppSelector((state) => state.settingsReducer);
+
 
   const showVerificationPhone = false;
   const { doSetVerifyHash, doSetChangeHash, doOpenModal, doCloseModals } = useModal();
@@ -36,6 +38,8 @@ const ProfileForm = () => {
   const [errorData, setErrorData] = useState<IResponseError>();
   const [hasChanges, setHasChanges] = useState(false);
   const isFirstRender = useRef(true); 
+
+  const { isLoadedPusherProvider } = usePusherModelProvider(); 
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -151,9 +155,16 @@ const ProfileForm = () => {
     };
 
     if (!user.data.email_verified_at) {
-      isFirstRegister === 'true' ? showAlert() : handleEmailVerification();
+      if (isFirstRegister === 'true') 
+        showAlert()
+      else {
+
+        if (isLoadedPusherProvider)
+          handleEmailVerification();
+
+      }
     }
-  }, [user]);
+  }, [user, isLoadedPusherProvider]);
   
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -332,7 +343,7 @@ const ProfileForm = () => {
 
   return (
     <form className={styles.container}>
-      {loadingUser || loader ? (
+      {loadingUser || loader || !isLoadedPusherProvider  ? (
         <div className={styles.loading}>
           <Loader />
         </div>
