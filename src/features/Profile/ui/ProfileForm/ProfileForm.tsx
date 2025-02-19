@@ -155,16 +155,9 @@ const ProfileForm = () => {
     };
 
     if (!user.data.email_verified_at) {
-      if (isFirstRegister === 'true') 
-        showAlert()
-      else {
-
-        if (isLoadedPusherProvider)
-          handleEmailVerification();
-
-      }
+      isFirstRegister === 'true' ? showAlert() : handleEmailVerification();
     }
-  }, [user, isLoadedPusherProvider]);
+  }, [user]);
   
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -343,7 +336,7 @@ const ProfileForm = () => {
 
   return (
     <form className={styles.container}>
-      {loadingUser || loader || !isLoadedPusherProvider  ? (
+      {loadingUser || loader ? (
         <div className={styles.loading}>
           <Loader />
         </div>

@@ -1,5 +1,6 @@
 import { PusherModals } from '@/entities/PusherModals';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
+import styles from '@/features/Profile/ui/ProfileForm/styles.module.scss';
 import { IBonus, ISetActiveBonus } from '@/shared/models/interfaces/bonuses';
 import { IBonusPusher } from '@/shared/models/interfaces/pusher/bonus';
 import PusherService from '@/shared/service/PusherService';
@@ -10,6 +11,7 @@ import { postSetMyActiveBonusApi } from '../api/bonuses/bonusesApi';
 import { getBonuses, resetBonuses } from '@/store/slices/bonusesSlices';
 import { getNodepositBonuses } from '@/store/slices/nodepositSlice';
 import { useRouter } from '@/shared/helpers/navigation';
+import Loader from '@/shared/ui/Loader';
 
 interface PusherProviderContextType {
   isLoadedPusherProvider: boolean;
@@ -33,6 +35,7 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   const { user } = useAppSelector((state) => state.userReducer);
   const [isLoadedPusherProvider, setIsLoadedPusherProvider] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
 
   function getRandomGameId(arr: number[]): number {
@@ -42,6 +45,13 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
     const randomIndex = Math.floor(Math.random() * arr.length);
     return arr[randomIndex];
   }
+  useEffect(() => {
+    console.log(isLoadedPusherProvider);
+    if (isLoadedPusherProvider) {
+      setIsLoading(false);
+    }
+
+  }, [dispatch, settings, user?.pusher_id, isLoadedPusherProvider]);
 
   useEffect(() => {
     const addActiveBonus = async (bonus: IBonusPusher) => {
@@ -141,10 +151,16 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <PusherModalContext.Provider value={{ isLoadedPusherProvider }}>
-      <div>
-        <PusherModals />
-        {children}
-      </div>
+      {isLoadedPusherProvider ? (
+        <div>
+          <PusherModals />
+          {children}
+        </div>
+      ) : (
+        <div className={styles.loading}>
+          <Loader />
+        </div>
+      )}
     </PusherModalContext.Provider>
   );
 };
