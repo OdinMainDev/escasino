@@ -24,14 +24,12 @@ function App() {
                 <GamesAllProviders>
                   <LangProvider>
                     <ModalProvider>
-                      <PusherModalProvider>
                         <GamesFilterProvider>
                           {/* EventDispatcherProvider -после него мы не вставляем никакие провайдеры, он завершающий */}
                           <EventDispatcherProvider>
                             <Outlet />
                           </EventDispatcherProvider>
                         </GamesFilterProvider>
-                      </PusherModalProvider>
                     </ModalProvider>
                   </LangProvider>
                 </GamesAllProviders>

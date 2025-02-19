@@ -31,6 +31,7 @@ import BonusesProvider from './providers/pages/BonusesProvider';
 import BonusesList from '@/pages/Bonus/ui/BonusesList';
 import { Rules } from '@/pages/Rules';
 import NodepositBonusesProvider from './providers/pages/NodepositBonusesProvider';
+import PusherModalProvider from './providers/PusherModalProvider';
 
 const availRoutes: RouteObject[] = [
   {
@@ -222,7 +223,6 @@ const availRoutes: RouteObject[] = [
     ],
   },
 ];
-
 const routes: RouteObject[] = [
   {
     element: <App />,
@@ -231,19 +231,26 @@ const routes: RouteObject[] = [
         element: <Layout />,
         children: [
           {
-            element: <GlobalModals />,
+            element: <PusherModalProvider />,
             children: [
               {
-                path: '/:lang',
-                element: <LanguageGuard />,
-                children: availRoutes,
-              },
-              {
-                children: availRoutes,
-              },
-              {
-                path: '*',
-                element: <Error404 />,
+                element: <GlobalModals />,
+                children: [
+                  {
+                    path: '/:lang',
+                    element: (
+                      <LanguageGuard />
+                    ),
+                    children: availRoutes,
+                  },
+                  {
+                    children: availRoutes,
+                  },
+                  {
+                    path: '*',
+                    element: <Error404 />,
+                  },
+                ],
               },
             ],
           },

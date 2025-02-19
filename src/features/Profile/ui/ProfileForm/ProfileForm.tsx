@@ -23,7 +23,6 @@ import { useTranslation } from 'react-i18next';
 import Statuses from '@/entities/Statuses';
 import { getEmailVerificationCode, getEmailVerificationHash, removeAllGets } from '@/shared/helpers/location';
 import { doVerifyEmailConfirmApi } from '@/app/api/auth/verification/emailVerify';
-import { usePusherModelProvider } from '@/app/providers/PusherModalProvider';
 
 const ProfileForm = () => {
   const { user, loading: loadingUser } = useAppSelector((state) => state.userReducer);
@@ -39,7 +38,6 @@ const ProfileForm = () => {
   const [hasChanges, setHasChanges] = useState(false);
   const isFirstRender = useRef(true); 
 
-  const { isLoadedPusherProvider } = usePusherModelProvider(); 
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -155,16 +153,9 @@ const ProfileForm = () => {
     };
 
     if (!user.data.email_verified_at) {
-      if (isFirstRegister === 'true') 
-        showAlert()
-      else {
-
-        if (isLoadedPusherProvider)
-          handleEmailVerification();
-
-      }
+      isFirstRegister === 'true' ? showAlert() : handleEmailVerification();
     }
-  }, [user, isLoadedPusherProvider]);
+  }, [user]);
   
 
   const sendData = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -343,7 +334,7 @@ const ProfileForm = () => {
 
   return (
     <form className={styles.container}>
-      {loadingUser || loader || !isLoadedPusherProvider  ? (
+      {loadingUser || loader ? (
         <div className={styles.loading}>
           <Loader />
         </div>

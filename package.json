@@ -17,6 +17,7 @@
     "axios": "^1.6.7",
     "classnames": "^2.5.1",
     "date-fns": "^3.0.2-rc.1",
+    "decimal.js": "^10.5.0",
     "i18next": "^23.10.0",
     "js-cookie": "^3.0.5",
     "postcss-cli": "^11.0.0",

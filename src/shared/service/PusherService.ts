@@ -5,11 +5,13 @@ class PusherService {
   private pusher: Pusher;
   private channels: { [key: string]: Channel } = {};
   private currentChannelName: string | null = null;
+  private connectedCallbacks: (() => void)[] = [];
 
   private constructor(api_key: string, cluster: string) {
     this.pusher = new Pusher(api_key, {
       cluster: cluster,
     });
+
 
     this.pusher.connection.bind('error', (err: { error: { data?: { code: number } } }) => {
       console.error('Pusher connection error:', err);
@@ -27,8 +29,17 @@ class PusherService {
     });
 
     this.pusher.connection.bind('connected', () => {
-      console.log('Pusher connected successfully.');
+      this.connectedCallbacks.forEach((callback) => callback());
     });
+
+  }
+
+  public onConnected(callback: () => void) {
+    if (this.isConnected()) {
+      callback();
+    } else {
+      this.connectedCallbacks.push(callback);
+    }
   }
 
   public static getInstance(api_key: string, cluster: string): PusherService {
@@ -79,6 +90,13 @@ class PusherService {
 
     this.pusher.disconnect();
     console.log('Pusher connection has been disconnected.');
+  }
+
+  public isConnected() {
+    if (!this.pusher) {
+      return false;
+    }
+    return this.pusher.connection.state === 'connected';
   }
 }
 

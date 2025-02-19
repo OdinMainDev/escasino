@@ -1,5 +1,6 @@
 import { PusherModals } from '@/entities/PusherModals';
 import { getVisitorId } from '@/shared/helpers/getVisitorId';
+import styles from '@/features/Profile/ui/ProfileForm/styles.module.scss';
 import { IBonus, ISetActiveBonus } from '@/shared/models/interfaces/bonuses';
 import { IBonusPusher } from '@/shared/models/interfaces/pusher/bonus';
 import PusherService from '@/shared/service/PusherService';
@@ -10,6 +11,8 @@ import { postSetMyActiveBonusApi } from '../api/bonuses/bonusesApi';
 import { getBonuses, resetBonuses } from '@/store/slices/bonusesSlices';
 import { getNodepositBonuses } from '@/store/slices/nodepositSlice';
 import { useRouter } from '@/shared/helpers/navigation';
+import Loader from '@/shared/ui/Loader';
+import { Outlet } from 'react-router-dom';
 
 interface PusherProviderContextType {
   isLoadedPusherProvider: boolean;
@@ -34,7 +37,6 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
   const { user } = useAppSelector((state) => state.userReducer);
   const [isLoadedPusherProvider, setIsLoadedPusherProvider] = useState<boolean>(false);
 
-
   function getRandomGameId(arr: number[]): number {
     if (arr.length === 1) {
       return arr[0];
@@ -42,6 +44,9 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
     const randomIndex = Math.floor(Math.random() * arr.length);
     return arr[randomIndex];
   }
+  useEffect(() => {
+
+  }, [dispatch, settings, user?.pusher_id]);
 
   useEffect(() => {
     const addActiveBonus = async (bonus: IBonusPusher) => {
@@ -71,6 +76,13 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
     };
     if (settings && settings.pusher.cluster && settings.pusher.key && user?.pusher_id) {
       const pusher = PusherService.getInstance(settings.pusher.key, settings.pusher.cluster);
+
+       const handleConnected = () => {
+        setIsLoadedPusherProvider(true);
+      };
+      pusher.onConnected(handleConnected);
+
+
       pusher.subscribe(user.pusher_id, 'payment_receive', () => {
         dispatch(openPusherModal('success-replenish'));
       });
@@ -134,17 +146,24 @@ const PusherModalProvider = ({ children }: PropsWithChildren) => {
         router.push('/bonus/nodeposit/' + settings.bonus.default_game_id.toString());
       });
 
-      setIsLoadedPusherProvider(true);
-
+      return () => {
+        setIsLoadedPusherProvider(false);
+      };
     }
   }, [dispatch, settings, user?.pusher_id]);
 
   return (
     <PusherModalContext.Provider value={{ isLoadedPusherProvider }}>
-      <div>
-        <PusherModals />
-        {children}
-      </div>
+      {isLoadedPusherProvider ? (
+        <div>
+          <PusherModals />
+          <Outlet />
+        </div>
+      ) : (
+        <div className={styles.loading}>
+          <Loader />
+        </div>
+      )}
     </PusherModalContext.Provider>
   );
 };
