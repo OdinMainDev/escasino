@@ -1,16 +1,20 @@
 import { IGame } from '@/shared/models/interfaces/game';
 import styles from './BonusesItem.module.scss';
 import { BaseHTMLAttributes, useEffect, useState } from 'react';
-import { useAppSelector } from '@/store/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { fetchBonusGames } from '@/store/slices/getBonusGamesSlice';
 
 interface IProps extends BaseHTMLAttributes<HTMLDivElement> {
   gameId: number;
 }
 const BonusGame = ({ gameId, onClick, ...otherProps }: IProps) => {
   const { t } = useTranslation();
-  const { games } = useAppSelector((state) => state.gamesAllSlice);
+  const { allGames } = useAppSelector((state) => state.fetchBonusGames);
+  const  allGamesFetched  = useAppSelector((state) => state.fetchBonusGames.isFinished);
+  const dispatch = useAppDispatch();
+
   const [game, setGame] = useState<IGame | null>(null);
   const imagePath = game
     ? game.system_name
@@ -19,10 +23,18 @@ const BonusGame = ({ gameId, onClick, ...otherProps }: IProps) => {
     : '';
 
   useEffect(() => {
-    if (gameId !== 0) {
-      setGame(games?.find((item) => item.id === gameId) ?? null);
+    if (!allGamesFetched) {
+      void dispatch(fetchBonusGames({ bonusId: undefined }));
     }
-  }, [gameId, games]);
+  }, []);
+
+  useEffect(() => {
+    if (gameId !== 0) {
+      setGame(allGames?.find((item) => item.id === gameId) ?? null);
+    }
+    
+    
+  }, [gameId, allGames ]);
 
   if (!game && gameId === 0) {
     return (
