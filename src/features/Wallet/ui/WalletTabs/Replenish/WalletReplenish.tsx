@@ -575,6 +575,14 @@ const WalletReplenish = () => {
           </div>
         ) : null}
         <div className={styles.title}>{t('depositSum')}</div>
+        {selectedProvider && (
+          <LimitTextDisplay
+            minAmount={minAmount}
+            maxAmount={maxAmount}
+            selectedProvider={selectedProvider}
+            amount={amount}
+          />
+        )}
         <Input
           placeholder={t('sum')}
           type="number"
@@ -597,15 +605,7 @@ const WalletReplenish = () => {
           }
           onChange={(e) => setAmount(e.target.value)}
         />
-        {selectedProvider && (
-          <LimitTextDisplay
-            minAmount={minAmount}
-            maxAmount={maxAmount}
-            selectedProvider={selectedProvider}
-            amount={amount}
-          />
-        )}
-      </div>
+    </div>
       <Button
         disabled={
           !validateData({

@@ -35,7 +35,7 @@ const LimitTextDisplay: React.FC<LimitTextDisplayProps> = ({
 
   return (
     <div className={styles.subtitle}>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-2">
         {limitText.minimum}
         {limitText.maximum}
       </div>
