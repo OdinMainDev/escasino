@@ -2,8 +2,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   padding: 32px 16px 24px 16px;
   height: 100vh;
+}
+
+.bon_buttons {
+  position: absolute;
+  width: calc(100% - 32px);
+  bottom: 0;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column-reverse; // реверс порядка кнопок
+  flex-wrap: wrap;            // разрешить перенос строк
 }
 
 .replenish {
@@ -15,8 +26,8 @@
 }
 
 .icon {
-  width: 104px;
-  height: 104px;
+  width: 42px;
+  height: 41px;
 }
 
 .lottery {
@@ -24,14 +35,14 @@
   flex-direction: column;
   align-items: center;
   padding: 32px 16px 24px 16px;
-  min-height: 200px;
+  min-height: 248px;
 }
 
 .buttons {
   display: flex;
-  justify-content: space-between; 
-  gap: 16px; 
-  width: 100%; 
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
 }
 
 
@@ -70,5 +81,6 @@
   line-height: 24px;
   letter-spacing: 0.01em;
   text-align: center;
+  font-family: Montserrat;
 
 }

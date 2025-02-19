@@ -25,7 +25,7 @@ const Lottery = () => {
         <div className={classNames(styles.title, 'mb-[8px]')}>{t('itsNoEnd')}</div>
         <div className={styles.subtitle}>{t('weHaveGiftLotteryTicket')}</div>
         <Button className="w-[100%] mt-[32px]">{t('pickUpYourTicket')}</Button>
-        <Button elType="outlined" className="w-[100%] mt-[16px]">
+        <Button elType="outlined" className="w-[100%] mt-[32px]">
           {t('cancel')}
         </Button>
       </div>
